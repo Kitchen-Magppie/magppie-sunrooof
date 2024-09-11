@@ -24,7 +24,7 @@
   },
   "include": [
     "types",
-    "appHooks",
+    "hooks",
     "config",
     "routes",
     "app/**/*",

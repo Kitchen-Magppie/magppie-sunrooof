@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useState } from "react"
 import { IoMdClose } from "react-icons/io"
-import { useFirebaseStorageActions } from "../../appHooks/firebase"
+import { useFirebaseStorageActions } from "../../hooks/firebase"
 
 import { CircularProgress } from ".."
 
