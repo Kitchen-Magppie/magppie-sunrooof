@@ -1,0 +1,45 @@
+2024-06-16T20:50:52.547374Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/types/package.json")}
+2024-06-16T20:50:52.547407Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/types"), path: AnchoredSystemPathBuf("packages/types") }}))
+2024-06-16T20:51:21.947266Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/appHooks/package.json")}
+2024-06-16T20:51:21.947358Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/appHooks"), path: AnchoredSystemPathBuf("packages/appHooks") }}))
+2024-06-16T20:51:40.346720Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/assets/package.json")}
+2024-06-16T20:51:40.346770Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/assets"), path: AnchoredSystemPathBuf("packages/assets") }}))
+2024-06-16T20:51:48.046915Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/config/package.json")}
+2024-06-16T20:51:48.046985Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/config"), path: AnchoredSystemPathBuf("packages/config") }}))
+2024-06-16T20:51:56.746545Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/common-redux/package.json")}
+2024-06-16T20:51:56.746647Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/common-redux"), path: AnchoredSystemPathBuf("packages/common-redux") }}))
+2024-06-16T20:55:59.650166Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kitchen/package.json")}
+2024-06-16T20:55:59.651027Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("kitchen"), path: AnchoredSystemPathBuf("apps/kitchen") }}))
+2024-06-16T20:56:01.046785Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kitchen/package.json")}
+2024-06-16T20:56:01.046815Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("kitchen"), path: AnchoredSystemPathBuf("apps/kitchen") }}))
+2024-06-16T20:56:01.161277Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-06-16T20:56:01.161526Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kitchen/package.json")}
+2024-06-16T20:56:01.161556Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("kitchen"), path: AnchoredSystemPathBuf("apps/kitchen") }}))
+2024-06-16T20:56:01.161714Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-06-16T20:56:05.947116Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kitchen/src/containers/home/Review/Review.tsx")}
+2024-06-16T20:56:05.947184Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("kitchen"), path: AnchoredSystemPathBuf("apps/kitchen") }}))
+2024-06-16T20:56:23.746602Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/assets/src/photos/index.ts")}
+2024-06-16T20:56:23.746658Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/assets"), path: AnchoredSystemPathBuf("packages/assets") }}))
+2024-06-16T20:56:55.747012Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/assets/src/photos/index.ts")}
+2024-06-16T20:56:55.747071Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/assets"), path: AnchoredSystemPathBuf("packages/assets") }}))
+2024-06-16T20:57:17.646821Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/assets/src/photos/index.ts")}
+2024-06-16T20:57:17.646885Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/assets"), path: AnchoredSystemPathBuf("packages/assets") }}))
+2024-06-16T20:57:17.647020Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-06-16T20:59:27.046458Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/typescript-config/react")}
+2024-06-16T20:59:27.046503Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/typescript-config"), path: AnchoredSystemPathBuf("packages/typescript-config") }}))
+2024-06-16T20:59:58.646622Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/typescript-config/react-app-env.d.ts"), AnchoredSystemPathBuf("packages/typescript-config/react")}
+2024-06-16T20:59:58.646677Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/typescript-config"), path: AnchoredSystemPathBuf("packages/typescript-config") }}))
+2024-06-16T21:00:01.547289Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/typescript-config/react-app-env.d.ts")}
+2024-06-16T21:00:01.547349Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/typescript-config"), path: AnchoredSystemPathBuf("packages/typescript-config") }}))
+2024-06-16T21:00:41.946432Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/typescript-config/base.json")}
+2024-06-16T21:00:41.946499Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/typescript-config"), path: AnchoredSystemPathBuf("packages/typescript-config") }}))
+2024-06-16T21:01:11.046456Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/appHooks/tsconfig.json")}
+2024-06-16T21:01:11.046515Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/appHooks"), path: AnchoredSystemPathBuf("packages/appHooks") }}))
+2024-06-16T21:01:16.246408Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/assets/tsconfig.json")}
+2024-06-16T21:01:16.246463Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/assets"), path: AnchoredSystemPathBuf("packages/assets") }}))
+2024-06-16T21:01:34.447176Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/common-redux/tsconfig.json")}
+2024-06-16T21:01:34.447265Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/common-redux"), path: AnchoredSystemPathBuf("packages/common-redux") }}))
+2024-06-16T21:01:42.946886Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/config/tsconfig.json")}
+2024-06-16T21:01:42.946942Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/config"), path: AnchoredSystemPathBuf("packages/config") }}))
+2024-06-16T21:02:26.147027Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/assets/src/photos/index.ts")}
+2024-06-16T21:02:26.147089Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@repo/assets"), path: AnchoredSystemPathBuf("packages/assets") }}))

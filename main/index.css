@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+@font-face {
+    font-family: 'CustomFont';
+    src: url('/public/fonts/Switzer-Regular.otf') format('otf');
+    src: url('/public/fonts/Switzer-Bold.otf') format('otf');
+    src: url('/public/fonts/Switzer-Light.otf') format('otf');
+    src: url('/public/fonts/Switzer-ExtralightItalic.otf') format('otf');
+    src: url('/public/fonts/Switzer-Extrabold.otf') format('otf');
+    src: url('/public/fonts/Switzer-Medium.otf') format('otf');
+    src: url('/public/fonts/Switzer-Thin.otf') format('otf');
+    src: url('/public/fonts/Switzer-Extralight.otf') format('otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Big Caslon FB';
+    src: url('/fonts/BigCaslon/BigCaslonFB-BlackItalic.eot');
+    src: local('Big Caslon FB Black Italic'), local('BigCaslonFB-BlackItalic'),
+        url('/fonts/BigCaslon/BigCaslonFB-BlackItalic.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslonFB-BlackItalic.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslonFB-BlackItalic.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslonFB-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Caslon FB';
+    src: url('/fonts/BigCaslon/BigCaslonFB-Bold.eot');
+    src: local('Big Caslon FB Bold'), local('BigCaslonFB-Bold'),
+        url('/fonts/BigCaslon/BigCaslonFB-Bold.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslonFB-Bold.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslonFB-Bold.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslonFB-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BigCaslon Expert';
+    src: url('/fonts/BigCaslon/BigCaslon-Expert.eot');
+    src: local('BigCaslon Expert'), local('BigCaslon-Expert'),
+        url('/fonts/BigCaslon/BigCaslon-Expert.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslon-Expert.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslon-Expert.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslon-Expert.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Caslon FB';
+    src: url('/fonts/BigCaslon/BigCaslonFB-Regular.eot');
+    src: local('Big Caslon FB Regular'), local('BigCaslonFB-Regular'),
+        url('/fonts/BigCaslon/BigCaslonFB-Regular.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslonFB-Regular.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslonFB-Regular.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslonFB-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Caslon FB';
+    src: url('/fonts/BigCaslon/BigCaslonFB-Black.eot');
+    src: local('Big Caslon FB Black'), local('BigCaslonFB-Black'),
+        url('/fonts/BigCaslon/BigCaslonFB-Black.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslonFB-Black.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslonFB-Black.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslonFB-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Caslon FB';
+    src: url('/fonts/BigCaslon/BigCaslonFB-Italic.eot');
+    src: local('Big Caslon FB Italic'), local('BigCaslonFB-Italic'),
+        url('/fonts/BigCaslon/BigCaslonFB-Italic.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslonFB-Italic.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslonFB-Italic.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslonFB-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BigCaslon Alternatives';
+    src: url('/fonts/BigCaslon/BigCaslon-Alternatives.eot');
+    src: local('BigCaslon Alternatives'), local('BigCaslon-Alternatives'),
+        url('/fonts/BigCaslon/BigCaslon-Alternatives.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslon-Alternatives.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslon-Alternatives.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslon-Alternatives.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BigCaslon SmallCaps';
+    src: url('/fonts/BigCaslon/BigCaslon-SmallCaps.eot');
+    src: local('BigCaslon SmallCaps'), local('BigCaslon-SmallCaps'),
+        url('/fonts/BigCaslon/BigCaslon-SmallCaps.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslon-SmallCaps.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslon-SmallCaps.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslon-SmallCaps.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Big Caslon FB';
+    src: url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.eot');
+    src: local('Big Caslon FB Bold Italic'), local('BigCaslonFB-BoldItalic'),
+        url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BigCaslon ItalicSwash';
+    src: url('/fonts/BigCaslon/BigCaslon-ItalicSwash.eot');
+    src: local('BigCaslon Italic Swash'), local('BigCaslon-ItalicSwash'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+.swiper-overflow-container {
+    background: red !important;
+}
+
+.swiper-overflow-container .container {
+    background: red !important;
+
+    overflow: visible; /* if your container has overflow by default */
+}
+
+.swiper-overflow-container .swiper-container {
+    background: red;
+    overflow: visible; /* remove swiper container overflow */
+}
+
+/* .swiper-wrapper {
+    padding: 10rem ;
+} */
