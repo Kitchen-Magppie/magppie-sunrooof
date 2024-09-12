@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useState } from "react"
 import { IoMdClose } from "react-icons/io"
 import { useFirebaseStorageActions } from "../../hooks/firebase"
 
-import { CircularProgress } from ".."
+import CircularProgress from "./../CircularProgress"
 
 export default function ImageInput(props: TImageActionProps) {
 

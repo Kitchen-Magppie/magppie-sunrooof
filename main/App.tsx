@@ -1,5 +1,6 @@
 // import { useFirebaseAuth } from '../appHooks/firebase/use-firebase-listeners'
 import Routes from '../routes'
+import { Button } from "@/components/ui/button"
 // import { useLocation, useNavigate } from 'react-router-dom';
 // import { RouteEnum } from "./types/route";
 // import CustomCircularProgress from '../app/kitchen/components/CustomCircularProgress'
@@ -28,7 +29,9 @@ export default function App() {
     //     return <CustomCircularProgress />
     // }
     return (
-        <>
+        <><Button>Click me</Button>
+
+
             <Routes />
         </>
     )

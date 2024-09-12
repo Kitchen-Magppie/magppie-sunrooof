@@ -4,7 +4,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 //====================================================================
 
 import { TComponentItem } from '../../../../../types/component'
-import { CustomToggle, ImageInput } from '../../../../../components'
+import CustomToggle from '../../../../../components/CustomToggle'
+import ImageInput from '../../../../../components/ImageInput'
 
 
 export default function ComponentCreateEditForm(props: TProps) {

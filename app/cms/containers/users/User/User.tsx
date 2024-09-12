@@ -8,7 +8,7 @@ import { Search } from '../../../components'
 import { useFirebaseCmsSuperUsersListener } from '../../../utils/firebase/use-firebase-cms-listeners'
 import { useAppSelector } from '../../../../../redux'
 import Modal from '../components/Modal'
-import { PageProgress } from '../../../../../components'
+import PageProgress from '../../../../../components/PageProgress'
 
 export default function User() {
     const [modalId, setIsModalId] = useState('')

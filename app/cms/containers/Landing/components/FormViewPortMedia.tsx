@@ -11,7 +11,7 @@ import {
 // import { FormToggle } from "../../../components"
 // import { useCallback } from "react"
 // import _ from "../../../../../types/lodash"
-import { ImageInput } from "../../../../../components"
+import ImageInput from "../../../../../components/ImageInput"
 import _ from "../../../../../types/lodash"
 
 export default function FormViewPortMedia(props: TProps) {

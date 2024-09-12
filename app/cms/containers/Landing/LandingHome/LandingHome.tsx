@@ -10,11 +10,9 @@ import {
     ComponentActionForm
 } from "../components"
 
-import {
-    CustomConfirmationDialog,
-    CustomSimpleModal,
-    PageProgress
-} from '../../../../../components'
+import PageProgress from '../../../../../components/PageProgress'
+import CustomSimpleModal from '../../../../../components/CustomSimpleModal'
+import CustomConfirmationDialog from '../../../../../components/CustomConfirmationDialog'
 import {
     COMPONENT_META,
     INIT_CUSTOMER_SITE_COMPONENT,

@@ -11,7 +11,7 @@ import {
     TComponentItem,
     TComponentMeta
 } from '../../../../../types'
-import { ImageInput } from '../../../../../components'
+import ImageInput from '../../../../../components/ImageInput'
 import { MinimalAccordion } from '../../../components'
 import _ from '../../../../../types/lodash'
 import {

@@ -8,7 +8,7 @@ import { Search } from '../../../components'
 import { useFirebaseCmsKitchensListener } from '../../../utils/firebase/use-firebase-cms-listeners'
 import { useAppSelector } from '../../../../../redux'
 import CustomModal from '../components/CustomModal'
-import { PageProgress } from '../../../../../components'
+import PageProgress from '../../../../../components/PageProgress'
 
 export default function Kitchen() {
     const [modalId, setIsModalId] = useState('')

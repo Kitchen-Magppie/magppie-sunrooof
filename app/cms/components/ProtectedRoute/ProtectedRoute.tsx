@@ -5,7 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import PageProgress from '../../../../components/PageProgress'
 import { useAppSelector } from '../../../../redux'
 import Header from '../Header'
-import { CustomBreadcrumb } from '../../../../components'
+import CustomBreadcrumb from "../../../../components/CustomBreadcrumb"
 
 export default function ProtectedRoute() {
     const { pathname } = useLocation()

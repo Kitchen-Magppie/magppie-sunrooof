@@ -8,7 +8,7 @@ import { Search } from './../../components'
 import { useFirebaseCmsProjectsListener } from '../../utils/firebase/use-firebase-cms-listeners'
 import { useAppSelector } from '../../../../redux'
 import Modal from './components/Modal'
-import { PageProgress } from '../../../../components'
+import PageProgress from '../../../../components/PageProgress'
 
 export default function Projects() {
     const [modalId, setIsModalId] = useState('')

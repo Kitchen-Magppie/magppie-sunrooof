@@ -13,7 +13,9 @@ import {
     TKitchen
 } from '../../../types/Kitchen'
 import { db } from '../../../../../config/firebase.config'
-import { ImageInput, SimpleDropdown } from '../../../../../components'
+import ImageInput from '../../../../../components/ImageInput'
+import SimpleDropdown from '../../../../../components/SimpleDropdown'
+
 import { FirebaseCollectionEnum } from '../../../../../types'
 
 export default function Form(props: TProps) {

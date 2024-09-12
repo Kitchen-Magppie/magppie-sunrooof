@@ -8,7 +8,11 @@ import { Search } from '../../../components'
 import { useAppSelector } from '../../../../../redux'
 import { CmsLandingPageComponentCard, ComponentCreateEditForm } from "../components"
 import { useFirebaseCustomerListener } from '../../../utils/firebase/customer'
-import { CustomConfirmationDialog, CustomSimpleModal, PageProgress } from '../../../../../components'
+import CustomConfirmationDialog from '../../../../../components/CustomConfirmationDialog'
+import CustomSimpleModal from '../../../../../components/CustomSimpleModal'
+
+import PageProgress from '../../../../../components/PageProgress'
+
 import { INIT_CUSTOMER_SITE_COMPONENT, TComponentItem } from '../../../../../types'
 
 export default function LandingPage() {
