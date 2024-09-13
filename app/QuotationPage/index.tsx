@@ -1,4 +1,5 @@
 import About from './About'
+import BuyingJourney from './BuyingJourney'
 // import Clients from './Clients'
 import Features from './Features'
 import Footer from './Footer'
@@ -17,6 +18,7 @@ const QuotationPage = () => {
             <Quotation />
             <TermsandConditions />
             <Guarantee />
+            <BuyingJourney />
             <Footer />
         </>
     )
