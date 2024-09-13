@@ -2,7 +2,7 @@ import { features } from './data'
 
 const Features = () => {
     return (
-        <div className="flex flex-col md:flex-row items-start container mx-auto py-20">
+        <div className="flex flex-col md:flex-row items-start w-full container mx-auto py-20">
             {features.map((feature) => {
                 return (
                     <div

@@ -1,4 +1,5 @@
 import ranbir from '../assets/clients/ranbir.png'
+import indiaFlag from '../assets/team/india-flag.png'
 
 export const team = [
     {
@@ -7,7 +8,7 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
     {
         id: 2,
@@ -15,7 +16,7 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
     {
         id: 3,
@@ -23,7 +24,7 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
     {
         id: 4,
@@ -31,7 +32,7 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
     {
         id: 5,
@@ -39,7 +40,7 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
     {
         id: 6,
@@ -47,7 +48,7 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
     {
         id: 7,
@@ -55,6 +56,6 @@ export const team = [
         name: 'Ishat Jain',
         positon: 'Founder',
         country: 'INDIA',
-        countryLogo: '',
+        countryLogo: indiaFlag,
     },
 ]
