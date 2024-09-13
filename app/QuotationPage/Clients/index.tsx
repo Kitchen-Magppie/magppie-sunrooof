@@ -6,7 +6,7 @@ const Clients = () => {
             <h1 className="text-white font-bold text-5xl text-center pb-10">
                 From those who love us
             </h1>
-            <div className="grid grid-cols-6 container mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-6 container mx-auto">
                 {clients.map((client) => {
                     return (
                         <div className="text-white flex flex-col items-center pb-5">
