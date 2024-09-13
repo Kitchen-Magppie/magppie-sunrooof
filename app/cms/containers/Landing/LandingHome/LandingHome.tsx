@@ -24,6 +24,7 @@ import { useFirebaseLandingListener } from '../../../utils/firebase'
 // import CustomDumpButton from '../../../components/Dump/CustomDumpButton'
 
 export function LandingHome() {
+    console.log('xsx')
     useFirebaseLandingListener()
     const { loading, value } = useAppSelector((state) => state.Cms.Landing)
     const meta = useMemo(() => COMPONENT_META(value), [value])
