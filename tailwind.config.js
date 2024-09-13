@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: ['class'],
     content: [
         'index.html',
         './app/**/*.{js,jsx,ts,tsx}',
@@ -8,12 +9,6 @@ export default {
         // './stories/**/*.{js,jsx,ts,tsx}',
         './node_modules/flowbite/**/*.js',
     ],
-    theme: {
-        extend: {
-            fontFamily: {
-                custom: ['CustomFont', 'sans-serif', 'Big Caslon FB'], // Add your custom font here
-            },
-        },
-    },
-    plugins: [require('flowbite/plugin')],
+
+    plugins: [require('flowbite/plugin'), require('tailwindcss-animate')],
 }
