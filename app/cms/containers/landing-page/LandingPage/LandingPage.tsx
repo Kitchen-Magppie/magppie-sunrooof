@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 
 //====================================================================
 
-import { Search } from '../../../components'
+import { CmsSearch } from '../../../components'
 import { useAppSelector } from '../../../../../redux'
 import { CmsLandingPageComponentCard, ComponentCreateEditForm } from "../components"
 import { useFirebaseCustomerListener } from '../../../utils/firebase/customer'
@@ -71,7 +71,7 @@ export default function LandingPage() {
     }, [onChangeModal])
     return (
         <div>
-            <Search placeholder="Search Components.." onChange={(search) => {
+            <CmsSearch placeholder="Search Components.." onChange={(search) => {
                 setCorpus((prev) => ({ ...prev, search }))
             }} />
             {loading ? (<PageProgress />) : (

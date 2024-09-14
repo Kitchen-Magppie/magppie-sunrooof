@@ -2,7 +2,7 @@ import { IoMdSearch } from 'react-icons/io'
 
 type TProps = { onChange: (e: string) => void; placeholder?: string }
 
-export function Search(props: TProps) {
+export function CmsSearch(props: TProps) {
     return (<form className="max-w-md mx-auto mt-10">
         <label
             htmlFor="default-search"

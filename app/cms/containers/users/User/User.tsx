@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa'
 //====================================================================
 
 import Card from '../components/Card'
-import { Search } from '../../../components'
+import { CmsSearch } from '../../../components'
 import { useFirebaseCmsSuperUsersListener } from '../../../utils/firebase/use-firebase-cms-listeners'
 import { useAppSelector } from '../../../../../redux'
 import Modal from '../components/Modal'
@@ -28,7 +28,7 @@ export default function User() {
 
     return (
         <div>
-            <Search
+            <CmsSearch
                 placeholder="Search Users.."
                 onChange={(e) => {
                     setSearch(e)

@@ -6,6 +6,6 @@ export function useContainerTitle() {
     const { pathname } = useLocation()
     useEffect(() => {
         const item = CMS_NAV_ITEMS?.find((row) => row.url === pathname)
-        document.title = `${item.title || 'Home'} | Sunrooof`
+        document.title = `${item?.title?.length ? item?.title : 'Home'} | Sunrooof`
     }, [pathname])
 }

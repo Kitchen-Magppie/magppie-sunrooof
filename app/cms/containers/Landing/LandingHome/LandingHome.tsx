@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa'
 import _ from 'lodash'
 //====================================================================
 
-import { Search } from '../../../components'
+import { CmsSearch } from '../../../components'
 import { useAppSelector } from '../../../../../redux'
 import {
     CmsLandingPageComponentCard,
@@ -107,7 +107,7 @@ export function LandingHome() {
 
     return (
         <div>
-            <Search
+            <CmsSearch
                 placeholder="Search Components.."
                 onChange={(search) => {
                     setCorpus((prev) => ({ ...prev, search }))
