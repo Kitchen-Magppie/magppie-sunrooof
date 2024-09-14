@@ -1,13 +1,38 @@
-import { useMemo } from "react";
-import { CmsSearch } from "../../components";
+import { useCallback, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { MdDone } from "react-icons/md";
 import { RiProgress1Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
 import { GrFormNextLink } from "react-icons/gr";
+import { RiApps2AddLine } from "react-icons/ri";
+//====================================================================
+import { CmsSearch, MinimalAccordion } from "../../components";
+import { CustomSimpleModal } from "../../../../components";
+
 export default function CustomerDashboard() {
+    const [corpus, setCorpus] = useState(INIT_CORPUS)
+    const onToggleModal = useCallback(() => {
+        setCorpus((prev) => ({
+            ...prev,
+            toggle: {
+                ...prev.toggle,
+                isOpenComponentModal: !prev.toggle.isOpenComponentModal
+            }
+        }))
+    }, [])
     return <div className="">
         <div className="">
-            <CmsSearch onChange={(e) => { console.log(e) }} />
+            <div className="flex gap-2 justify-between">
+                <div className=" w-full">
+                    <CmsSearch onChange={(e) => { console.log(e) }} />
+                </div>
+                <button className="flex items-center p-3 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={() => {
+                        onToggleModal()
+                    }}
+                >
+                    <RiApps2AddLine className="text-2xl" />
+                </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
                 {Array.from({ length: 5 })?.map((_, i) => {
@@ -20,8 +45,21 @@ export default function CustomerDashboard() {
             </div>
         </div>
 
+        <CustomSimpleModal
+            show={corpus.toggle.isOpenComponentModal}
+            onHide={() => { onToggleModal() }}
+            label="Create Component"
+        >
+            <div className="p-2">
+                <MinimalAccordion title="Comparisons" >
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ullam tempora facere temporibus consectetur, earum eos doloremque, quam a aliquam perspiciatis, mollitia veniam ipsam alias aspernatur et itaque cum quasi culpa.
+                </MinimalAccordion>
+            </div>
+        </CustomSimpleModal>
     </div>
 }
+type TCorpus = { toggle: { isOpenComponentModal: boolean } }
+const INIT_CORPUS: TCorpus = { toggle: { isOpenComponentModal: false } }
 
 
 
@@ -79,6 +117,7 @@ function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
                     <GrFormNextLink />
                 </Link>
             </div>
+
         </div>
 
     )
