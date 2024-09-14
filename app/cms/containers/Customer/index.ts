@@ -1,1 +1,1 @@
-export { default } from "./Customer"
+export { default } from "./CustomerDashboard"

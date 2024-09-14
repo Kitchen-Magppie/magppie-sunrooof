@@ -5,4 +5,11 @@ import FormToggle from "./FormToggle";
 export * from "./MinimalAccordion"
 export * from "./CmsSearch/CmsSearch"
 import ExampleSass from "./ExampleSass";
-export { ExampleSass, Header, ProtectedRoute, FormToggle }
+import CmsNotFound from "./CmsNotFound";
+export {
+    CmsNotFound,
+    ExampleSass,
+    Header,
+    ProtectedRoute,
+    FormToggle,
+}

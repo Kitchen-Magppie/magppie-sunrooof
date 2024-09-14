@@ -9,7 +9,7 @@ import { useFirebaseCmsSuperUsersListener } from '../../../utils/firebase/use-fi
 import { useAppSelector } from '../../../../../redux'
 import Modal from '../components/Modal'
 import { PageProgress } from '../../../../../components'
-
+import { CmsNotFound } from "./../../../components"
 export default function User() {
     const [modalId, setIsModalId] = useState('')
     const openModal = (id = 'create') => setIsModalId(id)
@@ -48,11 +48,7 @@ export default function User() {
                                 />
                             ))}
                         </div>
-                    ) : (
-                        <div className="flex flex-row justify-center h-20 align-middle">
-                            Not found
-                        </div>
-                    )}
+                    ) : <CmsNotFound />}
                 </div>
             )}
             <div

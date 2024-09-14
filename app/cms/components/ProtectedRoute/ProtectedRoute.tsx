@@ -23,10 +23,10 @@ export default function ProtectedRoute() {
     }
     if (user?.value && !GUEST_ROUTES?.includes(pathname)) {
         return (
-            <div className="">
+            <div className="bg-slate-50 h-screen">
                 <Header />
                 <div className="container mx-auto p-2 max-w-7xl">
-                    <div className="mt-20">
+                    <div className="mt-20 ">
                         <Outlet />
                     </div>
                 </div>
