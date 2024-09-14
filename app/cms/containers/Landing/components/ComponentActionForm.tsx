@@ -42,8 +42,8 @@ export default function ComponentActionForm(props: TProps) {
     })
     const defaultValues = useMemo(() => ({
         ...item,
-        orderId: item.orderId < 0 ? meta.order.next : item.orderId,
-    }), [item, meta.order.next])
+        orderId: item.orderId < 0 ? meta?.order?.next : item?.orderId,
+    }), [item, meta?.order?.next])
     const methods = useForm({
         defaultValues,
         resolver: yupResolver(schema),
@@ -191,6 +191,6 @@ const sectionImageItemSchema = Yup.object().shape({
 
 type TProps = {
     item: TComponentItem,
-    meta: TComponentMeta,
+    meta?: TComponentMeta,
     mode: 'create' | 'edit' | ''
 }
