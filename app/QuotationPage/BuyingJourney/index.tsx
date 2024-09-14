@@ -9,11 +9,11 @@ const BuyingJourney = () => {
                 </h1>
             </div>
             <div className="flex flex-col lg:flex-row items-center lg:justify-between w-full max-w-5xl">
-                <div className="flex mb-8 justify-evenly w-full">
+                <div className="grid grid-cols-3 lg:flex lg:justify-evenly mb-8 w-full">
                     {data.map((step) => {
                         return (
                             <div
-                                className="flex flex-col items-center"
+                                className="flex flex-col items-center py-8"
                                 key={step.id}
                             >
                                 <span className="text-4xl font-bold">
