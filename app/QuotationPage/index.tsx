@@ -1,3 +1,4 @@
+import TwodDesigns from './2dDesigns'
 import About from './About'
 import BeforeAfter from './BeforeAfter/BeforeAfter'
 import BuyingJourney from './BuyingJourney'
@@ -21,6 +22,7 @@ const QuotationPage = () => {
             <Features />
             <Team />
             <ClientName />
+            <TwodDesigns />
             <Quotation />
             <TermsandConditions />
             <Guarantee />
