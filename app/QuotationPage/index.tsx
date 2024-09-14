@@ -1,5 +1,7 @@
 import About from './About'
+import BeforeAfter from './BeforeAfter/BeforeAfter'
 import BuyingJourney from './BuyingJourney'
+import ClientName from './ClientName'
 import Clients from './Clients'
 import Features from './Features'
 import Footer from './Footer'
@@ -15,8 +17,10 @@ const QuotationPage = () => {
             <Header />
             <About />
             <Clients />
+            <BeforeAfter />
             <Features />
             <Team />
+            <ClientName />
             <Quotation />
             <TermsandConditions />
             <Guarantee />
