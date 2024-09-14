@@ -9,7 +9,7 @@ const Clients = () => {
             <div className="grid grid-cols-2 lg:grid-cols-6 container mx-auto max-w-xl">
                 {clients.map((client) => {
                     return (
-                        <div className="text-white flex flex-col items-center pb-5">
+                        <div className="text-white flex flex-col items-center pb-5" key={client.id}>
                             <img src={client.img} alt="" />
                             <h1>{client.heading}</h1>
                             <p>{client.subHeading}</p>
