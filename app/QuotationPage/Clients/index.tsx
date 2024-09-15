@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { clients } from './data'
 
 const Clients = () => {
@@ -10,7 +11,7 @@ const Clients = () => {
                 {clients.map((client) => {
                     return (
                         <div className="text-white flex flex-col items-center pb-5" key={client.id}>
-                            <img src={client.img} alt="" />
+                            <LazyLoadImage effect='blur' src={client.img} alt="" />
                             <h1>{client.heading}</h1>
                             <p>{client.subHeading}</p>
                         </div>
