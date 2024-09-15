@@ -26,10 +26,7 @@ export function useCustomerDashboard() {
     return ({
         data: {
             ...corpus,
-            values: {
-                ...corpus.values,
-                components
-            }
+            values: { ...corpus.values, components }
         },
         action: {
             onToggleModal,

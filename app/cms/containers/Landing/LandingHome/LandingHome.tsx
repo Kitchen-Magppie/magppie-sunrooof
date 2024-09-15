@@ -121,7 +121,9 @@ export function LandingHome() {
                     {components?.length ? (
                         <div className="gap-6 grid grid-cols-2 md:grid-cols-3 max-w-screen-2xl mx-auto place-items-start">
                             {components?.map((item, i) => {
-                                return <CmsLandingPageComponentCard key={i} item={item}
+                                return <CmsLandingPageComponentCard
+                                    key={i}
+                                    item={item}
                                     onEdit={() => { onClickEdit(item) }}
                                     onRemove={() => { onClickRemove(item) }}
                                 />

@@ -3,7 +3,12 @@ import { LuSave } from "react-icons/lu";
 import { FaRegCopy } from "react-icons/fa6";
 import { FaEarthAmericas } from "react-icons/fa6";
 //====================================================================
-import { CmsSearch, MinimalAccordion, CmsCustomerCardItem } from "../../../components";
+import {
+    CmsSearch,
+    MinimalAccordion,
+    CmsCustomerCardItem,
+    CmsNotFound
+} from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
 import { ComponentActionForm } from "../../Landing/components";
 import { CmsCardEnum } from "../../../types";
@@ -28,7 +33,7 @@ export default function CustomerDashboard() {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
+            {cumulative.data.values.components?.length ? (<div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
                 {cumulative.data.values.components.map((item, i) => {
                     return <CmsCustomerCardItem
                         label={item.name}
@@ -36,7 +41,8 @@ export default function CustomerDashboard() {
                         variant={CmsCardEnum.Pending}
                     />
                 })}
-            </div>
+            </div>) : <div className="mt-40"> <CmsNotFound /></div>}
+
         </div>
 
         <CustomSimpleModal
@@ -54,7 +60,7 @@ export default function CustomerDashboard() {
                     </MinimalAccordion>)
                 })}
 
-                <div className="flex flex-col   gap-1">
+                <div className="flex flex-col gap-1">
                     <div className="">
                         <button
                             type="button"
