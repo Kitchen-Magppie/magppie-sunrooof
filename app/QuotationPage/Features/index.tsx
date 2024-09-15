@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { features } from './data'
 
 const Features = () => {
@@ -9,7 +10,7 @@ const Features = () => {
                         key={feature.id}
                         className="flex flex-col mb-10 lg:items-center lg:text-center"
                     >
-                        <img src={feature.img} className="h-40 w-40" alt="" />
+                        <LazyLoadImage effect='blur' src={feature.img} className="h-40 w-40" alt="" />
                         <h1 className="text-3xl pt-3">{feature.heading}</h1>
                         <p className="pt-3 md:text-base text-xl">
                             {feature.content}

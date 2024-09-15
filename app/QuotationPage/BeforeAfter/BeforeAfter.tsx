@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { images } from './data'
 
 const BeforeAfter = () => {
@@ -7,7 +8,7 @@ const BeforeAfter = () => {
                 {images.map((image) => {
                     return (
                         <div key={image.id}>
-                            <img src={image.image} alt="" />
+                            <LazyLoadImage effect='blur' src={image.image} alt="" />
                         </div>
                     )
                 })}

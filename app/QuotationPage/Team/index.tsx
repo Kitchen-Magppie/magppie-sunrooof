@@ -1,3 +1,4 @@
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { team } from './data'
 
 const Team = () => {
@@ -10,11 +11,11 @@ const Team = () => {
                 {team.map((person) => {
                     return (
                         <div className="text-black flex flex-col items-center pb-10 gap-0" key={person.id}>
-                            <img src={person.img} alt="" />
+                            <LazyLoadImage effect='blur' src={person.img} alt="" />
                             <h1>{person.name}</h1>
                             <p>{person.positon}</p>
                             <p>{person.country}</p>
-                            <img
+                            <LazyLoadImage effect='blur'
                                 className="w-15 h-10 mt-2"
                                 src={person.countryLogo}
                                 alt=""
