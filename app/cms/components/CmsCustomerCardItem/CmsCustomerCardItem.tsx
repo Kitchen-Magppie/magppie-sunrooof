@@ -7,31 +7,8 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { CmsCardEnum, TCmsCustomerCardItem } from "../../types/card";
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
-
-    const values = useMemo(() => {
-        switch (props.variant) {
-            case CmsCardEnum.Complete:
-                return ({
-                    classes: 'bg-green-500',
-
-                    icon: <MdDone className="text-xl" />
-                })
-
-            case CmsCardEnum.Pending:
-                return ({
-                    classes: 'bg-yellow-500',
-                    icon: <RiProgress1Line className="text-xl" />
-                })
-
-            default:
-                return ({
-                    classes: '',
-                    icon: <></>
-                })
-                break;
-        }
-    }, [props.variant])
-
+    const { variant } = props;
+    const values = useMemo(() => STATUS_ITEM(variant), [variant])
 
     return (<div className="transition-transform duration-300 transform hover:scale-105 max-w-sm p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col gap-2">
         <div className="flex items-center justify-between">
@@ -66,3 +43,19 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     )
 }
 
+const STATUS_ITEM = (variant: CmsCardEnum) => {
+    switch (variant) {
+        case CmsCardEnum.Complete:
+            return ({
+                classes: 'bg-green-500',
+                icon: <MdDone className="text-xl" />
+            })
+
+        case CmsCardEnum.Pending:
+            return ({
+                classes: 'bg-yellow-500', icon: <RiProgress1Line className="text-xl" />
+            })
+        default:
+            return ({ classes: '', icon: <></> })
+    }
+}
