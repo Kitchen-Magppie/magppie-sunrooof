@@ -1,3 +1,4 @@
+import { LazyLoadImage } from "react-lazy-load-image-component"
 import logo from "./assets/logo_footer.png"
 
 const Footer = () => {
@@ -17,7 +18,8 @@ const Footer = () => {
                 </p>
             </div>
             <div className="flex flex-col items-start">
-                <img src={logo} className="h-100 w-100" alt="" />
+                <LazyLoadImage
+                    effect="blur" src={logo} className="h-100 w-100" alt="" />
                 <p className="font-bold text-4xl ml-8">www.sunrooof.com</p>
             </div>
         </div>

@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-
+@import url('react-lazy-load-image-component/src/effects/blur.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -181,4 +181,3 @@ body {
 /* .swiper-wrapper {
     padding: 10rem ;
 } */
-
