@@ -16,13 +16,13 @@ const BuyingJourney = () => {
                                 className="flex flex-col items-center py-8"
                                 key={step.id}
                             >
-                                <span className="text-4xl font-bold">
+                                <span className="text-6xl lg:text-4xl font-bold">
                                     {step.id}
                                 </span>
-                                <span className="text-center text-lg font-semibold mt-2">
+                                <span className="text-center text-2xl lg:text-xl font-semibold mt-2">
                                     {step.heading}
                                 </span>
-                                <span className="text-center text-sm text-gray-500">
+                                <span className="text-center text-lg lg:text-sm text-gray-500">
                                     {step.subHeading}
                                 </span>
                             </div>
