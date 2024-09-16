@@ -5,14 +5,14 @@ const Footer = () => {
     return (
         <div className="py-16 flex flex-col justify-start bg-[#fbfaf9]">
             <div className="pb-10 ml-8">
-                <p className="text-xl">
+                <p className="text-2xl mb-2">
                     <span className="font-bold">Number:</span>- +91 9711008738
                 </p>
-                <p className="text-xl">
+                <p className="text-2xl mb-2">
                     <span className="font-bold">Experience Center:</span>- 352,
                     Sultanpur Metro Station, MG Road. New Delhi-110030
                 </p>
-                <p className="text-xl">
+                <p className="text-2xl mb-2">
                     <span className="font-bold">Email:</span>-
                     contactsunrooof@magppie.com
                 </p>
