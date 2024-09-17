@@ -6,7 +6,7 @@ const ThreedDesigns = () => {
     return (
         <div className="flex flex-col justify-center items-center py-20">
             <h1 className="text-6xl underline">3D Designs</h1>
-            <div className="flex flex-col items-center">
+            <div className="flex items-center mx-10">
                 <LazyLoadImage
                     effect="blur"
                     src={ThreedOne}
@@ -14,7 +14,11 @@ const ThreedDesigns = () => {
                     alt=""
                 />
                 <LazyLoadImage
-                    effect="blur" src={ThreedTwo} alt="" className="rounded-lg shadow-md" />
+                    effect="blur"
+                    src={ThreedTwo}
+                    alt=""
+                    className="rounded-lg shadow-md ml-4"
+                />
             </div>
         </div>
     )
