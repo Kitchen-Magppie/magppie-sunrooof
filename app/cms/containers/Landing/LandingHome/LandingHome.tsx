@@ -17,6 +17,7 @@ import {
 } from '../../../../../components'
 import {
     COMPONENT_META,
+    ComponentModeEnum,
     INIT_CUSTOMER_SITE_COMPONENT,
     TComponentItem
 } from '../../../../../types'
@@ -93,7 +94,7 @@ export function LandingHome() {
             label={`${_.upperFirst(corpus.modal.action)} Component`}
         >
             <ComponentActionForm
-                mode={corpus.modal.action}
+                mode={ComponentModeEnum.Create}
                 item={corpus.modal.value}
                 meta={meta}
             />

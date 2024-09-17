@@ -1,69 +1,122 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import * as Yup from 'yup'
 import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { MdPostAdd } from "react-icons/md";
-
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { IoCreateOutline } from "react-icons/io5";
+import { CiDesktop, CiMobile1 } from "react-icons/ci";
+import { BsWindowStack } from "react-icons/bs";
+import { RiText } from "react-icons/ri";
+import { MdTextFields } from "react-icons/md";
 //====================================================================
 
 import {
     INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+    TComponentMode,
     TComponentItem,
-    TComponentMeta
+    TComponentMeta,
+    _,
+    ComponentModeEnum,
+    ViewPortEnum,
+    CmsComponentMediaEnum,
 } from '../../../../../types'
 import { ImageInput } from '../../../../../components'
-import { MinimalAccordion } from '../../../components'
-import _ from '../../../../../types/lodash'
+import { MinimalAccordion, FieldCautation } from '../../../components'
 import {
     FormTypography,
     FormItemTypography,
     FormViewPortMedia
 } from '.'
-import { useFirebaseCustomerSiteComponentActions } from '../../../utils/firebase/customer/use-firebase-customer-actions';
+import { useFirebaseCustomerSiteComponentAction } from '../../../utils/firebase/customer';
+import { useAppSelector } from '../../../../../redux'
+
 
 export default function ComponentActionForm(props: TProps) {
-    const { meta, item } = props;
+
+    const [corpus, setCorpus] = useState({ isSubmitting: false })
+    const { item } = props;
+    // TODO: To check cms on dummy collection;
+    // TODO: To add order id globally and inside every images;
+    // TODO: If we have create action then we have to ensure about global order id will be the unique and next manner;
+    // TODO: To ensure the gallery array is working properly;
+    // FIXME: When we enter directly a url for edit, data not found because of listner not calling;
+    // FIXME: To remove accordion overflow scroll, we have complete height;
+
+    const { value } = useAppSelector((state) => state.Cms.Landing)
+    const isCreateMode = props.mode === ComponentModeEnum.Create
+    const filteredOrder = useMemo(() => {
+        return _.applyOrder(_.map(value, 'orderId'))
+    }, [value])
     const schema = Yup.object().shape({
-        orderId: Yup.number()
-            .min(0, 'The number must be non-negative')
+        orderId: Yup.string()
             .required('Order ID is required')
-            .integer('Order ID must be an integer')
+            // .min(0, 'The number must be non-negative')
+            // .integer('Order ID must be an integer')
             .test('checkValidOrderId',
                 'The given Order ID is invalid.',
                 (currentId) => {
-                    return !meta?.order?.used?.filter((previousId) => previousId !== item?.orderId)?.includes(currentId)
-                }),
+                    const { prev, prefer } = filteredOrder;
+                    if (isCreateMode) {
+                        return !prev?.includes(currentId)
+                    } else {
+                        return item.orderId === currentId || Number(prefer) >= Number(item.orderId)
+                    }
+                })
+        ,
         typography: typographySchema,
         links: linkSchema,
-        items: Yup.array().of(typographySchema).required(),
+        items: Yup.array().of(typographyItemSchema).required(),
         name: Yup.string().required('Name is required'),
         isGallery: Yup.boolean(),
         gallery: Yup.array().of(sectionImageItemSchema),
         icons: Yup.array().of(sectionImageItemSchema),
     })
-    const defaultValues = useMemo(() => ({
-        ...item,
-        orderId: item?.orderId < 0 ? meta?.order?.next : item?.orderId,
-    }), [item, meta?.order?.next])
+    const defaultValues = useMemo(() => {
+        return {
+            ...item,
+            orderId: props.mode === ComponentModeEnum.Edit ? item.orderId : filteredOrder.prefer,
+        };
+
+    }, [filteredOrder.prefer, item, props.mode])
+
     const methods = useForm({
         defaultValues,
+        // mode: 'onBlur',
+        reValidateMode: 'onChange',
         resolver: yupResolver(schema),
     })
     const {
         register,
         setValue,
         handleSubmit,
+        watch,
         formState: { errors },
     } = methods
 
-    const values = methods.watch()
+    useEffect(() => {
+        setValue('orderId', props.mode === ComponentModeEnum.Edit ? item.orderId : filteredOrder.prefer)
+    }, [filteredOrder.prefer, item.orderId, props.mode, setValue])
 
-    const actions = useFirebaseCustomerSiteComponentActions()
-    const onSubmit = handleSubmit((data) => {
-        actions.add(data as TComponentItem)
-        console.log(data)
+    const values = watch()
+
+    const CustomerAction = useFirebaseCustomerSiteComponentAction()
+    const onSubmit = handleSubmit((data: TComponentItem) => {
+
+        setCorpus((prev) => ({ ...prev, isSubmitting: true }))
+        setTimeout(() => {
+            if (isCreateMode) {
+                CustomerAction.add(data)
+            } else {
+                CustomerAction.edit({
+                    ...data,
+                    id: item.id
+                })
+
+            }
+            setCorpus((prev) => ({ ...prev, isSubmitting: false }))
+
+        }, 2000)
     })
-    console.log(errors)
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
@@ -76,7 +129,10 @@ export default function ComponentActionForm(props: TProps) {
 
     return (
         <FormProvider {...methods}>
-            <form onSubmit={onSubmit} className="bg-white p-6 rounded shadow-md overflow-y-scroll h-[80vh]">
+            <form onSubmit={onSubmit} className="bg-white p-6 overflow-y-scroll h-[80vh] ">
+                <div className=" mb-2">
+                    <FieldCautation disableAppendButton />
+                </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">
                         Order ID
@@ -99,28 +155,28 @@ export default function ComponentActionForm(props: TProps) {
                     />
                     {renderErrorMessage('name')}
                 </div>
-                <MinimalAccordion isExpanded title='Typography'>
+                <MinimalAccordion isExpanded title='Typography' icon={<RiText />} >
                     <FormTypography />
                 </MinimalAccordion>
-                <MinimalAccordion isExpanded title='Items'>
-                    <div className="flex flex-row-reverse">
-                        <MdPostAdd className='text-xl text-blue-500 cursor-pointer'
-                            onClick={() => {
+                <MinimalAccordion isExpanded title='Items' icon={<MdTextFields />}>
+                    <div className="mb-3">
+                        <FieldCautation label='Array Field'
+                            onClickAdd={() => {
+                                const filterOrder = _.applyOrder(_.map(values.items, 'orderId'))
                                 setValue('items',
                                     [...values.items,
-                                        INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY
+                                    {
+                                        ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+                                        orderId: filterOrder.prefer
+                                    }
                                     ])
                             }}
                         />
+
                     </div>
                     <FormItemTypography />
                 </MinimalAccordion>
-
-                <MinimalAccordion title='Desktop'>
-                    <FormViewPortMedia variant='desktop' />
-                </MinimalAccordion>
-
-                <MinimalAccordion title='Mobile'>
+                <MinimalAccordion title='Links' icon={<BsWindowStack />}>
                     <div className=''>
                         <ImageInput
                             label='Icon'
@@ -158,12 +214,25 @@ export default function ComponentActionForm(props: TProps) {
 
                 </MinimalAccordion>
 
-
+                <MinimalAccordion title='Icons' icon={<CiDesktop />}>
+                    <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Icon} />
+                </MinimalAccordion>
+                <MinimalAccordion title='Gallery ' icon={<CiDesktop />}>
+                    <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Gallery} />
+                </MinimalAccordion>
+                <MinimalAccordion title='Icons' icon={<CiMobile1 />}>
+                    <FormViewPortMedia viewport={ViewPortEnum.Mobile} name={CmsComponentMediaEnum.Gallery} />
+                </MinimalAccordion>
+                <MinimalAccordion title='Gallery' icon={<CiMobile1 />}>
+                    <FormViewPortMedia viewport={ViewPortEnum.Mobile} name={CmsComponentMediaEnum.Icon} />
+                </MinimalAccordion>
                 <button
+                    disabled={corpus.isSubmitting}
                     type="submit"
-                    className="w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Create Component
+                    {isCreateMode ? 'Create' : 'Edit'} Component
+                    {corpus.isSubmitting ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
                 </button>
             </form>
         </FormProvider>
@@ -173,11 +242,12 @@ export default function ComponentActionForm(props: TProps) {
 
 const typographySchema = Yup.object().shape({
     main: Yup.string(),
-    secondary: Yup.string(),
-    subtitle: Yup.string(),
-    action: Yup.string(),
     description: Yup.string(),
-    secondaryDescription: Yup.string(),
+})
+const typographyItemSchema = Yup.object().shape({
+    orderId: Yup.string(),
+    main: Yup.string(),
+    description: Yup.string(),
 })
 
 const linkSchema = Yup.object().shape({
@@ -196,5 +266,5 @@ const sectionImageItemSchema = Yup.object().shape({
 type TProps = {
     item: TComponentItem,
     meta?: TComponentMeta,
-    mode: 'create' | 'edit' | ''
+    mode: TComponentMode
 }
