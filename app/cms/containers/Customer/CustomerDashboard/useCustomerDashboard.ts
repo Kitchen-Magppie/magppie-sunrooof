@@ -1,17 +1,18 @@
 import { useCallback, useMemo, useState } from "react"
 import { _, INIT_CUSTOMER_SITE_COMPONENT, TComponentItem } from "../../../../../types"
+import { useAppSelector } from "../../../../../redux";
 
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
-
+    const value = useAppSelector((state) => state.Cms.CustomerSiteComponent);
 
     const components = useMemo(() => {
-        return _.sortBy(corpus.values.components?.filter((item) =>
+        return _.sortBy(value.value?.filter((item) =>
             corpus.filteration.search?.length
                 ? _.lowerCase(item.name)?.includes(_.lowerCase(corpus.filteration.search))
                 : true
         ), 'orderId')
-    }, [corpus.filteration.search, corpus.values.components]);
+    }, [corpus.filteration.search, value.value]);
 
     const onToggleModal = useCallback(() => {
         setCorpus((prev) => ({
@@ -24,6 +25,7 @@ export function useCustomerDashboard() {
     }, [])
 
     return ({
+        loading: value.loading,
         data: {
             ...corpus,
             values: {
@@ -58,7 +60,6 @@ type TCorpus = {
         search: string,
     },
     values: {
-        components: TComponentItem[],
         sections: string[],
         modal: TCorpusModal
     }
@@ -74,19 +75,11 @@ const SECTIONS = [
     '3D Design',
     'Quotation'
 ]
-const _components: TComponentItem[] = Array.from({ length: 5 })?.map((_, i) => {
-
-    return ({
-        ...INIT_CUSTOMER_SITE_COMPONENT,
-        name: `MagpPie Sunrooof #${i + 1}`
-    }) as TComponentItem
-})
 
 const INIT_CORPUS: TCorpus = {
     toggle: { isOpenComponentModal: false },
     filteration: { search: '' },
     values: {
-        components: _components,
         sections: SECTIONS,
         modal: INIT_CORPUS_MODAL
     }

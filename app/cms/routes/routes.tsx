@@ -7,7 +7,6 @@ import {
     SignIn,
     User,
     LandingHome,
-    // LandingPage,
 } from '../containers'
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
@@ -52,8 +51,7 @@ export default function CmsRoutes() {
             {
                 path: 'landing',
                 element: <LandingHome />,
-            },
-
+            }
         ],
     } as RouteObject
 }

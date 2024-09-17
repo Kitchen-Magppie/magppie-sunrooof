@@ -11,7 +11,8 @@ import { TKitchen } from '../../types/Kitchen';
 import { setKitchens } from '../../redux/slices/Kitchen.slice';
 import { TProject } from '../../types/Project';
 import { setProjects } from '../../redux/slices/Project.slice';
-import { FirebaseCollectionEnum } from '../../../../types';
+import { FirebaseCollectionEnum, TComponentItem } from '../../../../types';
+import { setCustomerSiteComponent } from '../../redux/slices';
 const { getAuth, onAuthStateChanged } = auth;
 
 export function useFirebaseCmsAuthListener() {
@@ -81,6 +82,27 @@ export const useFirebaseCmsKitchensListener = () => {
     }, [dispatch])
 }
 
+
+
+export function useFirebaseCmsSiteComponentListener() {
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        const collectionRef = collection(db, FirebaseCollectionEnum.Component);
+
+        onSnapshot(collectionRef, ({ docs }) => {
+            const data: TComponentItem[] = [];
+            docs?.forEach((doc) => {
+                const row = doc.data();
+                data.push({
+                    ...row,
+                    id: doc.id
+                } as TComponentItem);
+            });
+            dispatch(setCustomerSiteComponent(data))
+
+        });
+    }, [dispatch])
+}
 
 export const useFirebaseCmsProjectsListener = () => {
     const dispatch = useAppDispatch()

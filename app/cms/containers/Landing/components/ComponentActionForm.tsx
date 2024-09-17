@@ -19,6 +19,7 @@ import {
     FormItemTypography,
     FormViewPortMedia
 } from '.'
+import { useFirebaseCustomerSiteComponentActions } from '../../../utils/firebase/customer/use-firebase-customer-actions';
 
 export default function ComponentActionForm(props: TProps) {
     const { meta, item } = props;
@@ -30,7 +31,7 @@ export default function ComponentActionForm(props: TProps) {
             .test('checkValidOrderId',
                 'The given Order ID is invalid.',
                 (currentId) => {
-                    return !meta.order.used?.filter((previousId) => previousId !== item.orderId)?.includes(currentId)
+                    return !meta?.order?.used?.filter((previousId) => previousId !== item?.orderId)?.includes(currentId)
                 }),
         typography: typographySchema,
         links: linkSchema,
@@ -42,7 +43,7 @@ export default function ComponentActionForm(props: TProps) {
     })
     const defaultValues = useMemo(() => ({
         ...item,
-        orderId: item.orderId < 0 ? meta?.order?.next : item?.orderId,
+        orderId: item?.orderId < 0 ? meta?.order?.next : item?.orderId,
     }), [item, meta?.order?.next])
     const methods = useForm({
         defaultValues,
@@ -57,9 +58,12 @@ export default function ComponentActionForm(props: TProps) {
 
     const values = methods.watch()
 
+    const actions = useFirebaseCustomerSiteComponentActions()
     const onSubmit = handleSubmit((data) => {
+        actions.add(data as TComponentItem)
         console.log(data)
     })
+    console.log(errors)
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
