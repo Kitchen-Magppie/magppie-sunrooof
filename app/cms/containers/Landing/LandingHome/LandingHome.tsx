@@ -3,7 +3,7 @@ import { FaPlus } from 'react-icons/fa'
 import _ from 'lodash'
 //====================================================================
 
-import { Search } from '../../../components'
+import { CmsNotFound, CmsSearch } from '../../../components'
 import { useAppSelector } from '../../../../../redux'
 import {
     CmsLandingPageComponentCard,
@@ -21,7 +21,6 @@ import {
     TComponentItem
 } from '../../../../../types'
 import { useFirebaseLandingListener } from '../../../utils/firebase'
-// import CustomDumpButton from '../../../components/Dump/CustomDumpButton'
 
 export function LandingHome() {
     useFirebaseLandingListener()
@@ -31,7 +30,10 @@ export function LandingHome() {
     const onChangeModal = useCallback((newValue: Partial<TCorpusModal>) => {
         setCorpus((prev) => ({
             ...prev,
-            modal: { ...prev.modal, ...newValue, },
+            modal: {
+                ...prev.modal,
+                ...newValue
+            },
         }))
     }, [])
 
@@ -106,7 +108,7 @@ export function LandingHome() {
 
     return (
         <div>
-            <Search
+            <CmsSearch
                 placeholder="Search Components.."
                 onChange={(search) => {
                     setCorpus((prev) => ({ ...prev, search }))
@@ -119,16 +121,15 @@ export function LandingHome() {
                     {components?.length ? (
                         <div className="gap-6 grid grid-cols-2 md:grid-cols-3 max-w-screen-2xl mx-auto place-items-start">
                             {components?.map((item, i) => {
-                                return <CmsLandingPageComponentCard key={i} item={item}
+                                return <CmsLandingPageComponentCard
+                                    key={i}
+                                    item={item}
                                     onEdit={() => { onClickEdit(item) }}
                                     onRemove={() => { onClickRemove(item) }}
                                 />
                             })}
                         </div>
-                    ) : (<div className="flex flex-row justify-center h-20 align-middle">
-                        Not found
-                    </div>
-                    )}
+                    ) : <CmsNotFound />}
                 </div>
             )}
             <div

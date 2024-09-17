@@ -14,6 +14,7 @@ export function useFirebaseAuth() {
         onAuthStateChanged(q, (user) => {
             // let result: IUser | null = null
             if (user?.email) {
+                console.log(user)
                 // result = {
                 //     ...INIT_USER,
                 //     id: _.get(user, 'reloadUserInfo.localId'),
