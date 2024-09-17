@@ -15,6 +15,7 @@ import { CmsCardEnum } from "../../../types";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useMemo } from "react";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
+import { ComponentModeEnum } from "../../../../../types";
 
 export default function CustomerDashboard() {
 
@@ -31,7 +32,8 @@ export default function CustomerDashboard() {
                 {data.values.sections?.map((section, i) => {
                     return (<MinimalAccordion title={section} key={i}>
                         <ComponentActionForm
-                            mode={data.values.modal.action}
+                            mode={ComponentModeEnum.Create}
+                            // mode={data.values.modal.action}
                             item={data.values.modal.value}
                         />
                     </MinimalAccordion>)
@@ -73,7 +75,6 @@ export default function CustomerDashboard() {
         action,
         data.toggle.isOpenComponentModal,
         data.values.link,
-        data.values.modal.action,
         data.values.modal.value,
         data.values.sections
     ])
@@ -82,9 +83,11 @@ export default function CustomerDashboard() {
         <div>
             <div className="flex gap-2 justify-between">
                 <div className=" w-full">
-                    <CmsSearch onChange={(e) => {
-                        action.onSearchItem(e)
-                    }} />
+                    <CmsSearch
+                        placeholder="Search.."
+                        onChange={(e) => {
+                            action.onSearchItem(e)
+                        }} />
                 </div>
                 <button className="flex items-center p-3 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     onClick={() => { action.onToggleModal() }}

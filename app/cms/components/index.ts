@@ -8,6 +8,8 @@ import ExampleSass from "./ExampleSass";
 import CmsNotFound from "./CmsNotFound";
 import { CmsCustomerCardItem } from "./CmsCustomerCardItem";
 import CmsCopyClipboard from "./CmsCopyClipboard"
+export * from "./FieldCautation"
+
 export {
     CmsCopyClipboard,
     CmsCustomerCardItem,
