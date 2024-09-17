@@ -5,7 +5,7 @@ import details from './assets/details.png'
 
 const ProjectDetails = () => {
     return (
-        <div className="flex flex-col justify-center items-center py-20">
+        <div className="flex flex-col justify-center items-center py-20 w-full">
             <h1 className="text-6xl underline">2D Designs</h1>
             <div className="flex mt-10 w-full justify-center">
                 <LazyLoadImage
