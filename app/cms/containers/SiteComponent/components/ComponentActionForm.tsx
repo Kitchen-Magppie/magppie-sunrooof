@@ -4,7 +4,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
-import { CiDesktop, CiMobile1 } from "react-icons/ci";
+import {
+    CiDesktop,
+    // CiMobile1
+} from "react-icons/ci";
 import { BsWindowStack } from "react-icons/bs";
 import { RiText } from "react-icons/ri";
 import { MdTextFields } from "react-icons/md";
@@ -35,13 +38,6 @@ export default function ComponentActionForm(props: TProps) {
 
     const [corpus, setCorpus] = useState({ isSubmitting: false })
     const { item } = props;
-    // TODO: To check cms on dummy collection;
-    // TODO: To add order id globally and inside every images;
-    // TODO: If we have create action then we have to ensure about global order id will be the unique and next manner;
-    // TODO: To ensure the gallery array is working properly;
-    // FIXME: When we enter directly a url for edit, data not found because of listner not calling;
-    // FIXME: To remove accordion overflow scroll, we have complete height;
-
     const { value } = useAppSelector((state) => state.Cms.Landing)
     const isCreateMode = props.mode === ComponentModeEnum.Create
     const filteredOrder = useMemo(() => {
@@ -220,12 +216,12 @@ export default function ComponentActionForm(props: TProps) {
                 <MinimalAccordion title='Gallery ' icon={<CiDesktop />}>
                     <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Gallery} />
                 </MinimalAccordion>
-                <MinimalAccordion title='Icons' icon={<CiMobile1 />}>
+                {/* <MinimalAccordion title='Icons' icon={<CiMobile1 />}>
                     <FormViewPortMedia viewport={ViewPortEnum.Mobile} name={CmsComponentMediaEnum.Gallery} />
                 </MinimalAccordion>
                 <MinimalAccordion title='Gallery' icon={<CiMobile1 />}>
                     <FormViewPortMedia viewport={ViewPortEnum.Mobile} name={CmsComponentMediaEnum.Icon} />
-                </MinimalAccordion>
+                </MinimalAccordion> */}
                 <button
                     disabled={corpus.isSubmitting}
                     type="submit"

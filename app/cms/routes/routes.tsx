@@ -6,12 +6,12 @@ import {
     Projects,
     SignIn,
     User,
-    LandingHome,
 } from '../containers'
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
 import Customer from '../containers/Customer'
 import Dashboard from '../containers/Dashboard'
+// import { SiteComponent } from "./../containers"
 import { useAppService } from '../hooks'
 
 export default function CmsRoutes() {
@@ -23,7 +23,6 @@ export default function CmsRoutes() {
         element: <ProtectedRoute />,
         children: [
             {
-
                 path: 'sign-in',
                 element: <SignIn />,
             },
@@ -43,15 +42,14 @@ export default function CmsRoutes() {
                 path: 'customers',
                 element: <Customer />,
             },
-
             // {
             //     path: 'landing-page',
             //     element: <LandingPage />, // FIXME: To remove this route in future and also container from `cms/landing-page`;
             // },
-            {
-                path: 'landing',
-                element: <LandingHome />,
-            }
+            // {
+            //     path: 'landing',
+            //     element: <SiteComponent />,
+            // }
         ],
     } as RouteObject
 }
