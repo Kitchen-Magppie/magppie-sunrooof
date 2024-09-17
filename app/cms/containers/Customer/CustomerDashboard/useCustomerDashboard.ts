@@ -1,5 +1,11 @@
 import { useCallback, useMemo, useState } from "react"
-import { _, INIT_CUSTOMER_SITE_COMPONENT, TComponentItem } from "../../../../../types"
+import {
+    _,
+    ComponentModeEnum,
+    INIT_CUSTOMER_SITE_COMPONENT,
+    TComponentItem,
+    TComponentMode
+} from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
 
 export function useCustomerDashboard() {
@@ -12,7 +18,10 @@ export function useCustomerDashboard() {
                 ? _.lowerCase(item.name)?.includes(_.lowerCase(corpus.filteration.search))
                 : true
         ), 'orderId')
-    }, [corpus.filteration.search, value.value]);
+    }, [
+        corpus.filteration.search,
+        value.value
+    ]);
 
     const onToggleModal = useCallback(() => {
         setCorpus((prev) => ({
@@ -24,35 +33,55 @@ export function useCustomerDashboard() {
         }))
     }, [])
 
-    return ({
-        loading: value.loading,
-        data: {
+    const onChangeModal = useCallback((args: { action: TComponentMode, value: boolean }) => {
+        setCorpus((prev) => ({
+            ...prev,
+            values: {
+                ...prev.values,
+                modal: {
+                    ...prev.values.modal,
+                    action: args.action
+                }
+            },
+            toggle: {
+                ...prev.toggle,
+                isOpenComponentModal: args.value
+            }
+        }))
+    }, [])
+    const onSearchItem = useCallback((search: string) => {
+        setCorpus((prev) => ({
+            ...prev,
+            filteration: {
+                ...prev.filteration,
+                search
+            }
+        }))
+    }, [])
+    const data = useMemo(() => {
+        return {
             ...corpus,
             values: {
                 ...corpus.values,
                 components,
                 link: `${window.location.href}/fake`
             }
-        },
+        }
+    }, [components, corpus])
+    return ({
+        loading: value.loading,
+        data,
         action: {
             onToggleModal,
-            onSearchItem: (search: string) => {
-                setCorpus((prev) => ({
-                    ...prev,
-                    filteration: {
-                        ...prev.filteration,
-                        search
-                    }
-                }))
-            }
+            onChangeModal,
+            onSearchItem
         }
     })
 }
 
 
 
-type TMode = 'create' | 'edit' | ''
-type TCorpusModal = { action: TMode, value: TComponentItem, open: boolean }
+type TCorpusModal = { action: TComponentMode, value: TComponentItem, open: boolean }
 
 type TCorpus = {
     toggle: { isOpenComponentModal: boolean },
@@ -65,7 +94,7 @@ type TCorpus = {
     }
 }
 const INIT_CORPUS_MODAL: TCorpusModal = {
-    action: '',
+    action: ComponentModeEnum.None,
     value: INIT_CUSTOMER_SITE_COMPONENT,
     open: false
 }

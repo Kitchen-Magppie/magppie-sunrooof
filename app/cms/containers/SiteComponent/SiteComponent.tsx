@@ -3,27 +3,27 @@ import { FaPlus } from 'react-icons/fa'
 import _ from 'lodash'
 //====================================================================
 
-import { CmsNotFound, CmsSearch } from '../../../components'
-import { useAppSelector } from '../../../../../redux'
+import { CmsNotFound, CmsSearch } from '../../components'
+import { useAppSelector } from '../../../../redux'
 import {
     CmsLandingPageComponentCard,
     ComponentActionForm
-} from "../components"
+} from "./components"
 
 import {
     CustomConfirmationDialog,
     CustomSimpleModal,
     PageProgress
-} from '../../../../../components'
+} from '../../../../components'
 import {
     COMPONENT_META,
     ComponentModeEnum,
     INIT_CUSTOMER_SITE_COMPONENT,
     TComponentItem
-} from '../../../../../types'
-import { useFirebaseLandingListener } from '../../../utils/firebase'
+} from '../../../../types'
+import { useFirebaseLandingListener } from '../../utils/firebase'
 
-export function LandingHome() {
+export function SiteComponent() {
     useFirebaseLandingListener()
     const { loading, value } = useAppSelector((state) => state.Cms.Landing)
     const meta = useMemo(() => COMPONENT_META(value), [value])

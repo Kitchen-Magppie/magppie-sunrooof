@@ -8,4 +8,5 @@ export type TCmsCardVariant = CmsCardEnum.Complete | CmsCardEnum.Pending | CmsCa
 export type TCmsCustomerCardItem = {
     label: string,
     variant: TCmsCardVariant,
+    onClickModal: VoidFunction
 }
