@@ -30,19 +30,6 @@ const BuyingJourney = () => {
                     })}
                 </div>
             </div>
-            <div className="hidden lg:flex justify-between items-center w-full max-w-5xl mt-8">
-                <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                <span className="w-1/6 border-b-2 border-gray-300"></span>
-                <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                <span className="w-1/6 border-b-2 border-gray-300"></span>
-                <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                <span className="w-1/6 border-b-2 border-gray-300"></span>
-                <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                <span className="w-1/6 border-b-2 border-gray-300"></span>
-                <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-                <span className="w-1/6 border-b-2 border-gray-300"></span>
-                <span className="w-4 h-4 bg-gray-300 rounded-full"></span>
-            </div>
         </div>
     )
 }
