@@ -1,6 +1,6 @@
+import { useMemo } from "react";
 import { RiApps2AddLine } from "react-icons/ri";
 import { FaEarthAmericas } from "react-icons/fa6";
-import { useMemo } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
 
@@ -14,13 +14,11 @@ import {
 import { CustomSimpleModal } from "../../../../../components";
 import { CmsCopyClipboard } from "./../../../components"
 import { ComponentActionForm } from "../../SiteComponent/components";
-import { CmsCardEnum } from "../../../types";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
 
 export default function CustomerDashboard() {
-
     useFirebaseCmsSiteComponentListener()
     const { loading, data, action } = useCustomerDashboard();
     const renderActionModal = useMemo(() => {
@@ -129,9 +127,9 @@ export default function CustomerDashboard() {
                                     value: true
                                 })
                             }}
-                            label={item.name}
+                            item={item}
                             key={i}
-                            variant={CmsCardEnum.Pending}
+                        // variant={CmsCardEnum.Pending}
                         />
                     })}
                 </>) : <div className="mt-40"> <CmsNotFound /></div>)}
