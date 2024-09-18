@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { collection, doc, getDoc, onSnapshot, } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, Timestamp, } from 'firebase/firestore';
 //====================================================================
 
 import { db, auth } from "../../../../config/firebase.config"
@@ -95,7 +95,11 @@ export function useFirebaseCmsSiteComponentListener() {
                 const row = doc.data();
                 data.push({
                     ...row,
-                    id: doc.id
+                    id: doc.id,
+                    at: {
+                        created: (row.at.created as Timestamp).toDate(),
+                        updated: (row.at.updated as Timestamp).toDate(),
+                    }
                 } as TComponentItem);
             });
             dispatch(setCustomerSiteComponent(data))

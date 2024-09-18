@@ -1,61 +1,51 @@
-import { useMemo } from "react";
-import { GrFormNextLink } from "react-icons/gr";
-import { MdDone } from "react-icons/md";
-import { RiProgress1Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { CmsCardEnum, TCmsCustomerCardItem } from "../../types/card";
+import { IoLocationOutline } from "react-icons/io5";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import dayjs from 'dayjs'
+//====================================================================
+
+import { TCmsCustomerCardItem } from "../../types";
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
-    const { variant } = props;
-    const values = useMemo(() => STATUS_ITEM(variant), [variant])
 
-    return (<div className="transition-transform duration-300 transform hover:scale-105 max-w-sm p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col gap-2">
-        <div className="flex items-center justify-between">
-            <h5 className=" text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {props.label}
-            </h5>
-            <button className="border p-2 rounded-full">
+    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out">
+        <div className="flex justify-between items-center mb-2">
+            <h2 className="text-lg font-semibold">{props.item.name}</h2>
+            <button className="border p-1 rounded-full border-gray-400 ">
                 <BsThreeDotsVertical />
-
             </button>
         </div>
-        <div className="">
-            <div className="inline-block">
-                <div className={`flex justify-center align-middle flex-row gap-1  px-3 py-1 text-sm font-medium text-white ${values.classes} rounded-lg capitalize`}>
-                    {values.icon}
-                    {props.variant}
-                </div>
-            </div>
+        <div className="flex items-center mb-2 gap-2">
+            <FaRegCalendarAlt size={24} />
+            {dayjs(props.item.at.created).format('DD/MM/YYYY')}
         </div>
-        <div className="">
-            <Link
-                to={'/cms/customers'}
-                className="inline-flex gap-1 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-                View
-                <GrFormNextLink />
-            </Link>
+        <div className="flex items-center mb-2 gap-2">
+            <IoLocationOutline size={24} />
+            Location
         </div>
-
-    </div>
-
-    )
+        <div className="flex items-center mb-2 capitalize gap-2">
+            {/* {values.icon} */}
+            {/* {props.variant} */}
+        </div>
+        {/* <div className="border border-t-1 border-x-0 border-b-0 border-gray-500">
+            Team
+        </div> */}
+    </div>);
 }
 
-const STATUS_ITEM = (variant: CmsCardEnum) => {
-    switch (variant) {
-        case CmsCardEnum.Complete:
-            return ({
-                classes: 'bg-green-500',
-                icon: <MdDone className="text-xl" />
-            })
+// const STATUS_ITEM = (variant: CmsCardEnum) => {
+//     switch (variant) {
+//         case CmsCardEnum.Complete:
+//             return ({
+//                 classes: 'bg-green-500',
+//                 icon: <MdDone size={24} />
+//             })
 
-        case CmsCardEnum.Pending:
-            return ({
-                classes: 'bg-yellow-500', icon: <RiProgress1Line className="text-xl" />
-            })
-        default:
-            return ({ classes: '', icon: <></> })
-    }
-}
+//         case CmsCardEnum.Pending:
+//             return ({
+//                 classes: 'bg-yellow-500', icon: <RiProgress1Line size={24} />
+//             })
+//         default:
+//             return ({ classes: '', icon: <></> })
+//     }
+// }
