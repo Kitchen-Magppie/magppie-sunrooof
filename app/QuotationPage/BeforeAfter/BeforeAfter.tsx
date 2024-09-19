@@ -1,17 +1,18 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { images } from './data'
+// import { images } from './data'
+import { QuotationMock as _data } from "../../cms/mocks"
 
 const BeforeAfter = () => {
     return (
         <div className="container max-w-5xl py-20 w-full mx-auto">
             <div className="grid grid-cols-2 place-items-center gap-2 justify-items-center">
-                {images.map((image) => {
+                {_images.map((image, i) => {
                     return (
-                        <div key={image.id}>
+                        <div key={i}>
                             <LazyLoadImage
                                 effect="blur"
                                 className="lg:w-[500px] lg:h-[500px] mb-2 h-[350px] w-[350px]"
-                                src={image.image}
+                                src={image}
                                 alt=""
                             />
                         </div>
@@ -22,4 +23,5 @@ const BeforeAfter = () => {
     )
 }
 
+const _images = Object.values(_data.Comparison)?.flatMap((item) => (Object.values(item)))
 export default BeforeAfter
