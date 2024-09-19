@@ -1,7 +1,7 @@
 // import alla from '../assets/team/Alla Mokrohuz Product Designer Ukraine.jpg'
 // import susan from '../assets/team/Susan Sadolin Director Sales USA.jpg'
 import ishat from '../assets/team/Ishat Jain Founder.jpg'
-// import beau from '../assets/team/Beau Avedissian Architect Australia.jpg'
+import beau from '../assets/team/Beau Avedissian Architect Australia.jpg'
 import vinod from '../assets/team/Vinod Jain Director INDIA.jpg'
 // import christroph from '../assets/team/Christoph Hoeynck Director Europe Germany.jpg'
 // import serge from '../assets/team/Serge Cornelissen Product Designer Belgium.png'
@@ -60,7 +60,7 @@ export const team = [
     },
     {
         id: 7,
-        img: ranbir,
+        img: beau,
         name: 'Beau Avedissian',
         positon: 'Architecht',
         country: 'Australia',
