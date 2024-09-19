@@ -1,10 +1,14 @@
+import horizontalLine from './assets/sunrooof-horizontal.png'
+import threeLines from "./assets/three-lines.png"
+
 const About = () => {
     return (
         <div className="bg-[#cfccc8] py-20 w-full">
-            <div className="bg-[#fffafa] flex flex-col mx-auto max-w-2xl lg:max-w-7xl justify-center items-center container text-center px-40 py-20 w-full rounded-lg shadow-lg">
-                <h1 className="text-4xl pb-10">
+            <div className="bg-[#fffafa] flex flex-col mx-auto max-w-2xl lg:max-w-5xl justify-center items-center container text-center px-40 py-20 w-full rounded-lg shadow-lg">
+                <h1 className="text-5xl pb-5">
                     About <span className="font-bold">MAGPPIE</span> Group
                 </h1>
+                <img src={horizontalLine} alt="" className='mb-10 w-96' />
                 <p className="pb-8 text-xl">
                     Magppie Group’s belief is to transform all spaces to
                     Wellness Spaces with their revolutionary products and
@@ -20,6 +24,7 @@ const About = () => {
                     truly the future of lighting and one of Magppie’s best
                     innovations
                 </p>
+                <img src={threeLines} className='w-20 mt-10' alt="" />
             </div>
         </div>
     )

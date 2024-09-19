@@ -17,9 +17,9 @@ import { INIT_SUPER_USER } from '../../../types/SuperUser'
 
 export default function CmsSignIn() {
     return (
-        <div className="bg-gradient-to-r from-gray-100 to-gray-300 min-h-screen flex">
+        <div className="min-h-screen flex">
             <div className="w-full flex items-center justify-between">
-                <div className="w-full p-8 space-y-6 max-w-xl mx-auto bg-white shadow-lg rounded-lg flex flex-col justify-center">
+                <div className="w-full p-8 space-y-6 max-w-xl mx-auto bg-white border-r-2 shadow-lg rounded-lg flex flex-col justify-center">
                     <img src={logoTextBlack} alt="" className="h-[100px]" />
                     <h2 className="text-2xl font-bold text-center">
                         CMS SIGN IN
