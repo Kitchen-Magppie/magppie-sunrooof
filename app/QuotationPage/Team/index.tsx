@@ -18,11 +18,17 @@ const Team = () => {
                                 effect="blur"
                                 src={person.img}
                                 alt=""
-                                className='mb-2'
+                                className="mb-2 rounded-full"
                             />
-                            <h1 className='text-2xl lg:text-xl'>{person.name}</h1>
-                            <p className='text-2xl lg:text-xl'>{person.positon}</p>
-                            <p className='text-2xl lg:text-xl'>{person.country}</p>
+                            <h1 className="text-2xl lg:text-xl">
+                                {person.name}
+                            </h1>
+                            <p className="text-2xl lg:text-xl">
+                                {person.positon}
+                            </p>
+                            <p className="text-2xl lg:text-xl">
+                                {person.country}
+                            </p>
                             <LazyLoadImage
                                 effect="blur"
                                 className="w-15 h-10 mt-2"
