@@ -1,37 +1,39 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { features } from './data'
 import Logo from '../../../assets/logo-black-text.png'
+import threeLines from '../assets/three-lines.png'
 
 const Features = () => {
     return (
-        <div className="flex flex-col items-center justify-center w-full container lg:mx-auto mx-4 py-20">
-            <div className='flex flex-col items-center justify-center mb-10'>
-                <img src={Logo} alt="" className='w-96' />
-                <h1 className='text-4xl'>benefits for offices</h1>
+        <div className="flex flex-col items-center justify-center w-full container mx-auto max-w-8xl py-20 px-4">
+            <div className="flex flex-col items-center justify-center mb-10 text-center">
+                <img src={Logo} alt="Company Logo" className="w-96" />
+                <h1 className="text-4xl font-semibold capitalize">
+                    Benefits for offices
+                </h1>
             </div>
-            <div className='flex items-center justify-evenly w-full'>
-                {features.map((feature) => {
-                    return (
-                        <div
-                            key={feature.id}
-                            className="flex flex-col mb-10 lg:items-center lg:text-center"
-                        >
-                            <LazyLoadImage
-                                effect="blur"
-                                src={feature.img}
-                                className="h-40 w-40"
-                                alt=""
-                            />
-                            <h1 className="text-4xl lg:text-3xl pt-3">
-                                {feature.heading}
-                            </h1>
-                            <p className="pt-3 lg:text-base text-2xl">
-                                {feature.content}
-                            </p>
-                        </div>
-                    )
-                })}
+            <div className="flex text-center justify-between w-full">
+                {features.map((feature) => (
+                    <div
+                        key={feature.id}
+                        className="flex flex-col mb-10 items-center text-center lg:w-1/3 md:w-1/2 px-4"
+                    >
+                        <LazyLoadImage
+                            effect="blur"
+                            src={feature.img}
+                            className="h-40 w-40 object-cover hover:scale-105 transition-transform duration-300"
+                            alt={feature.heading}
+                        />
+                        <h2 className="text-2xl lg:text-xl pt-4 font-medium">
+                            {feature.heading}
+                        </h2>
+                        <p className="pt-2 text-lg lg:text-base">
+                            {feature.content}
+                        </p>
+                    </div>
+                ))}
             </div>
+            <img src={threeLines} alt="" />
         </div>
     )
 }
