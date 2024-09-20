@@ -7,13 +7,14 @@ import ClientName from './ClientName'
 import Clients from './Clients'
 import DesignedBy from './DesignedBy'
 import Features from './Features'
-import Footer from './Footer'
+// import Footer from './Footer'
 import Guarantee from './Guarantee'
 import Header from './Header'
 import ProjectDetails from './ProjectDetails'
 import Quotation from './Quotation'
 import Team from './Team'
 import TermsandConditions from './TermsandConditions/TermsandConditions'
+import FooterFinal from "./FooterFinal"
 
 const QuotationPage = () => {
     return (
@@ -33,7 +34,8 @@ const QuotationPage = () => {
             <TermsandConditions />
             <Guarantee />
             <BuyingJourney />
-            <Footer />
+            {/* <Footer /> */}
+            <FooterFinal />
         </>
     )
 }
