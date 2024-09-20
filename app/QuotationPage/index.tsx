@@ -2,7 +2,6 @@
 // import ThreedDesigns from './3dDesigns'
 import About from './About'
 import BeforeAfter from './BeforeAfter/BeforeAfter'
-import BuyingJourney from './BuyingJourney'
 import ClientName from './ClientName'
 import Clients from './Clients'
 import DesignedBy from './DesignedBy'
@@ -14,11 +13,14 @@ import ProjectDetails from './ProjectDetails'
 import Quotation from './Quotation'
 import Team from './Team'
 import TermsandConditions from './TermsandConditions/TermsandConditions'
-import FooterFinal from "./FooterFinal"
+import FooterFinal from './FooterFinal'
+import BuyingJourney from './BuyingJourney'
+import Navbar from './Navbar'
 
 const QuotationPage = () => {
     return (
         <>
+            <Navbar />
             <Header />
             <About />
             <Clients />

@@ -3,7 +3,7 @@ import { terms } from './data'
 const TermsandConditions = () => {
     return (
         <div className="flex flex-col w-full mb-20">
-            <div className='flex items-center justify-center bg-[#77726b] mb-10 py-10'>
+            <div className='flex items-center justify-center bg-[#1E1E1E] mb-10 py-10'>
                 <h1 className='text-6xl font-bold text-white'>Terms & Conditions</h1>
             </div>
             <div className='container mx-auto'>
