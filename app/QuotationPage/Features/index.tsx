@@ -2,7 +2,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { features } from './data'
 import Logo from '../../../assets/logo-black-text.png'
 import threeLines from '../assets/three-lines.png'
-import '../../../main/index.css'
+import './index.css'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -53,7 +53,6 @@ const Features = () => {
                 </div>
                 <div className="flex">
                     <Swiper
-                        style={{ '--swiper-pagination-bullet-size': '16px' }}
                         modules={[Pagination]}
                         className="mySwiper"
                         pagination={{
@@ -61,8 +60,8 @@ const Features = () => {
                         }}
                     >
                         {features.map((feature) => (
-                            <SwiperSlide>
-                                <div key={feature.id} className="">
+                            <SwiperSlide key={feature.id}>
+                                <div className="">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={feature.img}
