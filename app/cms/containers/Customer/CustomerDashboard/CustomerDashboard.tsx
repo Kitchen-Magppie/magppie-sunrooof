@@ -16,11 +16,14 @@ import { CmsCopyClipboard } from "./../../../components"
 import { ComponentActionForm } from "../../SiteComponent/components";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
-import { ComponentModeEnum } from "../../../../../types";
+import { ComponentModeEnum, INIT_CUSTOMER_SITE_COMPONENT } from "../../../../../types";
+import { CUSTOMER_COMPONENTS } from "../../../mocks/component";
 
 export default function CustomerDashboard() {
     useFirebaseCmsSiteComponentListener()
     const { loading, data, action } = useCustomerDashboard();
+
+    console.log(CUSTOMER_COMPONENTS)
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}

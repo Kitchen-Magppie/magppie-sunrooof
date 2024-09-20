@@ -7,6 +7,7 @@ import {
     TComponentMode
 } from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
+import { COMPONENT_SECTIONS } from "../../../mocks/component";
 
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
@@ -98,18 +99,12 @@ const INIT_CORPUS_MODAL: TCorpusModal = {
     value: INIT_CUSTOMER_SITE_COMPONENT,
     open: false
 }
-const SECTIONS = [
-    'Comparisons (Before & After)',
-    '2D Design',
-    '3D Design',
-    'Quotation'
-]
 
 const INIT_CORPUS: TCorpus = {
     toggle: { isOpenComponentModal: false },
     filteration: { search: '' },
     values: {
-        sections: SECTIONS,
+        sections: COMPONENT_SECTIONS,
         modal: INIT_CORPUS_MODAL
     }
 }
