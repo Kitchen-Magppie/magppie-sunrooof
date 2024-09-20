@@ -3,6 +3,7 @@ import { IoMdClose } from "react-icons/io"
 import { useFirebaseStorageActions } from "../../hooks/firebase"
 
 import { CircularProgress } from ".."
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 export default function ImageInput(props: TImageActionProps) {
 
@@ -67,7 +68,8 @@ export default function ImageInput(props: TImageActionProps) {
 
 function ImageCard(props: TImageCardProps) {
     return (<div className="relative my-2 ">
-        <img
+        <LazyLoadImage
+            effect="blur"
             src={props.link}
             alt=""
             className="w-32 h-32 object-cover rounded-lg ms-1"

@@ -4,7 +4,7 @@ import _ from 'lodash'
 //====================================================================
 
 import Card from './components/Card'
-import { Search } from './../../components'
+import { CmsSearch } from './../../components'
 import { useFirebaseCmsProjectsListener } from '../../utils/firebase/use-firebase-cms-listeners'
 import { useAppSelector } from '../../../../redux'
 import Modal from './components/Modal'
@@ -29,7 +29,7 @@ export default function Projects() {
 
     return (
         <div>
-            <Search
+            <CmsSearch
                 placeholder="Search Projects.."
                 onChange={(e) => {
                     setSearch(e)

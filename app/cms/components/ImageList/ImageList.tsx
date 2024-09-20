@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react"
 import { IoMdClose } from 'react-icons/io'
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 export default function ImageList(props: TProps) {
 
@@ -12,7 +13,8 @@ export default function ImageList(props: TProps) {
 
     return (<div className="flex flex-wrap">
         {images.map((image, i) => (<div key={i} className="relative my-2 ">
-            <img
+            <LazyLoadImage
+                effect="blur"
                 src={image}
                 alt=""
                 className="w-32 h-32 object-cover rounded-lg ms-1"
