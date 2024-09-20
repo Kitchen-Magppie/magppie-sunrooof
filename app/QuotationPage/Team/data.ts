@@ -26,8 +26,8 @@ export const team = [
         id: 2,
         img: vinod,
         name: 'Vinod Jain',
-        positon: 'Director Europe',
-        country: 'Germany',
+        positon: 'Director',
+        country: 'India',
         countryLogo: india,
     },
     {
