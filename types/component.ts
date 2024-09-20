@@ -1,4 +1,3 @@
-import { _ } from "./"
 export type TComponentMeta = { order: { used: number[], next: number } }
 
 export type TComponentTypography = {
@@ -33,25 +32,30 @@ export type TComponentMediaItem = {
 
 
 export type TComponentItem = {
-    orderId: string,
-    id: string,
-    componentId: string,
     typography: TComponentTypography,
     items: (TComponentTypography & { orderId: string })[],
     links: TComponentLink,
-    name: string,
-    isGallery: boolean,
+    // isGallery: boolean,
     gallery: TComponentMediaItem[],
     icons: TComponentMediaItem[],
+}
+
+export type TCustomerComponentItem = {
+    name: string,
+    components: TComponentItem[],
+    id: string,
+    componentId: string,
     at: { created: Date, updated: Date }
+
 }
 
 
-export const COMPONENT_META = (ar: TComponentItem[]) => {
-    const used = ar?.map((row) => Number(row.orderId))?.sort()
-    const next = _(used).max() + 1
-    return ({ order: { used, next } }) as TComponentMeta
-}
+
+// export const COMPONENT_META = (ar: TComponentItem[]) => {
+//     const used = ar?.map((row) => Number(row.orderId))?.sort()
+//     const next = _(used).max() + 1
+//     return ({ order: { used, next } }) as TComponentMeta
+// }
 
 export const INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY: TComponentTypography = {
     main: '',
@@ -78,16 +82,9 @@ const INIT_CUSTOMER_SITE_COMPONENT_LINK: TComponentLink = {
 export const INIT_CUSTOMER_SITE_COMPONENT: TComponentItem = {
     typography: INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
     links: INIT_CUSTOMER_SITE_COMPONENT_LINK,
-    orderId: '',
-    componentId: '',
-    id: '',
-    name: '',
-    isGallery: false,
     icons: [],
     gallery: [],
     items: [],
-    // sections: INIT_CUSTOMER_SITE_COMPONENT_SECTIONS,
-    at: { created: new Date(), updated: new Date() }
 }
 
 // const _prev = INIT_CUSTOMER_SITE_COMPONENT

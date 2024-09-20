@@ -6,7 +6,6 @@ import _ from 'lodash'
 import { CmsNotFound, CmsSearch } from '../../components'
 import { useAppSelector } from '../../../../redux'
 import {
-    CmsLandingPageComponentCard,
     ComponentActionForm
 } from "./components"
 
@@ -16,17 +15,18 @@ import {
     PageProgress
 } from '../../../../components'
 import {
-    COMPONENT_META,
+    // COMPONENT_META,
     ComponentModeEnum,
-    INIT_CUSTOMER_SITE_COMPONENT,
-    TComponentItem
+    TCustomerComponentItem
 } from '../../../../types'
 import { useFirebaseLandingListener } from '../../utils/firebase'
+import CmsLandingPageComponentCard from './components/CmsLandingPageComponentCard'
+import { INIT_CUSTOMER_COMPONENT_ITEM } from '../../mocks'
 
 export function SiteComponent() {
     useFirebaseLandingListener()
     const { loading, value } = useAppSelector((state) => state.Cms.Landing)
-    const meta = useMemo(() => COMPONENT_META(value), [value])
+    // const meta = useMemo(() => COMPONENT_META(value), [value])
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const onChangeModal = useCallback((newValue: Partial<TCorpusModal>) => {
         setCorpus((prev) => ({
@@ -64,9 +64,10 @@ export function SiteComponent() {
         />)
     }, [corpus.confirmation])
 
-    const onClickRemove = useCallback((item: TComponentItem) => {
+    const onClickRemove = useCallback((item: TCustomerComponentItem) => {
         setCorpus((prev) => ({
-            ...prev, confirmation: {
+            ...prev,
+            confirmation: {
                 ...prev.confirmation,
                 open: true,
                 id: item.id,
@@ -77,7 +78,7 @@ export function SiteComponent() {
             }
         }))
     }, [])
-    const onClickEdit = useCallback((value: TComponentItem) => {
+    const onClickEdit = useCallback((value: TCustomerComponentItem) => {
 
         onChangeModal({
             action: 'edit',
@@ -96,14 +97,14 @@ export function SiteComponent() {
             <ComponentActionForm
                 mode={ComponentModeEnum.Create}
                 item={corpus.modal.value}
-                meta={meta}
+            // meta={meta}
             />
         </CustomSimpleModal>
     }, [
         corpus.modal.action,
         corpus.modal.open,
         corpus.modal.value,
-        meta,
+        // meta,
         onChangeModal
     ])
 
@@ -150,12 +151,12 @@ export function SiteComponent() {
     )
 }
 type TMode = 'create' | 'edit' | ''
-type TCorpusModal = { action: TMode, value: TComponentItem, open: boolean }
+type TCorpusModal = { action: TMode, value: TCustomerComponentItem, open: boolean }
 
 type TCorpusConfirmation = { open: boolean, text: { remark: string, header: string }, id: string }
 type TCorpus = { modal: TCorpusModal, search: string, confirmation: TCorpusConfirmation }
 const INIT_CONFIRMATION: TCorpusConfirmation = { open: false, text: { remark: '', header: '' }, id: '' }
-const INIT_CORPUS_MODAL: TCorpusModal = { action: '', value: INIT_CUSTOMER_SITE_COMPONENT, open: false }
+const INIT_CORPUS_MODAL: TCorpusModal = { action: '', value: INIT_CUSTOMER_COMPONENT_ITEM, open: false }
 const INIT_CORPUS: TCorpus = {
     modal: INIT_CORPUS_MODAL,
     search: '',

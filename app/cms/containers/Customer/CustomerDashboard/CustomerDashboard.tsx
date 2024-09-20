@@ -7,7 +7,7 @@ import { IoCreateOutline } from "react-icons/io5";
 //====================================================================
 import {
     CmsSearch,
-    MinimalAccordion,
+    // MinimalAccordion,
     CmsCustomerCardItem,
     CmsNotFound
 } from "../../../components";
@@ -16,14 +16,13 @@ import { CmsCopyClipboard } from "./../../../components"
 import { ComponentActionForm } from "../../SiteComponent/components";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
-import { ComponentModeEnum, INIT_CUSTOMER_SITE_COMPONENT } from "../../../../../types";
-import { CUSTOMER_COMPONENTS } from "../../../mocks/component";
+import { ComponentModeEnum } from "../../../../../types";
+import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks/component";
 
 export default function CustomerDashboard() {
     useFirebaseCmsSiteComponentListener()
     const { loading, data, action } = useCustomerDashboard();
 
-    console.log(CUSTOMER_COMPONENTS)
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}
@@ -36,15 +35,23 @@ export default function CustomerDashboard() {
             label="Create Component"
         >
             <div className="p-2">
-                {data.values.sections?.map((section, i) => {
-                    return (<MinimalAccordion title={section} key={i}>
+
+                <ComponentActionForm
+                    mode={ComponentModeEnum.Create}
+                    // mode={data.values.modal.action}
+                    // item={section}
+                    item={data.values.modal.value}
+                />
+                {/* {data.values.modal.value?.map((section, i) => {
+
+                    return (<MinimalAccordion title={section.name} key={i}>
                         <ComponentActionForm
                             mode={ComponentModeEnum.Create}
                             // mode={data.values.modal.action}
-                            item={data.values.modal.value}
+                            item={section}
                         />
                     </MinimalAccordion>)
-                })}
+                })} */}
 
                 <div className="flex flex-col gap-1">
                     <div className="">
@@ -94,8 +101,7 @@ export default function CustomerDashboard() {
         data.toggle.isOpenComponentModal,
         data.values.link,
         data.values.modal.action,
-        data.values.modal.value,
-        data.values.sections
+        data.values.modal.value
     ])
 
     return <div>
@@ -112,7 +118,8 @@ export default function CustomerDashboard() {
                     onClick={() => {
                         action.onChangeModal({
                             action: ComponentModeEnum.Create,
-                            value: true
+                            value: true,
+                            item: INIT_CUSTOMER_COMPONENT_ITEM
                         })
                     }}
                 >

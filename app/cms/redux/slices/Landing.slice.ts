@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FirebaseCollectionEnum, TComponentItem } from '../../../../types';
+import { FirebaseCollectionEnum, TCustomerComponentItem } from '../../../../types';
 
 interface ILandingSlice {
-    value: TComponentItem[];
+    value: TCustomerComponentItem[];
     status: 'loading' | 'success' | 'failed';
     loading: boolean,
     error: null | string | undefined;
@@ -16,7 +16,7 @@ const initialState: ILandingSlice = {
     error: null,
 };
 
-type TAction = PayloadAction<TComponentItem[]>
+type TAction = PayloadAction<TCustomerComponentItem[]>
 const LandingSlice = createSlice({
     name: FirebaseCollectionEnum.Landing,
     initialState,

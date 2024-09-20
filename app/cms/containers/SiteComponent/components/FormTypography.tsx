@@ -2,8 +2,7 @@ import { useCallback } from "react"
 import { useFormContext } from "react-hook-form"
 //====================================================================
 
-import _ from "../../../../../types/lodash"
-import { TComponentTypography } from "../../../../../types"
+import { TComponentTypography, _ } from "../../../../../types"
 
 export default function FormTypography() {
     const { register, formState: { errors } } = useFormContext<{ typography: TComponentTypography }>()
