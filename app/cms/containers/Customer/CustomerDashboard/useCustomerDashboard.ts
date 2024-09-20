@@ -6,7 +6,7 @@ import {
     TCustomerComponentItem
 } from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
-import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks/component";
+import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
 
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)

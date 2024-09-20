@@ -17,7 +17,7 @@ import { ComponentActionForm } from "../../SiteComponent/components";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
-import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks/component";
+import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
 
 export default function CustomerDashboard() {
     useFirebaseCmsSiteComponentListener()
