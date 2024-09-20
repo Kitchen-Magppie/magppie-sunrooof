@@ -7,7 +7,7 @@ const Team = () => {
             <h1 className="uppercase font-bold text-7xl text-center pb-10 text-[#78746c]">
                 our team
             </h1>
-            <div className="grid grid-cols-2 lg:grid-cols-4 container mx-auto max-w-xl lg:max-w-7xl">
+            <div className="grid grid-cols-2 lg:grid-cols-4 container mx-auto max-w-5xl lg:max-w-7xl">
                 {team.map((person) => {
                     return (
                         <div
@@ -18,7 +18,7 @@ const Team = () => {
                                 effect="blur"
                                 src={person.img}
                                 alt=""
-                                className="mb-2 rounded-full"
+                                className="mb-2 rounded-3xl w-72 h-[400px]"
                             />
                             <h1 className="text-2xl lg:text-xl">
                                 {person.name}

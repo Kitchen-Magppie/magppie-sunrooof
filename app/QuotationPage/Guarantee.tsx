@@ -1,6 +1,6 @@
 const Guarantee = () => {
     return (
-        <div className="flex flex-col container lg:mx-auto mx-4 py-10">
+        <div className="flex flex-col container mx-auto mx-4 py-10 justify-center">
             <div>
                 <h1 className="text-6xl font-bold mb-4">5 year guarantee</h1>
                 <p className="text-3xl pb-2 font-semibold">

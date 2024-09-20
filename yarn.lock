@@ -3717,7 +3717,7 @@ __metadata:
     react-toastify: "npm:^10.0.5"
     react-use: "npm:^17.5.1"
     sass: "npm:^1.77.8"
-    swiper: "npm:^11.1.4"
+    swiper: "npm:^11.1.14"
     tailwind-merge: "npm:^2.5.2"
     tailwindcss: "npm:^3.4.3"
     tailwindcss-animate: "npm:^1.0.7"
@@ -5221,10 +5221,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^11.1.4":
-  version: 11.1.4
-  resolution: "swiper@npm:11.1.4"
-  checksum: 10c0/a1e4b87f414f67f5da6a07b33d5ee20e54062d21f8bed88195d5d56decff6afddf683e130118b7fa12668de221f794ae63f6c073761b683a4b90bbd5eb585202
+"swiper@npm:^11.1.14":
+  version: 11.1.14
+  resolution: "swiper@npm:11.1.14"
+  checksum: 10c0/a1075cbd2254aedd22b411ea03cbd7a91ba1cc79d7c2dc41f215e987811e449a2915a26b39fdfc1d7c08250fa2cfbe51d28476f834e75033c73ea357a4ac9f8d
   languageName: node
   linkType: hard
 
