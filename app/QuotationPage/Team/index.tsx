@@ -18,7 +18,7 @@ const Team = () => {
                                 effect="blur"
                                 src={person.img}
                                 alt=""
-                                className="mb-2 rounded-full"
+                                className="mb-2 rounded-full w-60"
                             />
                             <h1 className="text-2xl lg:text-xl">
                                 {person.name}

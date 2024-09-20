@@ -1,30 +1,39 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { features } from './data'
+import Logo from '../../../assets/logo-black-text.png'
+import threeLines from '../assets/three-lines.png'
 
 const Features = () => {
     return (
-        <div className="flex flex-col lg:flex-row justify-evenly w-full container lg:mx-auto mx-4 py-20">
-            {features.map((feature) => {
-                return (
+        <div className="flex flex-col items-center justify-center w-full container max-w-5xl lg:mx-auto py-20 px-4">
+            <div className="flex flex-col items-center justify-center mb-10 text-center">
+                <img src={Logo} alt="Company Logo" className="w-96" />
+                <h1 className="text-4xl font-semibold capitalize">
+                    Benefits for offices
+                </h1>
+            </div>
+            <div className="flex text-center flex-col lg:flex-row justify-between w-full">
+                {features.map((feature) => (
                     <div
                         key={feature.id}
-                        className="flex flex-col mb-10 lg:items-center lg:text-center"
+                        className="flex flex-col mb-10 items-start text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center"
                     >
                         <LazyLoadImage
                             effect="blur"
                             src={feature.img}
-                            className="h-40 w-40"
-                            alt=""
+                            className="h-40 w-40 object-cover hover:scale-105 transition-transform duration-300"
+                            alt={feature.heading}
                         />
-                        <h1 className="text-4xl lg:text-3xl pt-3">
+                        <h2 className="text-2xl lg:text-xl pt-4 font-medium">
                             {feature.heading}
-                        </h1>
-                        <p className="pt-3 lg:text-base text-2xl">
+                        </h2>
+                        <p className="pt-2 text-lg lg:text-base">
                             {feature.content}
                         </p>
                     </div>
-                )
-            })}
+                ))}
+            </div>
+            <img src={threeLines} alt="" />
         </div>
     )
 }

@@ -3,9 +3,9 @@ import { clients } from './data'
 
 const Clients = () => {
     return (
-        <div className="bg-[#78746c] py-20">
-            <h1 className="text-white font-bold text-5xl text-center pb-10">
-                From those who love us
+        <div className="bg-[#f9f5ef] py-20">
+            <h1 className="text-black text-5xl text-center pb-10">
+                The ones who chose <span className="font-bold">SUNROOOF</span>
             </h1>
             <div className="grid grid-cols-2 lg:grid-cols-6 container mx-auto max-w-xl lg:max-w-7xl gap-5">
                 {clients.map((client) => {
@@ -16,7 +16,7 @@ const Clients = () => {
                         >
                             <LazyLoadImage
                                 effect="blur"
-                                className="mb-2 shadow-md rounded-md"
+                                className="mb-2 shadow-md rounded-3xl"
                                 src={client.img}
                                 alt=""
                             />
