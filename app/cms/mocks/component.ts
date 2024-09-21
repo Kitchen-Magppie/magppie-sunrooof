@@ -1,6 +1,7 @@
 import {
     INIT_CUSTOMER_SITE_COMPONENT,
     TCustomerComponentItem,
+    _
 } from "../../../types"
 
 export const COMPONENT_SECTIONS = [
@@ -13,7 +14,7 @@ export const COMPONENT_SECTIONS = [
 export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerComponentItem = {
     name: '',
     components: COMPONENT_SECTIONS?.map((name) => ({ ...INIT_CUSTOMER_SITE_COMPONENT, name })),
-    componentId: '',
+    componentId: _.uuid(),
     id: '',
     at: { created: new Date(), updated: new Date() }
 }
