@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TComponentItem } from '../../../../types/component';
+import { TCustomerComponentItem } from '../../../../types/component';
 
 
 interface ICustomerSiteComponentSlice {
-    value: TComponentItem[];
+    value: TCustomerComponentItem[];
     status: 'loading' | 'success' | 'failed';
     loading: boolean,
     error: null | string | undefined;
@@ -16,7 +16,7 @@ const initialState: ICustomerSiteComponentSlice = {
     error: null,
 };
 
-type TAction = PayloadAction<TComponentItem[]>
+type TAction = PayloadAction<TCustomerComponentItem[]>
 const CustomerSiteComponentSlice = createSlice({
     name: 'CustomerSiteComponent',
     initialState,

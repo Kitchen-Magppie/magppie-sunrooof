@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../../../../../redux";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { FirebaseCollectionEnum, TComponentItem } from "../../../../../types";
+import { FirebaseCollectionEnum, TCustomerComponentItem } from "../../../../../types";
 import { db } from "../../../../../config";
 import { setConsultation, setCustomerSiteComponent } from "../../../redux/slices";
 import { IConsult } from "../../../../../types/consultation";
@@ -13,14 +13,14 @@ export function useFirebaseCustomerListener() {
         const collectionRef = collection(db, FirebaseCollectionEnum.Component);
 
         onSnapshot(collectionRef, ({ docs }) => {
-            const data: TComponentItem[] = [];
+            const data: TCustomerComponentItem[] = [];
             docs?.forEach((doc) => {
                 const row = doc.data();
                 data.push({
                     ...row,
                     id: doc.id,
                     at: { created: row.at.created?.toDate() }
-                } as TComponentItem);
+                } as TCustomerComponentItem);
             });
             dispatch(setCustomerSiteComponent(data))
         });

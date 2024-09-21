@@ -1,4 +1,4 @@
-import { TComponentItem } from "../../../types"
+import { TCustomerComponentItem } from "../../../types"
 
 export enum CmsCardEnum {
     Complete = 'complete',
@@ -8,6 +8,6 @@ export enum CmsCardEnum {
 
 export type TCmsCardVariant = CmsCardEnum.Complete | CmsCardEnum.Pending | CmsCardEnum.None
 export type TCmsCustomerCardItem = {
-    item: TComponentItem
+    item: TCustomerComponentItem
     onClickModal: VoidFunction
 }

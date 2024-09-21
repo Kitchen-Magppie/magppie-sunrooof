@@ -42,14 +42,6 @@ export default function CmsRoutes() {
                 path: 'customers',
                 element: <Customer />,
             },
-            // {
-            //     path: 'landing-page',
-            //     element: <LandingPage />, // FIXME: To remove this route in future and also container from `cms/landing-page`;
-            // },
-            // {
-            //     path: 'landing',
-            //     element: <SiteComponent />,
-            // }
         ],
     } as RouteObject
 }
