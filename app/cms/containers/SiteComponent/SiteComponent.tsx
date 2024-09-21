@@ -5,9 +5,9 @@ import _ from 'lodash'
 
 import { CmsNotFound, CmsSearch } from '../../components'
 import { useAppSelector } from '../../../../redux'
-import {
-    ComponentActionForm
-} from "./components"
+// import {
+//     ComponentActionForm
+// } from "./components"
 
 import {
     CustomConfirmationDialog,
@@ -16,8 +16,8 @@ import {
 } from '../../../../components'
 import {
     // COMPONENT_META,
-    ComponentModeEnum,
-    TCustomerComponentItem
+    // ComponentModeEnum,
+    TCustomerItem
 } from '../../../../types'
 import { useFirebaseLandingListener } from '../../utils/firebase'
 import CmsLandingPageComponentCard from './components/CmsLandingPageComponentCard'
@@ -64,7 +64,7 @@ export function SiteComponent() {
         />)
     }, [corpus.confirmation])
 
-    const onClickRemove = useCallback((item: TCustomerComponentItem) => {
+    const onClickRemove = useCallback((item: TCustomerItem) => {
         setCorpus((prev) => ({
             ...prev,
             confirmation: {
@@ -78,7 +78,7 @@ export function SiteComponent() {
             }
         }))
     }, [])
-    const onClickEdit = useCallback((value: TCustomerComponentItem) => {
+    const onClickEdit = useCallback((value: TCustomerItem) => {
 
         onChangeModal({
             action: 'edit',
@@ -94,19 +94,14 @@ export function SiteComponent() {
             }}
             label={`${_.upperFirst(corpus.modal.action)} Component`}
         >
-            <ComponentActionForm
+
+            xsxs
+            {/* <ComponentActionForm
                 mode={ComponentModeEnum.Create}
                 item={corpus.modal.value}
-            // meta={meta}
-            />
+            /> */}
         </CustomSimpleModal>
-    }, [
-        corpus.modal.action,
-        corpus.modal.open,
-        corpus.modal.value,
-        // meta,
-        onChangeModal
-    ])
+    }, [corpus.modal.action, corpus.modal.open, onChangeModal])
 
     return (
         <div>
@@ -151,7 +146,7 @@ export function SiteComponent() {
     )
 }
 type TMode = 'create' | 'edit' | ''
-type TCorpusModal = { action: TMode, value: TCustomerComponentItem, open: boolean }
+type TCorpusModal = { action: TMode, value: TCustomerItem, open: boolean }
 
 type TCorpusConfirmation = { open: boolean, text: { remark: string, header: string }, id: string }
 type TCorpus = { modal: TCorpusModal, search: string, confirmation: TCorpusConfirmation }

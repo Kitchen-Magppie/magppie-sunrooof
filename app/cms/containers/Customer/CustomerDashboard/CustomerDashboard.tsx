@@ -9,7 +9,7 @@ import {
     CmsNotFound
 } from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
-import { ComponentActionForm } from "../../SiteComponent/components";
+// import { ComponentActionForm } from "../../SiteComponent/components";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
@@ -31,13 +31,13 @@ export default function CustomerDashboard() {
             label="Create Component"
         >
             <div className="p-2">
-                <ComponentActionForm
+                {/* <ComponentActionForm
                     mode={ComponentModeEnum.Create}
                     item={data.values.modal.value}
-                />
+                /> */}
             </div>
         </CustomSimpleModal>)
-    }, [action, data.toggle.isOpenComponentModal, data.values.modal.value])
+    }, [action, data.toggle.isOpenComponentModal])
 
     return <div>
         <div>

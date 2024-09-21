@@ -1,7 +1,6 @@
 import {
     CustomerComponentEnum,
-    INIT_CUSTOMER_SITE_COMPONENT,
-    TCustomerComponentItem,
+    TCustomerItem,
     _
 } from "../../../types"
 
@@ -28,9 +27,10 @@ export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     },
 ]
 
-export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerComponentItem = {
+export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     name: '',
-    components: CUSTOMER_COMPONENT_VALUE_OPTIONS?.map(({ value }) => ({ ...INIT_CUSTOMER_SITE_COMPONENT, name: value })),
+    components: [],
+    // components: CUSTOMER_COMPONENT_VALUE_OPTIONS?.map(({ value }) => ({ ...INIT_CUSTOMER_SITE_COMPONENT, name: value })),
     componentId: _.uuid(),
     id: '',
     at: { created: new Date(), updated: new Date() }

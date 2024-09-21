@@ -3,17 +3,11 @@
 // import afterOne from '../../QuotationPage/assets/before-after/after1.png'
 // import beforeTwo from '../../QuotationPage/assets/before-after/before2.png'
 // import afterTwo from '../../QuotationPage/assets/before-after/after2.png'
-import {
-    CustomerComponentEnum,
-    INIT_COMPNENT_MEDIA_TYPOGRAPHY,
-    INIT_CUSTOMER_SITE_COMPONENT,
-    INIT_CUSTOMER_SITE_COMPONENT_LINK,
-    INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
-    TComponentItem,
-    TComponentMediaItem,
-    TCustomerComponentItem
-} from '../../../types'
-import { CUSTOMER_COMPONENT_VALUE_OPTIONS } from './component'
+// import {
+//     CustomerComponentEnum,
+
+// } from '../../../types'
+// import { CUSTOMER_COMPONENT_VALUE_OPTIONS } from './component'
 
 export const QuotationMock = {
     Comparison: {
@@ -65,49 +59,49 @@ export const QuotationMock = {
 
 
 export function MOCK_TO_FIREBASE_SCHEMA() {
-    const _images = Object.values(QuotationMock.Comparison)?.flatMap((item) => (Object.values(item)))
+    // const _images = Object.values(QuotationMock.Comparison)?.flatMap((item) => (Object.values(item)))
 
-    const BEFORE_AND_AFTER_COMPONENT: TComponentItem = {
-        ...INIT_CUSTOMER_SITE_COMPONENT,
-        value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Comparison).label,
-        gallery: _images?.map((item, i) => {
-            return ({
-                orderId: `${i + 1}`,
-                typography: INIT_COMPNENT_MEDIA_TYPOGRAPHY,
-                link: item
-            })
-        }) as TComponentMediaItem[]
-    }
-    const QUOTATION_COMPONENT: TComponentItem = {
-        ...INIT_CUSTOMER_SITE_COMPONENT,
-        value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Quotation).label,
-        typography: {
-            ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
-            main: 'Quotation'
-        },
-        links: {
-            ...INIT_CUSTOMER_SITE_COMPONENT_LINK,
-            illustration: QuotationMock.Quotation.illustration
-        }
-    }
-    const CLIENT_COMPONENT: TComponentItem = {
-        ...INIT_CUSTOMER_SITE_COMPONENT,
-        value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Client).label,
-        typography: {
-            ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
-            main: QuotationMock.Client.name,
-            description: QuotationMock.Client.remark,
-        },
-    }
+    // const BEFORE_AND_AFTER_COMPONENT: TComponentItem = {
+    //     ...INIT_CUSTOMER_SITE_COMPONENT,
+    //     value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Comparison).label,
+    //     gallery: _images?.map((item, i) => {
+    //         return ({
+    //             orderId: `${i + 1}`,
+    //             typography: INIT_COMPNENT_MEDIA_TYPOGRAPHY,
+    //             link: item
+    //         })
+    //     }) as TComponentMediaItem[]
+    // }
+    // const QUOTATION_COMPONENT: TComponentItem = {
+    //     ...INIT_CUSTOMER_SITE_COMPONENT,
+    //     value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Quotation).label,
+    //     typography: {
+    //         ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+    //         main: 'Quotation'
+    //     },
+    //     links: {
+    //         ...INIT_CUSTOMER_SITE_COMPONENT_LINK,
+    //         illustration: QuotationMock.Quotation.illustration
+    //     }
+    // }
+    // const CLIENT_COMPONENT: TComponentItem = {
+    //     ...INIT_CUSTOMER_SITE_COMPONENT,
+    //     value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Client).label,
+    //     typography: {
+    //         ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+    //         main: QuotationMock.Client.name,
+    //         description: QuotationMock.Client.remark,
+    //     },
+    // }
 
-    return {
-        componentId: 'bc431ad6-0b87-4e55-a8a2-23ee3e2643ed',
-        name: 'Canon',
-        components: [
-            QUOTATION_COMPONENT,
-            BEFORE_AND_AFTER_COMPONENT,
-            CLIENT_COMPONENT
-        ]
-    } as TCustomerComponentItem
+    // return {
+    //     componentId: 'bc431ad6-0b87-4e55-a8a2-23ee3e2643ed',
+    //     name: 'Canon',
+    //     components: [
+    //         QUOTATION_COMPONENT,
+    //         BEFORE_AND_AFTER_COMPONENT,
+    //         CLIENT_COMPONENT
+    //     ]
+    // } as TCustomerComponentItem
     // return
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useAppDispatch } from "../../../../../redux";
-import { FirebaseCollectionEnum, TCustomerComponentItem } from "../../../../../types";
+import { FirebaseCollectionEnum, TCustomerItem } from "../../../../../types";
 import { db } from "../../../../../config/firebase.config";
 import { setLanding } from "../../../redux/slices";
 
@@ -11,14 +11,14 @@ export function useFirebaseLandingListener() {
     useEffect(() => {
         const collectionRef = collection(db, FirebaseCollectionEnum.Landing);
         onSnapshot(collectionRef, ({ docs }) => {
-            const data: TCustomerComponentItem[] = [];
+            const data: TCustomerItem[] = [];
             docs?.forEach((doc) => {
                 const row = doc.data();
                 data.push({
                     ...row,
                     id: doc.id,
                     at: { created: row.at.created?.toDate() }
-                } as TCustomerComponentItem);
+                } as TCustomerItem);
             });
             dispatch(setLanding(data))
         });

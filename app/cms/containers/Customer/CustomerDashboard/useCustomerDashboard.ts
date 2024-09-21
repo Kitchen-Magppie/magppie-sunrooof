@@ -3,7 +3,7 @@ import {
     _,
     ComponentModeEnum,
     TComponentMode,
-    TCustomerComponentItem
+    TCustomerItem
 } from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
 import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
@@ -33,7 +33,7 @@ export function useCustomerDashboard() {
         }))
     }, [])
 
-    const onChangeModal = useCallback((args: { action: TComponentMode, value: boolean, item?: TCustomerComponentItem }) => {
+    const onChangeModal = useCallback((args: { action: TComponentMode, value: boolean, item?: TCustomerItem }) => {
         setCorpus((prev) => ({
             ...prev,
             values: {
@@ -84,7 +84,7 @@ export function useCustomerDashboard() {
 
 type TCorpusModal = {
     action: TComponentMode,
-    value: TCustomerComponentItem,
+    value: TCustomerItem,
     open: boolean
 }
 
