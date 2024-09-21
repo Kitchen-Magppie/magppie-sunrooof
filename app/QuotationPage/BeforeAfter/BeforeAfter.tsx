@@ -1,8 +1,8 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-// import { images } from './data'
-import { QuotationMock as _data } from "../../cms/mocks"
+import { QuotationMock as _data, MOCK_TO_FIREBASE_SCHEMA } from "../../cms/mocks"
 
 const BeforeAfter = () => {
+    console.log(MOCK_TO_FIREBASE_SCHEMA())
     return (
         <div className="container max-w-5xl py-20 w-full mx-auto">
             <div className="grid grid-cols-2 place-items-center gap-2 justify-items-center">

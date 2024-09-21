@@ -8,6 +8,14 @@ export type TComponentTypography = {
     description: string,
     secondaryDescription: string
 }
+export enum CustomerComponentEnum {
+    TwoDDesign = '2d-design',
+    ThreeDDesign = '3d-design',
+    Client = 'clients',
+    Comparison = 'comparisons',
+    Quotation = 'quotations'
+}
+
 export type TComponentLink = { icon: string, bg: string, illustration: string, video: string }
 export enum ViewPortEnum {
     None = '',
@@ -27,7 +35,7 @@ export type TComponentMediaItem = {
     orderId: string,
     link: string,
     typography: TComponentMediaTypography,
-    viewport: TViewPort
+    // viewport: TViewPort
 }
 
 
@@ -35,6 +43,7 @@ export type TComponentItem = {
     typography: TComponentTypography,
     items: (TComponentTypography & { orderId: string })[],
     links: TComponentLink,
+    value: string,
     // isGallery: boolean,
     gallery: TComponentMediaItem[],
     icons: TComponentMediaItem[],
@@ -82,6 +91,7 @@ const INIT_CUSTOMER_SITE_COMPONENT_LINK: TComponentLink = {
 export const INIT_CUSTOMER_SITE_COMPONENT: TComponentItem = {
     typography: INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
     links: INIT_CUSTOMER_SITE_COMPONENT_LINK,
+    value: '',
     icons: [],
     gallery: [],
     items: [],
@@ -96,7 +106,7 @@ export const COMPONENT_MEDIA_ITEM: TComponentMediaItem = {
     orderId: '',
     typography: INIT_COMPNENT_MEDIA_TYPOGRAPHY,
     link: "",
-    viewport: ViewPortEnum.None
+    // viewport: ViewPortEnum.None
 }
 
 
