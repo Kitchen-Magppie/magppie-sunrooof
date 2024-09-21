@@ -3,7 +3,7 @@ import { clients } from './data'
 
 const Clients = () => {
     return (
-        <div className="bg-[#f9f5ef] py-20">
+        <div className="bg-[#f9f5ef] py-20" id='clients'>
             <h1 className="text-black text-5xl text-center pb-10">
                 The ones who chose <span className="font-bold">SUNROOOF</span>
             </h1>
