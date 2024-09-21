@@ -14,10 +14,15 @@ import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
 import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
+import { CustomerActionForm } from "./CustomerActionForm";
 
 export default function CustomerDashboard() {
     useFirebaseCmsSiteComponentListener()
     const { loading, data, action } = useCustomerDashboard();
+
+
+
+
 
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
@@ -31,6 +36,7 @@ export default function CustomerDashboard() {
             label="Create Component"
         >
             <div className="p-2">
+                <CustomerActionForm />
                 {/* <ComponentActionForm
                     mode={ComponentModeEnum.Create}
                     item={data.values.modal.value}
@@ -94,3 +100,6 @@ function CardSkeleton() {
     </div>
     )
 }
+
+
+

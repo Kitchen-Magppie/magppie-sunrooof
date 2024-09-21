@@ -1,5 +1,7 @@
 import {
     CustomerComponentEnum,
+    TCustomerComponentDesign2DDataItem,
+    TCustomerComponentItem,
     TCustomerItem,
     _
 } from "../../../types"
@@ -35,3 +37,105 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     id: '',
     at: { created: new Date(), updated: new Date() }
 }
+
+
+export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
+    {
+        value: CustomerComponentEnum.Client,
+        data: { name: '', description: '' }
+    },
+    {
+        value: CustomerComponentEnum.Comparison,
+        data: []
+    },
+    {
+        value: CustomerComponentEnum.Quotation,
+        data: { header: '', illustration: '' }
+    },
+    {
+        value: CustomerComponentEnum.TwoDDesign,
+        data: {
+            designBy: '',
+            approvedBy: '',
+            deisgn: '',
+            finish: '',
+            callingHeightOnSite: '',
+            afterInstallation: '',
+            yourPlan: '',
+            header: '',
+            leftImage: '',
+            rightImage: '',
+        }
+    },
+    {
+        value: CustomerComponentEnum.ThreeDDesign,
+        data: []
+    }
+];
+
+export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: { label: string; value: keyof TCustomerComponentDesign2DDataItem }[] = [
+    { label: "Design By", value: "designBy" },
+    { label: "Approved By", value: 'approvedBy' },
+    { label: "Design", value: 'deisgn' },
+    { label: "Finish", value: 'finish' },
+    { label: "Calling Height On Site", value: 'callingHeightOnSite' },
+    { label: "After Installation", value: 'afterInstallation' },
+    { label: "Your Plan", value: 'yourPlan' },
+    { label: "Header", value: 'header' },
+    { label: "Left Image", value: 'leftImage' },
+    { label: "Right Image", value: 'rightImage' }
+];
+
+export const INIT_CUSTOMER_ITEM: TCustomerItem = {
+    name: "",
+    components: [
+        {
+            // Client defaults
+            value: CustomerComponentEnum.Client,
+            data: {
+                name: "",
+                description: "",
+            },
+        },
+        {
+            // Comparison defaults
+            value: CustomerComponentEnum.Comparison,
+            data: [], // Empty array for comparison data
+        },
+        {
+            // Quotation defaults
+            value: CustomerComponentEnum.Quotation,
+            data: {
+                header: "",
+                illustration: "",
+            },
+        },
+        {
+            // TwoDDesign defaults
+            value: CustomerComponentEnum.TwoDDesign,
+            data: {
+                designBy: "",
+                approvedBy: "",
+                deisgn: "", // typo, assuming it's "design"
+                finish: "",
+                callingHeightOnSite: "",
+                afterInstallation: "",
+                yourPlan: "",
+                header: "",
+                leftImage: "",
+                rightImage: "",
+            },
+        },
+        {
+            // ThreeDDesign defaults
+            value: CustomerComponentEnum.ThreeDDesign,
+            data: [], // Empty array for 3D design data
+        },
+    ],
+    id: "",
+    componentId: "",
+    at: {
+        created: new Date(), // Use current date
+        updated: new Date(), // Use current date
+    },
+};

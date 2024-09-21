@@ -18,29 +18,41 @@ type TCustomerComponentQuotationItem = {
     data: { header: string, illustration: string }
 }
 
-type TCustomerComponentDesign2DItem = {
-    value: CustomerComponentEnum.TwoDDesign,
-    data: {
-        designBy: string,
-        approvedBy: string,
-        deisgn: string,
-        finish: string,
-        callingHeightOnSite: string,
-        afterInstallation: string,
-        yourPlan: string,
-        header: string,
-        leftImage: string,
-        rightImage: string,
-    }
+export type TCustomerComponentDesign2DDataItem = {
+    designBy: string,
+    approvedBy: string,
+    deisgn: string,
+    finish: string,
+    callingHeightOnSite: string,
+    afterInstallation: string,
+    yourPlan: string,
+    header: string,
+    leftImage: string,
+    rightImage: string,
 }
+
+export type TCustomerComponentDesign2DItem = {
+    value: CustomerComponentEnum.TwoDDesign,
+    data: TCustomerComponentDesign2DDataItem
+}
+export enum CustomerComponentEnum {
+    TwoDDesign = '2d-design',
+    ThreeDDesign = '3d-design',
+    Client = 'clients',
+    Comparison = 'comparisons',
+    Quotation = 'quotations'
+}
+
 type TCustomerComponentDesign3DItem = {
     value: CustomerComponentEnum.ThreeDDesign,
     data: string[]
 }
 
-type TCustomerComponentItem = TCustomerComponentClientItem |
+export type TCustomerComponentItem = TCustomerComponentClientItem |
     TCustomerComponentComparisonItem |
-    TCustomerComponentQuotationItem | TCustomerComponentDesign2DItem | TCustomerComponentDesign3DItem
+    TCustomerComponentQuotationItem |
+    TCustomerComponentDesign2DItem |
+    TCustomerComponentDesign3DItem
 
 
 export type TCustomerItem = {
@@ -49,13 +61,6 @@ export type TCustomerItem = {
     id: string,
     componentId: string,
     at: { created: Date, updated: Date }
-}
-export enum CustomerComponentEnum {
-    TwoDDesign = '2d-design',
-    ThreeDDesign = '3d-design',
-    Client = 'clients',
-    Comparison = 'comparisons',
-    Quotation = 'quotations'
 }
 
 

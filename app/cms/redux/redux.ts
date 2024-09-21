@@ -4,23 +4,23 @@ import {
     CustomerSiteComponentReducer,
     AuthReducer,
     SuperUserReducer,
-    ProjectReducer,
-    KitchenReducer,
-    UserReducer,
-    LandingReducer,
-    ConsultationReducer,
+    // ProjectReducer,
+    // KitchenReducer,
+    // UserReducer,
+    // LandingReducer,
+    // ConsultationReducer,
 } from "./slices"
 
 
 const CmsReducers = combineReducers({
     Auth: AuthReducer,
-    Landing: LandingReducer,
+    // Landing: LandingReducer,
     CustomerSiteComponent: CustomerSiteComponentReducer,
-    Users: UserReducer,
-    Kitchens: KitchenReducer,
-    Projects: ProjectReducer,
+    // Users: UserReducer,
+    // Kitchens: KitchenReducer,
+    // Projects: ProjectReducer,
     SuperUsers: SuperUserReducer,
-    Consultations: ConsultationReducer,
+    // Consultations: ConsultationReducer,
 
 })
 
