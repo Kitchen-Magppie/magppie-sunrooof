@@ -4,6 +4,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['SF Pro Display', 'sans-serif'],
+                cursive: ['Dancing Script', 'cursive'],
             },
             fontWeight: {
                 thin: 100,
