@@ -3,7 +3,7 @@ import { team } from './data'
 
 const Team = () => {
     return (
-        <div className="py-20 flex flex-col justify-center items-center">
+        <div className="py-20 flex flex-col justify-center items-center" id='team'>
             <h1 className="uppercase text-7xl text-center pb-10 text-[#78746c]">
                 our team
             </h1>

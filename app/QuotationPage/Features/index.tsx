@@ -13,7 +13,7 @@ import { Pagination } from 'swiper/modules'
 
 const Features = () => {
     return (
-        <>
+        <div id='features'>
             <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto py-20 px-4">
                 <div className="flex flex-col items-center justify-center mb-10 text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
@@ -80,7 +80,7 @@ const Features = () => {
                     </Swiper>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

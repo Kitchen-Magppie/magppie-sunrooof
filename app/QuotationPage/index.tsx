@@ -19,7 +19,7 @@ import Navbar from './Navbar'
 
 const QuotationPage = () => {
     return (
-        <>
+        <div className='overflow-x-hidden'>
             <Navbar />
             <Header />
             <About />
@@ -38,7 +38,7 @@ const QuotationPage = () => {
             <BuyingJourney />
             {/* <Footer /> */}
             <FooterFinal />
-        </>
+        </div>
     )
 }
 
