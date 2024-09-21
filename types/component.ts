@@ -76,7 +76,7 @@ export const INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY: TComponentTypography = {
 }
 export const INIT_COMPNENT_MEDIA_TYPOGRAPHY: TComponentMediaTypography = { main: '', description: '' }
 
-const INIT_CUSTOMER_SITE_COMPONENT_LINK: TComponentLink = {
+export const INIT_CUSTOMER_SITE_COMPONENT_LINK: TComponentLink = {
     icon: '',
     bg: '',
     illustration: '',

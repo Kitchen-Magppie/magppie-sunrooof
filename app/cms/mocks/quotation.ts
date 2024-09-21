@@ -1,4 +1,4 @@
-import illustration from '../../QuotationPage/assets/quotation.png'
+// import illustration from '../../QuotationPage/assets/quotation.png'
 // import beforeOne from '../../QuotationPage/assets/before-after/before1.png'
 // import afterOne from '../../QuotationPage/assets/before-after/after1.png'
 // import beforeTwo from '../../QuotationPage/assets/before-after/before2.png'
@@ -7,8 +7,11 @@ import {
     CustomerComponentEnum,
     INIT_COMPNENT_MEDIA_TYPOGRAPHY,
     INIT_CUSTOMER_SITE_COMPONENT,
+    INIT_CUSTOMER_SITE_COMPONENT_LINK,
+    INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
     TComponentItem,
-    TComponentMediaItem
+    TComponentMediaItem,
+    TCustomerComponentItem
 } from '../../../types'
 import { CUSTOMER_COMPONENT_VALUE_OPTIONS } from './component'
 
@@ -24,7 +27,10 @@ export const QuotationMock = {
         },
     },
     Client: { name: 'Mr. Karthik', remerk: 'Exclusively designed for' },
-    Quotation: { header: 'Quotation', illustration },
+    Quotation: {
+        header: 'Quotation',
+        illustration: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=9bfb5aa4-c14b-439f-930d-11c622a70ef0'
+    },
     Design2D: {
         0: {
             designBy: 'Nishtha',
@@ -64,18 +70,34 @@ export function MOCK_TO_FIREBASE_SCHEMA() {
     const BEFORE_AND_AFTER_COMPONENT: TComponentItem = {
         ...INIT_CUSTOMER_SITE_COMPONENT,
         value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Comparison).label,
-        gallery: _images?.map((item) => {
+        gallery: _images?.map((item, i) => {
             return ({
-                orderId: '',
+                orderId: `${i + 1}`,
                 typography: INIT_COMPNENT_MEDIA_TYPOGRAPHY,
                 link: item
             })
         }) as TComponentMediaItem[]
     }
+    const QUOTATION_COMPONENT: TComponentItem = {
+        ...INIT_CUSTOMER_SITE_COMPONENT,
+        value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Quotation).label,
+        typography: {
+            ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+            main: 'Quotation'
+        },
+        links: {
+            ...INIT_CUSTOMER_SITE_COMPONENT_LINK,
+            illustration: QuotationMock.Quotation.illustration
+        }
+    }
 
-    return [{
-        ...BEFORE_AND_AFTER_COMPONENT,
-        componentId: 'bc431ad6-0b87-4e55-a8a2-23ee3e2643ed'
-    }]
+    return {
+        componentId: 'bc431ad6-0b87-4e55-a8a2-23ee3e2643ed',
+        name: 'Canon',
+        components: [
+            QUOTATION_COMPONENT,
+            BEFORE_AND_AFTER_COMPONENT,
+        ]
+    } as TCustomerComponentItem
     // return
 }
