@@ -3,11 +3,11 @@ import { team } from './data'
 
 const Team = () => {
     return (
-        <div className="py-20 flex flex-col justify-center items-center">
+        <div className="py-20 flex flex-col justify-center items-center" id='team'>
             <h1 className="uppercase text-7xl text-center pb-10 text-[#78746c]">
                 our team
             </h1>
-            <div className="grid grid-cols-2 lg:grid-cols-4 container mx-auto max-w-5xl lg:max-w-7xl">
+            <div className="grid grid-cols-2 lg:grid-cols-4 container mx-auto max-w-xl lg:max-w-7xl">
                 {team.map((person) => {
                     return (
                         <div
