@@ -7,6 +7,10 @@ import {
 
 export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     {
+        value: CustomerComponentEnum.Client,
+        label: 'Client',
+    },
+    {
         value: CustomerComponentEnum.Comparison,
         label: 'Comparisons (Before & After)',
     },

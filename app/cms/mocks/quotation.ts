@@ -26,7 +26,7 @@ export const QuotationMock = {
             After: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fcomparisons%2Fafter2.png?alt=media&token=692fc5d4-1aa9-4c23-b045-1d0118ed1c1d'
         },
     },
-    Client: { name: 'Mr. Karthik', remerk: 'Exclusively designed for' },
+    Client: { name: 'Mr. Karthik', remark: 'Exclusively designed for' },
     Quotation: {
         header: 'Quotation',
         illustration: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=9bfb5aa4-c14b-439f-930d-11c622a70ef0'
@@ -90,6 +90,15 @@ export function MOCK_TO_FIREBASE_SCHEMA() {
             illustration: QuotationMock.Quotation.illustration
         }
     }
+    const CLIENT_COMPONENT: TComponentItem = {
+        ...INIT_CUSTOMER_SITE_COMPONENT,
+        value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Client).label,
+        typography: {
+            ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+            main: QuotationMock.Client.name,
+            description: QuotationMock.Client.remark,
+        },
+    }
 
     return {
         componentId: 'bc431ad6-0b87-4e55-a8a2-23ee3e2643ed',
@@ -97,6 +106,7 @@ export function MOCK_TO_FIREBASE_SCHEMA() {
         components: [
             QUOTATION_COMPONENT,
             BEFORE_AND_AFTER_COMPONENT,
+            CLIENT_COMPONENT
         ]
     } as TCustomerComponentItem
     // return
