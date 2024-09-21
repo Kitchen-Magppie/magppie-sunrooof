@@ -32,7 +32,7 @@ const Navbar = () => {
                     isSidebarOpen ? 'blur-md' : ''
                 }`} // Apply blur when sidebar is open
             >
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center lg:justify-center lg:w-full">
                     <h1 className="text-5xl lg:text-3xl font-extrabold tracking-wide text-center">
                         MAGPPIE
                     </h1>
