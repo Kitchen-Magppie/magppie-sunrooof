@@ -3,7 +3,7 @@ import threeLines from "./assets/three-lines.png"
 
 const About = () => {
     return (
-        <div className="bg-[#cfccc8] py-20 w-full">
+        <div className="bg-[#cfccc8] py-20 w-full" id='about'>
             <div className="bg-[#fffafa] flex flex-col mx-auto max-w-2xl lg:max-w-5xl justify-center items-center container text-center px-20 lg:px-40 py-20 w-full rounded-lg shadow-lg">
                 <h1 className="text-5xl pb-5 w-full">
                     About <span className="font-bold">MAGPPIE</span> Group

@@ -1,85 +1,59 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import * as Yup from 'yup'
 import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
-import {
-    CiDesktop,
-    // CiMobile1
-} from "react-icons/ci";
+import { FaEarthAmericas } from "react-icons/fa6";
+
+import { CiDesktop } from "react-icons/ci";
 import { BsWindowStack } from "react-icons/bs";
 import { RiText } from "react-icons/ri";
 import { MdTextFields } from "react-icons/md";
 //====================================================================
 
 import {
-    INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
     TComponentMode,
-    TComponentItem,
-    TComponentMeta,
     _,
     ComponentModeEnum,
     ViewPortEnum,
     CmsComponentMediaEnum,
+    INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
+    TCustomerComponentItem,
 } from '../../../../../types'
 import { ImageInput } from '../../../../../components'
-import { MinimalAccordion, FieldCautation } from '../../../components'
+import {
+    MinimalAccordion,
+    FieldCautation,
+    CmsCopyClipboard
+} from '../../../components'
 import {
     FormTypography,
     FormItemTypography,
     FormViewPortMedia
 } from '.'
-import { useFirebaseCustomerSiteComponentAction } from '../../../utils/firebase/customer';
-import { useAppSelector } from '../../../../../redux'
-
 
 export default function ComponentActionForm(props: TProps) {
 
     const [corpus, setCorpus] = useState({ isSubmitting: false })
     const { item } = props;
-    const { value } = useAppSelector((state) => state.Cms.Landing)
     const isCreateMode = props.mode === ComponentModeEnum.Create
-    const filteredOrder = useMemo(() => {
-        return _.applyOrder(_.map(value, 'orderId'))
-    }, [value])
-    const schema = Yup.object().shape({
-        orderId: Yup.string()
-            .required('Order ID is required')
-            // .min(0, 'The number must be non-negative')
-            // .integer('Order ID must be an integer')
-            .test('checkValidOrderId',
-                'The given Order ID is invalid.',
-                (currentId) => {
-                    const { prev, prefer } = filteredOrder;
-                    if (isCreateMode) {
-                        return !prev?.includes(currentId)
-                    } else {
-                        return item.orderId === currentId || Number(prefer) >= Number(item.orderId)
-                    }
-                })
-        ,
-        typography: typographySchema,
-        links: linkSchema,
-        items: Yup.array().of(typographyItemSchema).required(),
-        name: Yup.string().required('Name is required'),
-        isGallery: Yup.boolean(),
-        gallery: Yup.array().of(sectionImageItemSchema),
-        icons: Yup.array().of(sectionImageItemSchema),
+    const validateSchema = Yup.object().shape({
+        name: Yup.string().required(),
+        components: Yup.array().of(Yup.object().shape({
+            typography: typographySchema,
+            links: linkSchema,
+            items: Yup.array().of(typographyItemSchema).required(),
+            gallery: Yup.array().of(sectionImageItemSchema),
+            icons: Yup.array().of(sectionImageItemSchema),
+        }))
     })
-    const defaultValues = useMemo(() => {
-        return {
-            ...item,
-            orderId: props.mode === ComponentModeEnum.Edit ? item.orderId : filteredOrder.prefer,
-        };
-
-    }, [filteredOrder.prefer, item, props.mode])
 
     const methods = useForm({
-        defaultValues,
+        defaultValues: item,
         // mode: 'onBlur',
         reValidateMode: 'onChange',
-        resolver: yupResolver(schema),
+        resolver: yupResolver(validateSchema),
     })
     const {
         register,
@@ -89,24 +63,22 @@ export default function ComponentActionForm(props: TProps) {
         formState: { errors },
     } = methods
 
-    useEffect(() => {
-        setValue('orderId', props.mode === ComponentModeEnum.Edit ? item.orderId : filteredOrder.prefer)
-    }, [filteredOrder.prefer, item.orderId, props.mode, setValue])
-
     const values = watch()
 
-    const CustomerAction = useFirebaseCustomerSiteComponentAction()
-    const onSubmit = handleSubmit((data: TComponentItem) => {
+    console.log(values)
 
+    // const CustomerAction = useFirebaseCustomerSiteComponentAction()
+    const onSubmit = handleSubmit((data: TCustomerComponentItem) => {
+        console.log(data)
         setCorpus((prev) => ({ ...prev, isSubmitting: true }))
         setTimeout(() => {
             if (isCreateMode) {
-                CustomerAction.add(data)
+                // CustomerAction.add(data)
             } else {
-                CustomerAction.edit({
-                    ...data,
-                    id: item.id
-                })
+                // CustomerAction.edit({
+                //     ...data,
+                //     id: item.id
+                // })
 
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }))
@@ -122,106 +94,110 @@ export default function ComponentActionForm(props: TProps) {
         }
         return ''
     }, [errors])
-
-    return (
-        <FormProvider {...methods}>
-            <form onSubmit={onSubmit} className="bg-white p-6 overflow-y-scroll h-[80vh] ">
-                <div className=" mb-2">
-                    <FieldCautation disableAppendButton />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Order ID
-                    </label>
-                    <input
-                        type="text"
-                        {...register('orderId')}
-                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    const renderComponentContent = useMemo(() => (values?.components.map((component, index) => {
+        return <div key={index} className="bg-white p-6 overflow-y-scroll h-[80vh] ">
+            <div className=" mb-2">
+                <FieldCautation disableAppendButton />
+            </div>
+            <MinimalAccordion isExpanded title='Typography' icon={<RiText />} >
+                <FormTypography index={index} />
+            </MinimalAccordion>
+            <MinimalAccordion isExpanded title='Items' icon={<MdTextFields />}>
+                <div className="mb-3">
+                    <FieldCautation label='Array Field'
+                        onClickAdd={() => {
+                            // const filterOrder = _.applyOrder(_.map(values.items, 'orderId'))
+                            const items = [..._.get(values, `components.${index}.items`, []),
+                                INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY
+                            ]
+                            setValue(`components.${index}.items`, items)
+                        }}
                     />
-                    {renderErrorMessage('orderId')}
+
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                        Name
-                    </label>
-                    <input
-                        type="text"
-                        {...register('name')}
-                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                <FormItemTypography index={index} />
+            </MinimalAccordion>
+            <MinimalAccordion title='Links' icon={<BsWindowStack />}>
+                <div className=''>
+                    <ImageInput
+                        label='Icon'
+                        values={component.links.icon?.length ? [component.links.icon] : []}
+                        path={`customer-site-components/icons`}
+                        onSuccess={(e) => {
+                            setValue(`components.${index}.links.icon`, e[0])
+                        }}
                     />
-                    {renderErrorMessage('name')}
+                    {renderErrorMessage('links.icon.message')}
                 </div>
-                <MinimalAccordion isExpanded title='Typography' icon={<RiText />} >
-                    <FormTypography />
-                </MinimalAccordion>
-                <MinimalAccordion isExpanded title='Items' icon={<MdTextFields />}>
-                    <div className="mb-3">
-                        <FieldCautation label='Array Field'
-                            onClickAdd={() => {
-                                const filterOrder = _.applyOrder(_.map(values.items, 'orderId'))
-                                setValue('items',
-                                    [...values.items,
-                                    {
-                                        ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
-                                        orderId: filterOrder.prefer
-                                    }
-                                    ])
-                            }}
-                        />
+                <div className="mb-4">
+                    <ImageInput
+                        values={component.links.bg?.length ? [component.links.bg] : []}
+                        label='Background'
+                        path={`customer-site-components/backgrounds`}
+                        onSuccess={(e) => {
+                            setValue(`components.${index}.links.bg`, e[0])
+                        }}
+                    />
+                    {renderErrorMessage('errors.links.bg')}
+                </div>
 
-                    </div>
-                    <FormItemTypography />
-                </MinimalAccordion>
-                <MinimalAccordion title='Links' icon={<BsWindowStack />}>
-                    <div className=''>
-                        <ImageInput
-                            label='Icon'
-                            values={values.links.icon?.length ? [values.links.icon] : []}
-                            path={`customer-site-components/icons`}
-                            onSuccess={(e) => {
-                                setValue('links.icon', e[0])
-                            }}
-                        />
-                        {renderErrorMessage('links.icon.message')}
-                    </div>
-                    <div className="mb-4">
-                        <ImageInput
-                            values={values.links.bg?.length ? [values.links.bg] : []}
-                            label='Background'
-                            path={`customer-site-components/backgrounds`}
-                            onSuccess={(e) => {
-                                setValue('links.bg', e[0])
-                            }}
-                        />
-                        {renderErrorMessage('errors.links.bg')}
-                    </div>
+                <div className="mb-4">
+                    <ImageInput
+                        label='Illustration'
+                        values={component.links.illustration?.length ? [component.links.illustration] : []}
+                        path={`customer-site-components/illustrations`}
+                        onSuccess={(e) => {
+                            setValue(`components.${index}.links.illustration`, e[0] || '')
+                        }}
+                    />
+                    {renderErrorMessage('links.illustration')}
+                </div>
 
-                    <div className="mb-4">
-                        <ImageInput
-                            label='Illustration'
-                            values={values.links.illustration?.length ? [values.links.illustration] : []}
-                            path={`customer-site-components/illustrations`}
-                            onSuccess={(e) => {
-                                setValue('links.illustration', e[0] || '')
-                            }}
-                        />
-                        {renderErrorMessage('links.illustration')}
+            </MinimalAccordion>
+
+            <MinimalAccordion title='Icons' icon={<CiDesktop />}>
+                <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Icon} />
+            </MinimalAccordion>
+            <MinimalAccordion title='Gallery ' icon={<CiDesktop />}>
+                <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Gallery} />
+            </MinimalAccordion>
+        </div>
+    })), [renderErrorMessage, setValue, values])
+
+    return (<FormProvider {...methods}>
+        <form onSubmit={onSubmit}>
+            <div className="bg-white px-6 overflow-y-scroll">
+                <label className="block text-sm font-medium text-gray-700">
+                    Name
+                </label>
+                <input
+                    type="text"
+                    {...register('name')}
+                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                {renderErrorMessage('name')}
+            </div>
+            {renderComponentContent}
+            <div className="px-10">
+                <div className="flex flex-col gap-1">
+                    <div className="">
+                        <button
+                            type="button"
+                            className="flex items-center gap-1 text-white  bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                        >
+                            <FaEarthAmericas />  Genrate URL
+                        </button>
                     </div>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            URL: <div className=" underline text-blue-700"></div>
+                        </div>
+                        <div className="cursor-pointer">
+                            <CmsCopyClipboard text='' />
+                        </div>
+                    </div>
+                </div>
 
-                </MinimalAccordion>
-
-                <MinimalAccordion title='Icons' icon={<CiDesktop />}>
-                    <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Icon} />
-                </MinimalAccordion>
-                <MinimalAccordion title='Gallery ' icon={<CiDesktop />}>
-                    <FormViewPortMedia viewport={ViewPortEnum.Desktop} name={CmsComponentMediaEnum.Gallery} />
-                </MinimalAccordion>
-                {/* <MinimalAccordion title='Icons' icon={<CiMobile1 />}>
-                    <FormViewPortMedia viewport={ViewPortEnum.Mobile} name={CmsComponentMediaEnum.Gallery} />
-                </MinimalAccordion>
-                <MinimalAccordion title='Gallery' icon={<CiMobile1 />}>
-                    <FormViewPortMedia viewport={ViewPortEnum.Mobile} name={CmsComponentMediaEnum.Icon} />
-                </MinimalAccordion> */}
                 <button
                     disabled={corpus.isSubmitting}
                     type="submit"
@@ -230,10 +206,9 @@ export default function ComponentActionForm(props: TProps) {
                     {isCreateMode ? 'Create' : 'Edit'} Component
                     {corpus.isSubmitting ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
                 </button>
-            </form>
-        </FormProvider>
-
-    )
+            </div>
+        </form>
+    </FormProvider>)
 }
 
 const typographySchema = Yup.object().shape({
@@ -260,7 +235,7 @@ const sectionImageItemSchema = Yup.object().shape({
 
 
 type TProps = {
-    item: TComponentItem,
-    meta?: TComponentMeta,
+    item: TCustomerComponentItem,
+    // meta?: TComponentMeta,
     mode: TComponentMode
 }

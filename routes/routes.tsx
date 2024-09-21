@@ -4,8 +4,9 @@ import CmsRoutes from '../app/cms/routes/routes'
 import QuotationPage from '../app/QuotationPage'
 
 export default function Routes() {
+    const CMS_ROUTES = CmsRoutes()
     return useRoutes([
-        CmsRoutes(),
+        CMS_ROUTES,
         {
             path: '/',
             element: <QuotationPage />,

@@ -2,22 +2,25 @@
 // import ThreedDesigns from './3dDesigns'
 import About from './About'
 import BeforeAfter from './BeforeAfter/BeforeAfter'
-import BuyingJourney from './BuyingJourney'
 import ClientName from './ClientName'
 import Clients from './Clients'
 import DesignedBy from './DesignedBy'
 import Features from './Features'
-import Footer from './Footer'
+// import Footer from './Footer'
 import Guarantee from './Guarantee'
 import Header from './Header'
 import ProjectDetails from './ProjectDetails'
 import Quotation from './Quotation'
 import Team from './Team'
 import TermsandConditions from './TermsandConditions/TermsandConditions'
+import FooterFinal from './FooterFinal'
+import BuyingJourney from './BuyingJourney'
+import Navbar from './Navbar'
 
 const QuotationPage = () => {
     return (
-        <>
+        <div className='overflow-x-hidden'>
+            <Navbar />
             <Header />
             <About />
             <Clients />
@@ -33,8 +36,9 @@ const QuotationPage = () => {
             <TermsandConditions />
             <Guarantee />
             <BuyingJourney />
-            <Footer />
-        </>
+            {/* <Footer /> */}
+            <FooterFinal />
+        </div>
     )
 }
 
