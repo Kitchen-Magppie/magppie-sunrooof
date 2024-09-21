@@ -8,11 +8,11 @@ const TermsandConditions = () => {
                     Terms & Conditions
                 </h1>
             </div>
-            <div className="container mx-auto">
+            <div className="container mx-auto px-10">
                 <ul>
                     {terms.map((term) => {
                         return (
-                            <li className="list-disc text-2xl" key={term.id}>
+                            <li className="list-disc text-3xl lg:text-2xl pb-4" key={term.id}>
                                 {term.content}
                             </li>
                         )
