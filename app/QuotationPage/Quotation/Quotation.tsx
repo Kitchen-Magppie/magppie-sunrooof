@@ -11,21 +11,9 @@ const Quotation = () => {
                 <LazyLoadImage
                     effect="blur"
                     src={_data.Quotation.illustration}
-                    className="w-[800px] h-[500px] lg:w-full lg:h-full object-cover quotation-image"
+                    className=" lg:w-full lg:h-full object-cover quotation-image"
                     alt=""
                 />
-                <style jsx>
-                    {`
-                        img.quotation-image {
-                            clip-path: polygon(
-                                0 30%,
-                                100% 30%,
-                                100% 100%,
-                                0 100%
-                            );
-                        }
-                    `}
-                </style>
             </div>
         </div>
     )

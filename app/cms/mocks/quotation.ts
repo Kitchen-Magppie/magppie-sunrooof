@@ -29,7 +29,7 @@ export const QuotationMock = {
     Client: { name: 'Mr. Karthik', remark: 'Exclusively designed for' },
     Quotation: {
         header: 'Quotation',
-        illustration: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=9bfb5aa4-c14b-439f-930d-11c622a70ef0'
+        illustration: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4'
     },
     Design2D: {
         0: {
