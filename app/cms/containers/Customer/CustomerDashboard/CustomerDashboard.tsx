@@ -4,12 +4,10 @@ import { RiApps2AddLine } from "react-icons/ri";
 //====================================================================
 import {
     CmsSearch,
-    // MinimalAccordion,
     CmsCustomerCardItem,
     CmsNotFound
 } from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
-// import { ComponentActionForm } from "../../SiteComponent/components";
 import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
@@ -36,7 +34,10 @@ export default function CustomerDashboard() {
             label="Create Component"
         >
             <div className="p-2">
-                <CustomerActionForm />
+                <CustomerActionForm
+                    mode={ComponentModeEnum.Create}
+
+                />
                 {/* <ComponentActionForm
                     mode={ComponentModeEnum.Create}
                     item={data.values.modal.value}

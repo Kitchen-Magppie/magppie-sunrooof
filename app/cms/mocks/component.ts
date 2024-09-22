@@ -1,6 +1,6 @@
 import {
     CustomerComponentEnum,
-    TCustomerComponentDesign2DDataItem,
+    TCustomerComponent2DDesignOptionItem,
     TCustomerComponentItem,
     TCustomerItem,
     _
@@ -32,7 +32,6 @@ export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
 export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     name: '',
     components: [],
-    // components: CUSTOMER_COMPONENT_VALUE_OPTIONS?.map(({ value }) => ({ ...INIT_CUSTOMER_SITE_COMPONENT, name: value })),
     componentId: _.uuid(),
     id: '',
     at: { created: new Date(), updated: new Date() }
@@ -73,7 +72,7 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     }
 ];
 
-export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: { label: string; value: keyof TCustomerComponentDesign2DDataItem }[] = [
+export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
     { label: "Design By", value: "designBy" },
     { label: "Approved By", value: 'approvedBy' },
     { label: "Design", value: 'design' },
@@ -88,39 +87,7 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: { label: string; value:
 
 export const INIT_CUSTOMER_ITEM: TCustomerItem = {
     name: "",
-    components: [
-        {
-            value: CustomerComponentEnum.Client,
-            data: { name: "", description: "" },
-        },
-        {
-            value: CustomerComponentEnum.Comparison,
-            data: [],
-        },
-        {
-            value: CustomerComponentEnum.Quotation,
-            data: { header: "", illustration: "" },
-        },
-        {
-            value: CustomerComponentEnum.TwoDDesign,
-            data: {
-                designBy: "",
-                approvedBy: "",
-                design: "",
-                finish: "",
-                callingHeightOnSite: "",
-                afterInstallation: "",
-                yourPlan: "",
-                header: "",
-                leftImage: "",
-                rightImage: "",
-            },
-        },
-        {
-            value: CustomerComponentEnum.ThreeDDesign,
-            data: [],
-        },
-    ],
+    components: INIT_CUSTOMER_COMPONENTS,
     id: "",
     componentId: "",
     at: {

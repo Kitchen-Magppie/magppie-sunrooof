@@ -20,6 +20,7 @@ type TCustomerComponentQuotationItem = {
     data: { header: string, illustration: string }
 }
 
+export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem }
 export type TCustomerComponentDesign2DDataItem = {
     designBy: string,
     approvedBy: string,
