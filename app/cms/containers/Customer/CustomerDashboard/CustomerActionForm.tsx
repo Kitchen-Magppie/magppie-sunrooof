@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
 
-import { _, CustomerComponentEnum, TCustomerItem } from '../../../../../types';
+import { _, CustomerComponentEnum, TCustomerItem, validateCustomerItemSchema } from '../../../../../types';
 import { CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, CUSTOMER_COMPONENT_VALUE_OPTIONS, INIT_CUSTOMER_ITEM } from '../../../mocks';
 import { MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
@@ -19,7 +18,7 @@ export function CustomerActionForm() {
         handleSubmit,
         formState: { errors }
     } = useForm<TCustomerItem>({
-        resolver: yupResolver(customerItemSchema),
+        resolver: yupResolver(validateCustomerItemSchema),
         defaultValues: INIT_CUSTOMER_ITEM
     });
 
@@ -188,72 +187,3 @@ export function CustomerActionForm() {
         </form>
     );
 }
-
-const comparisonDataItemSchema = yup.object().shape({
-    value: yup.string().required(),
-    image: yup.object().shape({
-        before: yup.string().required(),
-        after: yup.string().required(),
-    }).required(),
-});
-
-const customerComponentComparisonItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.Comparison]).required(),
-    data: yup.array().of(comparisonDataItemSchema).required(),
-});
-
-const customerComponentClientItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.Client]).required(),
-    data: yup.object({
-        name: yup.string().required(),
-        description: yup.string().required(),
-    }).required(),
-});
-
-const customerComponentQuotationItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
-    data: yup.object({
-        header: yup.string().required(),
-        illustration: yup.string().required(),
-    }).required(),
-});
-
-const customerComponentDesign2DItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
-    data: yup.object().shape({
-        designBy: yup.string().required(),
-        approvedBy: yup.string().required(),
-        deisgn: yup.string().required(),
-        finish: yup.string().required(),
-        callingHeightOnSite: yup.string().required(),
-        afterInstallation: yup.string().required(),
-        yourPlan: yup.string().required(),
-        header: yup.string().required(),
-        leftImage: yup.string().required(),
-        rightImage: yup.string().required(),
-    }).required(),
-});
-
-const customerComponentDesign3DItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.ThreeDDesign]).required(),
-    data: yup.array().of(yup.string().required()).required(),
-});
-
-const customerComponentSchema = yup.mixed().oneOf([
-    customerComponentClientItemSchema,
-    customerComponentComparisonItemSchema,
-    customerComponentQuotationItemSchema,
-    customerComponentDesign2DItemSchema,
-    customerComponentDesign3DItemSchema,
-]);
-
-const customerItemSchema = yup.object().shape({
-    name: yup.string().required(),
-    components: yup.array().of(customerComponentSchema).required(),
-    id: yup.string().required(),
-    componentId: yup.string().required(),
-    at: yup.object().shape({
-        created: yup.date().required(),
-        updated: yup.date().required(),
-    }).required(),
-});
