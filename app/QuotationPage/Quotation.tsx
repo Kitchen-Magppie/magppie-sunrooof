@@ -3,7 +3,6 @@ import { QuotationMock as _data } from '../cms/mocks'
 import { TCustomerComponentQuotationItem } from '../../types'
 
 const Quotation = (props: TProps) => {
-    console.log(props.item)
     return (
         <div className="flex flex-col justify-center items-center py-10">
             <h1 className="text-8xl italic underline mb-6">

@@ -1,5 +1,5 @@
-// import TwodDesigns from './2dDesigns'
-// import ThreedDesigns from './3dDesigns'
+import TwodDesigns from './2dDesigns'
+import ThreedDesigns from './3dDesigns'
 import About from './About'
 import BeforeAfter from './BeforeAfter/BeforeAfter'
 import ClientName from './ClientName'
@@ -9,8 +9,7 @@ import Features from './Features'
 // import Footer from './Footer'
 import Guarantee from './Guarantee'
 import Header from './Header'
-import ProjectDetails from './ProjectDetails'
-import Quotation from './Quotation'
+import Quotation from './Quotation/Quotation'
 import Team from './Team'
 import TermsandConditions from './TermsandConditions/TermsandConditions'
 import FooterFinal from './FooterFinal'
@@ -61,10 +60,12 @@ const QuotationPage = () => {
             <DesignedBy />
             <Team />
             <ClientName item={component[CustomerComponentEnum.Client]} />
-            <ProjectDetails />
-            {/* <TwodDesigns />
-            <ThreedDesigns /> */}
-            <Quotation item={component[CustomerComponentEnum.Quotation]} />
+            {/* <ProjectDetails /> */}
+            <TwodDesigns />
+            <ThreedDesigns />
+            <Quotation
+                item={component[CustomerComponentEnum.Quotation]}
+            />
             <TermsandConditions />
             <Guarantee />
             <BuyingJourney />
