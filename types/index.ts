@@ -7,4 +7,5 @@ export * from "./route"
 export * from "./toast"
 export * from "./landing"
 export * from "./firebase"
+export * from "./consultation"
 export { _ }

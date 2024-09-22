@@ -10,7 +10,7 @@ const Quotation = () => {
             <LazyLoadImage
                 effect="blur"
                 src={_data.Quotation.illustration}
-                className="w-[800px] h-[500px]"
+                className="w-[800px] h-[500px] lg:w-full lg:h-full"
                 alt=""
             />
         </div>

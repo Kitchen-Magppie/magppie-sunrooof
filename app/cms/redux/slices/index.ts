@@ -1,5 +1,5 @@
 export * from "./Auth.slice"
-export * from "./CustomerSiteComponent.slice"
+export * from "./Customer.slice"
 export * from "./Kitchen.slice"
 export * from "./Landing.slice"
 export * from "./Project.slice"
