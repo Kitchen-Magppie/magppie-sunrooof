@@ -1,8 +1,7 @@
 import { FaPen } from 'react-icons/fa'
 //====================================================================
 import { MdDeleteOutline } from "react-icons/md";
-import { TCustomerComponentItem } from '../../../../../types/component'
-
+import { TCustomerItem } from '../../../../../types'
 
 export default function CmsLandingPageComponentCard(props: TProps) {
     return (<div className={`max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 bg-origin-content bg-center w-full group`}
@@ -41,7 +40,7 @@ export default function CmsLandingPageComponentCard(props: TProps) {
 }
 
 type TProps = {
-    item: TCustomerComponentItem,
+    item: TCustomerItem,
     onRemove?: (e: string) => void,
     onEdit?: (e: string) => void
 }

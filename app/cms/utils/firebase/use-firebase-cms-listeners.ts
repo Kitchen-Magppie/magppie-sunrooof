@@ -11,8 +11,8 @@ import { TKitchen } from '../../types/Kitchen';
 import { setKitchens } from '../../redux/slices/Kitchen.slice';
 import { TProject } from '../../types/Project';
 import { setProjects } from '../../redux/slices/Project.slice';
-import { FirebaseCollectionEnum, TCustomerComponentItem } from '../../../../types';
-import { setCustomerSiteComponent } from '../../redux/slices';
+import { FirebaseCollectionEnum, TCustomerItem } from '../../../../types';
+import { setCustomers } from '../../redux/slices';
 const { getAuth, onAuthStateChanged } = auth;
 
 export function useFirebaseCmsAuthListener() {
@@ -84,13 +84,12 @@ export const useFirebaseCmsKitchensListener = () => {
 
 
 
-export function useFirebaseCmsSiteComponentListener() {
+export function useFirebaseCmsCustomerListener() {
     const dispatch = useAppDispatch()
     useEffect(() => {
-        const collectionRef = collection(db, FirebaseCollectionEnum.Component);
-
+        const collectionRef = collection(db, FirebaseCollectionEnum.Customer);
         onSnapshot(collectionRef, ({ docs }) => {
-            const data: TCustomerComponentItem[] = [];
+            const data: TCustomerItem[] = [];
             docs?.forEach((doc) => {
                 const row = doc.data();
                 data.push({
@@ -100,9 +99,9 @@ export function useFirebaseCmsSiteComponentListener() {
                         created: (row.at.created as Timestamp).toDate(),
                         updated: (row.at.updated as Timestamp).toDate(),
                     }
-                } as TCustomerComponentItem);
+                } as TCustomerItem);
             });
-            dispatch(setCustomerSiteComponent(data))
+            dispatch(setCustomers(data))
 
         });
     }, [dispatch])
