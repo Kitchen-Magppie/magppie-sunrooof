@@ -25,7 +25,7 @@ import { INIT_CUSTOMER_COMPONENT_ITEM } from '../../mocks'
 
 export function SiteComponent() {
     useFirebaseLandingListener()
-    const { loading, value } = useAppSelector((state) => state.Cms.Landing)
+    const { loading, value } = useAppSelector((state) => state.Cms.CustomerSiteComponent)
     // const meta = useMemo(() => COMPONENT_META(value), [value])
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const onChangeModal = useCallback((newValue: Partial<TCorpusModal>) => {

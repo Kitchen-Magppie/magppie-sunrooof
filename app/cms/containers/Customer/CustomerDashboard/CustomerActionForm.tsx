@@ -5,7 +5,11 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
 
 import { _, CustomerComponentEnum, TCustomerItem, validateCustomerItemSchema } from '../../../../../types';
-import { CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, CUSTOMER_COMPONENT_VALUE_OPTIONS, INIT_CUSTOMER_ITEM } from '../../../mocks';
+import {
+    CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
+    CUSTOMER_COMPONENT_VALUE_OPTIONS,
+    INIT_CUSTOMER_ITEM
+} from '../../../mocks';
 import { MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
 
@@ -17,7 +21,7 @@ export function CustomerActionForm() {
         register,
         handleSubmit,
         formState: { errors }
-    } = useForm<TCustomerItem>({
+    } = useForm({
         resolver: yupResolver(validateCustomerItemSchema),
         defaultValues: INIT_CUSTOMER_ITEM
     });
@@ -65,8 +69,9 @@ export function CustomerActionForm() {
             <div className='px-6'>
                 {/* <label className="h3">Components</label> */}
                 {values?.components?.map((component, i) => {
-                    const currentComponent = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === component.value)
-                    switch (component.value) {
+                    const value = _.get(component, 'value')
+                    const currentComponent = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value)
+                    switch (value) {
                         case CustomerComponentEnum.Client:
                             return <div key={i}>
                                 <MinimalAccordion isExpanded title={currentComponent.label}>

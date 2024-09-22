@@ -23,7 +23,7 @@ type TCustomerComponentQuotationItem = {
 export type TCustomerComponentDesign2DDataItem = {
     designBy: string,
     approvedBy: string,
-    deisgn: string,
+    design: string,
     finish: string,
     callingHeightOnSite: string,
     afterInstallation: string,
@@ -42,7 +42,8 @@ export enum CustomerComponentEnum {
     ThreeDDesign = '3d-design',
     Client = 'clients',
     Comparison = 'comparisons',
-    Quotation = 'quotations'
+    Quotation = 'quotations',
+    None = ''
 }
 
 type TCustomerComponentDesign3DItem = {
@@ -132,7 +133,7 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
     data: yup.object().shape({
         designBy: yup.string().required(),
         approvedBy: yup.string().required(),
-        deisgn: yup.string().required(),
+        design: yup.string().required(),
         finish: yup.string().required(),
         callingHeightOnSite: yup.string().required(),
         afterInstallation: yup.string().required(),
@@ -148,13 +149,30 @@ const customerComponentDesign3DItemSchema = yup.object().shape({
     data: yup.array().of(yup.string().required()).required(),
 });
 
-const customerComponentSchema = yup.mixed().oneOf([
-    customerComponentClientItemSchema,
-    customerComponentComparisonItemSchema,
-    customerComponentQuotationItemSchema,
-    customerComponentDesign2DItemSchema,
-    customerComponentDesign3DItemSchema,
-]);
+// const customerComponentSchema = yup.mixed().oneOf([
+//     customerComponentClientItemSchema,
+//     customerComponentComparisonItemSchema,
+//     customerComponentQuotationItemSchema,
+//     customerComponentDesign2DItemSchema,
+//     customerComponentDesign3DItemSchema,
+// ]);
+
+const customerComponentSchema = yup.lazy((value) => {
+    switch (value.value) {
+        case CustomerComponentEnum.Client:
+            return customerComponentClientItemSchema;
+        case CustomerComponentEnum.Comparison:
+            return customerComponentComparisonItemSchema;
+        case CustomerComponentEnum.Quotation:
+            return customerComponentQuotationItemSchema;
+        case CustomerComponentEnum.TwoDDesign:
+            return customerComponentDesign2DItemSchema;
+        case CustomerComponentEnum.ThreeDDesign:
+            return customerComponentDesign3DItemSchema;
+        default:
+            return yup.mixed().required(); // Fallback in case something goes wrong
+    }
+});
 
 export const validateCustomerItemSchema = yup.object().shape({
     name: yup.string().required(),

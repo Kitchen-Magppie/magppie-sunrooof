@@ -57,7 +57,7 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
         data: {
             designBy: '',
             approvedBy: '',
-            deisgn: '',
+            design: '',
             finish: '',
             callingHeightOnSite: '',
             afterInstallation: '',
@@ -76,7 +76,7 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: { label: string; value: keyof TCustomerComponentDesign2DDataItem }[] = [
     { label: "Design By", value: "designBy" },
     { label: "Approved By", value: 'approvedBy' },
-    { label: "Design", value: 'deisgn' },
+    { label: "Design", value: 'design' },
     { label: "Finish", value: 'finish' },
     { label: "Calling Height On Site", value: 'callingHeightOnSite' },
     { label: "After Installation", value: 'afterInstallation' },
@@ -90,33 +90,23 @@ export const INIT_CUSTOMER_ITEM: TCustomerItem = {
     name: "",
     components: [
         {
-            // Client defaults
             value: CustomerComponentEnum.Client,
-            data: {
-                name: "",
-                description: "",
-            },
+            data: { name: "", description: "" },
         },
         {
-            // Comparison defaults
             value: CustomerComponentEnum.Comparison,
-            data: [], // Empty array for comparison data
+            data: [],
         },
         {
-            // Quotation defaults
             value: CustomerComponentEnum.Quotation,
-            data: {
-                header: "",
-                illustration: "",
-            },
+            data: { header: "", illustration: "" },
         },
         {
-            // TwoDDesign defaults
             value: CustomerComponentEnum.TwoDDesign,
             data: {
                 designBy: "",
                 approvedBy: "",
-                deisgn: "", // typo, assuming it's "design"
+                design: "",
                 finish: "",
                 callingHeightOnSite: "",
                 afterInstallation: "",
@@ -127,15 +117,14 @@ export const INIT_CUSTOMER_ITEM: TCustomerItem = {
             },
         },
         {
-            // ThreeDDesign defaults
             value: CustomerComponentEnum.ThreeDDesign,
-            data: [], // Empty array for 3D design data
+            data: [],
         },
     ],
     id: "",
     componentId: "",
     at: {
-        created: new Date(), // Use current date
-        updated: new Date(), // Use current date
+        created: new Date(),
+        updated: new Date(),
     },
 };
