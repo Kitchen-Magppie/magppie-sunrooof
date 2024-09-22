@@ -17,11 +17,6 @@ import { CustomerActionForm } from "./CustomerActionForm";
 export default function CustomerDashboard() {
     useFirebaseCmsSiteComponentListener()
     const { loading, data, action } = useCustomerDashboard();
-
-
-
-
-
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}

@@ -3,9 +3,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
+//====================================================================
 
 import {
-    _, ComponentModeEnum, CustomerComponentEnum,
+    _,
+    ComponentModeEnum,
+    CustomerComponentEnum,
+    TCustomerComponentDesign2DDataItem,
     TCustomerItem,
     validateCustomerItemSchema
 } from '../../../../../types';
@@ -156,24 +160,29 @@ export function CustomerActionForm(props: TProps) {
                         case CustomerComponentEnum.TwoDDesign:
                             return <div key={i}>
                                 <MinimalAccordion isExpanded title={currentComponent.label}>
-                                    <div className="flex flex-col gap-2 px-6">
-                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.map((field, j) => {
-                                            return (<div className="bg-white  overflow-y-scroll" key={j}>
-                                                <label className="block text-sm font-medium text-gray-700">
-                                                    {field.label}
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    {...register(`components.${i}.data.${field.value}`)}
-                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                />
-                                                {renderErrorMessage(`components.${i}.data.${field.value}`)}
+                                    {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((_, k) => {
+                                        return (<div key={k} className="flex flex-col gap-2 px-6">
+                                            <div className='text-gray-400 italic  text-lg'>
+                                                #{k + 1}
                                             </div>
-                                            )
-                                        })}
-                                        <ImageInput label='Map' path='' onSuccess={() => { }} />
-                                        <ImageInput path='' onSuccess={() => { }} />
-                                    </div>
+                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.map((field, j) => {
+                                                return (<div className="bg-white  overflow-y-scroll" key={j}>
+                                                    <label className="block text-sm font-medium text-gray-700">
+                                                        {field.label}
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        {...register(`components.${i}.data.${k}.${field.value}`)}
+                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    />
+                                                    {renderErrorMessage(`components.${i}.data.${k}.${field.value}`)}
+                                                </div>
+                                                )
+                                            })}
+                                            <ImageInput label='Map' path='' onSuccess={() => { }} />
+                                            <ImageInput path='' onSuccess={() => { }} />
+                                        </div>)
+                                    })}
                                 </MinimalAccordion>
                             </div>
                         default:
@@ -194,7 +203,6 @@ export function CustomerActionForm(props: TProps) {
                     {corpus.isSubmitting ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
                 </button>
             </div>
-
         </form>
     );
 }

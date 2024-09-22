@@ -1,10 +1,12 @@
 import {
     CustomerComponentEnum,
     TCustomerComponent2DDesignOptionItem,
+    TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
     TCustomerItem,
     _
 } from "../../../types"
+import { QuotationMock } from "./quotation";
 
 export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     {
@@ -37,6 +39,18 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     at: { created: new Date(), updated: new Date() }
 }
 
+export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
+    designBy: '',
+    approvedBy: '',
+    design: '',
+    finish: '',
+    callingHeightOnSite: '',
+    afterInstallation: '',
+    yourPlan: '',
+    header: '',
+    leftImage: '',
+    rightImage: '',
+}
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     {
@@ -53,18 +67,10 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     },
     {
         value: CustomerComponentEnum.TwoDDesign,
-        data: {
-            designBy: '',
-            approvedBy: '',
-            design: '',
-            finish: '',
-            callingHeightOnSite: '',
-            afterInstallation: '',
-            yourPlan: '',
-            header: '',
-            leftImage: '',
-            rightImage: '',
-        }
+        data: [
+            INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+            INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+        ]
     },
     {
         value: CustomerComponentEnum.ThreeDDesign,
@@ -95,3 +101,48 @@ export const INIT_CUSTOMER_ITEM: TCustomerItem = {
         updated: new Date(),
     },
 };
+
+export const DEFAULT_CUSTOMER: TCustomerItem = {
+    ...INIT_CUSTOMER_ITEM,
+    name: 'Default',
+    components: [
+        {
+            value: CustomerComponentEnum.Client,
+            data: {
+                name: QuotationMock.Client.name,
+                description: QuotationMock.Client.remark,
+            }
+        },
+        {
+            value: CustomerComponentEnum.Comparison,
+            data: [
+                {
+                    value: '0',
+                    image: {
+                        before: QuotationMock.Comparison.Row1.Before, after: QuotationMock.Comparison.Row1.After
+                    }
+                },
+                {
+                    value: '1',
+                    image: {
+                        before: QuotationMock.Comparison.Row2.Before, after: QuotationMock.Comparison.Row2.After
+                    }
+                }
+            ]
+        },
+        {
+            value: CustomerComponentEnum.Quotation,
+            data: { header: QuotationMock.Quotation.header, illustration: QuotationMock.Quotation.illustration }
+        },
+
+        {
+            value: CustomerComponentEnum.TwoDDesign,
+            data: [],
+            // data: _.values(QuotationMock.Design2D)
+        }
+        // {
+        //     value: CustomerComponentEnum.ThreeDDesign,
+        //     data: { header: QuotationMock.Quotation.header, illustration: QuotationMock.Quotation.illustration }
+        // }
+    ]
+}

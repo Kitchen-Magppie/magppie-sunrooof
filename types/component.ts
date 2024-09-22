@@ -36,7 +36,7 @@ export type TCustomerComponentDesign2DDataItem = {
 
 export type TCustomerComponentDesign2DItem = {
     value: CustomerComponentEnum.TwoDDesign,
-    data: TCustomerComponentDesign2DDataItem
+    data: TCustomerComponentDesign2DDataItem[]
 }
 export enum CustomerComponentEnum {
     TwoDDesign = '2d-design',
@@ -131,7 +131,7 @@ const customerComponentQuotationItemSchema = yup.object().shape({
 
 const customerComponentDesign2DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
-    data: yup.object().shape({
+    data: yup.array().of(yup.object().shape({
         designBy: yup.string().required(),
         approvedBy: yup.string().required(),
         design: yup.string().required(),
@@ -142,7 +142,7 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
         header: yup.string().required(),
         leftImage: yup.string().required(),
         rightImage: yup.string().required(),
-    }).required(),
+    })).required(),
 });
 
 const customerComponentDesign3DItemSchema = yup.object().shape({
