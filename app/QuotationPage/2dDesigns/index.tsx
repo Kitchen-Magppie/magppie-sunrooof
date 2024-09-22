@@ -14,8 +14,11 @@ import 'swiper/css/navigation'
 import 'swiper/css/zoom'
 import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
+
 //Icons
+// @ts-expect-error svg-issue
 import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
+// @ts-expect-error svg-issue
 import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 
 //hooks
@@ -144,7 +147,7 @@ const Layout2dDesign = () => {
             <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                 <ProjectDetails
                     selectedLayout={selectedLayout}
-                    isMobile={isMobile}
+                    // isMobile={isMobile}
                 />
                 <div className="flex">{renderSwiper}</div>
             </div>

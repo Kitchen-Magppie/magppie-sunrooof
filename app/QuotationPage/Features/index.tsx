@@ -21,11 +21,11 @@ const Features = () => {
                         Benefits for offices
                     </h1>
                 </div>
-                <div className="flex text-center flex-col mt-5 lg:flex-row justify-between w-full">
+                <div className="flex text-center flex-col mt-5 items-center lg:flex-row w-full">
                     {features.map((feature) => (
                         <div
                             key={feature.id}
-                            className="flex flex-col mb-10 items-start text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center"
+                            className="flex flex-col items-center w-full justify-center mb-10 text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center"
                         >
                             <LazyLoadImage
                                 effect="blur"
@@ -61,7 +61,7 @@ const Features = () => {
                     >
                         {features.map((feature) => (
                             <SwiperSlide key={feature.id}>
-                                <div className="">
+                                <div className=" flex  flex-col text-center items-center justify-center w-full">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={feature.img}

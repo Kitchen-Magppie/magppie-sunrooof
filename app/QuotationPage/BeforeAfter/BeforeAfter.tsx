@@ -23,7 +23,7 @@ const BeforeAfter = () => {
     return (
         <div className="container max-w-7xl py-20 w-full mx-auto">
             <div className="flex flex-col items-center justify-center text-center">
-                <h1 className="text-5xl pb-5 w-full">
+                <h1 className="text-5xl pb-5 w-full px-4">
                     Witness the change After{' '}
                     <span className="font-bold">SUNROOF</span>
                 </h1>

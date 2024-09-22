@@ -1,9 +1,9 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { projectDetailsData1, projectDetailsData2 } from './data'
 
-const ProjectDetails = ({selectedLayout}) => {
-
-    const projectDetailsData = selectedLayout === 1 ? projectDetailsData1 : projectDetailsData2
+const ProjectDetails = ({ selectedLayout }) => {
+    const projectDetailsData =
+        selectedLayout === 1 ? projectDetailsData1 : projectDetailsData2
 
     return (
         <div className="bg-[#78746c] text-white p-6 lg:w-80 shadow-md flex gap-6 lg:flex-col flex-row lg:flex-nowrap flex-wrap">
