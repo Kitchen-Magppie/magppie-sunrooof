@@ -4,21 +4,25 @@ import { RiApps2AddLine } from "react-icons/ri";
 //====================================================================
 import {
     CmsSearch,
-    // MinimalAccordion,
     CmsCustomerCardItem,
     CmsNotFound
 } from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
-import { ComponentActionForm } from "../../SiteComponent/components";
-import { useCustomerDashboard } from "./useCustomerDashboard";
-import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
+import { useFirebaseCmsCustomerListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
-import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
+import {
+    INIT_CUSTOMER_ITEM
+} from "../../../mocks";
+import {
+    CustomerActionForm,
+    useCustomerDashboard
+} from ".";
+// import CustomDumpButton from "../../../components/Dump/CustomDumpButton";
 
 export default function CustomerDashboard() {
-    useFirebaseCmsSiteComponentListener()
+    useFirebaseCmsCustomerListener()
     const { loading, data, action } = useCustomerDashboard();
-
+    // console.log(DEFAULT_CUSTOMER)
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}
@@ -31,7 +35,7 @@ export default function CustomerDashboard() {
             label="Create Component"
         >
             <div className="p-2">
-                <ComponentActionForm
+                <CustomerActionForm
                     mode={ComponentModeEnum.Create}
                     item={data.values.modal.value}
                 />
@@ -41,6 +45,7 @@ export default function CustomerDashboard() {
 
     return <div>
         <div>
+            {/* <CustomDumpButton /> */}
             <div className="flex gap-2 justify-between">
                 <div className=" w-full">
                     <CmsSearch
@@ -54,7 +59,7 @@ export default function CustomerDashboard() {
                         action.onChangeModal({
                             action: ComponentModeEnum.Create,
                             value: true,
-                            item: INIT_CUSTOMER_COMPONENT_ITEM
+                            item: INIT_CUSTOMER_ITEM
                         })
                     }}
                 >
@@ -67,10 +72,13 @@ export default function CustomerDashboard() {
                     {data.values.components.map((item, i) => {
                         return <CmsCustomerCardItem
                             onClickModal={() => {
-                                action.onChangeModal({
-                                    action: ComponentModeEnum.Edit,
-                                    value: true
-                                })
+                                if (item) {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Edit,
+                                        value: true,
+                                        item
+                                    })
+                                }
                             }}
                             item={item}
                             key={i}
@@ -94,3 +102,6 @@ function CardSkeleton() {
     </div>
     )
 }
+
+
+
