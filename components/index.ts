@@ -9,8 +9,9 @@ import CustomConfirmationDialog from "./CustomConfirmationDialog"
 import CustomSiteModal from "./CustomSiteModal";
 import SpecialCharacterDom from "./SpecialCharacterDom";
 import CustomAutocompleteExample from "./CustomAutocompleteExample";
-
+import ErrorBoundary from "./ErrorBoundary";
 export {
+    ErrorBoundary,
     CustomAutocompleteExample,
     SpecialCharacterDom,
     CustomSiteModal,
