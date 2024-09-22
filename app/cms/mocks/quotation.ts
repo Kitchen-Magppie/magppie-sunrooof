@@ -1,14 +1,3 @@
-// import illustration from '../../QuotationPage/assets/quotation.png'
-// import beforeOne from '../../QuotationPage/assets/before-after/before1.png'
-// import afterOne from '../../QuotationPage/assets/before-after/after1.png'
-// import beforeTwo from '../../QuotationPage/assets/before-after/before2.png'
-// import afterTwo from '../../QuotationPage/assets/before-after/after2.png'
-// import {
-//     CustomerComponentEnum,
-
-// } from '../../../types'
-// import { CUSTOMER_COMPONENT_VALUE_OPTIONS } from './component'
-
 export const QuotationMock = {
     Comparison: {
         Row1: {
@@ -52,56 +41,8 @@ export const QuotationMock = {
         }
     },
     Design3D: {
-        Image1: '',
-        Image2: ''
+        Image1: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2F3d-design%2F3done.png?alt=media&token=bc8f39ae-d09e-4560-9d73-0e7081060909',
+        Image2: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2F3d-design%2F3dtwo.png?alt=media&token=64653275-9249-4cbf-b060-1e9486bf12d3'
     }
 } as const
 
-
-export function MOCK_TO_FIREBASE_SCHEMA() {
-    // const _images = Object.values(QuotationMock.Comparison)?.flatMap((item) => (Object.values(item)))
-
-    // const BEFORE_AND_AFTER_COMPONENT: TComponentItem = {
-    //     ...INIT_CUSTOMER_SITE_COMPONENT,
-    //     value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Comparison).label,
-    //     gallery: _images?.map((item, i) => {
-    //         return ({
-    //             orderId: `${i + 1}`,
-    //             typography: INIT_COMPNENT_MEDIA_TYPOGRAPHY,
-    //             link: item
-    //         })
-    //     }) as TComponentMediaItem[]
-    // }
-    // const QUOTATION_COMPONENT: TComponentItem = {
-    //     ...INIT_CUSTOMER_SITE_COMPONENT,
-    //     value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Quotation).label,
-    //     typography: {
-    //         ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
-    //         main: 'Quotation'
-    //     },
-    //     links: {
-    //         ...INIT_CUSTOMER_SITE_COMPONENT_LINK,
-    //         illustration: QuotationMock.Quotation.illustration
-    //     }
-    // }
-    // const CLIENT_COMPONENT: TComponentItem = {
-    //     ...INIT_CUSTOMER_SITE_COMPONENT,
-    //     value: CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === CustomerComponentEnum.Client).label,
-    //     typography: {
-    //         ...INIT_CUSTOMER_SITE_COMPONENT_TYPOGRAPHY,
-    //         main: QuotationMock.Client.name,
-    //         description: QuotationMock.Client.remark,
-    //     },
-    // }
-
-    // return {
-    //     componentId: 'bc431ad6-0b87-4e55-a8a2-23ee3e2643ed',
-    //     name: 'Canon',
-    //     components: [
-    //         QUOTATION_COMPONENT,
-    //         BEFORE_AND_AFTER_COMPONENT,
-    //         CLIENT_COMPONENT
-    //     ]
-    // } as TCustomerComponentItem
-    // return
-}

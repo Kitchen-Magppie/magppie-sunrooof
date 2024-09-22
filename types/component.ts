@@ -2,7 +2,7 @@ export type TComponentMeta = { order: { used: number[], next: number } }
 
 import * as yup from 'yup';
 
-type TCustomerComponentComparisonDataItem = {
+export type TCustomerComponentComparisonDataItem = {
     value: string,
     image: { before: string, after: string }
 }
