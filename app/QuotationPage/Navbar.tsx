@@ -93,6 +93,24 @@ const Navbar = () => {
                             </a>{' '}
                             {/* Added href */}
                         </li>
+                        <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
+                            <a href="#2d" onClick={toggleSidebar}>
+                                2D Designs
+                            </a>{' '}
+                            {/* Added href */}
+                        </li>
+                        <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
+                            <a href="#3d" onClick={toggleSidebar}>
+                                3D Designs
+                            </a>{' '}
+                            {/* Added href */}
+                        </li>
+                        <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
+                            <a href="#quotation" onClick={toggleSidebar}>
+                                Quotation
+                            </a>{' '}
+                            {/* Added href */}
+                        </li>
                     </ul>
                 </div>
             </motion.div>

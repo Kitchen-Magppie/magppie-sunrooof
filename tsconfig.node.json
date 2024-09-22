@@ -8,6 +8,7 @@
     "strict": false
   },
   "include": [
-    "vite.config.ts"
+    "vite.config.ts",
+    "vite-plugin-svgr/client"
   ]
 }
