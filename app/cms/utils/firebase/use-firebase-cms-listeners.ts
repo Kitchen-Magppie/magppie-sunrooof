@@ -12,7 +12,7 @@ import { setKitchens } from '../../redux/slices/Kitchen.slice';
 import { TProject } from '../../types/Project';
 import { setProjects } from '../../redux/slices/Project.slice';
 import { FirebaseCollectionEnum, TCustomerItem } from '../../../../types';
-import { setCustomerSiteComponent } from '../../redux/slices';
+import { setCustomers } from '../../redux/slices';
 const { getAuth, onAuthStateChanged } = auth;
 
 export function useFirebaseCmsAuthListener() {
@@ -84,11 +84,10 @@ export const useFirebaseCmsKitchensListener = () => {
 
 
 
-export function useFirebaseCmsSiteComponentListener() {
+export function useFirebaseCmsCustomerListener() {
     const dispatch = useAppDispatch()
     useEffect(() => {
-        const collectionRef = collection(db, FirebaseCollectionEnum.Component);
-
+        const collectionRef = collection(db, FirebaseCollectionEnum.Customer);
         onSnapshot(collectionRef, ({ docs }) => {
             const data: TCustomerItem[] = [];
             docs?.forEach((doc) => {
@@ -102,7 +101,7 @@ export function useFirebaseCmsSiteComponentListener() {
                     }
                 } as TCustomerItem);
             });
-            dispatch(setCustomerSiteComponent(data))
+            dispatch(setCustomers(data))
 
         });
     }, [dispatch])

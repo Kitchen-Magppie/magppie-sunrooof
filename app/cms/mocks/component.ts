@@ -52,6 +52,21 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
     rightImage: '',
 }
 
+
+
+export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
+    { label: "Design By", value: "designBy" },
+    { label: "Approved By", value: 'approvedBy' },
+    { label: "Design", value: 'design' },
+    { label: "Finish", value: 'finish' },
+    { label: "Calling Height On Site", value: 'callingHeightOnSite' },
+    { label: "After Installation", value: 'afterInstallation' },
+    { label: "Your Plan", value: 'yourPlan' },
+    { label: "Header", value: 'header' },
+    { label: "Left Image", value: 'leftImage' },
+    { label: "Right Image", value: 'rightImage' }
+];
+
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     {
         value: CustomerComponentEnum.Client,
@@ -74,23 +89,9 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     },
     {
         value: CustomerComponentEnum.ThreeDDesign,
-        data: []
+        data: ['', '']
     }
 ];
-
-export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
-    { label: "Design By", value: "designBy" },
-    { label: "Approved By", value: 'approvedBy' },
-    { label: "Design", value: 'design' },
-    { label: "Finish", value: 'finish' },
-    { label: "Calling Height On Site", value: 'callingHeightOnSite' },
-    { label: "After Installation", value: 'afterInstallation' },
-    { label: "Your Plan", value: 'yourPlan' },
-    { label: "Header", value: 'header' },
-    { label: "Left Image", value: 'leftImage' },
-    { label: "Right Image", value: 'rightImage' }
-];
-
 export const INIT_CUSTOMER_ITEM: TCustomerItem = {
     name: "",
     components: INIT_CUSTOMER_COMPONENTS,
@@ -105,7 +106,7 @@ export const INIT_CUSTOMER_ITEM: TCustomerItem = {
 export const DEFAULT_CUSTOMER: TCustomerItem = {
     ...INIT_CUSTOMER_ITEM,
     name: 'Default',
-    customerId: 'a0707f32-a245-40ea-898e-c32f8c6172ac',
+    customerId: '309e18c2-5350-4788-8234-0e3e3580229d',
     components: [
         {
             value: CustomerComponentEnum.Client,
@@ -169,10 +170,13 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
                     rightImage: '',
                 }
             ]
+        },
+        {
+            value: CustomerComponentEnum.ThreeDDesign,
+            data: [
+                'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2F3d-design%2F3done.png?alt=media&token=bc8f39ae-d09e-4560-9d73-0e7081060909',
+                'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2F3d-design%2F3dtwo.png?alt=media&token=64653275-9249-4cbf-b060-1e9486bf12d3'
+            ]
         }
-        // {
-        //     value: CustomerComponentEnum.ThreeDDesign,
-        //     data: { header: QuotationMock.Quotation.header, illustration: QuotationMock.Quotation.illustration }
-        // }
     ]
 }

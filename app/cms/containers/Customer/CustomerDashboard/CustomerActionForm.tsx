@@ -16,25 +16,22 @@ import {
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
-    INIT_CUSTOMER_ITEM
 } from '../../../mocks';
 import { MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
 
-type TProps = {
-    mode: ComponentModeEnum
-}
 export function CustomerActionForm(props: TProps) {
     const [corpus, setCorpus] = useState({ isSubmitting: false })
-
+    const { mode, item } = props;
     const {
         watch,
         register,
         handleSubmit,
         formState: { errors }
     } = useForm({
+        mode: "onChange",
         resolver: yupResolver(validateCustomerItemSchema),
-        defaultValues: INIT_CUSTOMER_ITEM
+        defaultValues: item
     });
 
     const values = watch()
@@ -51,13 +48,9 @@ export function CustomerActionForm(props: TProps) {
         console.log('Form Data:', data);
     };
 
-    console.log(values)
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Name Field */}
-
-
             <div className="flex flex-col gap-2">
                 <div className="bg-white px-6 overflow-y-scroll">
                     <label className="block text-sm font-medium text-gray-700">
@@ -198,10 +191,15 @@ export function CustomerActionForm(props: TProps) {
                     }}
                     className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    {props.mode === ComponentModeEnum.Create ? 'Create' : 'Edit'} Component
+                    {mode === ComponentModeEnum.Create ? 'Create' : 'Edit'} Component
                     {corpus.isSubmitting ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
                 </button>
             </div>
         </form>
     );
+}
+
+type TProps = {
+    mode: ComponentModeEnum,
+    item: TCustomerItem
 }

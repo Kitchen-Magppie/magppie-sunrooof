@@ -171,7 +171,7 @@ export const validateCustomerItemSchema = yup.object().shape({
     name: yup.string().required(),
     components: yup.array().of(customerComponentSchema).required(),
     id: yup.string().required(),
-    componentId: yup.string().required(),
+    customerId: yup.string().required(),
     at: yup.object().shape({
         created: yup.date().required(),
         updated: yup.date().required(),

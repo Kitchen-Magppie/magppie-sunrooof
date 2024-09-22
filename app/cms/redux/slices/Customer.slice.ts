@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TCustomerItem } from '../../../../types/component';
+import { TCustomerItem } from '../../../../types';
 
 
-interface ICustomerSiteComponentSlice {
+interface ICustomerSlice {
     value: TCustomerItem[];
     status: 'loading' | 'success' | 'failed';
     loading: boolean,
     error: null | string | undefined;
 }
 
-const initialState: ICustomerSiteComponentSlice = {
+const initialState: ICustomerSlice = {
     loading: true,
     value: [],
     status: 'loading',
@@ -17,11 +17,11 @@ const initialState: ICustomerSiteComponentSlice = {
 };
 
 type TAction = PayloadAction<TCustomerItem[]>
-const CustomerSiteComponentSlice = createSlice({
-    name: 'CustomerSiteComponent',
+const CustomerSlice = createSlice({
+    name: 'Customer',
     initialState,
     reducers: {
-        setCustomerSiteComponent: (state, action: TAction) => {
+        setCustomers: (state, action: TAction) => {
             state.status = 'success';
             state.loading = false;
             state.value = action.payload;
@@ -30,7 +30,7 @@ const CustomerSiteComponentSlice = createSlice({
 });
 
 export const {
-    setCustomerSiteComponent
-} = CustomerSiteComponentSlice.actions;
+    setCustomers
+} = CustomerSlice.actions;
 
-export const CustomerSiteComponentReducer = CustomerSiteComponentSlice.reducer
+export const CustomerReducer = CustomerSlice.reducer

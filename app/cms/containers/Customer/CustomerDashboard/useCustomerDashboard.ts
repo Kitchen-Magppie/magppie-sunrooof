@@ -10,7 +10,7 @@ import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
 
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
-    const value = useAppSelector((state) => state.Cms.CustomerSiteComponent);
+    const value = useAppSelector((state) => state.Cms.Customer);
 
     const components = useMemo(() => {
         return _.sortBy(value.value?.filter((item) =>

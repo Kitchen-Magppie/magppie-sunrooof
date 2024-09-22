@@ -8,21 +8,21 @@ import {
     CmsNotFound
 } from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
-import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
+import { useFirebaseCmsCustomerListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
 import {
-    DEFAULT_CUSTOMER,
-    INIT_CUSTOMER_COMPONENT_ITEM
+    INIT_CUSTOMER_ITEM
 } from "../../../mocks";
 import {
     CustomerActionForm,
     useCustomerDashboard
 } from ".";
+// import CustomDumpButton from "../../../components/Dump/CustomDumpButton";
 
 export default function CustomerDashboard() {
-    useFirebaseCmsSiteComponentListener()
+    useFirebaseCmsCustomerListener()
     const { loading, data, action } = useCustomerDashboard();
-    console.log(DEFAULT_CUSTOMER)
+    // console.log(DEFAULT_CUSTOMER)
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}
@@ -37,18 +37,15 @@ export default function CustomerDashboard() {
             <div className="p-2">
                 <CustomerActionForm
                     mode={ComponentModeEnum.Create}
-
-                />
-                {/* <ComponentActionForm
-                    mode={ComponentModeEnum.Create}
                     item={data.values.modal.value}
-                /> */}
+                />
             </div>
         </CustomSimpleModal>)
-    }, [action, data.toggle.isOpenComponentModal])
+    }, [action, data.toggle.isOpenComponentModal, data.values.modal.value])
 
     return <div>
         <div>
+            {/* <CustomDumpButton /> */}
             <div className="flex gap-2 justify-between">
                 <div className=" w-full">
                     <CmsSearch
@@ -62,7 +59,7 @@ export default function CustomerDashboard() {
                         action.onChangeModal({
                             action: ComponentModeEnum.Create,
                             value: true,
-                            item: INIT_CUSTOMER_COMPONENT_ITEM
+                            item: INIT_CUSTOMER_ITEM
                         })
                     }}
                 >
@@ -75,10 +72,13 @@ export default function CustomerDashboard() {
                     {data.values.components.map((item, i) => {
                         return <CmsCustomerCardItem
                             onClickModal={() => {
-                                action.onChangeModal({
-                                    action: ComponentModeEnum.Edit,
-                                    value: true
-                                })
+                                if (item) {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Edit,
+                                        value: true,
+                                        item
+                                    })
+                                }
                             }}
                             item={item}
                             key={i}
