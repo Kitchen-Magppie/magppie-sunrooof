@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @import url('react-lazy-load-image-component/src/effects/blur.css');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+@import './fonts.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +9,10 @@
 body {
     padding: 0;
     margin: 0;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 @font-face {
@@ -145,6 +151,20 @@ body {
         url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.woff') format('woff'),
         url('/fonts/BigCaslon/BigCaslonFB-BoldItalic.ttf') format('truetype');
     font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BigCaslon ItalicSwash';
+    src: url('/fonts/BigCaslon/BigCaslon-ItalicSwash.eot');
+    src: local('BigCaslon Italic Swash'), local('BigCaslon-ItalicSwash'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.eot?#iefix')
+            format('embedded-opentype'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.woff2') format('woff2'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.woff') format('woff'),
+        url('/fonts/BigCaslon/BigCaslon-ItalicSwash.ttf') format('truetype');
+    font-weight: normal;
     font-style: italic;
     font-display: swap;
 }

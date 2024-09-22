@@ -2,9 +2,8 @@ import { Link } from "react-router-dom"
 import { GrFormNextLink } from "react-icons/gr";
 import { FaRegUser } from "react-icons/fa";
 import { MdDone } from "react-icons/md";
-
 export default function Dashboard() {
-    return <div className="">
+    return <div>
         <div className="transition-transform duration-300 transform hover:scale-105 max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col gap-2">
             <div className="flex justify-between align-middle items-center">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

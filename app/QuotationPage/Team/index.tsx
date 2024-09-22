@@ -3,24 +3,29 @@ import { team } from './data'
 
 const Team = () => {
     return (
-        <div className="py-20">
-            <h1 className="uppercase font-bold text-7xl text-center pb-10 text-[#78746c]">
+        <div
+            className="py-20 flex flex-col justify-center items-center"
+            id="team"
+        >
+            <h1 className="text-5xl pb-10 w-full text-center font-bold uppercase text-[#78746c]">
                 our team
             </h1>
-            <div className="grid grid-cols-2 lg:grid-cols-4 container mx-auto max-w-5xl lg:max-w-7xl">
+            <div className="grid grid-cols-2 lg:grid-cols-4 container mx-auto max-w-xl lg:max-w-7xl gap-4">
                 {team.map((person) => {
                     return (
                         <div
-                            className="text-black flex flex-col items-center pb-10 gap-0"
+                            className="text-black flex flex-col items-center pb-10 gap-1"
                             key={person.id}
                         >
-                            <LazyLoadImage
-                                effect="blur"
-                                src={person.img}
-                                alt=""
-                                className="mb-2 rounded-3xl w-72 h-[400px]"
-                            />
-                            <h1 className="text-2xl lg:text-xl">
+                            <div className="mb-2 w-48 max-w-48 lg:w-36 lg:max-w-36 h-[200px] max-h-[200px] mb-24 lg:mb-4">
+                                <LazyLoadImage
+                                    effect="blur"
+                                    src={person.img}
+                                    alt=""
+                                    className="w-full h-full rounded-3xl"
+                                />
+                            </div>
+                            <h1 className="text-2xl lg:text-xl font-bold">
                                 {person.name}
                             </h1>
                             <p className="text-2xl lg:text-xl">

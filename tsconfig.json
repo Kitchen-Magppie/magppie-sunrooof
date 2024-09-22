@@ -21,6 +21,7 @@
     "include": [
         "types",
         "hooks",
+        "vite-plugin-svgr/client",
         "config",
         "routes",
         "app/**/*",

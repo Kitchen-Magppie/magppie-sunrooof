@@ -1,26 +1,28 @@
 import { useMemo } from "react";
 import { RiApps2AddLine } from "react-icons/ri";
-import { FaEarthAmericas } from "react-icons/fa6";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { IoCreateOutline } from "react-icons/io5";
 
 //====================================================================
 import {
     CmsSearch,
-    MinimalAccordion,
     CmsCustomerCardItem,
     CmsNotFound
 } from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
-import { CmsCopyClipboard } from "./../../../components"
-import { ComponentActionForm } from "../../SiteComponent/components";
-import { useCustomerDashboard } from "./useCustomerDashboard";
-import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
+import { useFirebaseCmsCustomerListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
+import {
+    INIT_CUSTOMER_ITEM
+} from "../../../mocks";
+import {
+    CustomerActionForm,
+    useCustomerDashboard
+} from ".";
+// import CustomDumpButton from "../../../components/Dump/CustomDumpButton";
 
 export default function CustomerDashboard() {
-    useFirebaseCmsSiteComponentListener()
+    useFirebaseCmsCustomerListener()
     const { loading, data, action } = useCustomerDashboard();
+    // console.log(DEFAULT_CUSTOMER)
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}
@@ -33,70 +35,17 @@ export default function CustomerDashboard() {
             label="Create Component"
         >
             <div className="p-2">
-                {data.values.sections?.map((section, i) => {
-                    return (<MinimalAccordion title={section} key={i}>
-                        <ComponentActionForm
-                            mode={ComponentModeEnum.Create}
-                            // mode={data.values.modal.action}
-                            item={data.values.modal.value}
-                        />
-                    </MinimalAccordion>)
-                })}
-
-                <div className="flex flex-col gap-1">
-                    <div className="">
-                        <button
-                            type="button"
-                            className="flex items-center gap-1 text-white  bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                        >
-                            <FaEarthAmericas />  Genrate URL
-                        </button>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            URL: <div className=" underline text-blue-700">{data.values.link}</div>
-                        </div>
-                        <div className="cursor-pointer">
-                            {/* <FaRegCopy /> */}
-                            <CmsCopyClipboard text={data.values.link} />
-                        </div>
-
-                    </div>
-                </div>
-
-                <div className="flex justify-center">
-                    <button
-                        // disabled={corpus.isSubmitting}
-                        type="submit"
-                        className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        {data.values.modal.action} Component
-                        {!data.toggle.isOpenComponentModal ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
-                    </button>
-                </div>
-
-                {/* <div className="flex justify-center">
-                    <button
-                        type="button"
-                        className="flex items-center gap-1 text-white  bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                    >
-                        <LuSave />  Save
-                    </button>
-                </div> */}
-
+                <CustomerActionForm
+                    mode={ComponentModeEnum.Create}
+                    item={data.values.modal.value}
+                />
             </div>
         </CustomSimpleModal>)
-    }, [
-        action,
-        data.toggle.isOpenComponentModal,
-        data.values.link,
-        data.values.modal.action,
-        data.values.modal.value,
-        data.values.sections
-    ])
+    }, [action, data.toggle.isOpenComponentModal, data.values.modal.value])
 
     return <div>
         <div>
+            {/* <CustomDumpButton /> */}
             <div className="flex gap-2 justify-between">
                 <div className=" w-full">
                     <CmsSearch
@@ -109,7 +58,8 @@ export default function CustomerDashboard() {
                     onClick={() => {
                         action.onChangeModal({
                             action: ComponentModeEnum.Create,
-                            value: true
+                            value: true,
+                            item: INIT_CUSTOMER_ITEM
                         })
                     }}
                 >
@@ -122,10 +72,13 @@ export default function CustomerDashboard() {
                     {data.values.components.map((item, i) => {
                         return <CmsCustomerCardItem
                             onClickModal={() => {
-                                action.onChangeModal({
-                                    action: ComponentModeEnum.Edit,
-                                    value: true
-                                })
+                                if (item) {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Edit,
+                                        value: true,
+                                        item
+                                    })
+                                }
                             }}
                             item={item}
                             key={i}
@@ -149,3 +102,6 @@ function CardSkeleton() {
     </div>
     )
 }
+
+
+
