@@ -29,7 +29,7 @@ export const QuotationMock = {
         0: {
             designBy: 'Nishtha',
             approvedBy: 'Mrinal',
-            deisgn: 'Classical',
+            design: 'Classical',
             finish: 'White',
             callingHeightOnSite: 'Pearl White',
             afterInstallation: '10ft',
@@ -41,7 +41,7 @@ export const QuotationMock = {
         1: {
             designBy: 'Nishtha',
             approvedBy: 'Mrinal',
-            deisgn: 'Classical',
+            design: 'Classical',
             finish: 'White',
             callingHeightOnSite: 'French Window',
             afterInstallation: '',

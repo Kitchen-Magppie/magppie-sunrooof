@@ -6,7 +6,7 @@ import {
     TCustomerItem,
     _
 } from "../../../types"
-import { QuotationMock } from "./quotation";
+import { QuotationMock } from ".";
 
 export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     {
@@ -34,7 +34,7 @@ export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
 export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     name: '',
     components: [],
-    componentId: _.uuid(),
+    customerId: _.uuid(),
     id: '',
     at: { created: new Date(), updated: new Date() }
 }
@@ -95,7 +95,7 @@ export const INIT_CUSTOMER_ITEM: TCustomerItem = {
     name: "",
     components: INIT_CUSTOMER_COMPONENTS,
     id: "",
-    componentId: "",
+    customerId: "",
     at: {
         created: new Date(),
         updated: new Date(),
@@ -105,6 +105,7 @@ export const INIT_CUSTOMER_ITEM: TCustomerItem = {
 export const DEFAULT_CUSTOMER: TCustomerItem = {
     ...INIT_CUSTOMER_ITEM,
     name: 'Default',
+    customerId: 'a0707f32-a245-40ea-898e-c32f8c6172ac',
     components: [
         {
             value: CustomerComponentEnum.Client,
@@ -132,13 +133,42 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         },
         {
             value: CustomerComponentEnum.Quotation,
-            data: { header: QuotationMock.Quotation.header, illustration: QuotationMock.Quotation.illustration }
+            data: {
+                header: QuotationMock.Quotation.header,
+                illustration: QuotationMock.Quotation.illustration
+            }
         },
 
         {
             value: CustomerComponentEnum.TwoDDesign,
-            data: [],
-            // data: _.values(QuotationMock.Design2D)
+            data: [
+                {
+                    ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+                    designBy: 'Nishtha',
+                    approvedBy: 'Mrinal',
+                    design: 'Classical',
+                    finish: 'White',
+                    callingHeightOnSite: 'Pearl White',
+                    afterInstallation: '10ft',
+                    yourPlan: '8ft 11 inch',
+                    header: 'Board Room',
+                    leftImage: '',
+                    rightImage: '',
+                },
+                {
+                    ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+                    designBy: 'Nishtha',
+                    approvedBy: 'Mrinal',
+                    design: 'Classical',
+                    finish: 'White',
+                    callingHeightOnSite: 'French Window',
+                    afterInstallation: '',
+                    yourPlan: '',
+                    header: 'Board Room',
+                    leftImage: '',
+                    rightImage: '',
+                }
+            ]
         }
         // {
         //     value: CustomerComponentEnum.ThreeDDesign,

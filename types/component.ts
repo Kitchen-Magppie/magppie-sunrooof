@@ -63,7 +63,7 @@ export type TCustomerItem = {
     name: string,
     components: TCustomerComponentItem[],
     id: string,
-    componentId: string,
+    customerId: string,
     at: { created: Date, updated: Date }
 }
 
@@ -150,14 +150,6 @@ const customerComponentDesign3DItemSchema = yup.object().shape({
     data: yup.array().of(yup.string().required()).required(),
 });
 
-// const customerComponentSchema = yup.mixed().oneOf([
-//     customerComponentClientItemSchema,
-//     customerComponentComparisonItemSchema,
-//     customerComponentQuotationItemSchema,
-//     customerComponentDesign2DItemSchema,
-//     customerComponentDesign3DItemSchema,
-// ]);
-
 const customerComponentSchema = yup.lazy((value) => {
     switch (value.value) {
         case CustomerComponentEnum.Client:
@@ -171,7 +163,7 @@ const customerComponentSchema = yup.lazy((value) => {
         case CustomerComponentEnum.ThreeDDesign:
             return customerComponentDesign3DItemSchema;
         default:
-            return yup.mixed().required(); // Fallback in case something goes wrong
+            return yup.mixed().required();
     }
 });
 

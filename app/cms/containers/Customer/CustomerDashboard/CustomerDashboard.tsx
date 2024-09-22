@@ -8,15 +8,21 @@ import {
     CmsNotFound
 } from "../../../components";
 import { CustomSimpleModal } from "../../../../../components";
-import { useCustomerDashboard } from "./useCustomerDashboard";
 import { useFirebaseCmsSiteComponentListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
-import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
-import { CustomerActionForm } from "./CustomerActionForm";
+import {
+    DEFAULT_CUSTOMER,
+    INIT_CUSTOMER_COMPONENT_ITEM
+} from "../../../mocks";
+import {
+    CustomerActionForm,
+    useCustomerDashboard
+} from ".";
 
 export default function CustomerDashboard() {
     useFirebaseCmsSiteComponentListener()
     const { loading, data, action } = useCustomerDashboard();
+    console.log(DEFAULT_CUSTOMER)
     const renderActionModal = useMemo(() => {
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}

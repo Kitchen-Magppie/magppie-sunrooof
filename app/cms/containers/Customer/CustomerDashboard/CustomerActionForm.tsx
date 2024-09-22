@@ -190,7 +190,6 @@ export function CustomerActionForm(props: TProps) {
                     }
                 })}
                 {errors.components && <p>{errors.components.message}</p>}
-
                 <button
                     disabled={corpus.isSubmitting}
                     type="submit"
