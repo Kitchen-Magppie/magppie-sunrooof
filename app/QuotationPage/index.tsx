@@ -21,15 +21,32 @@ import { useAppSelector } from '../../redux'
 import { PageProgress } from '../../components'
 import { useMemo } from 'react'
 import { DEFAULT_CUSTOMER } from '../cms/mocks'
-import { CustomerComponentEnum } from '../../types'
+import {
+    CustomerComponentEnum,
+    TCustomerComponentClientItem,
+    TCustomerComponentComparisonDataItem,
+    TCustomerComponentQuotationItem
+} from '../../types'
 
 const QuotationPage = () => {
     useFirebaseCmsCustomerListener()
     const { loading, value } = useAppSelector((state) => state.Cms.Customer);
 
-    const currentCustomer = useMemo(() => value.find((row) => row.customerId === DEFAULT_CUSTOMER.customerId), [value])
-    // console.log(loading, value)
-    console.log(currentCustomer)
+    console.log(value)
+
+    const component = useMemo(() => {
+
+        const data = value.find((row) => row.customerId === DEFAULT_CUSTOMER.customerId)
+        return ({
+            [CustomerComponentEnum.Comparison]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison).data as TCustomerComponentComparisonDataItem[],
+            [CustomerComponentEnum.Client]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Client) as unknown as TCustomerComponentClientItem,
+            [CustomerComponentEnum.TwoDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as unknown as TCustomerComponentClientItem,
+            [CustomerComponentEnum.Quotation]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as unknown as TCustomerComponentQuotationItem,
+        })
+
+    }, [value])
+
+    console.log(component)
     if (loading) {
         return <PageProgress />
     }
@@ -39,19 +56,18 @@ const QuotationPage = () => {
             <Header />
             <About />
             <Clients />
-            <BeforeAfter item={currentCustomer?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison).data} />
+            <BeforeAfter item={component[CustomerComponentEnum.Comparison]} />
             <Features />
             <DesignedBy />
             <Team />
-            <ClientName />
+            <ClientName item={component[CustomerComponentEnum.Client]} />
             <ProjectDetails />
             {/* <TwodDesigns />
             <ThreedDesigns /> */}
-            <Quotation />
+            <Quotation item={component[CustomerComponentEnum.Quotation]} />
             <TermsandConditions />
             <Guarantee />
             <BuyingJourney />
-            {/* <Footer /> */}
             <FooterFinal />
         </div>
     )

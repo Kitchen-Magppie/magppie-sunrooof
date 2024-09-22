@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { _, TCustomerComponentComparisonDataItem } from '../../../types'
-type TProps = { item: TCustomerComponentComparisonDataItem[] }
 const BeforeAfter = (props: TProps) => {
 
     const images = useMemo(() => (_.values(props.item?.flatMap((item) => _.values(item.image)))), [props.item])
@@ -24,5 +23,6 @@ const BeforeAfter = (props: TProps) => {
     </div>
     )
 }
+type TProps = { item: TCustomerComponentComparisonDataItem[] }
 
 export default BeforeAfter

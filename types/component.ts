@@ -10,12 +10,12 @@ type TCustomerComponentComparisonItem = {
     value: CustomerComponentEnum.Comparison,
     data: TCustomerComponentComparisonDataItem[]
 }
-type TCustomerComponentClientItem = {
+export type TCustomerComponentClientItem = {
     value: CustomerComponentEnum.Client,
     data: { name: string, description: string }
 }
 
-type TCustomerComponentQuotationItem = {
+export type TCustomerComponentQuotationItem = {
     value: CustomerComponentEnum.Quotation,
     data: { header: string, illustration: string }
 }
