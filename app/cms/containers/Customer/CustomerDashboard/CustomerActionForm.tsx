@@ -9,6 +9,7 @@ import {
     _,
     ComponentModeEnum,
     CustomerComponentEnum,
+    TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerItem,
     validateCustomerItemSchema
@@ -21,8 +22,10 @@ import { MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
 
 export function CustomerActionForm(props: TProps) {
+
     const [corpus, setCorpus] = useState({ isSubmitting: false })
     const { mode, item } = props;
+
     const {
         watch,
         register,
@@ -48,8 +51,6 @@ export function CustomerActionForm(props: TProps) {
         console.log('Form Data:', data);
     };
 
-    // console.log(values)
-
     return (<form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
@@ -71,74 +72,13 @@ export function CustomerActionForm(props: TProps) {
         <div className='px-6'>
             {values?.components?.map((component, i) => {
                 const value = _.get(component, 'value')
-                const currentComponent = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value)
+                const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value).label
                 switch (value) {
                     case CustomerComponentEnum.Client:
                         return <div key={i}>
-                            <MinimalAccordion isExpanded title={currentComponent.label}>
-                                <div className="bg-white px-6 overflow-y-scroll">
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        {...register(`components.${i}.data.name`)}
-                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    />
-                                    {renderErrorMessage(`components.${i}.data.name`)}
-                                </div>
-                                <div className="bg-white px-6 overflow-y-scroll">
-                                    <label className="block text-sm font-medium text-gray-700">
-                                        Description
-                                    </label>
-                                    <input
-                                        type="text"
-                                        {...register(`components.${i}.data.description`)}
-                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    />
-                                    {renderErrorMessage(`components.${i}.data.description`)}
-                                </div>
-                            </MinimalAccordion>
-                        </div>
-                    case CustomerComponentEnum.Comparison:
-                        return <div key={i}>
-                            <MinimalAccordion isExpanded title={currentComponent.label}>
-                                <div className=" grid grid-cols-2 gap-1">
-                                    <div className="row">
-                                        <div className="">
-                                            {/* <ImageInput
-                                                values={[component.data.leftImage]}
-                                                path=''
-                                                label='Before'
-                                                onSuccess={() => { }} />
-                                            <ImageInput
-                                                path=''
-                                                values={[component.data.leftImage]}
-                                                label='After'
-                                                onSuccess={() => { }} /> */}
-                                        </div>
-
-                                        <div className="">
-                                            <ImageInput
-                                                path=''
-                                                label='Before'
-                                                onSuccess={() => { }} />
-                                            <ImageInput
-                                                path=''
-                                                label='After'
-                                                onSuccess={() => { }} />
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </MinimalAccordion>
-                        </div>
-                    case CustomerComponentEnum.Quotation:
-                        return <div key={i}>
-                            <MinimalAccordion isExpanded title={currentComponent.label}>
-                                <div className="flex flex-col gap-2 px-6">
-                                    <div className="bg-white  overflow-y-scroll">
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="grid grid-cols-2">
+                                    <div className="bg-white px-6 overflow-y-scroll">
                                         <label className="block text-sm font-medium text-gray-700">
                                             Name
                                         </label>
@@ -151,58 +91,126 @@ export function CustomerActionForm(props: TProps) {
                                     </div>
                                     <div className="bg-white  overflow-y-scroll">
                                         <label className="block text-sm font-medium text-gray-700">
-                                            Name
+                                            Description
                                         </label>
                                         <input
                                             type="text"
-                                            {...register(`components.${i}.data.email`)}
+                                            {...register(`components.${i}.data.description`)}
                                             className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         />
-                                        {renderErrorMessage(`components.${i}.data.email`)}
+                                        {renderErrorMessage(`components.${i}.data.description`)}
                                     </div>
-                                    <div className="bg-white  overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Mobile
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.mobile`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.mobile`)}
+                                </div>
+
+
+                            </MinimalAccordion>
+                        </div>
+                    case CustomerComponentEnum.Comparison: {
+                        return <div key={i}>
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="grid grid-cols-2 gap-1">
+                                    {(component as TCustomerComponentComparisonItem).data.map((item, j) => {
+                                        return <div key={`component-${i}-${j}`}>
+                                            <div className="">#{j + 1}</div>
+                                            <ImageInput
+                                                values={[item.image.before]}
+                                                path=''
+                                                label='Before'
+                                                onSuccess={() => {
+                                                    // setValue(`components.${i}.data.${j}.image.before`, '')
+                                                }} />
+                                            <ImageInput
+                                                values={[item.image.after]}
+                                                path=''
+                                                label='After'
+                                                onSuccess={() => {
+                                                    // setValue(`components.${i}.data.${j}.image.after`, '')
+                                                }} />
+                                        </div>
+                                    })}
+
+                                </div>
+                            </MinimalAccordion>
+                        </div>
+                    }
+                    case CustomerComponentEnum.Quotation:
+                        return <div key={i}>
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="flex flex-col gap-2 px-6">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.name`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.name`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.email`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.email`)}
+                                        </div>
                                     </div>
-                                    <div className="bg-white  overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Created Date
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.createdDate`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.createdDate`)}
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Mobile
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.mobile`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.mobile`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Created Date
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.createdDate`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.createdDate`)}
+                                        </div>
                                     </div>
-                                    <div className="bg-white  overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Address
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.address`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.address`)}
-                                    </div>
-                                    <div className="bg-white  overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Zone
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.zone`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.zone`)}
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Address
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.address`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.address`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Zone
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.zone`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.zone`)}
+                                        </div>
+
                                     </div>
 
                                     <ImageInput label='Invoice URL'
@@ -218,54 +226,111 @@ export function CustomerActionForm(props: TProps) {
                             last: _.get(component, 'data.1', '')
                         }
                         return <div key={i}>
-                            <MinimalAccordion isExpanded title={currentComponent.label}>
-                                <div className="flex flex-col gap-2 px-6">
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="grid grid-cols-2 gap-2">
                                     <ImageInput
                                         values={images.first?.length ? [images.first] : []}
-                                        path='' onSuccess={() => { }} />
+                                        label='#1'
+                                        path='' onSuccess={() => { }}
+                                    />
                                     <ImageInput
+                                        label='#2'
                                         values={images.last?.length ? [images.last] : []}
-
-                                        path='' onSuccess={() => { }} />
+                                        path='' onSuccess={() => { }}
+                                    />
                                 </div>
+
                             </MinimalAccordion>
                         </div>
                     }
-                    case CustomerComponentEnum.TwoDDesign:
+                    case CustomerComponentEnum.TwoDDesign: {
+                        // console.log(component)
                         return <div key={i}>
-                            <MinimalAccordion isExpanded title={currentComponent.label}>
+                            <MinimalAccordion isExpanded title={title}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
-                                    console.log(data)
                                     return (<div key={k} className="flex flex-col gap-2 px-6">
                                         <div className='text-gray-400 italic  text-lg'>
                                             #{k + 1}
                                         </div>
-                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.map((field, j) => {
-                                            if (field.label?.includes('Image')) {
-                                                return <ImageInput label={field.label}
-                                                    key={j}
-                                                    path=''
-                                                    // values={[component.data[field.value]]}
-                                                    onSuccess={() => { }}
-                                                />
-                                            }
-                                            return (<div className="bg-white  overflow-y-scroll" key={j}>
-                                                <label className="block text-sm font-medium text-gray-700">
-                                                    {field.label}
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    {...register(`components.${i}.data.${k}.${field.value}`)}
-                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                />
-                                                {renderErrorMessage(`components.${i}.data.${k}.${field.value}`)}
-                                            </div>
-                                            )
-                                        })}
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'text')?.map((item, j) => {
+                                                // if (item.label?.includes('Image')) {
+                                                //     return <div className="">
+                                                //         <ImageInput label={item.label}
+                                                //             key={j}
+                                                //             path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                //             values={[data[item.value]]}
+                                                //             // values={[component.data[field.value]]}
+                                                //             onSuccess={() => { }}
+                                                //         />
+                                                //     </div>
+                                                // }
+                                                return (<div className="bg-white" key={j}>
+                                                    <label className="block text-sm font-medium text-gray-700">
+                                                        {item.label}
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        {...register(`components.${i}.data.${k}.${item.value}`)}
+                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    />
+                                                    {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
+                                                </div>
+                                                )
+                                            })}
+                                            {/* {_.chunk(CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, 2)?.map((chunk, j) => {
+
+                                                return chunk?.map((item) => {
+                                                    const renderRow = () => {
+                                                        if (item.label?.includes('Image')) {
+                                                            return <div className="">
+                                                                <ImageInput label={item.label}
+                                                                    key={j}
+                                                                    path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                                    values={[data[item.value]]}
+                                                                    // values={[component.data[field.value]]}
+                                                                    onSuccess={() => { }}
+                                                                />
+                                                            </div>
+                                                        }
+                                                        return (<div className="bg-white" key={j}>
+                                                            <label className="block text-sm font-medium text-gray-700">
+                                                                {item.label}
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                {...register(`components.${i}.data.${k}.${item.value}`)}
+                                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                            />
+                                                            {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
+                                                        </div>
+                                                        )
+                                                    }
+                                                    return renderRow()
+
+                                                })
+                                            })} */}
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'image')?.map((item, j) => {
+                                                return <div className="">
+                                                    <ImageInput label={item.label}
+                                                        key={j}
+                                                        path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                        values={[data[item.value]]}
+                                                        // values={[component.data[field.value]]}
+                                                        onSuccess={() => { }}
+                                                    />
+                                                </div>
+                                            })}
+
+                                        </div>
                                     </div>)
                                 })}
                             </MinimalAccordion>
                         </div>
+
+                    }
                     default:
                         return <div key={i} />
                 }

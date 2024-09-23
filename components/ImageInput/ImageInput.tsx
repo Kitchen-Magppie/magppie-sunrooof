@@ -43,7 +43,7 @@ export default function ImageInput(props: TImageActionProps) {
         }
 
     }
-    return (<>
+    return (<div>
         {props.label?.length ? (<label className="block text-sm font-medium text-gray-700">
             {props.label}
         </label>) : ''}
@@ -63,7 +63,7 @@ export default function ImageInput(props: TImageActionProps) {
             })}
         </div>
 
-    </>)
+    </div>)
 }
 
 function ImageCard(props: TImageCardProps) {
