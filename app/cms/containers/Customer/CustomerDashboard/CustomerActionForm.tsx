@@ -123,12 +123,68 @@ export function CustomerActionForm(props: TProps) {
                                             </label>
                                             <input
                                                 type="text"
-                                                {...register(`components.${i}.data.header`)}
+                                                {...register(`components.${i}.data.name`)}
                                                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                             />
-                                            {renderErrorMessage(`components.${i}.data.header`)}
+                                            {renderErrorMessage(`components.${i}.data.name`)}
                                         </div>
-                                        <ImageInput path='' onSuccess={() => { }} />
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.email`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.email`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Mobile
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.mobile`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.mobile`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Created Date
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.createdDate`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.createdDate`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Address
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.address`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.address`)}
+                                        </div>
+                                        <div className="bg-white  overflow-y-scroll">
+                                            <label className="block text-sm font-medium text-gray-700">
+                                                Zone
+                                            </label>
+                                            <input
+                                                type="text"
+                                                {...register(`components.${i}.data.zone`)}
+                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.zone`)}
+                                        </div>
+
+                                        <ImageInput label='Invoice URL' path='' onSuccess={() => { }} />
                                     </div>
                                 </MinimalAccordion>
                             </div>
@@ -151,13 +207,12 @@ export function CustomerActionForm(props: TProps) {
                                                 #{k + 1}
                                             </div>
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.map((field, j) => {
-
-                                                // console.log(field)
                                                 if (field.label?.includes('Image')) {
                                                     return <ImageInput label={field.label}
-                                                        // values={ }
                                                         key={j}
-                                                        path='' onSuccess={() => { }} />
+                                                        path=''
+                                                        onSuccess={() => { }}
+                                                    />
                                                 }
                                                 return (<div className="bg-white  overflow-y-scroll" key={j}>
                                                     <label className="block text-sm font-medium text-gray-700">
