@@ -139,9 +139,6 @@ const customerComponentQuotationItemSchema = yup.object().shape({
         address: yup.string().required(),
         zone: yup.string().required(),
         invoiceUrl: yup.string().required()
-
-        // header: yup.string().required(),
-        // illustration: yup.string().required(),
     }).required(),
 });
 
