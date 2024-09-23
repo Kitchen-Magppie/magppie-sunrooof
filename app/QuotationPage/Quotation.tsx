@@ -10,7 +10,7 @@ const Quotation = (props: TProps) => {
             </h1>
             <LazyLoadImage
                 effect="blur"
-                src={props.item.data.illustration}
+                src={props.item.data.invoiceUrl}
                 className="w-[800px] h-[500px] lg:w-full lg:h-full"
                 alt=""
             />

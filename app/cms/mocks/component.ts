@@ -78,7 +78,15 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     },
     {
         value: CustomerComponentEnum.Quotation,
-        data: { header: '', illustration: '' }
+        data: {
+            name: '',
+            email: '',
+            mobile: '',
+            createdDate: '',
+            address: '',
+            zone: '',
+            invoiceUrl: ''
+        }
     },
     {
         value: CustomerComponentEnum.TwoDDesign,
@@ -134,10 +142,7 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         },
         {
             value: CustomerComponentEnum.Quotation,
-            data: {
-                header: QuotationMock.Quotation.header,
-                illustration: QuotationMock.Quotation.illustration
-            }
+            data: QuotationMock.Quotation.data
         },
 
         {

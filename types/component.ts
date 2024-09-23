@@ -17,7 +17,15 @@ export type TCustomerComponentClientItem = {
 
 export type TCustomerComponentQuotationItem = {
     value: CustomerComponentEnum.Quotation,
-    data: { header: string, illustration: string }
+    data: {
+        name: string,
+        email: string,
+        mobile: string,
+        createdDate: string,
+        address: string,
+        zone: string,
+        invoiceUrl: string
+    }
 }
 
 export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem }
@@ -124,8 +132,13 @@ const customerComponentClientItemSchema = yup.object().shape({
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
     data: yup.object({
-        header: yup.string().required(),
-        illustration: yup.string().required(),
+        name: yup.string().required(),
+        email: yup.string().required(),
+        mobile: yup.string().required(),
+        createdDate: yup.string().required(),
+        address: yup.string().required(),
+        zone: yup.string().required(),
+        invoiceUrl: yup.string().required()
     }).required(),
 });
 
