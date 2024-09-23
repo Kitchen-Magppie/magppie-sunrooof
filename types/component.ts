@@ -6,7 +6,7 @@ export type TCustomerComponentComparisonDataItem = {
     value: string,
     image: { before: string, after: string }
 }
-type TCustomerComponentComparisonItem = {
+export type TCustomerComponentComparisonItem = {
     value: CustomerComponentEnum.Comparison,
     data: TCustomerComponentComparisonDataItem[]
 }

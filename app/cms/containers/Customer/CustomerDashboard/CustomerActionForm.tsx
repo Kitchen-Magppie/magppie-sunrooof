@@ -9,6 +9,7 @@ import {
     _,
     ComponentModeEnum,
     CustomerComponentEnum,
+    TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerItem,
     validateCustomerItemSchema
@@ -27,6 +28,7 @@ export function CustomerActionForm(props: TProps) {
         watch,
         register,
         handleSubmit,
+        // setValue,
         formState: { errors }
     } = useForm({
         mode: "onChange",
@@ -100,40 +102,35 @@ export function CustomerActionForm(props: TProps) {
                                 </div>
                             </MinimalAccordion>
                         </div>
-                    case CustomerComponentEnum.Comparison:
+                    case CustomerComponentEnum.Comparison: {
+                        console.log(component)
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={currentComponent.label}>
-                                <div className=" grid grid-cols-2 gap-1">
-                                    <div className="row">
-                                        <div className="">
-                                            {/* <ImageInput
-                                                values={[component.data.leftImage]}
+                                <div className="grid grid-cols-2 gap-1">
+                                    {(component as TCustomerComponentComparisonItem).data.map((item, j) => {
+                                        return <div key={`component-${i}-${j}`}>
+                                            <div className="">{j + 1}</div>
+                                            <ImageInput
+                                                values={[item.image.before]}
                                                 path=''
                                                 label='Before'
-                                                onSuccess={() => { }} />
+                                                onSuccess={() => {
+                                                    // setValue(`components.${i}.data.${j}.image.before`, '')
+                                                }} />
                                             <ImageInput
-                                                path=''
-                                                values={[component.data.leftImage]}
-                                                label='After'
-                                                onSuccess={() => { }} /> */}
-                                        </div>
-
-                                        <div className="">
-                                            <ImageInput
-                                                path=''
-                                                label='Before'
-                                                onSuccess={() => { }} />
-                                            <ImageInput
+                                                values={[item.image.after]}
                                                 path=''
                                                 label='After'
-                                                onSuccess={() => { }} />
-
+                                                onSuccess={() => {
+                                                    // setValue(`components.${i}.data.${j}.image.after`, '')
+                                                }} />
                                         </div>
+                                    })}
 
-                                    </div>
                                 </div>
                             </MinimalAccordion>
                         </div>
+                    }
                     case CustomerComponentEnum.Quotation:
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={currentComponent.label}>
@@ -222,20 +219,24 @@ export function CustomerActionForm(props: TProps) {
                                 <div className="flex flex-col gap-2 px-6">
                                     <ImageInput
                                         values={images.first?.length ? [images.first] : []}
-                                        path='' onSuccess={() => { }} />
+                                        label='#1'
+                                        path='' onSuccess={() => { }}
+                                    />
                                     <ImageInput
+                                        label='#2'
                                         values={images.last?.length ? [images.last] : []}
-
-                                        path='' onSuccess={() => { }} />
+                                        path='' onSuccess={() => { }}
+                                    />
                                 </div>
                             </MinimalAccordion>
                         </div>
                     }
-                    case CustomerComponentEnum.TwoDDesign:
+                    case CustomerComponentEnum.TwoDDesign: {
+                        // console.log(component)
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={currentComponent.label}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
-                                    console.log(data)
+                                    // console.log(data)
                                     return (<div key={k} className="flex flex-col gap-2 px-6">
                                         <div className='text-gray-400 italic  text-lg'>
                                             #{k + 1}
@@ -244,7 +245,8 @@ export function CustomerActionForm(props: TProps) {
                                             if (field.label?.includes('Image')) {
                                                 return <ImageInput label={field.label}
                                                     key={j}
-                                                    path=''
+                                                    path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                    values={[data[field.value]]}
                                                     // values={[component.data[field.value]]}
                                                     onSuccess={() => { }}
                                                 />
@@ -266,6 +268,8 @@ export function CustomerActionForm(props: TProps) {
                                 })}
                             </MinimalAccordion>
                         </div>
+
+                    }
                     default:
                         return <div key={i} />
                 }
