@@ -63,15 +63,12 @@ export function CustomerActionForm(props: TProps) {
                     />
                     {renderErrorMessage('name')}
                 </div>
-
                 <div className="px-6">
-
                 </div>
             </div>
 
             {/* Components (rendering depends on the type of component) */}
             <div className='px-6'>
-                {/* <label className="h3">Components</label> */}
                 {values?.components?.map((component, i) => {
                     const value = _.get(component, 'value')
                     const currentComponent = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value)
@@ -101,12 +98,8 @@ export function CustomerActionForm(props: TProps) {
                                         />
                                         {renderErrorMessage(`components.${i}.data.description`)}
                                     </div>
-
                                 </MinimalAccordion>
-
-
                             </div>
-
                         case CustomerComponentEnum.Comparison:
                             return <div key={i}>
                                 <MinimalAccordion isExpanded title={currentComponent.label}>
@@ -143,22 +136,29 @@ export function CustomerActionForm(props: TProps) {
                             return <div key={i}>
                                 <MinimalAccordion isExpanded title={currentComponent.label}>
                                     <div className="flex flex-col gap-2 px-6">
-
                                         <ImageInput path='' onSuccess={() => { }} />
                                         <ImageInput path='' onSuccess={() => { }} />
-
                                     </div>
                                 </MinimalAccordion>
                             </div>
                         case CustomerComponentEnum.TwoDDesign:
                             return <div key={i}>
                                 <MinimalAccordion isExpanded title={currentComponent.label}>
-                                    {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((_, k) => {
+                                    {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
+                                        console.log(data)
                                         return (<div key={k} className="flex flex-col gap-2 px-6">
                                             <div className='text-gray-400 italic  text-lg'>
                                                 #{k + 1}
                                             </div>
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.map((field, j) => {
+
+                                                // console.log(field)
+                                                if (field.label?.includes('Image')) {
+                                                    return <ImageInput label={field.label}
+                                                        // values={ }
+                                                        key={j}
+                                                        path='' onSuccess={() => { }} />
+                                                }
                                                 return (<div className="bg-white  overflow-y-scroll" key={j}>
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         {field.label}
@@ -172,8 +172,6 @@ export function CustomerActionForm(props: TProps) {
                                                 </div>
                                                 )
                                             })}
-                                            <ImageInput label='Map' path='' onSuccess={() => { }} />
-                                            <ImageInput path='' onSuccess={() => { }} />
                                         </div>)
                                     })}
                                 </MinimalAccordion>

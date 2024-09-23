@@ -17,7 +17,15 @@ export type TCustomerComponentClientItem = {
 
 export type TCustomerComponentQuotationItem = {
     value: CustomerComponentEnum.Quotation,
-    data: { header: string, illustration: string }
+    data: {
+        name: string,
+        email: string,
+        mobile: string,
+        createdDate: string,
+        address: string,
+        zone: string,
+        invoiceUrl: string
+    }
 }
 
 export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem }
