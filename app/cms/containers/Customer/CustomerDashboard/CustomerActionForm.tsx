@@ -50,8 +50,6 @@ export function CustomerActionForm(props: TProps) {
         console.log('Form Data:', data);
     };
 
-    // console.log(values)
-
     return (<form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
