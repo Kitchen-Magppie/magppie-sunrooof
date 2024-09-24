@@ -10,7 +10,7 @@ import 'swiper/css/grid'
 import 'swiper/css/pagination'
 
 // import required modules
-import { Grid, FreeMode } from 'swiper/modules'
+import { Grid, Scrollbar, FreeMode } from 'swiper/modules'
 
 const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
@@ -58,7 +58,7 @@ const Team = () => {
         //     </div>
         // </div>
         <>
-            <div className="py-20 container mx-auto lg:max-w-7xl">
+            <div className="py-20 container mx-auto lg:max-w-5xl relative">
                 <h1 className="text-5xl pb-10 w-full text-center font-bold uppercase text-[#78746c]">
                     our team
                 </h1>
@@ -74,14 +74,15 @@ const Team = () => {
                         }}
                         spaceBetween={10}
                         freeMode={true}
-                        modules={[Grid, FreeMode]}
+                        modules={[Grid, Scrollbar]}
                         className="mySwiper"
+                        scrollbar={{ draggable: true }}
                     >
                         {team.map((person) => {
                             return (
                                 <SwiperSlide key={person.id}>
                                     <div className="text-black flex flex-col items-center pb-10 gap-1">
-                                        <div className="h-64 w-64 mb-24 lg:mb-4">
+                                        <div className="h-72 w-64 mb-24 lg:mb-4">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={person.img}
@@ -89,7 +90,7 @@ const Team = () => {
                                                 className="w-full h-full rounded-3xl"
                                             />
                                         </div>
-                                        <div className="mt-10 flex flex-col items-center">
+                                        <div className="mt-10 flex flex-col items-center absolute text-white bottom-14 w-full">
                                             <h1 className="text-2xl lg:text-xl font-bold">
                                                 {person.name}
                                             </h1>
@@ -99,6 +100,8 @@ const Team = () => {
                                             <p className="text-2xl lg:text-xl">
                                                 {person.country}
                                             </p>
+                                        </div>
+                                        <div className="absolute right-0 mr-10 mt-2">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 className="w-15 h-10 mt-2"
@@ -122,14 +125,15 @@ const Team = () => {
                         }}
                         spaceBetween={10}
                         freeMode={true}
-                        modules={[Grid, FreeMode]}
+                        modules={[Grid, Scrollbar, FreeMode]}
                         className="mySwiper"
+                        scrollbar={{ draggable: true }}
                     >
                         {team.map((person) => {
                             return (
                                 <SwiperSlide key={person.id}>
-                                    <div className="text-black flex flex-col items-center pb-10 gap-1">
-                                        <div className="h-96 w-96 mb-24 lg:mb-4">
+                                    <div className="text-black flex flex-col items-center pb-10 gap-1 h-full">
+                                        <div className="h-full w-72 lg:mb-4">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={person.img}
@@ -137,7 +141,7 @@ const Team = () => {
                                                 className="w-full h-full rounded-3xl"
                                             />
                                         </div>
-                                        <div className="mt-48 flex flex-col items-center">
+                                        <div className="flex flex-col items-center absolute text-white bottom-20 w-full">
                                             <h1 className="text-2xl lg:text-xl font-bold">
                                                 {person.name}
                                             </h1>
@@ -147,9 +151,11 @@ const Team = () => {
                                             <p className="text-2xl lg:text-xl">
                                                 {person.country}
                                             </p>
+                                        </div>
+                                        <div className="absolute right-0 mr-10 mt-2">
                                             <LazyLoadImage
                                                 effect="blur"
-                                                className="w-15 h-10 mt-2"
+                                                className="w-15 h-6 mt-2"
                                                 src={person.countryLogo}
                                                 alt=""
                                             />

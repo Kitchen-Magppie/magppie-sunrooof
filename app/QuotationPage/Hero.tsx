@@ -10,7 +10,7 @@ const Hero = () => {
                 <hr className="bg-white w-[570px] lg:w-[900px] h-1 mt-4 rounded-full lg:mt-2" />
                 <h1 className="text-6xl py-10">{_data.Client.name}</h1>
             </div>
-            <div className="flex flex-col text-center">
+            <div className="flex flex-col text-center mt-10">
                 <p className=" text-5xl lg:text-7xl mb-2 font-cursive">
                     engineered in
                 </p>

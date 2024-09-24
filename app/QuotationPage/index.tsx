@@ -1,7 +1,7 @@
 import TwodDesigns from './2dDesigns'
 import ThreedDesigns from './3dDesigns'
 import About from './About'
-import BeforeAfter from './BeforeAfter/BeforeAfter'
+// import BeforeAfter from './BeforeAfter/BeforeAfter'
 // import ClientName from './ClientName'
 import Clients from './Clients'
 // import DesignedBy from './DesignedBy'
@@ -16,6 +16,7 @@ import FooterFinal from './FooterFinal'
 import BuyingJourney from './BuyingJourney'
 import Navbar from './Navbar'
 import Hero from './Hero'
+import ImageComparison from './Image'
 
 const QuotationPage = () => {
     return (
@@ -27,7 +28,8 @@ const QuotationPage = () => {
             {/* <Header /> */}
             <About />
             <Clients />
-            <BeforeAfter />
+            <ImageComparison />
+            {/* <BeforeAfter /> */}
             <Features />
             <Team />
             {/* <ProjectDetails /> */}

@@ -9,7 +9,7 @@ import 'swiper/css/grid'
 import 'swiper/css/pagination'
 
 // import required modules
-import { Grid, FreeMode } from 'swiper/modules'
+import { Grid, FreeMode, Scrollbar } from 'swiper/modules'
 
 const Clients = () => {
     const isMobile = useMedia('(orientation: portrait)')
@@ -30,7 +30,8 @@ const Clients = () => {
                     }}
                     spaceBetween={10}
                     freeMode={true}
-                    modules={[Grid, FreeMode]}
+                    scrollbar={{ draggable: true }}
+                    modules={[Grid, FreeMode, Scrollbar]}
                     className="mySwiper container max-w-2xl"
                 >
                     {clients.map((client) => {
