@@ -38,6 +38,8 @@ export function CustomerActionForm(props: TProps) {
     });
 
     const values = watch()
+
+    console.log(values)
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return <p className="text-red-500 text-xs mt-1">
@@ -248,7 +250,7 @@ export function CustomerActionForm(props: TProps) {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
-                                    return (<div key={k} className="flex flex-col gap-2 px-6">
+                                    return (<div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`} className="flex flex-col gap-2 px-6">
                                         <div className='text-gray-400 italic  text-lg'>
                                             #{k + 1}
                                         </div>
@@ -265,7 +267,7 @@ export function CustomerActionForm(props: TProps) {
                                                 //         />
                                                 //     </div>
                                                 // }
-                                                return (<div className="bg-white" key={j}>
+                                                return (<div className="bg-white" key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}>
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         {item.label}
                                                     </label>
@@ -313,7 +315,7 @@ export function CustomerActionForm(props: TProps) {
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'image')?.map((item, j) => {
-                                                return <div className="">
+                                                return <div key={j}>
                                                     <ImageInput label={item.label}
                                                         key={j}
                                                         path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
@@ -352,7 +354,4 @@ export function CustomerActionForm(props: TProps) {
     );
 }
 
-type TProps = {
-    mode: ComponentModeEnum,
-    item: TCustomerItem
-}
+type TProps = { mode: ComponentModeEnum, item: TCustomerItem }
