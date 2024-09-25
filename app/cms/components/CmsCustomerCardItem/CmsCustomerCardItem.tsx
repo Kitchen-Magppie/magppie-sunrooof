@@ -1,4 +1,4 @@
-import { BsThreeDotsVertical } from "react-icons/bs";
+// import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import dayjs from 'dayjs'
@@ -8,12 +8,14 @@ import { TCmsCustomerCardItem } from "../../types";
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
 
-    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out">
+    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out cursor-pointer"
+        onClick={props.onClickModal}
+    >
         <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-semibold">{props.item.name}</h2>
-            <button className="border p-1 rounded-full border-gray-400 ">
+            {/* <button className="border p-1 rounded-full border-gray-400 ">
                 <BsThreeDotsVertical />
-            </button>
+            </button> */}
         </div>
         <div className="flex items-center mb-2 gap-2">
             <FaRegCalendarAlt size={24} />

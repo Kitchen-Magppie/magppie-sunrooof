@@ -89,13 +89,10 @@ export function SignInForm() {
         <button
             type="submit"
             disabled={values?.loading}
-            className={`text-white w-full text-center h-12 bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center me-2 mb-2 ${
-                isError ? 'bg-red-600' : 'bg-black'
-            } uppercase text-white ${
-                isError ? 'hover:bg-red-700' : 'bg-black'
-            }  focus:outline-none focus:ring-2 ${
-                isError ? 'focus:ring-red-500' : 'bg-black'
-            } focus:ring-offset-2`}
+            className={`text-white w-full text-center h-12 bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center me-2 mb-2 ${isError ? 'bg-red-600' : 'bg-black'
+                } uppercase text-white ${isError ? 'hover:bg-red-700' : 'bg-black'
+                }  focus:outline-none focus:ring-2 ${isError ? 'focus:ring-red-500' : 'bg-black'
+                } focus:ring-offset-2`}
         >
             <div className="flex justify-center items-center gap-2 w-full">
                 <div>Sign In</div>
@@ -116,9 +113,8 @@ export function SignInForm() {
                         type="email"
                         {...register('email')}
                         placeholder="Email"
-                        className={`w-full text-xl border-t-0 border-l-0 border-r-0 ${
-                            errors.email ? 'border-red-500' : 'border-gray-400'
-                        }`}
+                        className={`w-full text-xl border-t-0 border-l-0 border-r-0 ${errors.email ? 'border-red-500' : 'border-gray-400'
+                            }`}
                     />
                     {helperText('email')}
                 </div>
@@ -129,11 +125,10 @@ export function SignInForm() {
                         {...register('password')}
                         type="password"
                         placeholder="Password"
-                        className={`w-full text-xl border-t-0 border-l-0 border-r-0 ${
-                            errors.password
+                        className={`w-full text-xl border-t-0 border-l-0 border-r-0 ${errors.password
                                 ? 'border-red-500'
                                 : 'border-gray-400'
-                        }`}
+                            }`}
                     />
                     {helperText('password')}
                 </div>

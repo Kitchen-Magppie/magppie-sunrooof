@@ -1,13 +1,14 @@
-import _ from "lodash";
+import { v4 as uuidv4 } from 'uuid';
 //====================================================================
+import _ from "lodash";
 type TApplyOrder = { original: string[], prev: string[], prefer: string }
-
 interface TLodashMixin extends _.LoDashStatic {
     titleCase: (e: string) => string,
     labelCase: (e: string) => string,
     isNumericString: (e: string) => boolean,
     mapNums: (e: unknown[]) => number[],
-    applyOrder: (e: string[]) => TApplyOrder
+    applyOrder: (e: string[]) => TApplyOrder,
+    uuid: () => string
 }
 
 
@@ -37,11 +38,16 @@ function applyOrder(original: string[]): TApplyOrder {
         prefer
     })
 }
+function uuid(): string {
+    return uuidv4();
+}
+
 _.mixin({
     titleCase,
     labelCase,
     isNumericString,
     mapNums,
-    applyOrder
+    applyOrder,
+    uuid
 })
 export default _ as TLodashMixin

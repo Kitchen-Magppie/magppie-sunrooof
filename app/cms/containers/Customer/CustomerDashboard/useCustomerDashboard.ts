@@ -2,15 +2,15 @@ import { useCallback, useMemo, useState } from "react"
 import {
     _,
     ComponentModeEnum,
-    INIT_CUSTOMER_SITE_COMPONENT,
-    TComponentItem,
-    TComponentMode
+    TComponentMode,
+    TCustomerItem
 } from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
+import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
 
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
-    const value = useAppSelector((state) => state.Cms.CustomerSiteComponent);
+    const value = useAppSelector((state) => state.Cms.Customer);
 
     const components = useMemo(() => {
         return _.sortBy(value.value?.filter((item) =>
@@ -33,14 +33,15 @@ export function useCustomerDashboard() {
         }))
     }, [])
 
-    const onChangeModal = useCallback((args: { action: TComponentMode, value: boolean }) => {
+    const onChangeModal = useCallback((args: { action: TComponentMode, value: boolean, item?: TCustomerItem }) => {
         setCorpus((prev) => ({
             ...prev,
             values: {
                 ...prev.values,
                 modal: {
                     ...prev.values.modal,
-                    action: args.action
+                    action: args.action,
+                    value: args?.item
                 }
             },
             toggle: {
@@ -81,35 +82,29 @@ export function useCustomerDashboard() {
 
 
 
-type TCorpusModal = { action: TComponentMode, value: TComponentItem, open: boolean }
+type TCorpusModal = {
+    action: TComponentMode,
+    value: TCustomerItem,
+    open: boolean
+}
 
 type TCorpus = {
     toggle: { isOpenComponentModal: boolean },
-    filteration: {
-        search: string,
-    },
+    filteration: { search: string },
     values: {
-        sections: string[],
         modal: TCorpusModal
     }
 }
 const INIT_CORPUS_MODAL: TCorpusModal = {
     action: ComponentModeEnum.None,
-    value: INIT_CUSTOMER_SITE_COMPONENT,
+    value: INIT_CUSTOMER_COMPONENT_ITEM,
     open: false
 }
-const SECTIONS = [
-    'Comparisons (Before & After)',
-    '2D Design',
-    '3D Design',
-    'Quotation'
-]
 
 const INIT_CORPUS: TCorpus = {
     toggle: { isOpenComponentModal: false },
     filteration: { search: '' },
     values: {
-        sections: SECTIONS,
         modal: INIT_CORPUS_MODAL
     }
 }
