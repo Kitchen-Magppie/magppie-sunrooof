@@ -17,9 +17,11 @@ import {
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
+    DEFAULT_CUSTOMER,
 } from '../../../mocks';
 import { MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
+import { useFirebaseCustomerAction } from '../../../utils/firebase/customer';
 
 export function CustomerActionForm(props: TProps) {
 
@@ -32,10 +34,11 @@ export function CustomerActionForm(props: TProps) {
         watch,
         register,
         handleSubmit,
+        setValue,
         formState: { errors }
     } = useForm({
         resolver: yupResolver(validateCustomerItemSchema),
-        defaultValues: item
+        defaultValues: { ...item, customerId: isCreateAction ? _.uuid() : item.customerId }
     });
 
     const values = watch()
@@ -49,26 +52,34 @@ export function CustomerActionForm(props: TProps) {
         return ''
     }, [errors])
 
-    const onSubmit = (data: TCustomerItem) => {
+    const action = useFirebaseCustomerAction()
+    const onSubmit = handleSubmit((data: TCustomerItem) => {
+        setCorpus((prev) => ({ ...prev, isSubmitting: true }))
+        setTimeout(() => {
+            if (DEFAULT_CUSTOMER.id !== item.customerId) {
 
-        if (isCreateAction) {
-            console.log('Form Data:', data);
-        }
-        else {
-            console.log('Form Data:', {
-                ...data,
-                at: {
-                    ...data.at,
-                    updated: new Date()
+                if (isCreateAction) {
+                    action.add(data)
                 }
-            });
+                else {
 
-        }
-    };
+                    action.edit({
+                        ...data,
+                        at: {
+                            ...data.at,
+                            updated: new Date()
+                        }
+                    })
 
-    console.log("Errors:", errors)
-    console.log("Values:", values)
-    return (<form onSubmit={handleSubmit(onSubmit)}>
+
+                }
+            }
+            setCorpus((prev) => ({ ...prev, isSubmitting: false }))
+
+        }, 2000)
+    });
+
+    return (<form onSubmit={onSubmit}>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
                 <label className="block text-sm font-medium text-gray-700">
@@ -135,18 +146,24 @@ export function CustomerActionForm(props: TProps) {
                                             <div className="">#{j + 1}</div>
                                             <ImageInput
                                                 values={data.before}
-                                                path=''
+                                                path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
                                                 label='Before'
-                                                onSuccess={() => {
-                                                    // setValue(`components.${i}.data.${j}.image.before`, '')
-                                                }} />
+                                                onSuccess={(e) => {
+                                                    setValue(`components.${i}.data.${j}.image.before`, e[0])
+                                                }}
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.${j}.image.before`)}
+
                                             <ImageInput
                                                 values={data.after}
-                                                path=''
+                                                path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
                                                 label='After'
-                                                onSuccess={() => {
-                                                    // setValue(`components.${i}.data.${j}.image.after`, '')
-                                                }} />
+                                                onSuccess={(e) => {
+                                                    setValue(`components.${i}.data.${j}.image.after`, e[0])
+                                                }}
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.${j}.image.after`)}
+
                                         </div>
                                     })}
 
@@ -236,8 +253,14 @@ export function CustomerActionForm(props: TProps) {
                                     </div>
                                     <ImageInput label='Invoice URL'
                                         values={image?.length ? [image] : []}
-                                        path={`customers/${values.customerId}/quotations`}
-                                        onSuccess={() => { }} />
+                                        path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
+
+                                        onSuccess={(e) => {
+                                            setValue(`components.${i}.data.invoiceUrl`, e[0])
+                                        }}
+                                    />
+                                    {renderErrorMessage(`components.${i}.data.invoiceUrl`)}
+
                                 </div>
                             </MinimalAccordion>
                         </div>
@@ -253,13 +276,23 @@ export function CustomerActionForm(props: TProps) {
                                     <ImageInput
                                         values={images.first?.length ? [images.first] : []}
                                         label='#1'
-                                        path='' onSuccess={() => { }}
+                                        path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                        onSuccess={(e) => {
+                                            setValue(`components.${i}.data.0`, e[0])
+                                        }}
                                     />
+                                    {renderErrorMessage(`components.${i}.data.0`)}
+
                                     <ImageInput
                                         label='#2'
                                         values={images.last?.length ? [images.last] : []}
-                                        path='' onSuccess={() => { }}
+                                        path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                        onSuccess={(e) => {
+                                            setValue(`components.${i}.data.1`, e[0])
+                                        }}
                                     />
+                                    {renderErrorMessage(`components.${i}.data.1`)}
+
                                 </div>
 
                             </MinimalAccordion>
@@ -298,8 +331,12 @@ export function CustomerActionForm(props: TProps) {
                                                         key={j}
                                                         path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
                                                         values={items}
-                                                        onSuccess={() => { }}
+                                                        onSuccess={(e) => {
+                                                            setValue(`components.${i}.data.${k}.${item.value}`, e[0])
+                                                        }}
                                                     />
+                                                    {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
+
                                                 </div>
                                             })}
                                         </div>
@@ -314,27 +351,14 @@ export function CustomerActionForm(props: TProps) {
                 }
             })}
             {errors.components && <p>{errors.components.message}</p>}
-            <div className="relative max-w-sm">
-                <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-                    <svg
-                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                    </svg>
-                </div>
 
-            </div>
 
             <button
                 disabled={corpus.isSubmitting}
                 type="submit"
-                onClick={() => {
-                    setCorpus({ isSubmitting: true })
-                }}
+                // onClick={() => {
+                //     setCorpus({ isSubmitting: true })
+                // }}
                 className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 {isCreateAction ? 'Create' : 'Edit'} Component
