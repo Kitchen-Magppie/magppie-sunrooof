@@ -55,16 +55,16 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
-    { label: "Design By", value: "designBy" },
-    { label: "Approved By", value: 'approvedBy' },
-    { label: "Design", value: 'design' },
-    { label: "Finish", value: 'finish' },
-    { label: "Calling Height On Site", value: 'callingHeightOnSite' },
-    { label: "After Installation", value: 'afterInstallation' },
-    { label: "Your Plan", value: 'yourPlan' },
-    { label: "Header", value: 'header' },
-    { label: "Left Image", value: 'leftImage' },
-    { label: "Right Image", value: 'rightImage' }
+    { label: "Design By", value: "designBy", field: 'text' },
+    { label: "Approved By", value: 'approvedBy', field: 'text' },
+    { label: "Design", value: 'design', field: 'text' },
+    { label: "Finish", value: 'finish', field: 'text' },
+    { label: "Calling Height On Site", value: 'callingHeightOnSite', field: 'text' },
+    { label: "After Installation", value: 'afterInstallation', field: 'text' },
+    { label: "Your Plan", value: 'yourPlan', field: 'text' },
+    { label: "Header", value: 'header', field: 'text' },
+    { label: "Left Image", value: 'leftImage', field: 'image' },
+    { label: "Right Image", value: 'rightImage', field: 'image' },
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
@@ -74,11 +74,19 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     },
     {
         value: CustomerComponentEnum.Comparison,
-        data: []
+        data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
     },
     {
         value: CustomerComponentEnum.Quotation,
-        data: { header: '', illustration: '' }
+        data: {
+            name: '',
+            email: '',
+            mobile: '',
+            createdDate: '',
+            address: '',
+            zone: '',
+            invoiceUrl: ''
+        }
     },
     {
         value: CustomerComponentEnum.TwoDDesign,
@@ -134,10 +142,7 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         },
         {
             value: CustomerComponentEnum.Quotation,
-            data: {
-                header: QuotationMock.Quotation.header,
-                illustration: QuotationMock.Quotation.illustration
-            }
+            data: QuotationMock.Quotation.data
         },
 
         {

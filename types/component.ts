@@ -6,21 +6,29 @@ export type TCustomerComponentComparisonDataItem = {
     value: string,
     image: { before: string, after: string }
 }
-type TCustomerComponentComparisonItem = {
+export type TCustomerComponentComparisonItem = {
     value: CustomerComponentEnum.Comparison,
     data: TCustomerComponentComparisonDataItem[]
 }
-type TCustomerComponentClientItem = {
+export type TCustomerComponentClientItem = {
     value: CustomerComponentEnum.Client,
     data: { name: string, description: string }
 }
 
-type TCustomerComponentQuotationItem = {
+export type TCustomerComponentQuotationItem = {
     value: CustomerComponentEnum.Quotation,
-    data: { header: string, illustration: string }
+    data: {
+        name: string,
+        email: string,
+        mobile: string,
+        createdDate: string,
+        address: string,
+        zone: string,
+        invoiceUrl: string
+    }
 }
 
-export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem }
+export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem, field: 'text' | 'image' }
 export type TCustomerComponentDesign2DDataItem = {
     designBy: string,
     approvedBy: string,
@@ -101,7 +109,7 @@ export const SPECIAL_CHARACTER_TO_DOM = (text: string) => {
 
 
 const comparisonDataItemSchema = yup.object().shape({
-    value: yup.string().required(),
+    value: yup.string().nullable(),
     image: yup.object().shape({
         before: yup.string().required(),
         after: yup.string().required(),
@@ -124,8 +132,13 @@ const customerComponentClientItemSchema = yup.object().shape({
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
     data: yup.object({
-        header: yup.string().required(),
-        illustration: yup.string().required(),
+        name: yup.string().required(),
+        email: yup.string().required(),
+        mobile: yup.string().required(),
+        createdDate: yup.string().required(),
+        address: yup.string().required(),
+        zone: yup.string().required(),
+        invoiceUrl: yup.string().required()
     }).required(),
 });
 
@@ -170,7 +183,7 @@ const customerComponentSchema = yup.lazy((value) => {
 export const validateCustomerItemSchema = yup.object().shape({
     name: yup.string().required(),
     components: yup.array().of(customerComponentSchema).required(),
-    id: yup.string().required(),
+    id: yup.string().nullable(),
     customerId: yup.string().required(),
     at: yup.object().shape({
         created: yup.date().required(),

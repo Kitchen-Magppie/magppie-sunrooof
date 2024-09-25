@@ -1,5 +1,6 @@
+import { useMemo } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { QuotationMock as _data } from "../../cms/mocks"
+import { _, TCustomerComponentComparisonDataItem } from '../../../types'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -10,14 +11,14 @@ import 'swiper/css/keyboard'
 import 'swiper/css/navigation'
 import {
     Mousewheel,
-Navigation,
+    Navigation,
     Keyboard,
     Scrollbar,
 } from 'swiper/modules'
 
-const _images = Object.values(_data.Comparison)?.flatMap((item) => Object.values(item))
 
-const BeforeAfter = () => {
+const BeforeAfter = (props: TProps) => {
+    const images = useMemo(() => (_.values(props.item?.flatMap((item) => _.values(item.image)))), [props.item])
     return (
         <div className="container max-w-7xl py-20 w-full mx-auto">
             <div className="flex flex-col items-center justify-center text-center">
@@ -37,7 +38,7 @@ const BeforeAfter = () => {
                     className="mySwiper"
                     scrollbar={{ draggable: true }}
                 >
-                    {_images.map((image, index) => {
+                    {images.map((image, index) => {
                         return (
                             <SwiperSlide key={index}>
                                 <div className="flex items-center mx-10 w-full h-full">
@@ -55,7 +56,9 @@ const BeforeAfter = () => {
                 </Swiper>
             </div>
         </div>
+
     )
 }
+type TProps = { item: TCustomerComponentComparisonDataItem[] }
 
-export default BeforeAfter;
+export default BeforeAfter

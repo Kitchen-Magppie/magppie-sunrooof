@@ -17,8 +17,35 @@ import BuyingJourney from './BuyingJourney'
 import Navbar from './Navbar'
 import Hero from './Hero'
 import ImageComparison from './Image'
+import { useFirebaseCmsCustomerListener } from '../cms/utils/firebase'
+import { useAppSelector } from '../../redux'
+import { useMemo } from 'react'
+import { DEFAULT_CUSTOMER } from '../cms/mocks'
+import { CustomerComponentEnum, TCustomerComponentClientItem, TCustomerComponentComparisonDataItem, TCustomerComponentQuotationItem } from '../../types'
+import { PageProgress } from '../../components'
 
 const QuotationPage = () => {
+    useFirebaseCmsCustomerListener()
+    const { loading, value } = useAppSelector((state) => state.Cms.Customer);
+
+    console.log(value)
+
+    const component = useMemo(() => {
+
+        const data = value.find((row) => row.customerId === DEFAULT_CUSTOMER.customerId)
+        return ({
+            [CustomerComponentEnum.Comparison]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison).data as TCustomerComponentComparisonDataItem[],
+            [CustomerComponentEnum.Client]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Client) as unknown as TCustomerComponentClientItem,
+            [CustomerComponentEnum.TwoDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as unknown as TCustomerComponentClientItem,
+            [CustomerComponentEnum.Quotation]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as unknown as TCustomerComponentQuotationItem,
+        })
+
+    }, [value])
+
+    console.log(component)
+    if (loading) {
+        return <PageProgress />
+    }
     return (
         <div className='overflow-x-hidden'>
             <Navbar />
@@ -35,11 +62,12 @@ const QuotationPage = () => {
             {/* <ProjectDetails /> */}
             <TwodDesigns />
             <ThreedDesigns />
-            <Quotation />
+            <Quotation
+                item={component[CustomerComponentEnum.Quotation]}
+            />
             <TermsandConditions />
             <Guarantee />
             <BuyingJourney />
-            {/* <Footer /> */}
             <FooterFinal />
         </div>
     )

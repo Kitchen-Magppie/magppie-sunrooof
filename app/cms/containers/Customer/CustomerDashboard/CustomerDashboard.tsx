@@ -10,20 +10,17 @@ import {
 import { CustomSimpleModal } from "../../../../../components";
 import { useFirebaseCmsCustomerListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
-import {
-    INIT_CUSTOMER_ITEM
-} from "../../../mocks";
-import {
-    CustomerActionForm,
-    useCustomerDashboard
-} from ".";
-// import CustomDumpButton from "../../../components/Dump/CustomDumpButton";
+import { INIT_CUSTOMER_ITEM } from "../../../mocks";
+import { CustomerActionForm, useCustomerDashboard } from ".";
 
 export default function CustomerDashboard() {
+
     useFirebaseCmsCustomerListener()
+
     const { loading, data, action } = useCustomerDashboard();
-    // console.log(DEFAULT_CUSTOMER)
+
     const renderActionModal = useMemo(() => {
+        const isCreateAction = data.values.modal.action === ComponentModeEnum.Create
         return (<CustomSimpleModal
             show={data.toggle.isOpenComponentModal}
             onHide={() => {
@@ -32,22 +29,26 @@ export default function CustomerDashboard() {
                     value: false
                 })
             }}
-            label="Create Component"
+            label={`${isCreateAction ? 'Create' : 'Edit'} Component`}
         >
             <div className="p-2">
                 <CustomerActionForm
-                    mode={ComponentModeEnum.Create}
+                    mode={data.values.modal.action}
                     item={data.values.modal.value}
                 />
             </div>
         </CustomSimpleModal>)
-    }, [action, data.toggle.isOpenComponentModal, data.values.modal.value])
+    }, [
+        action,
+        data.toggle.isOpenComponentModal,
+        data.values.modal.action,
+        data.values.modal.value
+    ])
 
     return <div>
         <div>
-            {/* <CustomDumpButton /> */}
             <div className="flex gap-2 justify-between">
-                <div className=" w-full">
+                <div className="w-full">
                     <CmsSearch
                         placeholder="Search.."
                         onChange={(e) => {
@@ -70,20 +71,16 @@ export default function CustomerDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
                 {loading ? Array.from({ length: 5 })?.map((_, i) => <CardSkeleton key={i} />) : (data.values.components?.length ? (<>
                     {data.values.components.map((item, i) => {
-                        return <CmsCustomerCardItem
-                            onClickModal={() => {
-                                if (item) {
-                                    action.onChangeModal({
-                                        action: ComponentModeEnum.Edit,
-                                        value: true,
-                                        item
-                                    })
-                                }
-                            }}
-                            item={item}
-                            key={i}
-                        // variant={CmsCardEnum.Pending}
-                        />
+                        const onClickModal = () => {
+                            if (item) {
+                                action.onChangeModal({
+                                    action: ComponentModeEnum.Edit,
+                                    value: true,
+                                    item
+                                })
+                            }
+                        }
+                        return <CmsCustomerCardItem onClickModal={onClickModal} item={item} key={i} />
                     })}
                 </>) : <div className="mt-40"> <CmsNotFound /></div>)}
             </div>
