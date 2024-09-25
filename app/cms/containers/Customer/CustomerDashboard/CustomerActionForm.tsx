@@ -26,20 +26,20 @@ export function CustomerActionForm(props: TProps) {
     const [corpus, setCorpus] = useState({ isSubmitting: false })
     const { mode, item } = props;
 
+    const isCreateAction = mode === ComponentModeEnum.Create
+
     const {
         watch,
         register,
         handleSubmit,
         formState: { errors }
     } = useForm({
-        mode: "onChange",
         resolver: yupResolver(validateCustomerItemSchema),
         defaultValues: item
     });
 
     const values = watch()
 
-    console.log(values)
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return <p className="text-red-500 text-xs mt-1">
@@ -50,9 +50,24 @@ export function CustomerActionForm(props: TProps) {
     }, [errors])
 
     const onSubmit = (data: TCustomerItem) => {
-        console.log('Form Data:', data);
+
+        if (isCreateAction) {
+            console.log('Form Data:', data);
+        }
+        else {
+            console.log('Form Data:', {
+                ...data,
+                at: {
+                    ...data.at,
+                    updated: new Date()
+                }
+            });
+
+        }
     };
 
+    console.log("Errors:", errors)
+    console.log("Values:", values)
     return (<form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
@@ -186,9 +201,10 @@ export function CustomerActionForm(props: TProps) {
                                                 Created Date
                                             </label>
                                             <input
-                                                type="text"
+                                                type="date"
                                                 {...register(`components.${i}.data.createdDate`)}
-                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                                                placeholder="Created Date"
                                             />
                                             {renderErrorMessage(`components.${i}.data.createdDate`)}
                                         </div>
@@ -250,7 +266,6 @@ export function CustomerActionForm(props: TProps) {
                         </div>
                     }
                     case CustomerComponentEnum.TwoDDesign: {
-                        // console.log(component)
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
@@ -260,17 +275,6 @@ export function CustomerActionForm(props: TProps) {
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'text')?.map((item, j) => {
-                                                // if (item.label?.includes('Image')) {
-                                                //     return <div className="">
-                                                //         <ImageInput label={item.label}
-                                                //             key={j}
-                                                //             path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                //             values={[data[item.value]]}
-                                                //             // values={[component.data[field.value]]}
-                                                //             onSuccess={() => { }}
-                                                //         />
-                                                //     </div>
-                                                // }
                                                 return (<div className="bg-white" key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}>
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         {item.label}
@@ -310,6 +314,21 @@ export function CustomerActionForm(props: TProps) {
                 }
             })}
             {errors.components && <p>{errors.components.message}</p>}
+            <div className="relative max-w-sm">
+                <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                    <svg
+                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                    </svg>
+                </div>
+
+            </div>
+
             <button
                 disabled={corpus.isSubmitting}
                 type="submit"
@@ -318,7 +337,7 @@ export function CustomerActionForm(props: TProps) {
                 }}
                 className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-                {mode === ComponentModeEnum.Create ? 'Create' : 'Edit'} Component
+                {isCreateAction ? 'Create' : 'Edit'} Component
                 {corpus.isSubmitting ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
             </button>
         </div>
