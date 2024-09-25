@@ -265,8 +265,8 @@ export function CustomerActionForm(props: TProps) {
                     }
                     case CustomerComponentEnum.ThreeDDesign: {
                         const images = {
-                            first: _.get(component, 'data.0', ''),
-                            last: _.get(component, 'data.1', '')
+                            first: `${_.get(component, 'data.0', '') || ''}`,
+                            last: `${_.get(component, 'data.1', '') || ''}`
                         }
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
