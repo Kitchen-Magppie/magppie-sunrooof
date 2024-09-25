@@ -15,7 +15,7 @@ const Clients = () => {
     const isMobile = useMedia('(orientation: portrait)')
     return (
         <div className="bg-[#f9f5ef] py-20" id="clients">
-            <h1 className="text-black text-6xl text-center pb-10">
+            <h1 className="text-black text-6xl lg:text-7xl text-center pb-10 mx-5">
                 The ones who chose <span className="font-bold">SUNROOOF</span>
             </h1>
             {isMobile ? (
