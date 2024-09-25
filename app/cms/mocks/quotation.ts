@@ -9,7 +9,7 @@ export const QuotationMock = {
             After: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fcomparisons%2Fafter2.png?alt=media&token=692fc5d4-1aa9-4c23-b045-1d0118ed1c1d'
         },
     },
-    Client: { name: 'Mr. Karthik', remark: 'Exclusively designed for' },
+    Client: { name: 'Mr. Karthik', remark: 'Excluisve proposal for' },
     Quotation: {
         header: 'Quotation',
         illustration: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4'

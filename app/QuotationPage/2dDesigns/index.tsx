@@ -14,7 +14,6 @@ import 'swiper/css/navigation'
 import 'swiper/css/zoom'
 import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
-
 //Icons
 // @ts-expect-error svg-issue
 import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
@@ -142,15 +141,28 @@ const Layout2dDesign = () => {
     }, [isMobile, onNext, onPrev, selectedLayout])
 
     return (
-        <div className="flex flex-col justify-center items-center py-20 px-4" id='2d'>
+        <div
+            className="flex flex-col justify-center items-center py-20 px-4"
+            id="2d"
+        >
             <h1 className="text-5xl mb-12">2D Designs</h1>
-            <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
-                <ProjectDetails
-                    selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
-                />
-                <div className="flex">{renderSwiper}</div>
-            </div>
+            {isMobile ? (
+                <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
+                    <div className="flex">{renderSwiper}</div>
+                    <ProjectDetails
+                        selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
+                    />
+                </div>
+            ) : (
+                <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
+                    <ProjectDetails
+                        selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
+                    />
+                    <div className="flex">{renderSwiper}</div>
+                </div>
+            )}
         </div>
     )
 }
