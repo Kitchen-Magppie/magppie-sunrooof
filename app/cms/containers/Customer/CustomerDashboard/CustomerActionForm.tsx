@@ -112,17 +112,21 @@ export function CustomerActionForm(props: TProps) {
                             <MinimalAccordion isExpanded title={title}>
                                 <div className="grid grid-cols-2 gap-1">
                                     {(component as TCustomerComponentComparisonItem).data.map((item, j) => {
+                                        const data = {
+                                            before: item.image.before?.length ? [item.image.before] : [],
+                                            after: item.image.after?.length ? [item.image.after] : [],
+                                        }
                                         return <div key={`component-${i}-${j}`}>
                                             <div className="">#{j + 1}</div>
                                             <ImageInput
-                                                values={[item.image.before]}
+                                                values={data.before}
                                                 path=''
                                                 label='Before'
                                                 onSuccess={() => {
                                                     // setValue(`components.${i}.data.${j}.image.before`, '')
                                                 }} />
                                             <ImageInput
-                                                values={[item.image.after]}
+                                                values={data.after}
                                                 path=''
                                                 label='After'
                                                 onSuccess={() => {
@@ -135,7 +139,8 @@ export function CustomerActionForm(props: TProps) {
                             </MinimalAccordion>
                         </div>
                     }
-                    case CustomerComponentEnum.Quotation:
+                    case CustomerComponentEnum.Quotation: {
+                        const image = _.get(component, 'data.invoiceUrl', '')
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 <div className="flex flex-col gap-2 px-6">
@@ -212,16 +217,15 @@ export function CustomerActionForm(props: TProps) {
                                             />
                                             {renderErrorMessage(`components.${i}.data.zone`)}
                                         </div>
-
                                     </div>
-
                                     <ImageInput label='Invoice URL'
-                                        values={[_.get(component, 'data.invoiceUrl', '')]}
+                                        values={image?.length ? [image] : []}
                                         path={`customers/${values.customerId}/quotations`}
                                         onSuccess={() => { }} />
                                 </div>
                             </MinimalAccordion>
                         </div>
+                    }
                     case CustomerComponentEnum.ThreeDDesign: {
                         const images = {
                             first: _.get(component, 'data.0', ''),
@@ -280,52 +284,20 @@ export function CustomerActionForm(props: TProps) {
                                                 </div>
                                                 )
                                             })}
-                                            {/* {_.chunk(CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, 2)?.map((chunk, j) => {
-
-                                                return chunk?.map((item) => {
-                                                    const renderRow = () => {
-                                                        if (item.label?.includes('Image')) {
-                                                            return <div className="">
-                                                                <ImageInput label={item.label}
-                                                                    key={j}
-                                                                    path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                    values={[data[item.value]]}
-                                                                    // values={[component.data[field.value]]}
-                                                                    onSuccess={() => { }}
-                                                                />
-                                                            </div>
-                                                        }
-                                                        return (<div className="bg-white" key={j}>
-                                                            <label className="block text-sm font-medium text-gray-700">
-                                                                {item.label}
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                {...register(`components.${i}.data.${k}.${item.value}`)}
-                                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                            />
-                                                            {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
-                                                        </div>
-                                                        )
-                                                    }
-                                                    return renderRow()
-
-                                                })
-                                            })} */}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'image')?.map((item, j) => {
+                                                const value = data[item.value]
+                                                const items = value?.length ? [value] : []
                                                 return <div key={j}>
                                                     <ImageInput label={item.label}
                                                         key={j}
                                                         path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                        values={[data[item.value]]}
-                                                        // values={[component.data[field.value]]}
+                                                        values={items}
                                                         onSuccess={() => { }}
                                                     />
                                                 </div>
                                             })}
-
                                         </div>
                                     </div>)
                                 })}
