@@ -82,7 +82,7 @@ const Team = () => {
                             return (
                                 <SwiperSlide key={person.id}>
                                     <div className="text-black flex flex-col items-center pb-10 gap-1">
-                                        <div className="h-72 w-64 mb-24 lg:mb-4">
+                                        <div className="h-72 w-80 mb-48 lg:mb-4">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={person.img}
@@ -90,7 +90,7 @@ const Team = () => {
                                                 className="w-full h-full rounded-3xl"
                                             />
                                         </div>
-                                        <div className="mt-10 flex flex-col items-center absolute text-white bottom-14 w-full">
+                                        <div className="flex flex-col items-center absolute text-white bottom-14 w-full">
                                             <h1 className="text-2xl lg:text-xl font-bold">
                                                 {person.name}
                                             </h1>
