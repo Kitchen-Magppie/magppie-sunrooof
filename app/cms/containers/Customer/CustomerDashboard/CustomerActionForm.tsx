@@ -283,8 +283,8 @@ export function CustomerActionForm(props: TProps) {
 
                                     <ImageInput
                                         label='#2'
-                                        values={images.last?.length ? [images.last] : []}
-                                        path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                        values={images?.last?.length ? [images.last] : []}
+                                        path={`customers/${values?.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
                                         onSuccess={(e) => {
                                             setValue(`components.${i}.data.1`, e[0])
                                         }}
