@@ -58,7 +58,7 @@ const Layout2dDesign = () => {
                     spaceBetween={30}
                     zoom={true}
                     modules={[Mousewheel, Scrollbar, Zoom]}
-                    className="w-full h-full overflow-hidden"
+                    className=""
                     scrollbar={{ draggable: true }}
                     onSwiper={setSwiperInstance}
                     onSlideChange={(swiper) =>
@@ -69,14 +69,14 @@ const Layout2dDesign = () => {
                         return (
                             <SwiperSlide
                                 key={index}
-                                className="flex items-center justify-center h-full !w-full"
+                                className="flex items-center justify-center h-full !w-full mb-16"
                             >
-                                <div className="border border-white swiper-zoom-container h-full w-full">
+                                <div className="border border-white swiper-zoom-container">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={image}
                                         alt=""
-                                        className="block w-full h-full object-contain"
+                                        className="block w-[900px] h-full object-contain"
                                     />
                                 </div>
                             </SwiperSlide>
