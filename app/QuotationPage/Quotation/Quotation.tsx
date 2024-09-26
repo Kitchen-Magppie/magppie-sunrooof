@@ -1,7 +1,6 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import ClientDetails from './ClientDetails'
 import { TCustomerComponentQuotationItem } from '../../../types'
-type TProps = { item: TCustomerComponentQuotationItem }
 
 const Quotation = (props: TProps) => {
     return (
@@ -21,3 +20,4 @@ const Quotation = (props: TProps) => {
 }
 
 export default Quotation
+type TProps = { item: TCustomerComponentQuotationItem }

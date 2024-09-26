@@ -17,8 +17,8 @@ export default function ImageInput(props: TImageActionProps) {
     const onRemove = useCallback((e: string) => {
         // StorageActions.remove(e)
         setCorpus((prev) => ({ ...prev, values: prev.values?.filter((row) => row !== e) }))
-        props.onSuccess(corpus.values?.filter((row) => row !== e))
-    }, [corpus.values, props])
+        // props.onSuccess(corpus.values?.filter((row) => row !== e))
+    }, [])
 
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files)
