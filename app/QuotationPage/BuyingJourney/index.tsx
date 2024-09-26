@@ -6,7 +6,7 @@ const BuyingJourney = () => {
             <div className="w-full hidden lg:flex flex-col items-center justify-center py-20">
                 {/* Header */}
                 <div className="flex items-center justify-center bg-[#1E1E1E] mb-10 py-10 w-full">
-                    <h1 className="text-7xl font-bold text-white">
+                    <h1 className="text-5xl text-white">
                         Buying Journey
                     </h1>
                 </div>
