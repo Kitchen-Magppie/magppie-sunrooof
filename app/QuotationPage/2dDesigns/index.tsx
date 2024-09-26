@@ -15,10 +15,8 @@ import 'swiper/css/zoom'
 import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
 //Icons
-// @ts-expect-error svg-issue
-import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
-// @ts-expect-error svg-issue
-import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
+import ArrowUpIcon from '../../../assets/icons/arrowUp.svg'
+import ArrowDownIcon from '../../../assets/icons/arrowDown.svg'
 
 //hooks
 import { useMedia } from 'react-use'
@@ -123,16 +121,18 @@ const Layout2dDesign = () => {
                     </Swiper>
                     <div className="flex items-center justify-center flex-col gap-8">
                         {selectedLayout > 0 && (
-                            <ArrowUpIcon
+                            <img src={ArrowUpIcon}
                                 onClick={() => onPrev()}
                                 className="text-white p-2 w-20 fill-[#78746c]"
-                            ></ArrowUpIcon>
+                            />
                         )}
                         {selectedLayout < _images.length - 1 && (
-                            <ArrowDownIcon
+                            <img
+                                src={ArrowDownIcon}
                                 onClick={() => onNext()}
                                 className="text-white p-2 w-20 fill-[#78746c]"
-                            ></ArrowDownIcon>
+                            />
+
                         )}
                     </div>
                 </>
@@ -151,14 +151,14 @@ const Layout2dDesign = () => {
                     <div className="flex">{renderSwiper}</div>
                     <ProjectDetails
                         selectedLayout={selectedLayout}
-                        // isMobile={isMobile}
+                    // isMobile={isMobile}
                     />
                 </div>
             ) : (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <ProjectDetails
                         selectedLayout={selectedLayout}
-                        // isMobile={isMobile}
+                    // isMobile={isMobile}
                     />
                     <div className="flex">{renderSwiper}</div>
                 </div>
