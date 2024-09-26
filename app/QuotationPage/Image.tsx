@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { QuotationMock as _data } from '../cms/mocks'
+// import { QuotationMock as _data } from '../cms/mocks'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
 
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,20 +8,23 @@ import { motion, AnimatePresence } from 'framer-motion'
 import 'swiper/css'
 
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { TCustomerComponentComparisonItem } from '../../types'
 
-const ImageComparison = () => {
+type TProps = { item: TCustomerComponentComparisonItem }
+const ImageComparison = (props: TProps) => {
     const [view, setView] = useState('before')
     const [currentSlide, setCurrentSlide] = useState(0)
-    const slides = [
-        {
-            before: _data.Comparison.Row1.Before,
-            after: _data.Comparison.Row1.After,
-        },
-        {
-            before: _data.Comparison.Row2.Before,
-            after: _data.Comparison.Row2.After,
-        },
-    ]
+    // const slides = [
+    //     {
+    //         before: _data.Comparison.Row1.Before,
+    //         after: _data.Comparison.Row1.After,
+    //     },
+    //     {
+    //         before: _data.Comparison.Row2.Before,
+    //         after: _data.Comparison.Row2.After,
+    //     },
+    // ]
+    const slides = props.item.data?.map((item) => item.image)
 
     const variants = {
         enter: (direction) => {
@@ -44,16 +47,16 @@ const ImageComparison = () => {
 
     const swipe = (direction) => {
         const newIndex =
-            (currentSlide + direction + slides.length) % slides.length
+            (currentSlide + direction + props.item.data.length) % slides.length
         setCurrentSlide(newIndex)
     }
 
     return (
         <div className="w-full bg-gray-100 flex flex-col items-center justify-center py-20">
             <div className="flex items-center justify-center text-center">
-                <h1 className="text-6xl w-full px-4 mb-8">
+                <h1 className="text-5xl w-full px-4 mb-8">
                     Witness the change After
-                    <span className="font-bold"> SUNROOF</span>
+                    <span className="font-bold"> SUNROOOF</span>
                 </h1>
             </div>
             <div className="w-[700px] h-[650px] lg:h-[800px] relative bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -93,21 +96,19 @@ const ImageComparison = () => {
                     <div className="border-2 p-2 rounded-md shadow-md">
                         <button
                             onClick={() => setView('before')}
-                            className={`px-6 py-2.5 text-2xl lg:text-lg ${
-                                view === 'before'
-                                    ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
-                                    : 'bg-gray-100 text-gray-600'
-                            }`}
+                            className={`px-6 py-2.5 text-2xl lg:text-lg ${view === 'before'
+                                ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
+                                : 'bg-gray-100 text-gray-600'
+                                }`}
                         >
                             Before
                         </button>
                         <button
                             onClick={() => setView('after')}
-                            className={`px-6 py-2.5 text-2xl lg:text-lg ${
-                                view === 'after'
-                                    ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
-                                    : 'bg-gray-100 text-gray-600'
-                            }`}
+                            className={`px-6 py-2.5 text-2xl lg:text-lg ${view === 'after'
+                                ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
+                                : 'bg-gray-100 text-gray-600'
+                                }`}
                         >
                             After
                         </button>

@@ -55,7 +55,7 @@ export enum CustomerComponentEnum {
     None = ''
 }
 
-type TCustomerComponentDesign3DItem = {
+export type TCustomerComponentDesign3DItem = {
     value: CustomerComponentEnum.ThreeDDesign,
     data: string[]
 }

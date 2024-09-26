@@ -14,8 +14,8 @@ import { Grid, FreeMode, Scrollbar } from 'swiper/modules'
 const Clients = () => {
     const isMobile = useMedia('(orientation: portrait)')
     return (
-        <div className="bg-[#f9f5ef] py-20" id="clients">
-            <h1 className="text-black text-6xl lg:text-7xl text-center pb-10 mx-5">
+        <div className="bg-[#77726c] text-white py-20" id="clients">
+            <h1 className="text-5xl lg:text-6xl text-center pb-10 mx-5">
                 The ones who chose <span className="font-bold">SUNROOOF</span>
             </h1>
             {isMobile ? (
@@ -37,7 +37,7 @@ const Clients = () => {
                     {clients.map((client) => {
                         return (
                             <SwiperSlide key={client.id}>
-                                <div className="text-black flex flex-col items-center pb-10 gap-1">
+                                <div className="flex flex-col items-center pb-10 gap-1">
                                     <div className="h-72 w-72 lg:mb-4">
                                         <LazyLoadImage
                                             effect="blur"
@@ -46,23 +46,6 @@ const Clients = () => {
                                             className="w-full h-full rounded-3xl"
                                         />
                                     </div>
-                                    {/* <div className="mt-10 flex flex-col items-center">
-                                        <h1 className="text-2xl lg:text-xl font-bold">
-                                            {person.name}
-                                        </h1>
-                                        <p className="text-2xl lg:text-xl">
-                                            {person.positon}
-                                        </p>
-                                        <p className="text-2xl lg:text-xl">
-                                            {person.country}
-                                        </p>
-                                        <LazyLoadImage
-                                            effect="blur"
-                                            className="w-15 h-10 mt-2"
-                                            src={person.countryLogo}
-                                            alt=""
-                                        />
-                                    </div> */}
                                 </div>
                             </SwiperSlide>
                         )
@@ -82,8 +65,6 @@ const Clients = () => {
                                     src={client.img}
                                     alt=""
                                 />
-                                {/* <h1>{client.heading}</h1>
-                            <p>{client.subHeading}</p> */}
                             </div>
                         )
                     })}
