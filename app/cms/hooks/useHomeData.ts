@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { useParams } from "react-router-dom";
+
 import { useAppSelector } from "../../../redux";
 import { useFirebaseCmsCustomerListener } from "../utils/firebase";
 import { DEFAULT_CUSTOMER } from "../mocks";
@@ -10,7 +12,6 @@ import {
     TCustomerComponentDesign3DItem,
     TCustomerComponentQuotationItem
 } from "../../../types";
-import { useParams } from "react-router-dom";
 
 export default function useHomeData() {
     useFirebaseCmsCustomerListener()
