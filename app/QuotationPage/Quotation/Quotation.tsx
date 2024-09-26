@@ -7,7 +7,7 @@ const Quotation = (props: TProps) => {
         <div className="flex flex-col justify-center items-center py-10" id='quotation'>
             <h1 className="text-5xl mb-10">Quotation</h1>
             <div className="flex flex-col items-center justify center px-24">
-                <ClientDetails />
+                <ClientDetails item={props.item} />
                 <LazyLoadImage
                     effect="blur"
                     src={props.item.data.invoiceUrl}
