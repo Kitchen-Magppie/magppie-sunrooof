@@ -54,7 +54,7 @@ const ImageComparison = (props: TProps) => {
     return (
         <div className="w-full bg-gray-100 flex flex-col items-center justify-center py-20">
             <div className="flex items-center justify-center text-center">
-                <h1 className="text-5xl w-full px-4 mb-8">
+                <h1 className="text-5xl lg:text-6xl w-full px-4 mb-8">
                     Witness the change After
                     <span className="font-bold"> SUNROOOF</span>
                 </h1>
@@ -105,7 +105,7 @@ const ImageComparison = (props: TProps) => {
                         </button>
                         <button
                             onClick={() => setView('after')}
-                            className={`px-6 py-2.5 text-2xl lg:text-lg ${view === 'after'
+                            className={`px-6 py-2 text-2xl lg:text-lg ${view === 'after'
                                 ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
                                 : 'bg-gray-100 text-gray-600'
                                 }`}
@@ -118,15 +118,15 @@ const ImageComparison = (props: TProps) => {
                 <div className="flex space-x-2 mt-5">
                     <button
                         onClick={() => swipe(-1)}
-                        className="p-2 bg-white rounded-full shadow-md"
+                        className="py-3 px-5 bg-[#615b58] text-white rounded-lg shadow-md"
                     >
-                        <FaArrowLeft className="h-8 w-8 lg:h-5 lg:w-5" />
+                        <FaArrowLeft className="h-8 w-8 lg:h-4 lg:w-4" />
                     </button>
                     <button
                         onClick={() => swipe(1)}
-                        className="p-2 bg-white rounded-full shadow-md"
+                        className="py-3 px-5 bg-[#615b58] text-white rounded-lg shadow-md"
                     >
-                        <FaArrowRight className="h-8 w-8 lg:h-5 lg:w-5" />
+                        <FaArrowRight className="h-8 w-8 lg:h-4 lg:w-4" />
                     </button>
                 </div>
             </div>
