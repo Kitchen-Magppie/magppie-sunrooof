@@ -1,14 +1,14 @@
-import { QuotationMock as _data } from '../cms/mocks'
-
-const Hero = () => {
+import { TCustomerComponentClientItem } from '../../types'
+// import { QuotationMock as _data } from '../cms/mocks'
+const Hero = (props: TProps) => {
     return (
         <div className="flex flex-col pt-20 justify-center items-center min-h-screen w-full bg-[#1B1A1A] text-white">
             <div className="flex flex-col text-center">
                 <h1 className="text-5xl lg:text-7xl uppercase">
-                    {_data.Client.remark}
+                    {props.item.data.description}
                 </h1>
                 <hr className="bg-white w-[600px] lg:w-[900px] h-1 mt-4 rounded-full lg:mt-2" />
-                <h1 className="text-6xl py-10">{_data.Client.name}</h1>
+                <h1 className="text-6xl py-10">{props.item.data.name}</h1>
             </div>
             <div className="flex flex-col text-center mt-10">
                 <p className=" text-5xl lg:text-7xl mb-2 font-cursive">
@@ -26,12 +26,12 @@ const Hero = () => {
                     assembled in
                     <span className="font-sans"> INDIA</span>
                 </p> */}
-                {/* <h1 className=" text-6xl mt-1 lg:text-8xl pb-1"></h1>
+            {/* <h1 className=" text-6xl mt-1 lg:text-8xl pb-1"></h1>
                 <p className=" text-6xl mt-1 lg:text-8xl pb-1 font-cursive"></p>
                 <h1 className="text-6xl mt-1 lg:text-8xl"></h1> */}
             {/* </div> */}
         </div>
     )
 }
-
 export default Hero
+type TProps = { item: TCustomerComponentClientItem }

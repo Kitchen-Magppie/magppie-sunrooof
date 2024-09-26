@@ -34,7 +34,7 @@ const QuotationPage = () => {
     }
     return (<div className='overflow-x-hidden'>
         <Navbar />
-        <Hero />
+        <Hero item={components[CustomerComponentEnum.Client]} />
         {/* <ClientName /> */}
         {/* <DesignedBy /> */}
         {/* <Header /> */}
