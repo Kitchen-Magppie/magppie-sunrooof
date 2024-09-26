@@ -13,15 +13,15 @@ import { Pagination } from 'swiper/modules'
 
 const Features = () => {
     return (
-        <div id='features'>
+        <div id="features">
             <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto py-20 px-4">
-                <div className="flex flex-col items-center justify-center mb-10 text-center">
+                <div className="flex flex-col mb-24 items-center justify-center text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
                     <h1 className="text-4xl font-semibold capitalize">
                         Benefits for offices
                     </h1>
                 </div>
-                <div className="flex text-center flex-col mt-5 items-center lg:flex-row w-full">
+                <div className="flex text-center flex-col items-center lg:flex-row w-full">
                     {features.map((feature) => (
                         <div
                             key={feature.id}
@@ -42,10 +42,10 @@ const Features = () => {
                         </div>
                     ))}
                 </div>
-                <img src={threeLines} alt="" />
+                <img className="mt-20" src={threeLines} alt="" />
             </div>
             <div className="flex flex-col lg:hidden py-20 container mx-auto w-full">
-                <div className="flex flex-col items-center justify-center mb-10 text-center">
+                <div className="flex flex-col items-center justify-center mb-24 text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
                     <h1 className="text-4xl font-semibold capitalize">
                         Benefits for offices
@@ -68,10 +68,10 @@ const Features = () => {
                                         className="h-40 w-40"
                                         alt={feature.heading}
                                     />
-                                    <h2 className="text-4xl lg:text-xl pt-4 font-medium">
+                                    <h2 className="text-5xl lg:text-xl pt-4 font-medium">
                                         {feature.heading}
                                     </h2>
-                                    <p className="pt-2 text-2xl lg:text-base mb-12">
+                                    <p className="mt-6 text-3xl lg:text-base mb-20">
                                         {feature.content}
                                     </p>
                                 </div>
