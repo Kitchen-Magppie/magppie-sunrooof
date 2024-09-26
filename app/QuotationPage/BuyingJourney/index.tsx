@@ -6,7 +6,7 @@ const BuyingJourney = () => {
             <div className="w-full hidden lg:flex flex-col items-center justify-center py-20">
                 {/* Header */}
                 <div className="flex items-center justify-center bg-[#1E1E1E] mb-10 py-10 w-full">
-                    <h1 className="text-6xl font-bold text-white">
+                    <h1 className="text-7xl font-bold text-white">
                         Buying Journey
                     </h1>
                 </div>
@@ -75,7 +75,7 @@ const BuyingJourney = () => {
             </div>
             <div className="w-full lg:hidden flex flex-col items-center justify-center py-20">
                 <div className="flex items-center justify-center bg-[#1E1E1E] mb-10 py-10 w-full">
-                    <h1 className="text-6xl font-bold text-white">
+                    <h1 className="text-5xl text-white">
                         Buying Journey
                     </h1>
                 </div>
@@ -90,7 +90,7 @@ const BuyingJourney = () => {
                                     <span className="text-6xl lg:text-4xl font-bold">
                                         {step.id}
                                     </span>
-                                    <span className="text-center text-2xl lg:text-xl font-semibold mt-2">
+                                    <span className="text-center text-2xl font-semibold lg:text-xl mt-2">
                                         {step.heading}
                                     </span>
                                     <span className="text-center text-lg lg:text-sm text-gray-500">

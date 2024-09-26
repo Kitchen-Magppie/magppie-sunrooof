@@ -54,9 +54,9 @@ const ImageComparison = (props: TProps) => {
     return (
         <div className="w-full bg-gray-100 flex flex-col items-center justify-center py-20">
             <div className="flex items-center justify-center text-center">
-                <h1 className="text-6xl w-full px-4 mb-8">
+                <h1 className="text-5xl w-full px-4 mb-8">
                     Witness the change After
-                    <span className="font-bold"> SUNROOF</span>
+                    <span className="font-bold"> SUNROOOF</span>
                 </h1>
             </div>
             <div className="w-[700px] h-[650px] lg:h-[800px] relative bg-white rounded-2xl shadow-lg overflow-hidden">
