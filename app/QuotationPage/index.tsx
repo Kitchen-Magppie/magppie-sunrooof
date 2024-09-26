@@ -21,7 +21,12 @@ import { useFirebaseCmsCustomerListener } from '../cms/utils/firebase'
 import { useAppSelector } from '../../redux'
 import { useMemo } from 'react'
 import { DEFAULT_CUSTOMER } from '../cms/mocks'
-import { CustomerComponentEnum, TCustomerComponentClientItem, TCustomerComponentComparisonDataItem, TCustomerComponentQuotationItem } from '../../types'
+import {
+    CustomerComponentEnum,
+    TCustomerComponentClientItem,
+    TCustomerComponentComparisonDataItem,
+    TCustomerComponentQuotationItem
+} from '../../types'
 import { PageProgress } from '../../components'
 
 const QuotationPage = () => {
@@ -42,7 +47,6 @@ const QuotationPage = () => {
 
     }, [value])
 
-    console.log(component)
     if (loading) {
         return <PageProgress />
     }
@@ -62,9 +66,7 @@ const QuotationPage = () => {
             {/* <ProjectDetails /> */}
             <TwodDesigns />
             <ThreedDesigns />
-            <Quotation
-                item={component[CustomerComponentEnum.Quotation]}
-            />
+            <Quotation item={component[CustomerComponentEnum.Quotation]} />
             <TermsandConditions />
             <Guarantee />
             <BuyingJourney />
