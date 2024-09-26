@@ -4,7 +4,7 @@ import About from './About'
 // import BeforeAfter from './BeforeAfter/BeforeAfter'
 // import ClientName from './ClientName'
 import Clients from './Clients'
-// import DesignedBy from './DesignedBy'
+import DesignedBy from './DesignedBy'
 import Features from './Features'
 // import Footer from './Footer'
 import Guarantee from './Guarantee'
@@ -36,13 +36,13 @@ const QuotationPage = () => {
         <Navbar />
         <Hero item={components[CustomerComponentEnum.Client]} />
         {/* <ClientName /> */}
-        {/* <DesignedBy /> */}
         {/* <Header /> */}
         <About />
         <Clients />
         <ImageComparison item={components[CustomerComponentEnum.Comparison]} />
         {/* <BeforeAfter /> */}
         <Features />
+        <DesignedBy />
         <Team />
         {/* <ProjectDetails /> */}
         <TwodDesigns item={components[CustomerComponentEnum.TwoDDesign]} />

@@ -5,6 +5,7 @@ export default {
             fontFamily: {
                 sans: ['SF Pro Display', 'sans-serif'],
                 cursive: ['Dancing Script', 'cursive'],
+                kudryashev: ['KudryashevDisplayContrast', 'sans-serif'],
             },
             fontWeight: {
                 thin: 100,
