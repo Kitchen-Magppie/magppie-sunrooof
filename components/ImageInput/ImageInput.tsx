@@ -15,10 +15,10 @@ export default function ImageInput(props: TImageActionProps) {
     const StorageActions = useFirebaseStorageActions()
 
     const onRemove = useCallback((e: string) => {
-        StorageActions.remove(e)
+        // StorageActions.remove(e)
         setCorpus((prev) => ({ ...prev, values: prev.values?.filter((row) => row !== e) }))
         props.onSuccess(corpus.values?.filter((row) => row !== e))
-    }, [StorageActions, corpus.values, props])
+    }, [corpus.values, props])
 
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files)
