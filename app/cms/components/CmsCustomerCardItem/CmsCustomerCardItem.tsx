@@ -34,20 +34,3 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
         </div> */}
     </div>);
 }
-
-// const STATUS_ITEM = (variant: CmsCardEnum) => {
-//     switch (variant) {
-//         case CmsCardEnum.Complete:
-//             return ({
-//                 classes: 'bg-green-500',
-//                 icon: <MdDone size={24} />
-//             })
-
-//         case CmsCardEnum.Pending:
-//             return ({
-//                 classes: 'bg-yellow-500', icon: <RiProgress1Line size={24} />
-//             })
-//         default:
-//             return ({ classes: '', icon: <></> })
-//     }
-// }
