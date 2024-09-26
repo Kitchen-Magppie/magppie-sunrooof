@@ -123,14 +123,13 @@ const Layout2dDesign = () => {
                     </Swiper>
                     <div className="flex items-center justify-center flex-col gap-8">
                         {selectedLayout > 0 && (
-                            <ArrowUpIcon src={ArrowUpIcon}
+                            <ArrowUpIcon
                                 onClick={() => onPrev()}
                                 className="text-white p-2 w-20 fill-[#78746c]"
                             />
                         )}
                         {selectedLayout < _images.length - 1 && (
                             <ArrowDownIcon
-                                src={ArrowDownIcon}
                                 onClick={() => onNext()}
                                 className="text-white p-2 w-20 fill-[#78746c]"
                             />
