@@ -1,20 +1,16 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import ThreedOne from '../assets/3d/3done.png'
-import ThreedTwo from '../assets/3d/3dtwo.png'
-
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+import { EffectCoverflow, Mousewheel, Scrollbar } from 'swiper/modules'
+import { useMedia } from 'react-use'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
-import { EffectCoverflow, Mousewheel, Scrollbar } from 'swiper/modules'
-import { useMedia } from 'react-use'
 
-const images = [ThreedOne, ThreedTwo]
+import { TCustomerComponentDesign3DItem } from '../../../types'
 
-const ThreedDesigns = () => {
+
+const ThreedDesigns = (props: { item: TCustomerComponentDesign3DItem }) => {
     const isMobile = useMedia('(orientation: portrait)')
-
     return (
         <div className="container max-w-5xl py-20 mt-28 w-full mx-auto" id='3d'>
             <div className="flex flex-col items-center justify-center mb-10 text-center">
@@ -40,7 +36,7 @@ const ThreedDesigns = () => {
                     className="mySwiper pb-20"
                     scrollbar={{ draggable: true }}
                 >
-                    {images.map((feature, index) => (
+                    {props.item.data.map((feature, index) => (
                         <SwiperSlide key={index} className="bg-cover bg-center">
                             <div className="flex items-center mx-10 w-[620px] h-[620px]">
                                 <LazyLoadImage
