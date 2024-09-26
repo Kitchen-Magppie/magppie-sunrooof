@@ -40,7 +40,7 @@ const QuotationPage = () => {
         {/* <Header /> */}
         <About />
         <Clients />
-        <ImageComparison />
+        <ImageComparison item={components[CustomerComponentEnum.Comparison]} />
         {/* <BeforeAfter /> */}
         <Features />
         <Team />
