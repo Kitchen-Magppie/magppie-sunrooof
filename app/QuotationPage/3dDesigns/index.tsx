@@ -16,7 +16,7 @@ const ThreedDesigns = () => {
     const isMobile = useMedia('(orientation: portrait)')
 
     return (
-        <div className="container max-w-5xl py-20 w-full mx-auto" id='3d'>
+        <div className="container max-w-5xl py-20 mt-28 w-full mx-auto" id='3d'>
             <div className="flex flex-col items-center justify-center mb-10 text-center">
                 <h1 className="text-5xl pb-5 w-full">
                     <span>3D Designs</span>

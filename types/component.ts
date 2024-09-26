@@ -109,7 +109,7 @@ export const SPECIAL_CHARACTER_TO_DOM = (text: string) => {
 
 
 const comparisonDataItemSchema = yup.object().shape({
-    value: yup.string().required(),
+    value: yup.string().nullable(),
     image: yup.object().shape({
         before: yup.string().required(),
         after: yup.string().required(),
@@ -183,7 +183,7 @@ const customerComponentSchema = yup.lazy((value) => {
 export const validateCustomerItemSchema = yup.object().shape({
     name: yup.string().required(),
     components: yup.array().of(customerComponentSchema).required(),
-    id: yup.string().required(),
+    id: yup.string().nullable(),
     customerId: yup.string().required(),
     at: yup.object().shape({
         created: yup.date().required(),

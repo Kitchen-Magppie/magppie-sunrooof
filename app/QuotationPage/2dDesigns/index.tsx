@@ -14,7 +14,6 @@ import 'swiper/css/navigation'
 import 'swiper/css/zoom'
 import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
-
 //Icons
 // @ts-expect-error svg-issue
 import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
@@ -59,7 +58,7 @@ const Layout2dDesign = () => {
                     spaceBetween={30}
                     zoom={true}
                     modules={[Mousewheel, Scrollbar, Zoom]}
-                    className="w-full h-full overflow-hidden"
+                    className=""
                     scrollbar={{ draggable: true }}
                     onSwiper={setSwiperInstance}
                     onSlideChange={(swiper) =>
@@ -70,14 +69,14 @@ const Layout2dDesign = () => {
                         return (
                             <SwiperSlide
                                 key={index}
-                                className="flex items-center justify-center h-full !w-full"
+                                className="flex items-center justify-center h-full !w-full mb-16"
                             >
-                                <div className="border border-white swiper-zoom-container h-full w-full">
+                                <div className="border border-white swiper-zoom-container">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={image}
                                         alt=""
-                                        className="block w-full h-full object-contain"
+                                        className="block w-[900px] h-full object-contain"
                                     />
                                 </div>
                             </SwiperSlide>
@@ -142,15 +141,28 @@ const Layout2dDesign = () => {
     }, [isMobile, onNext, onPrev, selectedLayout])
 
     return (
-        <div className="flex flex-col justify-center items-center py-20 px-4" id='2d'>
+        <div
+            className="flex flex-col justify-center items-center py-20 px-4"
+            id="2d"
+        >
             <h1 className="text-5xl mb-12">2D Designs</h1>
-            <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
-                <ProjectDetails
-                    selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
-                />
-                <div className="flex">{renderSwiper}</div>
-            </div>
+            {isMobile ? (
+                <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
+                    <div className="flex">{renderSwiper}</div>
+                    <ProjectDetails
+                        selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
+                    />
+                </div>
+            ) : (
+                <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
+                    <ProjectDetails
+                        selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
+                    />
+                    <div className="flex">{renderSwiper}</div>
+                </div>
+            )}
         </div>
     )
 }

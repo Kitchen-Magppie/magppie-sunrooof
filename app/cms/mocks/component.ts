@@ -74,7 +74,7 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     },
     {
         value: CustomerComponentEnum.Comparison,
-        data: []
+        data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
     },
     {
         value: CustomerComponentEnum.Quotation,

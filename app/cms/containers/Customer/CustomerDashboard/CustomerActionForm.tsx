@@ -17,27 +17,32 @@ import {
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
+    DEFAULT_CUSTOMER,
 } from '../../../mocks';
 import { MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
+import { useFirebaseCustomerAction } from '../../../utils/firebase/customer';
 
 export function CustomerActionForm(props: TProps) {
 
     const [corpus, setCorpus] = useState({ isSubmitting: false })
     const { mode, item } = props;
 
+    const isCreateAction = mode === ComponentModeEnum.Create
+
     const {
         watch,
         register,
         handleSubmit,
+        setValue,
         formState: { errors }
     } = useForm({
-        mode: "onChange",
         resolver: yupResolver(validateCustomerItemSchema),
-        defaultValues: item
+        defaultValues: { ...item, customerId: isCreateAction ? _.uuid() : item.customerId }
     });
 
     const values = watch()
+
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return <p className="text-red-500 text-xs mt-1">
@@ -47,11 +52,32 @@ export function CustomerActionForm(props: TProps) {
         return ''
     }, [errors])
 
-    const onSubmit = (data: TCustomerItem) => {
-        console.log('Form Data:', data);
-    };
+    const action = useFirebaseCustomerAction()
+    const onSubmit = handleSubmit((data: TCustomerItem) => {
+        setCorpus((prev) => ({ ...prev, isSubmitting: true }))
+        setTimeout(() => {
+            if (DEFAULT_CUSTOMER.id !== item.customerId) {
 
-    return (<form onSubmit={handleSubmit(onSubmit)}>
+                if (isCreateAction) {
+                    action.add(data)
+                }
+                else {
+
+                    action.edit({
+                        ...data,
+                        at: {
+                            ...data.at,
+                            updated: new Date()
+                        }
+                    })
+                }
+            }
+            setCorpus((prev) => ({ ...prev, isSubmitting: false }))
+
+        }, 2000)
+    });
+
+    return (<form onSubmit={onSubmit}>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
                 <label className="block text-sm font-medium text-gray-700">
@@ -110,22 +136,32 @@ export function CustomerActionForm(props: TProps) {
                             <MinimalAccordion isExpanded title={title}>
                                 <div className="grid grid-cols-2 gap-1">
                                     {(component as TCustomerComponentComparisonItem).data.map((item, j) => {
+                                        const data = {
+                                            before: item.image.before?.length ? [item.image.before] : [],
+                                            after: item.image.after?.length ? [item.image.after] : [],
+                                        }
                                         return <div key={`component-${i}-${j}`}>
                                             <div className="">#{j + 1}</div>
                                             <ImageInput
-                                                values={[item.image.before]}
-                                                path=''
+                                                values={data.before}
+                                                path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
                                                 label='Before'
-                                                onSuccess={() => {
-                                                    // setValue(`components.${i}.data.${j}.image.before`, '')
-                                                }} />
+                                                onSuccess={(e) => {
+                                                    setValue(`components.${i}.data.${j}.image.before`, e[0])
+                                                }}
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.${j}.image.before`)}
+
                                             <ImageInput
-                                                values={[item.image.after]}
-                                                path=''
+                                                values={data.after}
+                                                path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
                                                 label='After'
-                                                onSuccess={() => {
-                                                    // setValue(`components.${i}.data.${j}.image.after`, '')
-                                                }} />
+                                                onSuccess={(e) => {
+                                                    setValue(`components.${i}.data.${j}.image.after`, e[0])
+                                                }}
+                                            />
+                                            {renderErrorMessage(`components.${i}.data.${j}.image.after`)}
+
                                         </div>
                                     })}
 
@@ -133,7 +169,8 @@ export function CustomerActionForm(props: TProps) {
                             </MinimalAccordion>
                         </div>
                     }
-                    case CustomerComponentEnum.Quotation:
+                    case CustomerComponentEnum.Quotation: {
+                        const image = _.get(component, 'data.invoiceUrl', '')
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 <div className="flex flex-col gap-2 px-6">
@@ -179,9 +216,10 @@ export function CustomerActionForm(props: TProps) {
                                                 Created Date
                                             </label>
                                             <input
-                                                type="text"
+                                                type="date"
                                                 {...register(`components.${i}.data.createdDate`)}
-                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                                                placeholder="Created Date"
                                             />
                                             {renderErrorMessage(`components.${i}.data.createdDate`)}
                                         </div>
@@ -210,20 +248,25 @@ export function CustomerActionForm(props: TProps) {
                                             />
                                             {renderErrorMessage(`components.${i}.data.zone`)}
                                         </div>
-
                                     </div>
-
                                     <ImageInput label='Invoice URL'
-                                        values={[_.get(component, 'data.invoiceUrl', '')]}
-                                        path={`customers/${values.customerId}/quotations`}
-                                        onSuccess={() => { }} />
+                                        values={image?.length ? [image] : []}
+                                        path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
+
+                                        onSuccess={(e) => {
+                                            setValue(`components.${i}.data.invoiceUrl`, e[0])
+                                        }}
+                                    />
+                                    {renderErrorMessage(`components.${i}.data.invoiceUrl`)}
+
                                 </div>
                             </MinimalAccordion>
                         </div>
+                    }
                     case CustomerComponentEnum.ThreeDDesign: {
                         const images = {
-                            first: _.get(component, 'data.0', ''),
-                            last: _.get(component, 'data.1', '')
+                            first: `${_.get(component, 'data.0', '') || ''}`,
+                            last: `${_.get(component, 'data.1', '') || ''}`
                         }
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
@@ -231,41 +274,39 @@ export function CustomerActionForm(props: TProps) {
                                     <ImageInput
                                         values={images.first?.length ? [images.first] : []}
                                         label='#1'
-                                        path='' onSuccess={() => { }}
+                                        path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                        onSuccess={(e) => {
+                                            setValue(`components.${i}.data.0`, e[0])
+                                        }}
                                     />
+                                    {renderErrorMessage(`components.${i}.data.0`)}
+
                                     <ImageInput
                                         label='#2'
-                                        values={images.last?.length ? [images.last] : []}
-                                        path='' onSuccess={() => { }}
+                                        values={images?.last?.length ? [images.last] : []}
+                                        path={`customers/${values?.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                        onSuccess={(e) => {
+                                            setValue(`components.${i}.data.1`, e[0])
+                                        }}
                                     />
+                                    {renderErrorMessage(`components.${i}.data.1`)}
+
                                 </div>
 
                             </MinimalAccordion>
                         </div>
                     }
                     case CustomerComponentEnum.TwoDDesign: {
-                        // console.log(component)
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
-                                    return (<div key={k} className="flex flex-col gap-2 px-6">
+                                    return (<div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`} className="flex flex-col gap-2 px-6">
                                         <div className='text-gray-400 italic  text-lg'>
                                             #{k + 1}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'text')?.map((item, j) => {
-                                                // if (item.label?.includes('Image')) {
-                                                //     return <div className="">
-                                                //         <ImageInput label={item.label}
-                                                //             key={j}
-                                                //             path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                //             values={[data[item.value]]}
-                                                //             // values={[component.data[field.value]]}
-                                                //             onSuccess={() => { }}
-                                                //         />
-                                                //     </div>
-                                                // }
-                                                return (<div className="bg-white" key={j}>
+                                                return (<div className="bg-white" key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}>
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         {item.label}
                                                     </label>
@@ -278,52 +319,24 @@ export function CustomerActionForm(props: TProps) {
                                                 </div>
                                                 )
                                             })}
-                                            {/* {_.chunk(CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, 2)?.map((chunk, j) => {
-
-                                                return chunk?.map((item) => {
-                                                    const renderRow = () => {
-                                                        if (item.label?.includes('Image')) {
-                                                            return <div className="">
-                                                                <ImageInput label={item.label}
-                                                                    key={j}
-                                                                    path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                    values={[data[item.value]]}
-                                                                    // values={[component.data[field.value]]}
-                                                                    onSuccess={() => { }}
-                                                                />
-                                                            </div>
-                                                        }
-                                                        return (<div className="bg-white" key={j}>
-                                                            <label className="block text-sm font-medium text-gray-700">
-                                                                {item.label}
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                {...register(`components.${i}.data.${k}.${item.value}`)}
-                                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                            />
-                                                            {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
-                                                        </div>
-                                                        )
-                                                    }
-                                                    return renderRow()
-
-                                                })
-                                            })} */}
                                         </div>
                                         <div className="grid grid-cols-2 gap-2">
                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter((item) => item.field === 'image')?.map((item, j) => {
-                                                return <div className="">
+                                                const value = data[item.value]
+                                                const items = value?.length ? [value] : []
+                                                return <div key={j}>
                                                     <ImageInput label={item.label}
                                                         key={j}
                                                         path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                        values={[data[item.value]]}
-                                                        // values={[component.data[field.value]]}
-                                                        onSuccess={() => { }}
+                                                        values={items}
+                                                        onSuccess={(e) => {
+                                                            setValue(`components.${i}.data.${k}.${item.value}`, e[0])
+                                                        }}
                                                     />
+                                                    {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
+
                                                 </div>
                                             })}
-
                                         </div>
                                     </div>)
                                 })}
@@ -336,15 +349,17 @@ export function CustomerActionForm(props: TProps) {
                 }
             })}
             {errors.components && <p>{errors.components.message}</p>}
+
+
             <button
                 disabled={corpus.isSubmitting}
                 type="submit"
-                onClick={() => {
-                    setCorpus({ isSubmitting: true })
-                }}
+                // onClick={() => {
+                //     setCorpus({ isSubmitting: true })
+                // }}
                 className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-                {mode === ComponentModeEnum.Create ? 'Create' : 'Edit'} Component
+                {isCreateAction ? 'Create' : 'Edit'} Component
                 {corpus.isSubmitting ? <AiOutlineLoading3Quarters className='text-xl animate-spin' /> : <IoCreateOutline className='text-xl' />}
             </button>
         </div>
@@ -352,7 +367,4 @@ export function CustomerActionForm(props: TProps) {
     );
 }
 
-type TProps = {
-    mode: ComponentModeEnum,
-    item: TCustomerItem
-}
+type TProps = { mode: ComponentModeEnum, item: TCustomerItem }
