@@ -2,20 +2,35 @@
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import dayjs from 'dayjs'
+import { useLocation } from "react-use";
+
 //====================================================================
 
 import { TCmsCustomerCardItem } from "../../types";
+import { useMemo } from "react";
+import { IoIosLink } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
+    const location = useLocation()
 
+    const publishedUrl = useMemo(() => {
+        if (props.item.id?.length)
+            return ([location.origin, 'quotation', props.item.id].join('/'))
+        return ''
+    }, [location.origin, props.item.id])
     return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out cursor-pointer"
         onClick={props.onClickModal}
     >
         <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-semibold">{props.item.name}</h2>
-            {/* <button className="border p-1 rounded-full border-gray-400 ">
-                <BsThreeDotsVertical />
-            </button> */}
+            <button className="border p-1 rounded-full border-gray-400  ">
+                {publishedUrl?.length ? (<Link to={publishedUrl} target="_blank">
+                    <IoIosLink className="cursor-pointer hover:text-blue-700"
+                    />
+                </Link>) : ''}
+
+            </button>
         </div>
         <div className="flex items-center mb-2 gap-2">
             <FaRegCalendarAlt size={24} />
@@ -34,20 +49,3 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
         </div> */}
     </div>);
 }
-
-// const STATUS_ITEM = (variant: CmsCardEnum) => {
-//     switch (variant) {
-//         case CmsCardEnum.Complete:
-//             return ({
-//                 classes: 'bg-green-500',
-//                 icon: <MdDone size={24} />
-//             })
-
-//         case CmsCardEnum.Pending:
-//             return ({
-//                 classes: 'bg-yellow-500', icon: <RiProgress1Line size={24} />
-//             })
-//         default:
-//             return ({ classes: '', icon: <></> })
-//     }
-// }

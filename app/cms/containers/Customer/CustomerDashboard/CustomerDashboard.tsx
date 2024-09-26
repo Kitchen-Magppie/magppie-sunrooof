@@ -10,7 +10,7 @@ import {
 import { CustomSimpleModal } from "../../../../../components";
 import { useFirebaseCmsCustomerListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
-import { INIT_CUSTOMER_ITEM } from "../../../mocks";
+import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from "../../../mocks";
 import { CustomerActionForm, useCustomerDashboard } from ".";
 
 export default function CustomerDashboard() {
@@ -71,8 +71,9 @@ export default function CustomerDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
                 {loading ? Array.from({ length: 5 })?.map((_, i) => <CardSkeleton key={i} />) : (data.values.components?.length ? (<>
                     {data.values.components.map((item, i) => {
+                        const isSecondaryRecord = item.customerId !== DEFAULT_CUSTOMER.customerId
                         const onClickModal = () => {
-                            if (item) {
+                            if (item && isSecondaryRecord) {
                                 action.onChangeModal({
                                     action: ComponentModeEnum.Edit,
                                     value: true,
