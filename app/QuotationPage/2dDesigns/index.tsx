@@ -127,13 +127,13 @@ const Layout2dDesign = (props: TProps) => {
                         {selectedLayout > 0 && (
                             <ArrowUpIcon
                                 onClick={() => onPrev()}
-                                className="text-white p-2 w-20 fill-[#78746c]"
+                                className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
                             />
                         )}
                         {selectedLayout < props.item.data?.length - 1 && (
                             <ArrowDownIcon
                                 onClick={() => onNext()}
-                                className="text-white p-2 w-20 fill-[#78746c]"
+                                className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
                             />
 
                         )}
