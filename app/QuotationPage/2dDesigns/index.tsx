@@ -15,8 +15,10 @@ import 'swiper/css/zoom'
 import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
 //Icons
-import ArrowUpIcon from '../../../assets/icons/arrowUp.svg'
-import ArrowDownIcon from '../../../assets/icons/arrowDown.svg'
+// @ts-expect-error svg-issue
+import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
+// @ts-expect-error svg-issue
+import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 
 //hooks
 import { useMedia } from 'react-use'
@@ -121,13 +123,13 @@ const Layout2dDesign = () => {
                     </Swiper>
                     <div className="flex items-center justify-center flex-col gap-8">
                         {selectedLayout > 0 && (
-                            <LazyLoadImage src={ArrowUpIcon}
+                            <ArrowUpIcon src={ArrowUpIcon}
                                 onClick={() => onPrev()}
                                 className="text-white p-2 w-20 fill-[#78746c]"
                             />
                         )}
                         {selectedLayout < _images.length - 1 && (
-                            <LazyLoadImage
+                            <ArrowDownIcon
                                 src={ArrowDownIcon}
                                 onClick={() => onNext()}
                                 className="text-white p-2 w-20 fill-[#78746c]"
