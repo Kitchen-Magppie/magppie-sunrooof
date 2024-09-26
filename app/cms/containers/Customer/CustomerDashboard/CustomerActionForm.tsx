@@ -1,8 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
+import { IoIosLink } from "react-icons/io";
 //====================================================================
 
 import {
@@ -19,9 +20,11 @@ import {
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
 } from '../../../mocks';
-import { MinimalAccordion } from '../../../components';
+import { CmsCopyClipboard, FieldCautation, MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
 import { useFirebaseCustomerAction } from '../../../utils/firebase/customer';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-use';
 
 export function CustomerActionForm(props: TProps) {
 
@@ -30,6 +33,13 @@ export function CustomerActionForm(props: TProps) {
 
     const isCreateAction = mode === ComponentModeEnum.Create
 
+    const location = useLocation()
+
+    const publishedUrl = useMemo(() => {
+        if (item.id?.length)
+            return ([location.origin, 'quotation', item.id].join('/'))
+        return ''
+    }, [item.id, location.origin])
     const {
         watch,
         register,
@@ -76,6 +86,26 @@ export function CustomerActionForm(props: TProps) {
 
         }, 2000)
     });
+    const renderPublishUrlContent = useMemo(() => {
+        return (publishedUrl?.length ? (<div className="flex flex-row gap-2 justify-between my-2">
+            <div className="flex gap-1 align-middle justify-center">
+                <button
+                    type="button"
+                    disabled
+                    className=" flex justify-center gap-3 flex-row align-middle w-full p-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                    <IoIosLink className='my-1' />
+                    Generated Link
+                </button>
+                <Link target='_blank' to={publishedUrl} className='text-blue-600 underline flex justify-center align-middle flex-col'>
+                    {publishedUrl}
+                </Link>
+            </div>
+            <CmsCopyClipboard text={publishedUrl} />
+        </div>) : <div className='mb-2'>
+            <FieldCautation label='NOTE' remark='Once all fields are valid, the URL will be generated automatically upon saving the form.' />
+        </div>);
+    }, [publishedUrl])
 
     return (<form onSubmit={onSubmit}>
         <div className="flex flex-col gap-2">
@@ -350,13 +380,11 @@ export function CustomerActionForm(props: TProps) {
             })}
             {errors.components && <p>{errors.components.message}</p>}
 
+            {renderPublishUrlContent}
 
             <button
                 disabled={corpus.isSubmitting}
                 type="submit"
-                // onClick={() => {
-                //     setCorpus({ isSubmitting: true })
-                // }}
                 className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 {isCreateAction ? 'Create' : 'Edit'} Component
