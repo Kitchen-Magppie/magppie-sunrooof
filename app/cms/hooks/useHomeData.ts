@@ -17,7 +17,7 @@ export default function useHomeData() {
     const components = useMemo(() => {
         const data = value.find((row) => row.customerId === DEFAULT_CUSTOMER.customerId)
         return ({
-            [CustomerComponentEnum.Comparison]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison) as unknown as TCustomerComponentComparisonItem[],
+            [CustomerComponentEnum.Comparison]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison) as unknown as TCustomerComponentComparisonItem,
             [CustomerComponentEnum.Client]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Client) as unknown as TCustomerComponentClientItem,
             [CustomerComponentEnum.TwoDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as unknown as TCustomerComponentDesign2DItem,
             [CustomerComponentEnum.ThreeDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.ThreeDDesign) as unknown as TCustomerComponentDesign3DItem,
