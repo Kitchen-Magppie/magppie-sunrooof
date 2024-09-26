@@ -59,7 +59,7 @@ const Team = () => {
         // </div>
         <>
             <div className="py-20 container mx-auto lg:max-w-5xl relative">
-                <h1 className="text-5xl pb-10 w-full text-center font-bold uppercase text-[#78746c]">
+                <h1 className="text-5xl pb-16 w-full text-center font-bold uppercase text-[#78746c]">
                     our team
                 </h1>
                 {isMobile ? (
