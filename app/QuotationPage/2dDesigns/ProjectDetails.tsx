@@ -25,7 +25,7 @@ const ProjectDetails = (props: TProps) => {
             </div>
             <div className="mb-2">
                 <span className="font-[400]">Ceiling Height on site :</span>{' '}
-                {props.item.callingHeightOnSite}
+                {props.item.ceilingHeightOnSite}
             </div>
             <div className="mb-2">
                 <span className="font-[400]">After Installation :</span>{' '}

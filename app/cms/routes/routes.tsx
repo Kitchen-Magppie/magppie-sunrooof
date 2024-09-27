@@ -10,8 +10,6 @@ import {
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
 import Customer from '../containers/Customer'
-import Dashboard from '../containers/Dashboard'
-// import { SiteComponent } from "./../containers"
 import { useAppService } from '../hooks'
 
 export default function CmsRoutes() {
@@ -32,15 +30,11 @@ export default function CmsRoutes() {
             },
             {
                 path: '',
-                element: <Dashboard />,
+                element: <Customer />,
             },
             {
                 path: 'users',
                 element: <User />,
-            },
-            {
-                path: 'customers',
-                element: <Customer />,
             },
         ],
     } as RouteObject

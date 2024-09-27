@@ -46,7 +46,7 @@ export default function CustomerDashboard() {
     ])
 
     return <div>
-        <div>
+        <div className="pt-4">
             <div className="flex gap-2 justify-between">
                 <div className="w-full">
                     <CmsSearch
@@ -67,23 +67,25 @@ export default function CustomerDashboard() {
                     <RiApps2AddLine className="text-2xl" />
                 </button>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
-                {loading ? Array.from({ length: 5 })?.map((_, i) => <CardSkeleton key={i} />) : (data.values.components?.length ? (<>
-                    {data.values.components.map((item, i) => {
-                        const isSecondaryRecord = item.customerId !== DEFAULT_CUSTOMER.customerId
-                        const onClickModal = () => {
-                            if (item && isSecondaryRecord) {
-                                action.onChangeModal({
-                                    action: ComponentModeEnum.Edit,
-                                    value: true,
-                                    item
-                                })
+            <div className="">
+                <div className="text-2xl font-bold my-5">Quotations</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {loading ? Array.from({ length: 5 })?.map((_, i) => <CardSkeleton key={i} />) : (data.values.components?.length ? (<>
+                        {data.values.components.map((item, i) => {
+                            const isSecondaryRecord = item.customerId !== DEFAULT_CUSTOMER.customerId
+                            const onClickModal = () => {
+                                if (item && isSecondaryRecord) {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Edit,
+                                        value: true,
+                                        item
+                                    })
+                                }
                             }
-                        }
-                        return <CmsCustomerCardItem onClickModal={onClickModal} item={item} key={i} />
-                    })}
-                </>) : <div className="mt-40"> <CmsNotFound /></div>)}
+                            return <CmsCustomerCardItem onClickModal={onClickModal} item={item} key={i} />
+                        })}
+                    </>) : <div className="mt-40"> <CmsNotFound /></div>)}
+                </div>
             </div>
         </div>
         {renderActionModal}
