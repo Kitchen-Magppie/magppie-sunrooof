@@ -25,6 +25,7 @@ import { ImageInput } from '../../../../../components';
 import { useFirebaseCustomerAction } from '../../../utils/firebase/customer';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-use';
+import { toast } from 'react-toastify';
 
 export function CustomerActionForm(props: TProps) {
 
@@ -51,7 +52,11 @@ export function CustomerActionForm(props: TProps) {
         defaultValues: { ...item, customerId: isCreateAction ? _.uuid() : item.customerId }
     });
 
+
     const values = watch()
+    console.log('State->', values)
+    console.log('Errors->', errors)
+
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
@@ -63,13 +68,18 @@ export function CustomerActionForm(props: TProps) {
     }, [errors])
 
     const action = useFirebaseCustomerAction()
+    console.log(isCreateAction)
     const onSubmit = handleSubmit((data: TCustomerItem) => {
         setCorpus((prev) => ({ ...prev, isSubmitting: true }))
         setTimeout(() => {
-            if (DEFAULT_CUSTOMER.id !== item.customerId) {
+            console.log(data)
+
+            if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
 
                 if (isCreateAction) {
+                    console.log(data)
                     action.add(data)
+                    toast('Record has been created')
                 }
                 else {
 
@@ -80,6 +90,8 @@ export function CustomerActionForm(props: TProps) {
                             updated: new Date()
                         }
                     })
+                    toast('Record has been edited')
+
                 }
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }))
@@ -107,7 +119,7 @@ export function CustomerActionForm(props: TProps) {
         </div>);
     }, [publishedUrl])
 
-    return (<form onSubmit={onSubmit}>
+    return (<form onSubmit={onSubmit} className=' h-[85vh] overflow-y-scroll'>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
                 <label className="block text-sm font-medium text-gray-700">
@@ -133,8 +145,8 @@ export function CustomerActionForm(props: TProps) {
                     case CustomerComponentEnum.Client:
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
-                                <div className="grid grid-cols-2">
-                                    <div className="bg-white px-6 overflow-y-scroll">
+                                <div className="grid grid-cols-2 gap-2">
+                                    <div className="bg-white overflow-y-scroll">
                                         <label className="block text-sm font-medium text-gray-700">
                                             Name
                                         </label>
@@ -164,7 +176,7 @@ export function CustomerActionForm(props: TProps) {
                     case CustomerComponentEnum.Comparison: {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
-                                <div className="grid grid-cols-2 gap-1">
+                                <div className="grid grid-cols-2 gap-2">
                                     {(component as TCustomerComponentComparisonItem).data.map((item, j) => {
                                         const data = {
                                             before: item.image.before?.length ? [item.image.before] : [],
@@ -203,7 +215,7 @@ export function CustomerActionForm(props: TProps) {
                         const image = _.get(component, 'data.invoiceUrl', '')
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
-                                <div className="flex flex-col gap-2 px-6">
+                                <div className="flex flex-col gap-2">
                                     <div className="grid grid-cols-2 gap-2">
                                         <div className="bg-white  overflow-y-scroll">
                                             <label className="block text-sm font-medium text-gray-700">
@@ -330,7 +342,7 @@ export function CustomerActionForm(props: TProps) {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
-                                    return (<div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`} className="flex flex-col gap-2 px-6">
+                                    return (<div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`} className="flex flex-col gap-2">
                                         <div className='text-gray-400 italic  text-lg'>
                                             #{k + 1}
                                         </div>
@@ -381,6 +393,13 @@ export function CustomerActionForm(props: TProps) {
             {errors.components && <p>{errors.components.message}</p>}
 
             {renderPublishUrlContent}
+            <div className="mb-20" />
+
+
+
+
+        </div>
+        <div className="left-0 right-0 absolute bottom-5 px-10" >
 
             <button
                 disabled={corpus.isSubmitting}

@@ -93,12 +93,15 @@ export default function CustomerDashboard() {
 }
 
 function CardSkeleton() {
-    return (<div className="max-w-sm p-4 bg-white border border-gray-300 rounded-2xl shadow-sm animate-pulse md:p-6 dark:border-gray-700"    >
-        {/* <div className="flex items-center justify-center h-48 mb-4 bg-white rounded dark:bg-gray-700" /> */}
-        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 py-3 mb-4" />
+    return (<div className="w-full p-4 bg-white border border-gray-300 rounded-lg shadow-sm animate-pulse md:p-6 dark:border-gray-700"    >
+        <div className="flex justify-between">
+            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 py-3 mb-4" />
+            <div className=" bg-gray-200 rounded-full dark:bg-gray-700 w-10 mb-4" />
+        </div>
         <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5" />
         <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5" />
-        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-5" />
+        <div className="h-4 bg-gray-200 rounded-lg dark:bg-gray-700 w-24 py-4" />
     </div>
     )
 }
