@@ -33,6 +33,12 @@ export default function CustomerDashboard() {
         >
             <div className="p-2">
                 <CustomerActionForm
+                    onSubmit={() => {
+                        action.onChangeModal({
+                            action: ComponentModeEnum.None,
+                            value: false
+                        })
+                    }}
                     mode={data.values.modal.action}
                     item={data.values.modal.value}
                 />

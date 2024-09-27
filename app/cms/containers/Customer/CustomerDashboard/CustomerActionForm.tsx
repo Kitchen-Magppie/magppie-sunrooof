@@ -54,9 +54,8 @@ export function CustomerActionForm(props: TProps) {
 
 
     const values = watch()
-    console.log('State->', values)
-    console.log('Errors->', errors)
-
+    // console.log('State->', values)
+    // console.log('Errors->', errors)
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
@@ -68,35 +67,23 @@ export function CustomerActionForm(props: TProps) {
     }, [errors])
 
     const action = useFirebaseCustomerAction()
-    console.log(isCreateAction)
     const onSubmit = handleSubmit((data: TCustomerItem) => {
         setCorpus((prev) => ({ ...prev, isSubmitting: true }))
         setTimeout(() => {
-            console.log(data)
-
             if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
 
                 if (isCreateAction) {
-                    console.log(data)
                     action.add(data)
                     toast('Record has been created')
-                }
-                else {
-
-                    action.edit({
-                        ...data,
-                        at: {
-                            ...data.at,
-                            updated: new Date()
-                        }
-                    })
+                } else {
+                    action.edit({ ...data, at: { ...data.at, updated: new Date() } })
                     toast('Record has been edited')
-
                 }
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }))
 
         }, 2000)
+        props.onSubmit()
     });
     const renderPublishUrlContent = useMemo(() => {
         return (publishedUrl?.length ? (<div className="flex flex-row gap-2 justify-between my-2">
@@ -414,4 +401,4 @@ export function CustomerActionForm(props: TProps) {
     );
 }
 
-type TProps = { mode: ComponentModeEnum, item: TCustomerItem }
+type TProps = { mode: ComponentModeEnum, item: TCustomerItem, onSubmit: VoidFunction }
