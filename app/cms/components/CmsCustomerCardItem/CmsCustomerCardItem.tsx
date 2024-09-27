@@ -23,9 +23,11 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     >
         <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-semibold">{props.item.name}</h2>
-            <button className="border p-1 rounded-full border-gray-400  ">
+            <button className="border p-1 rounded-full border-gray-400  bg-white cursor-pointer"
+                title="Go to Published Link"
+            >
                 {publishedUrl?.length ? (<Link to={publishedUrl} target="_blank">
-                    <IoIosLink className="cursor-pointer hover:text-blue-700"
+                    <IoIosLink className="cursor-pointer"
                     />
                 </Link>) : ''}
 
