@@ -16,7 +16,7 @@ const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
     return (
         <div className="py-44 container mx-auto lg:max-w-7xl relative">
-            <h1 className="text-5xl pb-16 w-full text-center uppercase text-[#78746c]">
+            <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
                 our team
             </h1>
             {isMobile ? (
@@ -29,7 +29,7 @@ const Team = () => {
                     pagination={{
                         clickable: true,
                     }}
-                    spaceBetween={10}
+                    spaceBetween={0}
                     freeMode={true}
                     modules={[Grid, Scrollbar]}
                     className="mySwiper"

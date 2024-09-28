@@ -30,10 +30,10 @@ const Features = () => {
                             <LazyLoadImage
                                 effect="blur"
                                 src={feature.img}
-                                className="h-40 w-40 object-cover hover:scale-105 transition-transform duration-300"
+                                className="h-40 w-40 object-cover hover:scale-105 transition-transform duration-300 mb-2"
                                 alt={feature.heading}
                             />
-                            <h2 className="text-4xl lg:text-xl pt-4 font-medium">
+                            <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-1">
                                 {feature.heading}
                             </h2>
                             <p className="pt-2 text-2xl lg:text-base">
@@ -45,7 +45,7 @@ const Features = () => {
                 <img className="mt-20" src={threeLines} alt="" />
             </div>
             <div className="flex flex-col lg:hidden py-20 container mx-auto w-full">
-                <div className="flex flex-col items-center justify-center mb-24 text-center">
+                <div className="flex flex-col items-center justify-center mb-32 text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
                     <h1 className="text-4xl font-semibold capitalize">
                         Benefits for offices
@@ -61,14 +61,14 @@ const Features = () => {
                     >
                         {features.map((feature) => (
                             <SwiperSlide key={feature.id}>
-                                <div className=" flex  flex-col text-center items-center justify-center w-full">
+                                <div className=" flex flex-col text-center items-center justify-center w-full mb-2">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={feature.img}
-                                        className="h-40 w-40"
+                                        className="h-40 w-40 mb-4"
                                         alt={feature.heading}
                                     />
-                                    <h2 className="text-5xl lg:text-xl pt-4 font-medium">
+                                    <h2 className="text-5xl mb-2 lg:text-xl pt-4 font-medium">
                                         {feature.heading}
                                     </h2>
                                     <p className="mt-6 text-3xl lg:text-base mb-20">
