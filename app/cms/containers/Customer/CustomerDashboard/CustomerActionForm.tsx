@@ -70,7 +70,6 @@ export function CustomerActionForm(props: TProps) {
         setCorpus((prev) => ({ ...prev, isSubmitting: true }))
         setTimeout(() => {
             if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
-
                 if (isCreateAction) {
                     action.add({ ...data, at: { ...data.at, created: new Date() } })
                     toast('Record has been created')
@@ -80,7 +79,6 @@ export function CustomerActionForm(props: TProps) {
                 }
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }))
-
         }, 2000)
         props.onSubmit()
     });
@@ -101,7 +99,11 @@ export function CustomerActionForm(props: TProps) {
             </div>
             <CmsCopyClipboard text={publishedUrl} />
         </div>) : <div className='mb-2'>
-            <FieldCautation label='NOTE' remark='Once all fields are valid, the URL will be generated automatically upon saving the form.' />
+            <FieldCautation
+                disableAppendButton
+                label='NOTE'
+                remark='Once all fields are valid, the URL will be generated automatically upon saving the form.'
+            />
         </div>);
     }, [publishedUrl])
 
