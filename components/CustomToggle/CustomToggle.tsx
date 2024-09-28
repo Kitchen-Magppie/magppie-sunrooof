@@ -1,8 +1,9 @@
 import { ChangeEvent, useCallback, useState } from "react"
+// ======================================================================
 
 export default function CustomToggle(props: TProps) {
-    const [checked, setChecked] = useState(props?.value || false)
 
+    const [checked, setChecked] = useState(props?.value || false)
     const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setChecked(e.target.checked)
         props.onChange(e.target.checked)
