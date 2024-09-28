@@ -145,10 +145,10 @@ const Layout2dDesign = (props: TProps) => {
 
     return (
         <div
-            className="flex flex-col justify-center items-center py-20 px-4"
+            className="flex flex-col justify-center items-center py-20 px-4 bg-gray-100"
             id="2d"
         >
-            <h1 className="text-5xl mb-12">2D Designs</h1>
+            <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">2D Designs</h1>
             {isMobile ? (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <div className="flex">{renderSwiper}</div>
