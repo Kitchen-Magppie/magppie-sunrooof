@@ -4,7 +4,7 @@ import About from './About'
 // import BeforeAfter from './BeforeAfter/BeforeAfter'
 // import ClientName from './ClientName'
 import Clients from './Clients'
-// import DesignedBy from './DesignedBy'
+import DesignedBy from './DesignedBy'
 import Features from './Features'
 // import Footer from './Footer'
 import Guarantee from './Guarantee'
@@ -17,59 +17,42 @@ import BuyingJourney from './BuyingJourney'
 import Navbar from './Navbar'
 import Hero from './Hero'
 import ImageComparison from './Image'
-import { useFirebaseCmsCustomerListener } from '../cms/utils/firebase'
-import { useAppSelector } from '../../redux'
-import { useMemo } from 'react'
-import { DEFAULT_CUSTOMER } from '../cms/mocks'
-import { CustomerComponentEnum, TCustomerComponentClientItem, TCustomerComponentComparisonDataItem, TCustomerComponentQuotationItem } from '../../types'
+
+import {
+    CustomerComponentEnum,
+
+} from '../../types'
 import { PageProgress } from '../../components'
+import useHomeData from '../cms/hooks/useHomeData'
 
 const QuotationPage = () => {
-    useFirebaseCmsCustomerListener()
-    const { loading, value } = useAppSelector((state) => state.Cms.Customer);
 
-    console.log(value)
+    const { loading, components } = useHomeData()
 
-    const component = useMemo(() => {
-
-        const data = value.find((row) => row.customerId === DEFAULT_CUSTOMER.customerId)
-        return ({
-            [CustomerComponentEnum.Comparison]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison).data as TCustomerComponentComparisonDataItem[],
-            [CustomerComponentEnum.Client]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Client) as unknown as TCustomerComponentClientItem,
-            [CustomerComponentEnum.TwoDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as unknown as TCustomerComponentClientItem,
-            [CustomerComponentEnum.Quotation]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as unknown as TCustomerComponentQuotationItem,
-        })
-
-    }, [value])
-
-    console.log(component)
     if (loading) {
         return <PageProgress />
     }
-    return (
-        <div className='overflow-x-hidden'>
-            <Navbar />
-            <Hero />
-            {/* <ClientName /> */}
-            {/* <DesignedBy /> */}
-            {/* <Header /> */}
-            <About />
-            <Clients />
-            <ImageComparison />
-            {/* <BeforeAfter /> */}
-            <Features />
-            <Team />
-            {/* <ProjectDetails /> */}
-            <TwodDesigns />
-            <ThreedDesigns />
-            <Quotation
-                item={component[CustomerComponentEnum.Quotation]}
-            />
-            <TermsandConditions />
-            <Guarantee />
-            <BuyingJourney />
-            <FooterFinal />
-        </div>
+    return (<div className='overflow-x-hidden'>
+        <Navbar />
+        <Hero item={components[CustomerComponentEnum.Client]} />
+        {/* <ClientName /> */}
+        {/* <Header /> */}
+        <About />
+        <Clients />
+        <ImageComparison item={components[CustomerComponentEnum.Comparison]} />
+        {/* <BeforeAfter /> */}
+        <Features />
+        <DesignedBy />
+        <Team />
+        {/* <ProjectDetails /> */}
+        <TwodDesigns item={components[CustomerComponentEnum.TwoDDesign]} />
+        <ThreedDesigns item={components[CustomerComponentEnum.ThreeDDesign]} />
+        <Quotation item={components[CustomerComponentEnum.Quotation]} />
+        <TermsandConditions />
+        <Guarantee />
+        <BuyingJourney />
+        <FooterFinal />
+    </div>
     )
 }
 

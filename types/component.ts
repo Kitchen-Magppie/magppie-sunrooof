@@ -34,7 +34,7 @@ export type TCustomerComponentDesign2DDataItem = {
     approvedBy: string,
     design: string,
     finish: string,
-    callingHeightOnSite: string,
+    ceilingHeightOnSite: string,
     afterInstallation: string,
     yourPlan: string,
     header: string,
@@ -55,7 +55,7 @@ export enum CustomerComponentEnum {
     None = ''
 }
 
-type TCustomerComponentDesign3DItem = {
+export type TCustomerComponentDesign3DItem = {
     value: CustomerComponentEnum.ThreeDDesign,
     data: string[]
 }
@@ -149,7 +149,7 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
         approvedBy: yup.string().required(),
         design: yup.string().required(),
         finish: yup.string().required(),
-        callingHeightOnSite: yup.string().required(),
+        ceilingHeightOnSite: yup.string().required(),
         afterInstallation: yup.string().required(),
         yourPlan: yup.string().required(),
         header: yup.string().required(),

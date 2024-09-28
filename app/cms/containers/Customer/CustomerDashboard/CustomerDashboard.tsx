@@ -10,7 +10,7 @@ import {
 import { CustomSimpleModal } from "../../../../../components";
 import { useFirebaseCmsCustomerListener } from "../../../utils/firebase";
 import { ComponentModeEnum } from "../../../../../types";
-import { INIT_CUSTOMER_ITEM } from "../../../mocks";
+import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from "../../../mocks";
 import { CustomerActionForm, useCustomerDashboard } from ".";
 
 export default function CustomerDashboard() {
@@ -33,6 +33,12 @@ export default function CustomerDashboard() {
         >
             <div className="p-2">
                 <CustomerActionForm
+                    onSubmit={() => {
+                        action.onChangeModal({
+                            action: ComponentModeEnum.None,
+                            value: false
+                        })
+                    }}
                     mode={data.values.modal.action}
                     item={data.values.modal.value}
                 />
@@ -46,7 +52,7 @@ export default function CustomerDashboard() {
     ])
 
     return <div>
-        <div>
+        <div className="pt-4">
             <div className="flex gap-2 justify-between">
                 <div className="w-full">
                     <CmsSearch
@@ -67,22 +73,25 @@ export default function CustomerDashboard() {
                     <RiApps2AddLine className="text-2xl" />
                 </button>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
-                {loading ? Array.from({ length: 5 })?.map((_, i) => <CardSkeleton key={i} />) : (data.values.components?.length ? (<>
-                    {data.values.components.map((item, i) => {
-                        const onClickModal = () => {
-                            if (item) {
-                                action.onChangeModal({
-                                    action: ComponentModeEnum.Edit,
-                                    value: true,
-                                    item
-                                })
+            <div className="">
+                <div className="text-2xl font-bold my-5">Quotations</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {loading ? Array.from({ length: 5 })?.map((_, i) => <CardSkeleton key={i} />) : (data.values.components?.length ? (<>
+                        {data.values.components.map((item, i) => {
+                            const isSecondaryRecord = item.customerId !== DEFAULT_CUSTOMER.customerId
+                            const onClickModal = () => {
+                                if (item && isSecondaryRecord) {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Edit,
+                                        value: true,
+                                        item
+                                    })
+                                }
                             }
-                        }
-                        return <CmsCustomerCardItem onClickModal={onClickModal} item={item} key={i} />
-                    })}
-                </>) : <div className="mt-40"> <CmsNotFound /></div>)}
+                            return <CmsCustomerCardItem onClickModal={onClickModal} item={item} key={i} />
+                        })}
+                    </>) : <div className="mt-40"> <CmsNotFound /></div>)}
+                </div>
             </div>
         </div>
         {renderActionModal}
@@ -90,12 +99,15 @@ export default function CustomerDashboard() {
 }
 
 function CardSkeleton() {
-    return (<div className="max-w-sm p-4 bg-white border border-gray-300 rounded-2xl shadow-sm animate-pulse md:p-6 dark:border-gray-700"    >
-        {/* <div className="flex items-center justify-center h-48 mb-4 bg-white rounded dark:bg-gray-700" /> */}
-        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 py-3 mb-4" />
+    return (<div className="w-full p-4 bg-white border border-gray-300 rounded-lg shadow-sm animate-pulse md:p-6 dark:border-gray-700"    >
+        <div className="flex justify-between">
+            <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 py-3 mb-4" />
+            <div className=" bg-gray-200 rounded-full dark:bg-gray-700 w-10 mb-4" />
+        </div>
         <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5" />
         <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5" />
-        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+        <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-5" />
+        <div className="h-4 bg-gray-200 rounded-lg dark:bg-gray-700 w-24 py-4" />
     </div>
     )
 }

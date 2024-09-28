@@ -9,7 +9,16 @@ export default function Routes() {
         CMS_ROUTES,
         {
             path: '/',
-            element: <QuotationPage />,
+            children: [
+                {
+                    path: '/',
+                    element: <QuotationPage />,
+                },
+                {
+                    path: '/quotation/:id',
+                    element: <QuotationPage />,
+                }
+            ]
         },
         {
             path: '*',
