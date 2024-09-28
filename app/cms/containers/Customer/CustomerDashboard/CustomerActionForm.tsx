@@ -1,8 +1,13 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
+import { IoIosLink } from "react-icons/io";
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-use';
+
 //====================================================================
 
 import {
@@ -19,7 +24,7 @@ import {
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
 } from '../../../mocks';
-import { MinimalAccordion } from '../../../components';
+import { CmsCopyClipboard, FieldCautation, MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
 import { useFirebaseCustomerAction } from '../../../utils/firebase/customer';
 
@@ -30,6 +35,13 @@ export function CustomerActionForm(props: TProps) {
 
     const isCreateAction = mode === ComponentModeEnum.Create
 
+    const location = useLocation()
+
+    const publishedUrl = useMemo(() => {
+        if (item.id?.length)
+            return ([location.origin, 'quotation', item.id].join('/'))
+        return ''
+    }, [item.id, location.origin])
     const {
         watch,
         register,
@@ -40,6 +52,7 @@ export function CustomerActionForm(props: TProps) {
         resolver: yupResolver(validateCustomerItemSchema),
         defaultValues: { ...item, customerId: isCreateAction ? _.uuid() : item.customerId }
     });
+
 
     const values = watch()
 
@@ -56,28 +69,45 @@ export function CustomerActionForm(props: TProps) {
     const onSubmit = handleSubmit((data: TCustomerItem) => {
         setCorpus((prev) => ({ ...prev, isSubmitting: true }))
         setTimeout(() => {
-            if (DEFAULT_CUSTOMER.id !== item.customerId) {
-
+            if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
                 if (isCreateAction) {
-                    action.add(data)
-                }
-                else {
-
-                    action.edit({
-                        ...data,
-                        at: {
-                            ...data.at,
-                            updated: new Date()
-                        }
-                    })
+                    action.add({ ...data, at: { ...data.at, created: new Date() } })
+                    toast('Record has been created')
+                } else {
+                    action.edit({ ...data, at: { ...data.at, updated: new Date() } })
+                    toast('Record has been edited')
                 }
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }))
-
         }, 2000)
+        props.onSubmit()
     });
+    const renderPublishUrlContent = useMemo(() => {
+        return (publishedUrl?.length ? (<div className="flex flex-row gap-2 justify-between my-2">
+            <div className="flex gap-1 align-middle justify-center">
+                <button
+                    type="button"
+                    disabled
+                    className=" flex justify-center gap-3 flex-row align-middle w-full p-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                    <IoIosLink className='my-1' />
+                    Generated Link
+                </button>
+                <Link target='_blank' to={publishedUrl} className='text-blue-600 underline flex justify-center align-middle flex-col'>
+                    {publishedUrl}
+                </Link>
+            </div>
+            <CmsCopyClipboard text={publishedUrl} />
+        </div>) : <div className='mb-2'>
+            <FieldCautation
+                disableAppendButton
+                label='NOTE'
+                remark='Once all fields are valid, the URL will be generated automatically upon saving the form.'
+            />
+        </div>);
+    }, [publishedUrl])
 
-    return (<form onSubmit={onSubmit}>
+    return (<form onSubmit={onSubmit} className=' h-[85vh] overflow-y-scroll'>
         <div className="flex flex-col gap-2">
             <div className="bg-white px-6 overflow-y-scroll">
                 <label className="block text-sm font-medium text-gray-700">
@@ -100,41 +130,41 @@ export function CustomerActionForm(props: TProps) {
                 const value = _.get(component, 'value')
                 const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value).label
                 switch (value) {
-                    case CustomerComponentEnum.Client:
-                        return <div key={i}>
-                            <MinimalAccordion isExpanded title={title}>
-                                <div className="grid grid-cols-2">
-                                    <div className="bg-white px-6 overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.name`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.name`)}
-                                    </div>
-                                    <div className="bg-white  overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Description
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.description`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.description`)}
-                                    </div>
-                                </div>
+                    // case CustomerComponentEnum.Client:
+                    //     return <div key={i}>
+                    //         <MinimalAccordion isExpanded title={title}>
+                    //             <div className="grid grid-cols-2 gap-2">
+                    //                 <div className="bg-white overflow-y-scroll">
+                    //                     <label className="block text-sm font-medium text-gray-700">
+                    //                         Name
+                    //                     </label>
+                    //                     <input
+                    //                         type="text"
+                    //                         {...register(`components.${i}.data.name`)}
+                    //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    //                     />
+                    //                     {renderErrorMessage(`components.${i}.data.name`)}
+                    //                 </div>
+                    //                 <div className="bg-white  overflow-y-scroll">
+                    //                     <label className="block text-sm font-medium text-gray-700">
+                    //                         Description
+                    //                     </label>
+                    //                     <input
+                    //                         type="text"
+                    //                         {...register(`components.${i}.data.description`)}
+                    //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    //                     />
+                    //                     {renderErrorMessage(`components.${i}.data.description`)}
+                    //                 </div>
+                    //             </div>
 
 
-                            </MinimalAccordion>
-                        </div>
+                    //         </MinimalAccordion>
+                    //     </div>
                     case CustomerComponentEnum.Comparison: {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
-                                <div className="grid grid-cols-2 gap-1">
+                                <div className="grid grid-cols-2 gap-2">
                                     {(component as TCustomerComponentComparisonItem).data.map((item, j) => {
                                         const data = {
                                             before: item.image.before?.length ? [item.image.before] : [],
@@ -173,7 +203,7 @@ export function CustomerActionForm(props: TProps) {
                         const image = _.get(component, 'data.invoiceUrl', '')
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
-                                <div className="flex flex-col gap-2 px-6">
+                                <div className="flex flex-col gap-2">
                                     <div className="grid grid-cols-2 gap-2">
                                         <div className="bg-white  overflow-y-scroll">
                                             <label className="block text-sm font-medium text-gray-700">
@@ -265,8 +295,8 @@ export function CustomerActionForm(props: TProps) {
                     }
                     case CustomerComponentEnum.ThreeDDesign: {
                         const images = {
-                            first: _.get(component, 'data.0', ''),
-                            last: _.get(component, 'data.1', '')
+                            first: `${_.get(component, 'data.0', '') || ''}`,
+                            last: `${_.get(component, 'data.1', '') || ''}`
                         }
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
@@ -300,7 +330,7 @@ export function CustomerActionForm(props: TProps) {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 {(_.get(component, 'data', []) as TCustomerComponentDesign2DDataItem[])?.map((data, k) => {
-                                    return (<div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`} className="flex flex-col gap-2 px-6">
+                                    return (<div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`} className="flex flex-col gap-2">
                                         <div className='text-gray-400 italic  text-lg'>
                                             #{k + 1}
                                         </div>
@@ -350,13 +380,18 @@ export function CustomerActionForm(props: TProps) {
             })}
             {errors.components && <p>{errors.components.message}</p>}
 
+            {renderPublishUrlContent}
+            <div className="mb-20" />
+
+
+
+
+        </div>
+        <div className="left-0 right-0 absolute bottom-5 px-10" >
 
             <button
                 disabled={corpus.isSubmitting}
                 type="submit"
-                // onClick={() => {
-                //     setCorpus({ isSubmitting: true })
-                // }}
                 className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
                 {isCreateAction ? 'Create' : 'Edit'} Component
@@ -367,4 +402,4 @@ export function CustomerActionForm(props: TProps) {
     );
 }
 
-type TProps = { mode: ComponentModeEnum, item: TCustomerItem }
+type TProps = { mode: ComponentModeEnum, item: TCustomerItem, onSubmit: VoidFunction }

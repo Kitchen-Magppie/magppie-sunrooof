@@ -44,9 +44,9 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
     approvedBy: '',
     design: '',
     finish: '',
-    callingHeightOnSite: '',
+    ceilingHeightOnSite: '',
     afterInstallation: '',
-    yourPlan: '',
+    // yourPlan: '',
     header: '',
     leftImage: '',
     rightImage: '',
@@ -59,19 +59,19 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
     { label: "Approved By", value: 'approvedBy', field: 'text' },
     { label: "Design", value: 'design', field: 'text' },
     { label: "Finish", value: 'finish', field: 'text' },
-    { label: "Calling Height On Site", value: 'callingHeightOnSite', field: 'text' },
+    { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
     { label: "After Installation", value: 'afterInstallation', field: 'text' },
-    { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Header", value: 'header', field: 'text' },
+    // { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Left Image", value: 'leftImage', field: 'image' },
     { label: "Right Image", value: 'rightImage', field: 'image' },
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
-    {
-        value: CustomerComponentEnum.Client,
-        data: { name: '', description: '' }
-    },
+    // {
+    //     value: CustomerComponentEnum.Client,
+    //     data: { name: '', description: '' }
+    // },
     {
         value: CustomerComponentEnum.Comparison,
         data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
@@ -154,9 +154,9 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
                     approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    callingHeightOnSite: 'Pearl White',
+                    ceilingHeightOnSite: 'Pearl White',
                     afterInstallation: '10ft',
-                    yourPlan: '8ft 11 inch',
+                    // yourPlan: '8ft 11 inch',
                     header: 'Board Room',
                     leftImage: '',
                     rightImage: '',
@@ -167,9 +167,9 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
                     approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    callingHeightOnSite: 'French Window',
+                    ceilingHeightOnSite: 'French Window',
                     afterInstallation: '',
-                    yourPlan: '',
+                    // yourPlan: '',
                     header: 'Board Room',
                     leftImage: '',
                     rightImage: '',

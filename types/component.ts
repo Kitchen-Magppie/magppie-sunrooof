@@ -34,9 +34,9 @@ export type TCustomerComponentDesign2DDataItem = {
     approvedBy: string,
     design: string,
     finish: string,
-    callingHeightOnSite: string,
+    ceilingHeightOnSite: string,
     afterInstallation: string,
-    yourPlan: string,
+    // yourPlan: string,
     header: string,
     leftImage: string,
     rightImage: string,
@@ -55,7 +55,7 @@ export enum CustomerComponentEnum {
     None = ''
 }
 
-type TCustomerComponentDesign3DItem = {
+export type TCustomerComponentDesign3DItem = {
     value: CustomerComponentEnum.ThreeDDesign,
     data: string[]
 }
@@ -121,13 +121,13 @@ const customerComponentComparisonItemSchema = yup.object().shape({
     data: yup.array().of(comparisonDataItemSchema).required(),
 });
 
-const customerComponentClientItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.Client]).required(),
-    data: yup.object({
-        name: yup.string().required(),
-        description: yup.string().required(),
-    }).required(),
-});
+// const customerComponentClientItemSchema = yup.object().shape({
+//     value: yup.mixed().oneOf([CustomerComponentEnum.Client]).required(),
+//     data: yup.object({
+//         name: yup.string().required(),
+//         description: yup.string().required(),
+//     }).required(),
+// });
 
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
@@ -149,9 +149,9 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
         approvedBy: yup.string().required(),
         design: yup.string().required(),
         finish: yup.string().required(),
-        callingHeightOnSite: yup.string().required(),
+        ceilingHeightOnSite: yup.string().required(),
         afterInstallation: yup.string().required(),
-        yourPlan: yup.string().required(),
+        // yourPlan: yup.string().required(),
         header: yup.string().required(),
         leftImage: yup.string().required(),
         rightImage: yup.string().required(),
@@ -165,8 +165,8 @@ const customerComponentDesign3DItemSchema = yup.object().shape({
 
 const customerComponentSchema = yup.lazy((value) => {
     switch (value.value) {
-        case CustomerComponentEnum.Client:
-            return customerComponentClientItemSchema;
+        // case CustomerComponentEnum.Client:
+        //     return customerComponentClientItemSchema;
         case CustomerComponentEnum.Comparison:
             return customerComponentComparisonItemSchema;
         case CustomerComponentEnum.Quotation:
