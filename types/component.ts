@@ -121,13 +121,13 @@ const customerComponentComparisonItemSchema = yup.object().shape({
     data: yup.array().of(comparisonDataItemSchema).required(),
 });
 
-const customerComponentClientItemSchema = yup.object().shape({
-    value: yup.mixed().oneOf([CustomerComponentEnum.Client]).required(),
-    data: yup.object({
-        name: yup.string().required(),
-        description: yup.string().required(),
-    }).required(),
-});
+// const customerComponentClientItemSchema = yup.object().shape({
+//     value: yup.mixed().oneOf([CustomerComponentEnum.Client]).required(),
+//     data: yup.object({
+//         name: yup.string().required(),
+//         description: yup.string().required(),
+//     }).required(),
+// });
 
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
@@ -165,8 +165,8 @@ const customerComponentDesign3DItemSchema = yup.object().shape({
 
 const customerComponentSchema = yup.lazy((value) => {
     switch (value.value) {
-        case CustomerComponentEnum.Client:
-            return customerComponentClientItemSchema;
+        // case CustomerComponentEnum.Client:
+        //     return customerComponentClientItemSchema;
         case CustomerComponentEnum.Comparison:
             return customerComponentComparisonItemSchema;
         case CustomerComponentEnum.Quotation:

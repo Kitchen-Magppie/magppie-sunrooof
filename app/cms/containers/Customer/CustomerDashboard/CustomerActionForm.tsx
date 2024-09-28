@@ -4,6 +4,10 @@ import { useForm } from 'react-hook-form';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoIosLink } from "react-icons/io";
+import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-use';
+
 //====================================================================
 
 import {
@@ -23,9 +27,6 @@ import {
 import { CmsCopyClipboard, FieldCautation, MinimalAccordion } from '../../../components';
 import { ImageInput } from '../../../../../components';
 import { useFirebaseCustomerAction } from '../../../utils/firebase/customer';
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-use';
-import { toast } from 'react-toastify';
 
 export function CustomerActionForm(props: TProps) {
 
@@ -54,8 +55,6 @@ export function CustomerActionForm(props: TProps) {
 
 
     const values = watch()
-    // console.log('State->', values)
-    // console.log('Errors->', errors)
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
@@ -73,7 +72,7 @@ export function CustomerActionForm(props: TProps) {
             if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
 
                 if (isCreateAction) {
-                    action.add(data)
+                    action.add({ ...data, at: { ...data.at, created: new Date() } })
                     toast('Record has been created')
                 } else {
                     action.edit({ ...data, at: { ...data.at, updated: new Date() } })
@@ -129,37 +128,37 @@ export function CustomerActionForm(props: TProps) {
                 const value = _.get(component, 'value')
                 const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value).label
                 switch (value) {
-                    case CustomerComponentEnum.Client:
-                        return <div key={i}>
-                            <MinimalAccordion isExpanded title={title}>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <div className="bg-white overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Name
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.name`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.name`)}
-                                    </div>
-                                    <div className="bg-white  overflow-y-scroll">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            Description
-                                        </label>
-                                        <input
-                                            type="text"
-                                            {...register(`components.${i}.data.description`)}
-                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        />
-                                        {renderErrorMessage(`components.${i}.data.description`)}
-                                    </div>
-                                </div>
+                    // case CustomerComponentEnum.Client:
+                    //     return <div key={i}>
+                    //         <MinimalAccordion isExpanded title={title}>
+                    //             <div className="grid grid-cols-2 gap-2">
+                    //                 <div className="bg-white overflow-y-scroll">
+                    //                     <label className="block text-sm font-medium text-gray-700">
+                    //                         Name
+                    //                     </label>
+                    //                     <input
+                    //                         type="text"
+                    //                         {...register(`components.${i}.data.name`)}
+                    //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    //                     />
+                    //                     {renderErrorMessage(`components.${i}.data.name`)}
+                    //                 </div>
+                    //                 <div className="bg-white  overflow-y-scroll">
+                    //                     <label className="block text-sm font-medium text-gray-700">
+                    //                         Description
+                    //                     </label>
+                    //                     <input
+                    //                         type="text"
+                    //                         {...register(`components.${i}.data.description`)}
+                    //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    //                     />
+                    //                     {renderErrorMessage(`components.${i}.data.description`)}
+                    //                 </div>
+                    //             </div>
 
 
-                            </MinimalAccordion>
-                        </div>
+                    //         </MinimalAccordion>
+                    //     </div>
                     case CustomerComponentEnum.Comparison: {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>

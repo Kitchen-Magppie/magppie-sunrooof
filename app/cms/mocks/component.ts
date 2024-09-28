@@ -68,10 +68,10 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
-    {
-        value: CustomerComponentEnum.Client,
-        data: { name: '', description: '' }
-    },
+    // {
+    //     value: CustomerComponentEnum.Client,
+    //     data: { name: '', description: '' }
+    // },
     {
         value: CustomerComponentEnum.Comparison,
         data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
