@@ -5,7 +5,7 @@ import { TCustomerComponentQuotationItem } from '../../../types'
 const Quotation = (props: TProps) => {
     return (
         <div
-            className="flex flex-col justify-center items-center py-10"
+            className="flex flex-col justify-center py-20 pb-32 items-center bg-gray-100"
             id="quotation"
         >
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">Quotation</h1>
@@ -15,7 +15,7 @@ const Quotation = (props: TProps) => {
                     <LazyLoadImage
                         effect="blur"
                         src={props.item.data.invoiceUrl}
-                        className="h-[300px] w-[1000px] lg:w-full lg:h-full object-contain quotation-image mt-5"
+                        className="h-[300px] w-[1000px] lg:w-full lg:h-full object-contain rounded-lg quotation-image mt-5"
                         alt=""
                     />
                 </div>
