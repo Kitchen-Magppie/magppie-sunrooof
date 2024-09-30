@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+// import { LazyLoadImage } from 'react-lazy-load-image-component'
 // ======================================================================
-import illustration from "./growth.svg"
+// import illustration from "./growth.svg"
 
 export function ToggleButton(props: TProps) {
 
     const [isLeft, setIsLeft] = useState(true)
+
     const onClickToggle = useCallback(() => {
         setIsLeft((prev) => !prev)
         if (props?.onToggle) {
@@ -14,17 +15,35 @@ export function ToggleButton(props: TProps) {
     }, [isLeft, props])
 
     return (<div className='flex items-center justify-center'>
-        <button
+        <div
             onClick={onClickToggle}
-            className={`relative w-full flex items-center px-4 py-2 rounded-full bg-[#ffffff] text-black`}
+
+            style={{
+                boxShadow: "inset 3px 10px 10px 2px rgba(0,0,0,0.2)"
+            }}
+            className={`${isLeft ? 'bg-gray-300' : 'bg-gray-200'
+                } relative inline-flex h-24 w-72 items-center rounded-full transition-colors duration-300 cursor-pointer focus:outline-none`}
+        >
+            <span
+                style={{
+                    // zIndex: 1,
+                    boxShadow: "3px 10px 10px 2px rgba(0,0,0,0.2)",
+                }}
+                className={`${isLeft ? 'translate-x-3' : 'translate-x-48'
+                    } inline-block h-20 w-20 transform bg-white rounded-full transition-transform duration-300`}
+            />
+        </div>
+        {/* <button
+            onClick={onClickToggle}
+            className={`relative w-full flex items-center rounded-full bg-[#ffffff] text-black`}
             style={{
                 boxShadow: "inset 3px 10px 10px 2px rgba(0,0,0,0.2)"
             }}
         >
             <div
-                className={`flex items-center justify-center w-48 h-5w-48 rounded-full bg-[#202620] absolute`}
+                className={`flex items-center justify-center w-32 h-5w-48 rounded-full bg-[#202620] absolute`}
                 style={{
-                    left: isLeft ? 0 : 'calc(100% - 11rem)',
+                    left: isLeft ? 0 : 'calc(100% - 8rem)',
                     transition: 'left 0.5s ease-in-out',
                 }}
             >
@@ -49,7 +68,7 @@ export function ToggleButton(props: TProps) {
                     Before
                 </div>
             </div>
-        </button>
+        </button> */}
     </div>)
 }
 
