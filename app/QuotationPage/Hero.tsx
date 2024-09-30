@@ -1,6 +1,6 @@
 const Hero = (props: TProps) => {
     return (
-        <div className="flex flex-col pt-20 justify-center items-center min-h-screen w-full bg-[#1B1A1A] text-white">
+        <div className="flex flex-col py-44 justify-center items-center h-[1500px] lg:h-screen w-full bg-[#1B1A1A] text-white">
             <div className="flex flex-col text-center">
                 <h1 className="text-5xl lg:text-7xl uppercase font-kudryashev">
                     EXCLUSIVE PROPOSAL FOR

@@ -71,7 +71,7 @@ const Layout2dDesign = (props: TProps) => {
                         return (
                             <SwiperSlide
                                 key={index}
-                                className="flex items-center justify-center h-full !w-full mb-16"
+                                className="flex items-center justify-center h-full !w-full"
                             >
                                 <div className="border border-white swiper-zoom-container">
                                     <LazyLoadImage
@@ -135,7 +135,6 @@ const Layout2dDesign = (props: TProps) => {
                                 onClick={() => onNext()}
                                 className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
                             />
-
                         )}
                     </div>
                 </>
@@ -145,24 +144,26 @@ const Layout2dDesign = (props: TProps) => {
 
     return (
         <div
-            className="flex flex-col justify-center items-center py-20 px-4"
+            className="flex flex-col justify-center items-center py-44 px-4 bg-gray-100"
             id="2d"
         >
-            <h1 className="text-5xl mb-12">2D Designs</h1>
+            <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
+                2D Designs
+            </h1>
             {isMobile ? (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <div className="flex">{renderSwiper}</div>
                     <ProjectDetails
                         item={props.item.data[selectedLayout]}
-                    // selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
+                        // selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
                     />
                 </div>
             ) : (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <ProjectDetails
                         item={props.item.data[selectedLayout]}
-                    // isMobile={isMobile}
+                        // isMobile={isMobile}
                     />
                     <div className="flex">{renderSwiper}</div>
                 </div>
