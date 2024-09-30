@@ -15,7 +15,7 @@ import { Grid, Scrollbar, FreeMode, Navigation } from 'swiper/modules'
 const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
     return (
-        <div className="py-20 pb-44 container mx-auto lg:max-w-7xl relative">
+        <div className="py-44 container mx-auto lg:max-w-7xl relative">
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
                 our team
             </h1>
@@ -29,7 +29,7 @@ const Team = () => {
                     pagination={{
                         clickable: true,
                     }}
-                    spaceBetween={0}
+                    spaceBetween={10}
                     freeMode={true}
                     modules={[Grid, Scrollbar]}
                     className="mySwiper"
