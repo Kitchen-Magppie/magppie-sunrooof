@@ -1,15 +1,14 @@
-// import { BsThreeDotsVertical } from "react-icons/bs";
+import { useMemo } from "react";
 import { IoCreateOutline, IoLocationOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import dayjs from 'dayjs'
 import { useLocation } from "react-use";
-
+import { IoIosLink } from "react-icons/io";
+import { Link } from "react-router-dom";
 //====================================================================
 
 import { TCmsCustomerCardItem } from "../../types";
-import { useMemo } from "react";
-import { IoIosLink } from "react-icons/io";
-import { Link } from "react-router-dom";
+
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     const location = useLocation()
@@ -38,8 +37,21 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
             {dayjs(props.item.at.created).format('DD/MM/YYYY')}
         </div>
         <div className="flex items-center mb-2 gap-2">
-            <IoLocationOutline size={24} />
-            Location
+            {publishedUrl?.length ? (<>
+                <IoIosLink className="cursor-pointer" size={24} />
+                <Link
+                    to={publishedUrl}
+                    target="_blank"
+                    className="text-blue-600 underline"
+                >
+                    {publishedUrl}
+                </Link>
+            </>) : (<>
+                <IoLocationOutline size={24} />
+                Location
+            </>)}
+
+
         </div>
         <div className="flex items-center mb-2 capitalize gap-2" />
 
