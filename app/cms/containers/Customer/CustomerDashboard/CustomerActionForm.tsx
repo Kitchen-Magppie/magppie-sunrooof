@@ -16,11 +16,13 @@ import {
     CustomerComponentEnum,
     TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DDataItem,
+    TCustomerComponentFeatureItem,
     TCustomerItem,
     validateCustomerItemSchema
 } from '../../../../../types';
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
+    CUSTOMER_COMPONENT_FEATURE_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
 } from '../../../mocks';
@@ -130,6 +132,40 @@ export function CustomerActionForm(props: TProps) {
                 const value = _.get(component, 'value')
                 const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find((item) => item.value === value).label
                 switch (value) {
+                    case CustomerComponentEnum.Feature: {
+
+                        const data = component as TCustomerComponentFeatureItem
+                        return <div key={i}>
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="d-flex flex-row gap">
+                                    {CUSTOMER_COMPONENT_FEATURE_OPTIONS?.map((feature) => {
+                                        return (<div key={feature.value} className=''>
+                                            <input
+                                                id={`feature-${i}`}
+                                                type="radio"
+                                                defaultChecked={data.data === feature.value}
+                                                name="feature"
+                                                onChange={(e) => {
+                                                    setValue(`components.${i}.data`, e.target.value)
+                                                }}
+                                                value={feature.value}
+                                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                            />
+                                            <label
+                                                htmlFor={`feature-${i}`}
+                                                className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                            >
+                                                {feature.label}
+                                            </label>
+                                        </div>)
+
+                                    })}
+
+                                </div>
+
+                            </MinimalAccordion>
+                        </div>
+                    }
                     // case CustomerComponentEnum.Client:
                     //     return <div key={i}>
                     //         <MinimalAccordion isExpanded title={title}>

@@ -10,6 +10,10 @@ export type TCustomerComponentComparisonItem = {
     value: CustomerComponentEnum.Comparison,
     data: TCustomerComponentComparisonDataItem[]
 }
+export type TCustomerComponentFeatureItem = {
+    value: CustomerComponentEnum.Feature,
+    data: ComponentFeatureEnum
+}
 export type TCustomerComponentClientItem = {
     value: CustomerComponentEnum.Client,
     data: { name: string, description: string }
@@ -51,6 +55,7 @@ export enum CustomerComponentEnum {
     ThreeDDesign = '3d-design',
     Client = 'clients',
     Comparison = 'comparisons',
+    Feature = 'feature',
     Quotation = 'quotations',
     None = ''
 }
@@ -64,7 +69,8 @@ export type TCustomerComponentItem = TCustomerComponentClientItem |
     TCustomerComponentComparisonItem |
     TCustomerComponentQuotationItem |
     TCustomerComponentDesign2DItem |
-    TCustomerComponentDesign3DItem
+    TCustomerComponentDesign3DItem |
+    TCustomerComponentFeatureItem
 
 
 export type TCustomerItem = {
@@ -82,6 +88,16 @@ export enum ComponentModeEnum {
     Create = 'create',
     Edit = 'edit',
     None = ''
+}
+
+export enum ComponentFeatureEnum {
+    Hospital = 'hospital',
+    Home = 'home',
+    RetailSpace = 'retail-space',
+    School = 'school',
+    Restaurant = 'restaurant',
+    Hotel = 'hotel',
+    Office = 'office'
 }
 
 export type TComponentMode = ComponentModeEnum.Create
@@ -129,6 +145,10 @@ const customerComponentComparisonItemSchema = yup.object().shape({
 //     }).required(),
 // });
 
+const customerComponentFeatureItemSchema = yup.object().shape({
+    value: yup.mixed().oneOf([CustomerComponentEnum.Feature]).required(),
+    data: yup.string().required(),
+});
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
     data: yup.object({
@@ -167,6 +187,8 @@ const customerComponentSchema = yup.lazy((value) => {
     switch (value.value) {
         // case CustomerComponentEnum.Client:
         //     return customerComponentClientItemSchema;
+        case CustomerComponentEnum.Feature:
+            return customerComponentFeatureItemSchema;
         case CustomerComponentEnum.Comparison:
             return customerComponentComparisonItemSchema;
         case CustomerComponentEnum.Quotation:
