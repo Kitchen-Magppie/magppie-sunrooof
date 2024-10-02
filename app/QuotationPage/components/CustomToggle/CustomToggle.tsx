@@ -26,7 +26,6 @@ export function ToggleButton(props: TProps) {
         >
             <span
                 style={{
-                    // zIndex: 1,
                     boxShadow: "3px 10px 10px 2px rgba(0,0,0,0.2)",
                 }}
                 className={`${isLeft ? 'translate-x-3' : 'translate-x-48'
