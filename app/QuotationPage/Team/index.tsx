@@ -18,7 +18,7 @@ import { Grid, Scrollbar, FreeMode, Navigation } from 'swiper/modules'
 const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
     return (
-        <div className="py-44 container mx-auto lg:max-w-7xl relative">
+        <div className="py-44 container mx-auto lg:max-w-7xl relative" id='team'>
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
                 our team
             </h1>
@@ -130,10 +130,10 @@ const Team = () => {
                     })}
                 </Swiper>
             )}
-            <button className="arrow-left absolute top-1/2 left-0 transform -translate-y-1/2 z-50 ml-2 mt-10 bg-blue-500 cursor-pointer text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
+            <button className="arrow-left absolute top-1/2 left-0 transform -translate-y-1/2 z-30 ml-2 mt-10 bg-blue-500 cursor-pointer text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
                 <FaArrowCircleLeft className='h-5 w-5' />
             </button>
-            <button className="arrow-right absolute top-1/2 right-0 transform -translate-y-1/2 z-50 mr-2 mt-10 bg-blue-500 text-white cursor-pointer p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
+            <button className="arrow-right absolute top-1/2 right-0 transform -translate-y-1/2 z-30 mr-2 mt-10 bg-blue-500 text-white cursor-pointer p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
                 <FaArrowCircleRight className='h-5 w-5' />
             </button>
         </div>
