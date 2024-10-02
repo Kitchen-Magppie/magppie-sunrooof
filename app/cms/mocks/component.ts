@@ -1,4 +1,5 @@
 import {
+    ComponentFeatureEnum,
     CustomerComponentEnum,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
@@ -94,6 +95,10 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
         ]
+    },
+    {
+        value: CustomerComponentEnum.Feature,
+        data: ComponentFeatureEnum.Office
     },
     {
         value: CustomerComponentEnum.ThreeDDesign,
