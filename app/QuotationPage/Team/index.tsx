@@ -131,10 +131,10 @@ const Team = () => {
                 </Swiper>
             )}
             <button className="arrow-left absolute top-1/2 left-0 transform -translate-y-1/2 z-30 ml-2 mt-10 bg-blue-500 cursor-pointer text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
-                <FaArrowCircleLeft className='h-6 w-6' />
+                <FaArrowCircleLeft className='h-5 w-5' />
             </button>
             <button className="arrow-right absolute top-1/2 right-0 transform -translate-y-1/2 z-30 mr-2 mt-10 bg-blue-500 text-white cursor-pointer p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
-                <FaArrowCircleRight className='h-6 w-6' />
+                <FaArrowCircleRight className='h-5 w-5' />
             </button>
         </div>
     )
