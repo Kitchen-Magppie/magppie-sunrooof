@@ -9,10 +9,45 @@ import {
 } from "../../../types"
 import { QuotationMock } from ".";
 
+export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
+    {
+        value: ComponentFeatureEnum.Office,
+        label: 'Office',
+    },
+    {
+        value: ComponentFeatureEnum.Home,
+        label: 'Home',
+    },
+    {
+        value: ComponentFeatureEnum.Restaurant,
+        label: 'Restaurant',
+    },
+    {
+        value: ComponentFeatureEnum.Hospital,
+        label: 'Hospital',
+    },
+    {
+        value: ComponentFeatureEnum.School,
+        label: 'School',
+    },
+    {
+        value: ComponentFeatureEnum.RetailSpace,
+        label: 'Retail Space',
+    },
+    {
+        value: ComponentFeatureEnum.Hotel,
+        label: 'Hotel',
+    },
+
+]
 export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     {
         value: CustomerComponentEnum.Client,
         label: 'Client',
+    },
+    {
+        value: CustomerComponentEnum.Feature,
+        label: 'Feature',
     },
     {
         value: CustomerComponentEnum.Comparison,
@@ -31,6 +66,7 @@ export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
         label: 'Quotation',
     },
 ]
+
 
 export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     name: '',
