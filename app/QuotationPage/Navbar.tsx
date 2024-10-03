@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
-import { IoIosMenu } from 'react-icons/io' // Import the 'close' icon
-import { motion } from 'framer-motion' // Import framer-motion for smooth animations
+import { useState } from 'react'
+import { IoIosMenu } from 'react-icons/io'
+import { motion } from 'framer-motion'
 import logo from '../../assets/WithoutBG.png'
 import logoHeader from './assets/logo_header.png'
+import { Link } from 'react-scroll' // Import Link from react-scroll
 
 const Navbar = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -11,20 +12,7 @@ const Navbar = () => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen)
     }
-
-    // Close sidebar on 'Esc' key press
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === 'Escape' && isSidebarOpen) {
-                setIsSidebarOpen(false)
-            }
-        }
-        document.addEventListener('keydown', handleKeyDown)
-        return () => {
-            document.removeEventListener('keydown', handleKeyDown)
-        }
-    }, [isSidebarOpen])
-
+    
     return (
         <div>
             {/* Navbar */}
@@ -34,7 +22,7 @@ const Navbar = () => {
                 }`} // Apply blur when sidebar is open
             >
                 <div className="flex flex-col items-center lg:justify-center lg:w-full">
-                    <img src={logoHeader} alt="" className='w-80 lg:w-60' />
+                    <img src={logoHeader} alt="" className="w-80 lg:w-60" />
                 </div>
 
                 {/* Menu Toggle Button */}
@@ -65,47 +53,83 @@ const Navbar = () => {
                     </div>
                     {/* Sidebar Links */}
                     <ul className="flex flex-col items-start justify-start h-full w-full space-y-8 text-lg font-semibold">
+                        {/* Using react-scroll's Link component for smooth scrolling */}
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#about" onClick={toggleSidebar}>
+                            <Link
+                                to="about"
+                                smooth={true}
+                                duration={500}
+                                offset={-100} // Optional offset for better alignment
+                                onClick={toggleSidebar}
+                            >
                                 About
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#clients" onClick={toggleSidebar}>
+                            <Link
+                                to="clients"
+                                smooth={true}
+                                duration={500}
+                                offset={-100}
+                                onClick={toggleSidebar}
+                            >
                                 Our Clients
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#team" onClick={toggleSidebar}>
+                            <Link
+                                to="team"
+                                smooth={true}
+                                duration={500}
+                                offset={-100}
+                                onClick={toggleSidebar}
+                            >
                                 Our Team
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#terms" onClick={toggleSidebar}>
+                            <Link
+                                to="terms"
+                                smooth={true}
+                                duration={500}
+                                offset={-100}
+                                onClick={toggleSidebar}
+                            >
                                 Terms & Conditions
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#2d" onClick={toggleSidebar}>
+                            <Link
+                                to="2d"
+                                smooth={true}
+                                duration={500}
+                                offset={-100}
+                                onClick={toggleSidebar}
+                            >
                                 2D Designs
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#3d" onClick={toggleSidebar}>
+                            <Link
+                                to="3d"
+                                smooth={true}
+                                duration={500}
+                                offset={-100}
+                                onClick={toggleSidebar}
+                            >
                                 3D Designs
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                         <li className="hover:text-gray-400 text-2xl transition duration-200 cursor-pointer">
-                            <a href="#quotation" onClick={toggleSidebar}>
+                            <Link
+                                to="quotation"
+                                smooth={true}
+                                duration={500}
+                                offset={-100}
+                                onClick={toggleSidebar}
+                            >
                                 Quotation
-                            </a>{' '}
-                            {/* Added href */}
+                            </Link>
                         </li>
                     </ul>
                 </div>

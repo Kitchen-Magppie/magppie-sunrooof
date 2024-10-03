@@ -2138,6 +2138,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-scroll@npm:^1":
+  version: 1.8.10
+  resolution: "@types/react-scroll@npm:1.8.10"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/fd488a2446f3654c7594fa664a3592661d2685608717f80e32d3749f496974d20876bcb127522a69b8249c2f513895a84b89bf6eeb95442fc6f5e7023f6baaff
+  languageName: node
+  linkType: hard
+
 "@types/react-transition-group@npm:^4.4.0":
   version: 4.4.10
   resolution: "@types/react-transition-group@npm:4.4.10"
@@ -4073,6 +4082,7 @@ __metadata:
     "@types/react-lazy-load-image-component": "npm:^1.6.4"
     "@types/react-redux": "npm:^7.1.33"
     "@types/react-router-dom": "npm:^5.3.3"
+    "@types/react-scroll": "npm:^1"
     "@types/uuid": "npm:^10"
     "@types/yup": "npm:^0.32.0"
     "@typescript-eslint/eslint-plugin": "npm:^7.2.0"
@@ -4101,6 +4111,7 @@ __metadata:
     react-redux: "npm:^9.1.2"
     react-responsive-carousel: "npm:^3.2.23"
     react-router-dom: "npm:^6.23.1"
+    react-scroll: "npm:^1.9.0"
     react-select: "npm:^5.8.0"
     react-toastify: "npm:^10.0.5"
     react-use: "npm:^17.5.1"
@@ -4837,7 +4848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2":
+"prop-types@npm:^15.5.8, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -5021,6 +5032,19 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 10c0/091949805745136350ab049b2a96281bf38742c9d3651019fb48ea79c5eafbfb0379f1d3e636602dd56b0ef278389e8fd25be983dc2c0ffd1103d06dfa8019f3
+  languageName: node
+  linkType: hard
+
+"react-scroll@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "react-scroll@npm:1.9.0"
+  dependencies:
+    lodash.throttle: "npm:^4.1.1"
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: ^15.5.4 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^15.5.4 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/bcaa045740351ba1373d2e3f236b1ff0d383e4e5efd43d87644c165a3c1c4988bd0361515c487688daf39c122b035c8a014fcd9184f51deb4a0d2c232ac5fb61
   languageName: node
   linkType: hard
 
