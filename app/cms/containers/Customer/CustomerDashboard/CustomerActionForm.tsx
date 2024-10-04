@@ -7,7 +7,7 @@ import { IoIosLink } from "react-icons/io";
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-use';
-
+import Select from 'react-select';
 //====================================================================
 
 import {
@@ -138,7 +138,15 @@ export function CustomerActionForm(props: TProps) {
                         return <div key={i}>
                             <MinimalAccordion isExpanded title={title}>
                                 <div className="d-flex flex-row gap">
-                                    {CUSTOMER_COMPONENT_FEATURE_OPTIONS?.map((feature) => {
+                                    <Select
+                                        // defaultValue={component.data}
+                                        onChange={(e) => {
+                                            setValue(`components.${i}.data`, e.value)
+                                        }}
+                                        defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(({ value }) => value === data.data)}
+                                        options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
+                                    />
+                                    {/* {CUSTOMER_COMPONENT_FEATURE_OPTIONS?.map((feature) => {
                                         return (<div key={feature.value} className=''>
                                             <input
                                                 id={`feature-${i}`}
@@ -159,7 +167,7 @@ export function CustomerActionForm(props: TProps) {
                                             </label>
                                         </div>)
 
-                                    })}
+                                    })} */}
 
                                 </div>
 
