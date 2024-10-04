@@ -36,7 +36,7 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
             <FaRegCalendarAlt size={24} />
             {dayjs(props.item.at.created).format('DD/MM/YYYY')}
         </div>
-        <div className="flex items-center mb-2 gap-2">
+        <div className="flex items-center mb-2 gap-2 overflow-hidden">
             {publishedUrl?.length ? (<>
                 <IoIosLink className="cursor-pointer" size={24} />
                 <Link
