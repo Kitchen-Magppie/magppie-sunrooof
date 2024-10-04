@@ -255,10 +255,14 @@ export function CustomerActionForm(props: TProps) {
                                             </label>
                                             <input
                                                 type="text"
-                                                {...register(`components.${i}.data.name`)}
+                                                value={values.name}
+                                                onChange={(e) => {
+                                                    setValue('name', e.target.value)
+                                                }}
+                                                // {...register(`components.${i}.data.name`)}
                                                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                             />
-                                            {renderErrorMessage(`components.${i}.data.name`)}
+                                            {renderErrorMessage(`name`)}
                                         </div>
                                         <div className="bg-white  overflow-y-scroll">
                                             <label className="block text-sm font-medium text-gray-700">
