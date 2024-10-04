@@ -262,7 +262,7 @@ export function CustomerActionForm(props: TProps) {
                                         </div>
                                         <div className="bg-white  overflow-y-scroll">
                                             <label className="block text-sm font-medium text-gray-700">
-                                                Name
+                                                Email
                                             </label>
                                             <input
                                                 type="text"
