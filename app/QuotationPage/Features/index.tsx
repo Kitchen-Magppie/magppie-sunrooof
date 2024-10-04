@@ -1,8 +1,9 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { features } from './data'
-import Logo from '../../../assets/logo-black-text.png'
+import Logo from '../../../assets/logo-black-text-withoutBg.png'
 import threeLines from '../assets/three-lines.png'
 import './index.css'
+import bgImage from '../assets/features/Background.jpg'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -13,8 +14,12 @@ import { Pagination } from 'swiper/modules'
 
 const Features = () => {
     return (
-        <div id="features">
-            <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto py-20 px-4">
+        <div
+            id="features"
+            style={{ backgroundImage: `url(${bgImage})` }}
+            className="bg-cover bg-center bg-no-repeat py-24"
+        >
+            <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto px-4">
                 <div className="flex flex-col mb-24 items-center justify-center text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
                     <h1 className="text-4xl font-semibold capitalize">
@@ -27,12 +32,14 @@ const Features = () => {
                             key={feature.id}
                             className="flex flex-col items-center w-full justify-center mb-10 text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center"
                         >
-                            <LazyLoadImage
-                                effect="blur"
-                                src={feature.img}
-                                className="h-40 w-40 object-cover hover:scale-105 transition-transform duration-300 mb-2"
-                                alt={feature.heading}
-                            />
+                            <div className="h-20 w-20 lg:h-40 lg:w-40 object-cover">
+                                <LazyLoadImage
+                                    effect="blur"
+                                    src={feature.img}
+                                    className="w-full h-full"
+                                    alt={feature.heading}
+                                />
+                            </div>
                             <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-1">
                                 {feature.heading}
                             </h2>
@@ -65,7 +72,7 @@ const Features = () => {
                                     <LazyLoadImage
                                         effect="blur"
                                         src={feature.img}
-                                        className="h-40 w-40 mb-4"
+                                        className="h-60 w-60 mb-4"
                                         alt={feature.heading}
                                     />
                                     <h2 className="text-5xl mb-2 lg:text-xl pt-4 font-medium">
