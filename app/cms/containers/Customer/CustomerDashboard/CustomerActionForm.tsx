@@ -78,6 +78,7 @@ export function CustomerActionForm(props: TProps) {
     }, [errors])
 
     const action = useFirebaseCustomerAction()
+
     const onSubmit = handleSubmit((data: TCustomerItem) => {
         setCorpus((prev) => ({ ...prev, isSubmitting: true }))
         setTimeout(() => {
@@ -100,7 +101,7 @@ export function CustomerActionForm(props: TProps) {
         }, 2000)
         props.onSubmit()
     })
-    // console.log(values)
+    console.log(errors)
     const renderPublishUrlContent = useMemo(() => {
         return publishedUrl?.length ? (
             <div className="flex flex-row gap-2 justify-between my-2 ">
