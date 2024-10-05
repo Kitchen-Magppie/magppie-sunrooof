@@ -34,8 +34,8 @@ export default function Header() {
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <div>
                     <Link to="/cms">
-                        <span className="self-center text-2xl font-semibold whitespace-nowrap">
-                            MagpPie
+                        <span className="self-center uppercase text-2xl font-semibold whitespace-nowrap">
+                            sunrooof
                         </span>
                     </Link>
                 </div>
