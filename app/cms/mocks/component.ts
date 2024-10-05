@@ -129,7 +129,7 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
         value: CustomerComponentEnum.TwoDDesign,
         data: [
             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-            INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+            // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
         ]
     },
     {

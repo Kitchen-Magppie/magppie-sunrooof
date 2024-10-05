@@ -1,10 +1,10 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { IoCreateOutline, IoLocationOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import dayjs from 'dayjs'
 import { useLocation } from "react-use";
 import { IoIosLink } from "react-icons/io";
-import { Link } from "react-router-dom";
 //====================================================================
 
 import { TCmsCustomerCardItem } from "../../types";
@@ -14,12 +14,13 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     const location = useLocation()
 
     const publishedUrl = useMemo(() => {
-        if (props.item.id?.length)
+        if (props.item.id?.length) {
             return ([location.origin, 'quotation', props.item.id].join('/'))
+        }
         return ''
     }, [location.origin, props.item.id])
-    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out"
-    >
+
+    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out">
         <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-semibold">{props.item.name}</h2>
             <button className="border p-1 rounded-full border-gray-400  bg-white cursor-pointer"
@@ -29,7 +30,6 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
                     <IoIosLink className="cursor-pointer"
                     />
                 </Link>) : ''}
-
             </button>
         </div>
         <div className="flex items-center mb-2 gap-2">
