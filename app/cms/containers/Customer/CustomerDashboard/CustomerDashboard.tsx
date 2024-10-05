@@ -109,12 +109,9 @@ export default function CustomerDashboard() {
                                     )
                                 })}
                             </>
-                        ) : (
-                            <div className="mt-40">
-
-                                <CmsNotFound />
-                            </div>
-                        )}
+                        ) : (<div className="mt-40">
+                            <CmsNotFound />
+                        </div>)}
                     </div>
                 </div>
             </div>

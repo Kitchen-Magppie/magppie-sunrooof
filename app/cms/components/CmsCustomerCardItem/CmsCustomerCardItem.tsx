@@ -6,12 +6,14 @@ import dayjs from 'dayjs'
 import { useLocation } from "react-use";
 import { IoIosLink } from "react-icons/io";
 //====================================================================
+import { DEFAULT_CUSTOMER } from '../../mocks'
 
 import { TCmsCustomerCardItem } from "../../types";
 
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     const location = useLocation()
+    const isDefault = DEFAULT_CUSTOMER.customerId === props.item.customerId
 
     const publishedUrl = useMemo(() => {
         if (props.item.id?.length) {
@@ -22,7 +24,14 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
 
     return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out">
         <div className="flex justify-between items-center mb-2">
-            <h2 className="text-lg font-semibold">{props.item.name}</h2>
+            <div className="flex gap-1">
+                <h2 className="text-lg font-semibold">{props.item.name}</h2>
+                {isDefault ? (<div
+                    className="flex flex-col align-middle justify-center rounded-md bg-orange-400 px-1 py-0 border border-transparent text-sm text-white">
+                    Default
+                </div>) : ''}
+
+            </div>
             <button className="border p-1 rounded-full border-gray-400  bg-white cursor-pointer"
                 title="Go to Published Link"
             >
