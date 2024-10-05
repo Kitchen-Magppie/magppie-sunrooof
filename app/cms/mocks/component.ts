@@ -1,6 +1,8 @@
 import {
+    ComponentComparisonDataEnum,
     ComponentFeatureEnum,
     CustomerComponentEnum,
+    TComponentComparisonDataOption,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
@@ -77,11 +79,11 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
 }
 
 export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
-    designBy: '',
-    approvedBy: '',
+    // designBy: '',
+    // approvedBy: '',
     design: '',
     finish: '',
-    ceilingHeightOnSite: '',
+    // ceilingHeightOnSite: '',
     afterInstallation: '',
     // yourPlan: '',
     header: '',
@@ -90,6 +92,16 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 }
 
 
+
+
+export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
+    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow },
+    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
+    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
+    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
+    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
+    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
+];
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
     // { label: "Design By", value: "designBy", field: 'text' },
@@ -191,11 +203,11 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
             data: [
                 {
                     ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                    designBy: 'Nishtha',
-                    approvedBy: 'Mrinal',
+                    // designBy: 'Nishtha',
+                    // approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    ceilingHeightOnSite: 'Pearl White',
+                    // ceilingHeightOnSite: 'Pearl White',
                     afterInstallation: '10ft',
                     // yourPlan: '8ft 11 inch',
                     header: 'Board Room',
@@ -204,11 +216,11 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
                 },
                 {
                     ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                    designBy: 'Nishtha',
-                    approvedBy: 'Mrinal',
+                    // designBy: 'Nishtha',
+                    // approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    ceilingHeightOnSite: 'French Window',
+                    // ceilingHeightOnSite: 'French Window',
                     afterInstallation: '',
                     // yourPlan: '',
                     header: 'Board Room',

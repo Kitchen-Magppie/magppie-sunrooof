@@ -34,11 +34,11 @@ export type TCustomerComponentQuotationItem = {
 
 export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem, field: 'text' | 'image' | 'select' }
 export type TCustomerComponentDesign2DDataItem = {
-    designBy: string,
-    approvedBy: string,
+    // designBy: string,
+    // approvedBy: string,
     design: string,
     finish: string,
-    ceilingHeightOnSite: string,
+    // ceilingHeightOnSite: string,
     afterInstallation: string,
     // yourPlan: string,
     header: string,
@@ -59,6 +59,17 @@ export enum CustomerComponentEnum {
     Quotation = 'quotations',
     None = ''
 }
+export enum ComponentComparisonDataEnum {
+    FrenchWindow = 'french-window',
+    ArchWindow = 'arch-window',
+    LouveredWindow = 'louvered-window',
+    ClassicalSunrooof = 'classical-sunrooof',
+    FlutedMinimalistSunrooof = 'fluted-minimalist-sunrooof',
+    ModernSunrooof = 'modern-sunrooof',
+}
+export type TComponentComparisonDataOption = { label: string, value: ComponentComparisonDataEnum }
+
+
 
 export type TCustomerComponentDesign3DItem = {
     value: CustomerComponentEnum.ThreeDDesign,
@@ -124,17 +135,18 @@ export const SPECIAL_CHARACTER_TO_DOM = (text: string) => {
 
 
 
-const comparisonDataItemSchema = yup.object().shape({
-    value: yup.string().nullable(),
-    image: yup.object().shape({
-        before: yup.string().required(),
-        after: yup.string().required(),
-    }).required(),
-});
+// const comparisonDataItemSchema = yup.object().shape({
+//     value: yup.string().nullable(),
+//     image: yup.object().shape({
+//         before: yup.string().required(),
+//         after: yup.string().required(),
+//     }).required(),
+// });
 
 const customerComponentComparisonItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Comparison]).required(),
-    data: yup.array().of(comparisonDataItemSchema).required(),
+    // data: yup.array().of(comparisonDataItemSchema).required(),
+    data: yup.string().required(),
 });
 
 // const customerComponentClientItemSchema = yup.object().shape({
@@ -165,11 +177,11 @@ const customerComponentQuotationItemSchema = yup.object().shape({
 const customerComponentDesign2DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
     data: yup.array().of(yup.object().shape({
-        designBy: yup.string().required(),
-        approvedBy: yup.string().required(),
+        // designBy: yup.string().required(),
+        // approvedBy: yup.string().required(),
         design: yup.string().required(),
         finish: yup.string().required(),
-        ceilingHeightOnSite: yup.string().required(),
+        // ceilingHeightOnSite: yup.string().required(),
         afterInstallation: yup.string().required(),
         // yourPlan: yup.string().required(),
         header: yup.string().required(),
