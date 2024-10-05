@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-use'
 import Select from 'react-select'
+import { IoIosRemoveCircleOutline } from "react-icons/io";
 //====================================================================
 
 import {
@@ -15,7 +16,7 @@ import {
     ComponentModeEnum,
     CustomerComponentEnum,
     TCustomerComponentComparisonItem,
-    TCustomerComponentDesign2DDataItem,
+    TCustomerComponentDesign2DItem,
     TCustomerComponentFeatureItem,
     TCustomerItem,
     validateCustomerItemSchema,
@@ -25,6 +26,7 @@ import {
     CUSTOMER_COMPONENT_FEATURE_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
+    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
 } from '../../../mocks'
 import {
     CmsCopyClipboard,
@@ -102,7 +104,7 @@ export function CustomerActionForm(props: TProps) {
     })
     const renderPublishUrlContent = useMemo(() => {
         return publishedUrl?.length ? (
-            <div className="flex flex-row gap-2 justify-between my-2">
+            <div className="flex flex-row gap-2 justify-between my-2 ">
                 <div className="flex gap-1 align-middle justify-center">
                     <button
                         type="button"
@@ -133,55 +135,48 @@ export function CustomerActionForm(props: TProps) {
         )
     }, [publishedUrl])
 
-    return (
-        <form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll">
-            <div className="flex flex-col gap-2">
-                <div className="bg-white px-6">
-                    <label className="block text-sm font-medium text-gray-700">
-                        Name
-                    </label>
-                    <input
-                        type="text"
-                        {...register('name')}
-                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                    {renderErrorMessage('name')}
-                </div>
-                <div className="px-6"></div>
+    return (<form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll ">
+        <div className="flex flex-col gap-2">
+            <div className="bg-white px-6">
+                <label className="block text-sm font-medium text-gray-700">
+                    Name
+                </label>
+                <input
+                    type="text"
+                    {...register('name')}
+                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                {renderErrorMessage('name')}
             </div>
+            <div className="px-6"></div>
+        </div>
 
-            {/* Components (rendering depends on the type of component) */}
-            <div className="px-6">
-                {values?.components?.map((component, i) => {
-                    const value = _.get(component, 'value')
-                    const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find(
-                        (item) => item.value === value
-                    ).label
-                    switch (value) {
-                        case CustomerComponentEnum.Feature: {
-                            const data =
-                                component as TCustomerComponentFeatureItem
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="d-flex flex-row gap">
-                                            <Select
-                                                // defaultValue={component.data}
-                                                onChange={(e) => {
-                                                    setValue(
-                                                        `components.${i}.data`,
-                                                        e.value
-                                                    )
-                                                }}
-                                                defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
-                                                    ({ value }) =>
-                                                        value === data.data
-                                                )}
-                                                options={
-                                                    CUSTOMER_COMPONENT_FEATURE_OPTIONS
-                                                }
-                                            />
-                                            {/* {CUSTOMER_COMPONENT_FEATURE_OPTIONS?.map((feature) => {
+        {/* Components (rendering depends on the type of component) */}
+        <div className="px-6">
+            {values?.components?.map((component, i) => {
+                const value = _.get(component, 'value')
+                const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find(
+                    (item) => item.value === value
+                ).label
+                switch (value) {
+                    case CustomerComponentEnum.Feature: {
+                        const data = component as TCustomerComponentFeatureItem
+                        return (<div key={i}>
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="d-flex flex-row gap">
+                                    <Select
+                                        onChange={(e) => {
+                                            setValue(`components.${i}.data`, e.value)
+                                        }}
+                                        defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
+                                            ({ value }) =>
+                                                value === data.data
+                                        )}
+                                        options={
+                                            CUSTOMER_COMPONENT_FEATURE_OPTIONS
+                                        }
+                                    />
+                                    {/* {CUSTOMER_COMPONENT_FEATURE_OPTIONS?.map((feature) => {
                                         return (<div key={feature.value} className=''>
                                             <input
                                                 id={`feature-${i}`}
@@ -203,408 +198,410 @@ export function CustomerActionForm(props: TProps) {
                                         </div>)
 
                                     })} */}
-                                        </div>
-                                    </MinimalAccordion>
                                 </div>
-                            )
-                        }
-                        // case CustomerComponentEnum.Client:
-                        //     return <div key={i}>
-                        //         <MinimalAccordion isExpanded title={title}>
-                        //             <div className="grid grid-cols-2 gap-2">
-                        //                 <div className="bg-white overflow-y-scroll">
-                        //                     <label className="block text-sm font-medium text-gray-700">
-                        //                         Name
-                        //                     </label>
-                        //                     <input
-                        //                         type="text"
-                        //                         {...register(`components.${i}.data.name`)}
-                        //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        //                     />
-                        //                     {renderErrorMessage(`components.${i}.data.name`)}
-                        //                 </div>
-                        //                 <div className="bg-white  overflow-y-scroll">
-                        //                     <label className="block text-sm font-medium text-gray-700">
-                        //                         Description
-                        //                     </label>
-                        //                     <input
-                        //                         type="text"
-                        //                         {...register(`components.${i}.data.description`)}
-                        //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        //                     />
-                        //                     {renderErrorMessage(`components.${i}.data.description`)}
-                        //                 </div>
-                        //             </div>
+                            </MinimalAccordion>
+                        </div>
+                        )
+                    }
+                    // case CustomerComponentEnum.Client:
+                    //     return <div key={i}>
+                    //         <MinimalAccordion isExpanded title={title}>
+                    //             <div className="grid grid-cols-2 gap-2">
+                    //                 <div className="bg-white overflow-y-scroll">
+                    //                     <label className="block text-sm font-medium text-gray-700">
+                    //                         Name
+                    //                     </label>
+                    //                     <input
+                    //                         type="text"
+                    //                         {...register(`components.${i}.data.name`)}
+                    //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    //                     />
+                    //                     {renderErrorMessage(`components.${i}.data.name`)}
+                    //                 </div>
+                    //                 <div className="bg-white  overflow-y-scroll">
+                    //                     <label className="block text-sm font-medium text-gray-700">
+                    //                         Description
+                    //                     </label>
+                    //                     <input
+                    //                         type="text"
+                    //                         {...register(`components.${i}.data.description`)}
+                    //                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    //                     />
+                    //                     {renderErrorMessage(`components.${i}.data.description`)}
+                    //                 </div>
+                    //             </div>
 
-                        //         </MinimalAccordion>
-                        //     </div>
-                        case CustomerComponentEnum.Comparison: {
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {(
-                                                component as TCustomerComponentComparisonItem
-                                            ).data.map((item, j) => {
-                                                const data = {
-                                                    before: item.image.before
-                                                        ?.length
-                                                        ? [item.image.before]
-                                                        : [],
-                                                    after: item.image.after
-                                                        ?.length
-                                                        ? [item.image.after]
-                                                        : [],
-                                                }
-                                                return (
-                                                    <div
-                                                        key={`component-${i}-${j}`}
-                                                    >
-                                                        <div className="">
-                                                            #{j + 1}
-                                                        </div>
-                                                        <ImageInput
-                                                            values={data.before}
-                                                            path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
-                                                            label="Before"
-                                                            onSuccess={(e) => {
-                                                                setValue(
-                                                                    `components.${i}.data.${j}.image.before`,
-                                                                    e[0]
-                                                                )
-                                                            }}
-                                                        />
-                                                        {renderErrorMessage(
-                                                            `components.${i}.data.${j}.image.before`
-                                                        )}
-
-                                                        <ImageInput
-                                                            values={data.after}
-                                                            path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
-                                                            label="After"
-                                                            onSuccess={(e) => {
-                                                                setValue(
-                                                                    `components.${i}.data.${j}.image.after`,
-                                                                    e[0]
-                                                                )
-                                                            }}
-                                                        />
-                                                        {renderErrorMessage(
-                                                            `components.${i}.data.${j}.image.after`
-                                                        )}
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
-                                    </MinimalAccordion>
-                                </div>
-                            )
-                        }
-                        case CustomerComponentEnum.Quotation: {
-                            const image = _.get(
-                                component,
-                                'data.invoiceUrl',
-                                ''
-                            )
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="flex flex-col gap-2">
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Name
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        value={values.name}
-                                                        onChange={(e) => {
-                                                            setValue(
-                                                                'name',
-                                                                e.target.value
-                                                            )
-                                                        }}
-                                                        // {...register(`components.${i}.data.name`)}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(`name`)}
-                                                </div>
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Email
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(
-                                                            `components.${i}.data.email`
-                                                        )}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.email`
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Mobile
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(
-                                                            `components.${i}.data.mobile`
-                                                        )}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.mobile`
-                                                    )}
-                                                </div>
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Created Date
-                                                    </label>
-                                                    <input
-                                                        type="date"
-                                                        {...register(
-                                                            `components.${i}.data.createdDate`
-                                                        )}
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
-                                                        placeholder="Created Date"
-                                                    />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.createdDate`
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Address
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(
-                                                            `components.${i}.data.address`
-                                                        )}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.address`
-                                                    )}
-                                                </div>
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Zone
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(
-                                                            `components.${i}.data.zone`
-                                                        )}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.zone`
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <ImageInput
-                                                label="Invoice URL"
-                                                values={
-                                                    image?.length ? [image] : []
-                                                }
-                                                path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
-                                                onSuccess={(e) => {
-                                                    setValue(
-                                                        `components.${i}.data.invoiceUrl`,
-                                                        e[0]
-                                                    )
-                                                }}
-                                            />
-                                            {renderErrorMessage(
-                                                `components.${i}.data.invoiceUrl`
-                                            )}
-                                        </div>
-                                    </MinimalAccordion>
-                                </div>
-                            )
-                        }
-                        case CustomerComponentEnum.ThreeDDesign: {
-                            const images = {
-                                first: `${
-                                    _.get(component, 'data.0', '') || ''
-                                }`,
-                                last: `${_.get(component, 'data.1', '') || ''}`,
-                            }
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <ImageInput
-                                                values={
-                                                    images.first?.length
-                                                        ? [images.first]
-                                                        : []
-                                                }
-                                                label="#1"
-                                                path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
-                                                onSuccess={(e) => {
-                                                    setValue(
-                                                        `components.${i}.data.0`,
-                                                        e[0]
-                                                    )
-                                                }}
-                                            />
-                                            {renderErrorMessage(
-                                                `components.${i}.data.0`
-                                            )}
-
-                                            <ImageInput
-                                                label="#2"
-                                                values={
-                                                    images?.last?.length
-                                                        ? [images.last]
-                                                        : []
-                                                }
-                                                path={`customers/${values?.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
-                                                onSuccess={(e) => {
-                                                    setValue(
-                                                        `components.${i}.data.1`,
-                                                        e[0]
-                                                    )
-                                                }}
-                                            />
-                                            {renderErrorMessage(
-                                                `components.${i}.data.1`
-                                            )}
-                                        </div>
-                                    </MinimalAccordion>
-                                </div>
-                            )
-                        }
-                        case CustomerComponentEnum.TwoDDesign: {
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
+                    //         </MinimalAccordion>
+                    //     </div>
+                    case CustomerComponentEnum.Comparison: {
+                        return (
+                            <div key={i}>
+                                <MinimalAccordion isExpanded title={title}>
+                                    <div className="grid grid-cols-2 gap-2">
                                         {(
-                                            _.get(
-                                                component,
-                                                'data',
-                                                []
-                                            ) as TCustomerComponentDesign2DDataItem[]
-                                        )?.map((data, k) => {
+                                            component as TCustomerComponentComparisonItem
+                                        ).data.map((item, j) => {
+                                            const data = {
+                                                before: item.image.before
+                                                    ?.length
+                                                    ? [item.image.before]
+                                                    : [],
+                                                after: item.image.after
+                                                    ?.length
+                                                    ? [item.image.after]
+                                                    : [],
+                                            }
                                             return (
                                                 <div
-                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
-                                                    className="flex flex-col gap-2"
+                                                    key={`component-${i}-${j}`}
                                                 >
-                                                    <div className="text-gray-400 italic  text-lg">
-                                                        #{k + 1}
+                                                    <div className="">
+                                                        #{j + 1}
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-2">
-                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                            (item) =>
-                                                                item.field ===
-                                                                'text'
-                                                        )?.map((item, j) => {
-                                                            return (
-                                                                <div
-                                                                    className="bg-white"
-                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                >
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        {
-                                                                            item.label
-                                                                        }
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        {...register(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                                    />
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.${k}.${item.value}`
-                                                                    )}
-                                                                </div>
+                                                    <ImageInput
+                                                        values={data.before}
+                                                        path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
+                                                        label="Before"
+                                                        onSuccess={(e) => {
+                                                            setValue(`components.${i}.data.${j}.image.before`, e[0])
+                                                        }}
+                                                    />
+                                                    {renderErrorMessage(`components.${i}.data.${j}.image.before`)}
+
+                                                    <ImageInput
+                                                        values={data.after}
+                                                        path={`customers/${values.customerId}/${CustomerComponentEnum.Comparison}`}
+                                                        label="After"
+                                                        onSuccess={(e) => {
+                                                            setValue(
+                                                                `components.${i}.data.${j}.image.after`,
+                                                                e[0]
                                                             )
-                                                        })}
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-2">
-                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                            (item) =>
-                                                                item.field ===
-                                                                'image'
-                                                        )?.map((item, j) => {
-                                                            const value =
-                                                                data[item.value]
-                                                            const items =
-                                                                value?.length
-                                                                    ? [value]
-                                                                    : []
-                                                            return (
-                                                                <div key={j}>
-                                                                    <ImageInput
-                                                                        label={
-                                                                            item.label
-                                                                        }
-                                                                        key={j}
-                                                                        path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                        values={
-                                                                            items
-                                                                        }
-                                                                        onSuccess={(
-                                                                            e
-                                                                        ) => {
-                                                                            setValue(
-                                                                                `components.${i}.data.${k}.${item.value}`,
-                                                                                e[0]
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.${k}.${item.value}`
-                                                                    )}
-                                                                </div>
-                                                            )
-                                                        })}
-                                                    </div>
+                                                        }}
+                                                    />
+                                                    {renderErrorMessage(
+                                                        `components.${i}.data.${j}.image.after`
+                                                    )}
                                                 </div>
                                             )
                                         })}
-                                    </MinimalAccordion>
-                                </div>
-                            )
-                        }
-                        default:
-                            return <div key={i} />
+                                    </div>
+                                </MinimalAccordion>
+                            </div>
+                        )
                     }
-                })}
-                {errors.components && <p>{errors.components.message}</p>}
+                    case CustomerComponentEnum.Quotation: {
+                        const image = _.get(
+                            component,
+                            'data.invoiceUrl',
+                            ''
+                        )
+                        return (
+                            <div key={i}>
+                                <MinimalAccordion isExpanded title={title}>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={values.name}
+                                                    onChange={(e) => {
+                                                        setValue(
+                                                            'name',
+                                                            e.target.value
+                                                        )
+                                                    }}
+                                                    // {...register(`components.${i}.data.name`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`name`)}
+                                            </div>
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Email
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(
+                                                        `components.${i}.data.email`
+                                                    )}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(
+                                                    `components.${i}.data.email`
+                                                )}
+                                            </div>
+                                        </div>
 
-                {renderPublishUrlContent}
-                <div className="mb-20" />
-            </div>
-            <div className="left-0 right-0 absolute bottom-5 px-10">
-                <button
-                    disabled={corpus.isSubmitting}
-                    type="submit"
-                    className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    {isCreateAction ? 'Create' : 'Edit'} Component
-                    {corpus.isSubmitting ? (
-                        <AiOutlineLoading3Quarters className="text-xl animate-spin" />
-                    ) : (
-                        <IoCreateOutline className="text-xl" />
-                    )}
-                </button>
-            </div>
-        </form>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Mobile
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(
+                                                        `components.${i}.data.mobile`
+                                                    )}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(
+                                                    `components.${i}.data.mobile`
+                                                )}
+                                            </div>
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Created Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    {...register(
+                                                        `components.${i}.data.createdDate`
+                                                    )}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                                                    placeholder="Created Date"
+                                                />
+                                                {renderErrorMessage(
+                                                    `components.${i}.data.createdDate`
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Address
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(
+                                                        `components.${i}.data.address`
+                                                    )}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(
+                                                    `components.${i}.data.address`
+                                                )}
+                                            </div>
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Zone
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(
+                                                        `components.${i}.data.zone`
+                                                    )}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(
+                                                    `components.${i}.data.zone`
+                                                )}
+                                            </div>
+                                        </div>
+                                        <ImageInput
+                                            label="Invoice URL"
+                                            values={
+                                                image?.length ? [image] : []
+                                            }
+                                            path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
+                                            onSuccess={(e) => {
+                                                setValue(
+                                                    `components.${i}.data.invoiceUrl`,
+                                                    e[0]
+                                                )
+                                            }}
+                                        />
+                                        {renderErrorMessage(
+                                            `components.${i}.data.invoiceUrl`
+                                        )}
+                                    </div>
+                                </MinimalAccordion>
+                            </div>
+                        )
+                    }
+                    case CustomerComponentEnum.ThreeDDesign: {
+                        const images = {
+                            first: `${_.get(component, 'data.0', '') || ''
+                                }`,
+                            last: `${_.get(component, 'data.1', '') || ''}`,
+                        }
+                        return (
+                            <div key={i}>
+                                <MinimalAccordion isExpanded title={title}>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <ImageInput
+                                            values={
+                                                images.first?.length
+                                                    ? [images.first]
+                                                    : []
+                                            }
+                                            label="#1"
+                                            path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                            onSuccess={(e) => {
+                                                setValue(
+                                                    `components.${i}.data.0`,
+                                                    e[0]
+                                                )
+                                            }}
+                                        />
+                                        {renderErrorMessage(
+                                            `components.${i}.data.0`
+                                        )}
+
+                                        <ImageInput
+                                            label="#2"
+                                            values={
+                                                images?.last?.length
+                                                    ? [images.last]
+                                                    : []
+                                            }
+                                            path={`customers/${values?.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                            onSuccess={(e) => {
+                                                setValue(
+                                                    `components.${i}.data.1`,
+                                                    e[0]
+                                                )
+                                            }}
+                                        />
+                                        {renderErrorMessage(
+                                            `components.${i}.data.1`
+                                        )}
+                                    </div>
+                                </MinimalAccordion>
+                            </div>
+                        )
+                    }
+                    case CustomerComponentEnum.TwoDDesign: {
+                        const prev = component as TCustomerComponentDesign2DItem
+
+                        return (<div key={i}>
+                            <MinimalAccordion isExpanded title={title}>
+                                <div className="">
+                                    <FieldCautation
+                                        onClickAdd={() => {
+                                            setValue(`components.${i}.data`, [
+                                                ...prev.data,
+                                                INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
+                                            ])
+                                        }}
+                                    />
+                                    {prev.data?.map((data, k) => {
+                                        const hasMoreThenOne = prev.data?.length > 1
+                                        return (
+                                            <div key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
+                                                className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
+                                            >
+                                                <div className="text-gray-400 italic text-lg flex justify-between">
+                                                    #{k + 1}
+                                                    <div className="py-1">
+                                                        <IoIosRemoveCircleOutline className={hasMoreThenOne ? 'text-red-500 cursor-pointer hover:text-red-800' : ''}
+                                                            onClick={() => {
+                                                                if (hasMoreThenOne)
+                                                                    setValue(`components.${i}.data`, prev.data.filter((_, m) => m !== k))
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                        ({ field }) => field === 'text'
+                                                    )?.map((item, j) => {
+                                                        return (<div
+                                                            className="bg-white"
+                                                            key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                        >
+                                                            <label className="block text-sm font-medium text-gray-700">
+                                                                {item.label}
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                {...register(
+                                                                    `components.${i}.data.${k}.${item.value}`
+                                                                )}
+                                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                            />
+                                                            {renderErrorMessage(
+                                                                `components.${i}.data.${k}.${item.value}`
+                                                            )}
+                                                        </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                        (item) =>
+                                                            item.field ===
+                                                            'image'
+                                                    )?.map((item, j) => {
+                                                        const value =
+                                                            data[item.value]
+                                                        const items =
+                                                            value?.length
+                                                                ? [value]
+                                                                : []
+                                                        return (
+                                                            <div key={j}>
+                                                                <ImageInput
+                                                                    label={
+                                                                        item.label
+                                                                    }
+                                                                    key={j}
+                                                                    path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                                    values={
+                                                                        items
+                                                                    }
+                                                                    onSuccess={(
+                                                                        e
+                                                                    ) => {
+                                                                        setValue(
+                                                                            `components.${i}.data.${k}.${item.value}`,
+                                                                            e[0]
+                                                                        )
+                                                                    }}
+                                                                />
+                                                                {renderErrorMessage(
+                                                                    `components.${i}.data.${k}.${item.value}`
+                                                                )}
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </MinimalAccordion>
+                        </div>
+                        )
+                    }
+                    default:
+                        return <div key={i} />
+                }
+            })}
+            {errors.components && <p>{errors.components.message}</p>}
+
+            {renderPublishUrlContent}
+            <div className="mb-20" />
+        </div>
+        <div className="left-0 right-0 absolute bottom-5 px-10">
+            <button
+                disabled={corpus.isSubmitting}
+                type="submit"
+                className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                {isCreateAction ? 'Create' : 'Edit'} Component
+                {corpus.isSubmitting ? (
+                    <AiOutlineLoading3Quarters className="text-xl animate-spin" />
+                ) : (
+                    <IoCreateOutline className="text-xl" />
+                )}
+            </button>
+        </div>
+    </form>
     )
 }
 

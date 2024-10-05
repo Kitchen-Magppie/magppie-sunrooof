@@ -175,7 +175,7 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
         header: yup.string().required(),
         leftImage: yup.string().required(),
         rightImage: yup.string().required(),
-    })).required(),
+    })).min(1).required(),
 });
 
 const customerComponentDesign3DItemSchema = yup.object().shape({
