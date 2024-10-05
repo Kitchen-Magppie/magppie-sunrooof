@@ -92,11 +92,11 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
-    { label: "Design By", value: "designBy", field: 'text' },
-    { label: "Approved By", value: 'approvedBy', field: 'text' },
-    { label: "Design", value: 'design', field: 'text' },
-    { label: "Finish", value: 'finish', field: 'text' },
-    { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
+    // { label: "Design By", value: "designBy", field: 'text' },
+    // { label: "Approved By", value: 'approvedBy', field: 'text' },
+    { label: "Design", value: 'design', field: 'select' },
+    { label: "Finish", value: 'finish', field: 'select' },
+    // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
     { label: "After Installation", value: 'afterInstallation', field: 'text' },
     { label: "Header", value: 'header', field: 'text' },
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
