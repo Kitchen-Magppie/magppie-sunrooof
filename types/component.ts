@@ -164,7 +164,7 @@ const customerComponentFeatureItemSchema = yup.object().shape({
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
     data: yup.object({
-        name: yup.string().required(),
+        name: yup.string().nullable(),
         email: yup.string().required(),
         mobile: yup.string().required(),
         createdDate: yup.string().required(),
