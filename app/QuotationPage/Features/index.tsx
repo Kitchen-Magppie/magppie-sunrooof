@@ -16,7 +16,15 @@ import { useMemo } from 'react'
 import { COMPONENT_FEATURE_DATA_OPTIONS } from '../../cms/mocks/feature'
 
 const Features = ({ item }: TProps) => {
-    const currentItem = useMemo(() => COMPONENT_FEATURE_DATA_OPTIONS?.find((option) => option.value === item.data), [item.data])
+    const currentItem = useMemo(
+        () =>
+            COMPONENT_FEATURE_DATA_OPTIONS?.find(
+                (option) => option.value === item.data
+            ),
+        [item.data]
+    )
+    console.log(currentItem)
+
     return (
         <div
             id="features"
