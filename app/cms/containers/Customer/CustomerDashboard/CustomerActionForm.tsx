@@ -66,6 +66,7 @@ export function CustomerActionForm(props: TProps) {
         },
     });
 
+    // console.log(errors)
     const values = watch();
 
     const renderErrorMessage = useCallback(
