@@ -2,7 +2,10 @@ import { ChangeEvent, useCallback, useState } from "react"
 import { IoMdClose } from "react-icons/io"
 import { useFirebaseStorageActions } from "../../hooks/firebase"
 
-import { CircularProgress } from ".."
+import {
+    CircularProgress,
+    // CustomConfirmationDialog
+} from ".."
 import { LazyLoadImage } from "react-lazy-load-image-component"
 
 export default function ImageInput(props: TImageActionProps) {
@@ -58,10 +61,22 @@ export default function ImageInput(props: TImageActionProps) {
         <div className="flex flex-wrap">
             {corpus.loading ? <CircularProgress /> : corpus?.values?.map((link, i) => {
                 return <div key={i} className="relative my-2 ">
-                    <ImageCard link={link} onRemove={onRemove} />
+                    <ImageCard link={link} onRemove={(e) => {
+                        onRemove(e)
+                    }} />
                 </div>
             })}
         </div>
+        {/* <CustomConfirmationDialog
+            show
+            text={{
+                header: 'Delete Confirmation',
+                remark: "Are you sure, you want to remove this image?"
+            }}
+            onHide={() => { }}
+            onConfirm={() => {
+            }}
+        /> */}
 
     </div>)
 }

@@ -115,6 +115,7 @@ export default function CustomerDashboard() {
                     </div>
                 </div>
             </div>
+
             {renderActionModal}
         </div>
     )
