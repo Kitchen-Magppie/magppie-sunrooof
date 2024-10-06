@@ -1,4 +1,5 @@
 // import { useFirebaseAuth } from '../appHooks/firebase/use-firebase-listeners'
+import { ToastContainer } from 'react-toastify'
 import Routes from '../routes'
 // import { useLocation, useNavigate } from 'react-router-dom';
 // import { RouteEnum } from "./types/route";
@@ -30,6 +31,7 @@ export default function App() {
     return (
         <>
             <Routes />
+            <ToastContainer />
         </>
     )
 }

@@ -1,5 +1,8 @@
 import {
+    ComponentComparisonDataEnum,
+    ComponentFeatureEnum,
     CustomerComponentEnum,
+    TComponentComparisonDataOption,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
@@ -8,10 +11,45 @@ import {
 } from "../../../types"
 import { QuotationMock } from ".";
 
+export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
+    {
+        value: ComponentFeatureEnum.Office,
+        label: 'Office',
+    },
+    {
+        value: ComponentFeatureEnum.Home,
+        label: 'Home',
+    },
+    {
+        value: ComponentFeatureEnum.Restaurant,
+        label: 'Restaurant',
+    },
+    {
+        value: ComponentFeatureEnum.Hospital,
+        label: 'Hospital',
+    },
+    {
+        value: ComponentFeatureEnum.School,
+        label: 'School',
+    },
+    {
+        value: ComponentFeatureEnum.RetailSpace,
+        label: 'Retail Space',
+    },
+    {
+        value: ComponentFeatureEnum.Hotel,
+        label: 'Hotel',
+    },
+
+]
 export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     {
         value: CustomerComponentEnum.Client,
         label: 'Client',
+    },
+    {
+        value: CustomerComponentEnum.Feature,
+        label: 'Feature',
     },
     {
         value: CustomerComponentEnum.Comparison,
@@ -31,6 +69,7 @@ export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     },
 ]
 
+
 export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     name: '',
     components: [],
@@ -40,13 +79,13 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
 }
 
 export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
-    designBy: '',
-    approvedBy: '',
+    // designBy: '',
+    // approvedBy: '',
     design: '',
     finish: '',
-    callingHeightOnSite: '',
+    // ceilingHeightOnSite: '',
     afterInstallation: '',
-    yourPlan: '',
+    // yourPlan: '',
     header: '',
     leftImage: '',
     rightImage: '',
@@ -54,24 +93,34 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 
+
+export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
+    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow },
+    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
+    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
+    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
+    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
+    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
+];
+
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
-    { label: "Design By", value: "designBy", field: 'text' },
-    { label: "Approved By", value: 'approvedBy', field: 'text' },
-    { label: "Design", value: 'design', field: 'text' },
-    { label: "Finish", value: 'finish', field: 'text' },
-    { label: "Calling Height On Site", value: 'callingHeightOnSite', field: 'text' },
+    // { label: "Design By", value: "designBy", field: 'text' },
+    // { label: "Approved By", value: 'approvedBy', field: 'text' },
+    { label: "Design", value: 'design', field: 'select' },
+    { label: "Finish", value: 'finish', field: 'select' },
+    // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
     { label: "After Installation", value: 'afterInstallation', field: 'text' },
-    { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Header", value: 'header', field: 'text' },
+    // { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Left Image", value: 'leftImage', field: 'image' },
     { label: "Right Image", value: 'rightImage', field: 'image' },
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
-    {
-        value: CustomerComponentEnum.Client,
-        data: { name: '', description: '' }
-    },
+    // {
+    //     value: CustomerComponentEnum.Client,
+    //     data: { name: '', description: '' }
+    // },
     {
         value: CustomerComponentEnum.Comparison,
         data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
@@ -92,8 +141,12 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
         value: CustomerComponentEnum.TwoDDesign,
         data: [
             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-            INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+            // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
         ]
+    },
+    {
+        value: CustomerComponentEnum.Feature,
+        data: ComponentFeatureEnum.Office
     },
     {
         value: CustomerComponentEnum.ThreeDDesign,
@@ -150,26 +203,26 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
             data: [
                 {
                     ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                    designBy: 'Nishtha',
-                    approvedBy: 'Mrinal',
+                    // designBy: 'Nishtha',
+                    // approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    callingHeightOnSite: 'Pearl White',
+                    // ceilingHeightOnSite: 'Pearl White',
                     afterInstallation: '10ft',
-                    yourPlan: '8ft 11 inch',
+                    // yourPlan: '8ft 11 inch',
                     header: 'Board Room',
                     leftImage: '',
                     rightImage: '',
                 },
                 {
                     ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                    designBy: 'Nishtha',
-                    approvedBy: 'Mrinal',
+                    // designBy: 'Nishtha',
+                    // approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    callingHeightOnSite: 'French Window',
+                    // ceilingHeightOnSite: 'French Window',
                     afterInstallation: '',
-                    yourPlan: '',
+                    // yourPlan: '',
                     header: 'Board Room',
                     leftImage: '',
                     rightImage: '',
@@ -185,3 +238,24 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         }
     ]
 }
+
+export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
+    "Arch Window",
+    "Classical",
+    "Classical Atrium",
+    "Fluted Minimalist",
+    "Fluted Minimalist Atrium",
+    "French Window",
+    "Louvered Window",
+    "Moorgan Premium Remote",
+    "Modern"
+]
+export const COMPONENT_DESIGN2D_FINISH_OPTIONS = [
+    'Black',
+    'Chrome',
+    'Gold',
+    'Mystic Wooden',
+    'Pearl White',
+    'Regal Bronze',
+    'Titanium Grey'
+]
