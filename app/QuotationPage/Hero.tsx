@@ -12,4 +12,5 @@ const Hero = (props: TProps) => {
     )
 }
 export default Hero
+
 type TProps = { name: string }

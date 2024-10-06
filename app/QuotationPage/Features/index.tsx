@@ -11,8 +11,20 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import { Pagination } from 'swiper/modules'
+import { TCustomerComponentFeatureItem } from '../../../types'
+import { useMemo } from 'react'
+import { COMPONENT_FEATURE_DATA_OPTIONS } from '../../cms/mocks/feature'
 
-const Features = () => {
+const Features = ({ item }: TProps) => {
+    const currentItem = useMemo(
+        () =>
+            COMPONENT_FEATURE_DATA_OPTIONS?.find(
+                (option) => option.value === item.data
+            ),
+        [item.data]
+    )
+    console.log(currentItem)
+
     return (
         <div
             id="features"
@@ -23,28 +35,29 @@ const Features = () => {
                 <div className="flex flex-col mb-24 items-center justify-center text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
                     <h1 className="text-4xl font-semibold capitalize">
-                        Benefits for offices
+                        {/* Benefits for offices */}
+                        {currentItem.header}
                     </h1>
                 </div>
                 <div className="flex text-center flex-col items-center lg:flex-row w-full">
-                    {features.map((feature) => (
+                    {currentItem.benefits.map((feature, i) => (
                         <div
-                            key={feature.id}
+                            key={i}
                             className="flex flex-col items-center w-full justify-center mb-10 text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center"
                         >
                             <div className="h-20 w-20 lg:h-40 lg:w-40 object-cover">
                                 <LazyLoadImage
                                     effect="blur"
-                                    src={feature.img}
+                                    src={feature.image}
                                     className="w-full h-full"
-                                    alt={feature.heading}
+                                    alt={feature.iconUrl}
                                 />
                             </div>
                             <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-1">
-                                {feature.heading}
+                                {feature.title}
                             </h2>
                             <p className="pt-2 text-2xl lg:text-base">
-                                {feature.content}
+                                {feature.subtitle}
                             </p>
                         </div>
                     ))}
@@ -90,5 +103,6 @@ const Features = () => {
         </div>
     )
 }
+type TProps = { item: TCustomerComponentFeatureItem }
 
 export default Features

@@ -14,12 +14,10 @@ import Navbar from './Navbar'
 import Hero from './Hero'
 import ImageComparison from './Image'
 
-import {
-    CustomerComponentEnum,
-
-} from '../../types'
+import { CustomerComponentEnum, } from '../../types'
 import { PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
+import { DEFAULT_CUSTOMER } from '../cms/mocks'
 
 const QuotationPage = () => {
 
@@ -33,11 +31,16 @@ const QuotationPage = () => {
         <Hero name={components.name} />
         <About />
         <Clients />
-        <ImageComparison item={components[CustomerComponentEnum.Comparison]} />
-        <Features />
+        <ImageComparison item={DEFAULT_CUSTOMER?.components.find((item) => item.value === CustomerComponentEnum.Comparison)} />
+
+        {/* <ImageComparison item={components[CustomerComponentEnum.Comparison]} /> */}
+        <Features item={components[CustomerComponentEnum.Feature]} />
         <DesignedBy />
         <Team />
-        <TwodDesigns item={components[CustomerComponentEnum.TwoDDesign]} />
+        <TwodDesigns
+            item={components[CustomerComponentEnum.TwoDDesign]}
+
+        />
         <ThreedDesigns item={components[CustomerComponentEnum.ThreeDDesign]} />
         <Quotation item={components[CustomerComponentEnum.Quotation]} />
         <TermsandConditions />

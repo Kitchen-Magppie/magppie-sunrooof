@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 // import { QuotationMock as _data } from '../cms/mocks'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
 
@@ -24,9 +24,9 @@ const ImageComparison = (props: TProps) => {
     //         after: _data.Comparison.Row2.After,
     //     },
     // ]
-    const slides = props.item.data?.map((item) => item.image)
+    const slides = props?.item?.data?.map((item) => item?.image)
 
-    const variants = {
+    const variants = useMemo(() => ({
         enter: (direction) => {
             return {
                 x: direction > 0 ? 1000 : -1000,
@@ -43,7 +43,7 @@ const ImageComparison = (props: TProps) => {
                 opacity: 0,
             }
         },
-    }
+    }), [])
 
     const swipe = (direction) => {
         const newIndex =
