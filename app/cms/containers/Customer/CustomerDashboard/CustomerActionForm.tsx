@@ -22,6 +22,8 @@ import {
     validateCustomerItemSchema,
 } from "../../../../../types";
 import {
+    COMPONENT_DESIGN2D_DESIGN_OPTIONS,
+    COMPONENT_DESIGN2D_FINISH_OPTIONS,
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
     CUSTOMER_COMPONENT_FEATURE_OPTIONS,
@@ -104,7 +106,6 @@ export function CustomerActionForm(props: TProps) {
         }, 2000);
         props.onSubmit();
     });
-    console.log(errors);
     const renderPublishUrlContent = useMemo(() => {
         return publishedUrl?.length ? (
             <div className="flex flex-row gap-2 justify-between my-2 ">
@@ -365,6 +366,7 @@ export function CustomerActionForm(props: TProps) {
                                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                                 ({ field }) => field === "select"
                                                             )?.map((item, j) => {
+                                                                const options = DESIGN_2D_SELECT_OPTION(item.value)
                                                                 return (
                                                                     <div
                                                                         className="bg-white"
@@ -372,18 +374,14 @@ export function CustomerActionForm(props: TProps) {
                                                                     >
                                                                         <Select
                                                                             placeholder={item.label}
+                                                                            defaultValue={options?.find((option) => option.value === data[item.value])}
                                                                             onChange={(e) => {
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.${item.value}`,
                                                                                     e?.value?.length ? e.value : ""
                                                                                 );
                                                                             }}
-                                                                            options={["", "Alpha", "Beta"]?.map(
-                                                                                (value) => ({
-                                                                                    value,
-                                                                                    label: value || "Select",
-                                                                                })
-                                                                            )}
+                                                                            options={options}
                                                                         />
                                                                         {renderErrorMessage(`components.${i}.data.${k}.${item.value}`)}
                                                                     </div>
@@ -480,3 +478,14 @@ export function CustomerActionForm(props: TProps) {
 
 type TProps = { mode: ComponentModeEnum; item: TCustomerItem; onSubmit: VoidFunction; };
 // 631
+
+function DESIGN_2D_SELECT_OPTION(e: string) {
+    switch (e) {
+        case 'design':
+            return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS)
+        case 'finish':
+            return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS)
+        default:
+            return []
+    }
+}

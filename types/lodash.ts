@@ -2,7 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 //====================================================================
 import _ from "lodash";
 type TApplyOrder = { original: string[], prev: string[], prefer: string }
+type TLabelify = { value: string, label: string }
 interface TLodashMixin extends _.LoDashStatic {
+    labelify: (e: string[]) => TLabelify[]
     titleCase: (e: string) => string,
     labelCase: (e: string) => string,
     isNumericString: (e: string) => boolean,
@@ -42,7 +44,12 @@ function uuid(): string {
     return uuidv4();
 }
 
+function labelify(e: string[]): TLabelify[] {
+    return e?.map((value) => ({ value, label: value }))
+}
+
 _.mixin({
+    labelify,
     titleCase,
     labelCase,
     isNumericString,
