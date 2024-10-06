@@ -17,8 +17,8 @@ export default function ImageInput(props: TImageActionProps) {
     const onRemove = useCallback((e: string) => {
         // StorageActions.remove(e)
         setCorpus((prev) => ({ ...prev, values: prev.values?.filter((row) => row !== e) }))
-        // props.onSuccess(corpus.values?.filter((row) => row !== e))
-    }, [])
+        props.onSuccess(corpus.values?.filter((row) => row !== e))
+    }, [corpus.values, props])
 
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files)
@@ -75,6 +75,7 @@ function ImageCard(props: TImageCardProps) {
             className="w-32 h-32 object-cover rounded-lg ms-1"
         />
         <button
+            type="button"
             onClick={() => { props.onRemove(props.link) }}
             className="absolute top-0 right-0 mt-1 mr-1 bg-red-600 text-white rounded-full p-1 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
