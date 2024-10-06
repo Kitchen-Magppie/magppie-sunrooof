@@ -37,7 +37,8 @@ const QuotationPage = () => {
         <Features />
         <DesignedBy />
         <Team />
-        <TwodDesigns item={components[CustomerComponentEnum.TwoDDesign]} />
+        <TwodDesigns />
+        {/* item={components[CustomerComponentEnum.TwoDDesign]} */}
         <ThreedDesigns item={components[CustomerComponentEnum.ThreeDDesign]} />
         <Quotation item={components[CustomerComponentEnum.Quotation]} />
         <TermsandConditions />
