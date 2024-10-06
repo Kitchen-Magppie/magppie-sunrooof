@@ -34,7 +34,7 @@ const QuotationPage = () => {
         <About />
         <Clients />
         <ImageComparison item={components[CustomerComponentEnum.Comparison]} />
-        <Features />
+        <Features item={components[CustomerComponentEnum.Feature]} />
         <DesignedBy />
         <Team />
         <TwodDesigns />
