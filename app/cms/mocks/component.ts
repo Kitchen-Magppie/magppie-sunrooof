@@ -112,8 +112,8 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
     { label: "After Installation", value: 'afterInstallation', field: 'text' },
     { label: "Header", value: 'header', field: 'text' },
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
-    { label: "Left Image", value: 'leftImage', field: 'image' },
-    { label: "Right Image", value: 'rightImage', field: 'image' },
+    { label: "Customer Image", value: 'leftImage', field: 'image' },
+    { label: "Proposed Image", value: 'rightImage', field: 'image' },
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
@@ -150,7 +150,9 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     },
     {
         value: CustomerComponentEnum.ThreeDDesign,
-        data: ['', '']
+        // data: ['', '']
+        data: []
+
     }
 ];
 export const INIT_CUSTOMER_ITEM: TCustomerItem = {
