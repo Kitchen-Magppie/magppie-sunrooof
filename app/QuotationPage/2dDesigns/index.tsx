@@ -23,25 +23,27 @@ import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 //hooks
 import { useMedia } from 'react-use'
 // import { TCustomerComponentDesign2DItem } from '../../../types'
-import { images } from './data'
+// import { images } from './data'
+import { TCustomerComponentDesign2DItem } from '../../../types'
 
 // const _images = [twoD, twoDtwo]
 
 // type TProps = { item: TCustomerComponentDesign2DItem }
 // props: TProps
+const Layout2dDesign = (props: TProps) => {
 
-const Layout2dDesign = () => {
+    // console.log(props)
     const [selectedLayout, setSelectedLayout] = useState(0)
     const [swiperInstance, setSwiperInstance] = useState(null)
 
     const isMobile = useMedia('(orientation: portrait)')
 
     const onNext = useCallback(() => {
-        if (swiperInstance && selectedLayout < images.length - 1) {
+        if (swiperInstance && selectedLayout < props.item.data.length - 1) {
             swiperInstance.slideNext()
             setSelectedLayout(selectedLayout + 1)
         }
-    }, [swiperInstance, selectedLayout])
+    }, [swiperInstance, selectedLayout, props.item.data.length])
 
     const onPrev = useCallback(() => {
         if (swiperInstance && selectedLayout > 0) {
@@ -87,16 +89,16 @@ const Layout2dDesign = () => {
                             </SwiperSlide>
                         )
                     })} */}
-                    {images.map((image) => {
+                    {props.item.data.map((image, i) => {
                         return (
                             <SwiperSlide
-                                key={image.id}
+                                key={i}
                                 className="flex items-center justify-center h-full !w-full"
                             >
                                 <div className="border border-white swiper-zoom-container">
                                     <LazyLoadImage
                                         effect="blur"
-                                        src={image.url}
+                                        src={image.rightImage}
                                         alt=""
                                         className="block w-[900px] h-full object-contain"
                                     />
@@ -142,16 +144,16 @@ const Layout2dDesign = () => {
                                 </SwiperSlide>
                             )
                         })} */}
-                        {images.map((image) => {
+                        {props.item.data.map((image, j) => {
                             return (
                                 <SwiperSlide
-                                    key={image.id}
+                                    key={j}
                                     className="flex items-center justify-center h-full !w-full"
                                 >
                                     <div className="border border-white swiper-zoom-container">
                                         <LazyLoadImage
                                             effect="blur"
-                                            src={image.url}
+                                            src={image.leftImage}
                                             alt=""
                                             className="block w-[900px] h-full object-contain"
                                         />
@@ -173,7 +175,7 @@ const Layout2dDesign = () => {
                                 className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
                             />
                         )} */}
-                        {selectedLayout < images.length - 1 && (
+                        {selectedLayout < props.item.data?.length - 1 && (
                             <ArrowDownIcon
                                 onClick={() => onNext()}
                                 className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
@@ -183,7 +185,7 @@ const Layout2dDesign = () => {
                 </>
             )
         }
-    }, [isMobile, onNext, onPrev, selectedLayout])
+    }, [isMobile, onNext, onPrev, props.item.data, selectedLayout])
 
     // [isMobile, onNext, onPrev, props.item.data, selectedLayout]
 
@@ -217,4 +219,5 @@ const Layout2dDesign = () => {
     )
 }
 
+type TProps = { item: TCustomerComponentDesign2DItem }
 export default Layout2dDesign
