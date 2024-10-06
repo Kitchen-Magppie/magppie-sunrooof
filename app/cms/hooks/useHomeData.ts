@@ -11,6 +11,7 @@ import {
     TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DItem,
     TCustomerComponentDesign3DItem,
+    TCustomerComponentFeatureItem,
     TCustomerComponentQuotationItem
 } from "../../../types";
 
@@ -32,6 +33,8 @@ export default function useHomeData() {
             [CustomerComponentEnum.TwoDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as unknown as TCustomerComponentDesign2DItem,
             [CustomerComponentEnum.ThreeDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.ThreeDDesign) as unknown as TCustomerComponentDesign3DItem,
             [CustomerComponentEnum.Quotation]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as unknown as TCustomerComponentQuotationItem,
+            [CustomerComponentEnum.Feature]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Feature) as unknown as TCustomerComponentFeatureItem,
+
         })
 
     }, [params, value])
