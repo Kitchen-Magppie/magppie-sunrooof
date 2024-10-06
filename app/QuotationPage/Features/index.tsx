@@ -42,7 +42,7 @@ const Features = ({ item }: TProps) => {
                                     effect="blur"
                                     src={feature.image}
                                     className="w-full h-full"
-                                    alt={feature.title}
+                                    alt={feature.iconUrl}
                                 />
                             </div>
                             <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-1">
