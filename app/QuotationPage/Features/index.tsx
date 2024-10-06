@@ -23,7 +23,6 @@ const Features = ({ item }: TProps) => {
             ),
         [item.data]
     )
-    console.log(currentItem)
 
     return (
         <div
