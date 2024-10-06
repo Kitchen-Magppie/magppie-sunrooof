@@ -238,3 +238,24 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         }
     ]
 }
+
+export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
+    "Arch Window",
+    "Classical",
+    "Classical Atrium",
+    "Fluted Minimalist",
+    "Fluted Minimalist Atrium",
+    "French Window",
+    "Louvered Window",
+    "Moorgan Premium Remote",
+    "Modern"
+]
+export const COMPONENT_DESIGN2D_FINISH_OPTIONS = [
+    'Black',
+    'Chrome',
+    'Gold',
+    'Mystic Wooden',
+    'Pearl White',
+    'Regal Bronze',
+    'Titanium Grey'
+]
