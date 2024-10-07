@@ -1,5 +1,4 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { features } from './data'
 import Logo from '../../../assets/logo-black-text-withoutBg.png'
 import threeLines from '../assets/three-lines.png'
 import './index.css'
@@ -78,20 +77,22 @@ const Features = ({ item }: TProps) => {
                             dynamicBullets: true,
                         }}
                     >
-                        {features.map((feature) => (
-                            <SwiperSlide key={feature.id}>
-                                <div className=" flex flex-col text-center items-center justify-center w-full mb-2">
-                                    <LazyLoadImage
-                                        effect="blur"
-                                        src={feature.img}
-                                        className="h-60 w-60 mb-4"
-                                        alt={feature.heading}
-                                    />
-                                    <h2 className="text-5xl mb-2 lg:text-xl pt-4 font-medium">
-                                        {feature.heading}
+                        {currentItem.benefits.map((feature, i) => (
+                            <SwiperSlide key={i}>
+                                <div className="flex flex-col items-center w-full justify-center mb-10 text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center">
+                                    <div className="h-20 w-20 lg:h-40 lg:w-40 object-cover">
+                                        <LazyLoadImage
+                                            effect="blur"
+                                            src={feature.image}
+                                            className="w-full h-full"
+                                            alt={feature.iconUrl}
+                                        />
+                                    </div>
+                                    <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-1">
+                                        {feature.title}
                                     </h2>
-                                    <p className="mt-6 text-3xl lg:text-base mb-20">
-                                        {feature.content}
+                                    <p className="pt-2 text-2xl lg:text-base">
+                                        {feature.subtitle}
                                     </p>
                                 </div>
                             </SwiperSlide>
