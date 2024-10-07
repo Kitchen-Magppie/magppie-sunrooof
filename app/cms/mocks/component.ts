@@ -123,7 +123,8 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     // },
     {
         value: CustomerComponentEnum.Comparison,
-        data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
+        data: ComponentComparisonDataEnum.None,
+        // data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
     },
     {
         value: CustomerComponentEnum.Quotation,
@@ -180,20 +181,8 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         },
         {
             value: CustomerComponentEnum.Comparison,
-            data: [
-                {
-                    value: '0',
-                    image: {
-                        before: QuotationMock.Comparison.Row1.Before, after: QuotationMock.Comparison.Row1.After
-                    }
-                },
-                {
-                    value: '1',
-                    image: {
-                        before: QuotationMock.Comparison.Row2.Before, after: QuotationMock.Comparison.Row2.After
-                    }
-                }
-            ]
+            data: ComponentComparisonDataEnum.None,
+
         },
         {
             value: CustomerComponentEnum.Quotation,
