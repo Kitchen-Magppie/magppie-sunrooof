@@ -100,7 +100,7 @@ const Layout2dDesign = (props: TProps) => {
                                         effect="blur"
                                         src={image.rightImage}
                                         alt=""
-                                        className="block w-[900px] h-full object-contain"
+                                        className="block w-[600px] h-full object-contain"
                                     />
                                 </div>
                             </SwiperSlide>
