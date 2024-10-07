@@ -5,7 +5,7 @@ import { TCustomerComponentQuotationItem } from '../../../types'
 const Quotation = (props: TProps) => {
     return (
         <div
-            className="flex flex-col justify-center pb-20 items-center bg-gray-100"
+            className="flex flex-col justify-center py-20 items-center bg-gray-100"
             id="quotation"
         >
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">Quotation</h1>
