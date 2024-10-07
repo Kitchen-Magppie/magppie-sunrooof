@@ -1,7 +1,7 @@
 import { Navigate, useRoutes } from 'react-router-dom'
 // ======================================================================
 import CmsRoutes from '../app/cms/routes/routes'
-import QuotationPage from '../app/QuotationPage'
+import QuotationPage from '../app/QuotationPage/QuotationPage'
 
 export default function Routes() {
     const CMS_ROUTES = CmsRoutes()

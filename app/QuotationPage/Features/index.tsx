@@ -79,8 +79,8 @@ const Features = ({ item }: TProps) => {
                     >
                         {currentItem.benefits.map((feature, i) => (
                             <SwiperSlide key={i}>
-                                <div className="flex flex-col items-center w-full justify-center mb-10 text-start lg:w-1/3 md:w-1/2 px-4 lg:items-center lg:text-center">
-                                    <div className="h-20 w-20 lg:h-40 lg:w-40 object-cover">
+                                <div className="flex flex-col items-center w-full justify-center text-center mb-10 px-4 lg:items-center lg:text-center">
+                                    <div className="h-44 w-44 lg:h-40 lg:w-40 object-cover">
                                         <LazyLoadImage
                                             effect="blur"
                                             src={feature.image}
@@ -88,10 +88,10 @@ const Features = ({ item }: TProps) => {
                                             alt={feature.iconUrl}
                                         />
                                     </div>
-                                    <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-1">
+                                    <h2 className="text-4xl lg:text-xl pt-4 font-medium mb-3">
                                         {feature.title}
                                     </h2>
-                                    <p className="pt-2 text-2xl lg:text-base">
+                                    <p className="pt-2 text-2xl lg:text-base mb-5">
                                         {feature.subtitle}
                                     </p>
                                 </div>
