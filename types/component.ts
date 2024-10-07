@@ -1,6 +1,6 @@
-export type TComponentMeta = { order: { used: number[], next: number } }
-
 import * as yup from 'yup';
+
+export type TComponentMeta = { order: { used: number[], next: number } }
 
 export type TCustomerComponentComparisonDataItem = {
     value: string,
@@ -8,7 +8,8 @@ export type TCustomerComponentComparisonDataItem = {
 }
 export type TCustomerComponentComparisonItem = {
     value: CustomerComponentEnum.Comparison,
-    data: TCustomerComponentComparisonDataItem[]
+    // data: TCustomerComponentComparisonDataItem[]
+    data: ComponentComparisonDataEnum
 }
 export type TCustomerComponentFeatureItem = {
     value: CustomerComponentEnum.Feature,
@@ -66,6 +67,8 @@ export enum ComponentComparisonDataEnum {
     ClassicalSunrooof = 'classical-sunrooof',
     FlutedMinimalistSunrooof = 'fluted-minimalist-sunrooof',
     ModernSunrooof = 'modern-sunrooof',
+    None = '',
+
 }
 export type TComponentComparisonDataOption = { label: string, value: ComponentComparisonDataEnum }
 
