@@ -31,7 +31,6 @@ import { TCustomerComponentDesign2DItem } from '../../../types'
 // type TProps = { item: TCustomerComponentDesign2DItem }
 // props: TProps
 const Layout2dDesign = (props: TProps) => {
-
     // console.log(props)
     const [selectedLayout, setSelectedLayout] = useState(0)
     const [swiperInstance, setSwiperInstance] = useState(null)
@@ -201,16 +200,16 @@ const Layout2dDesign = (props: TProps) => {
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <div className="flex">{renderSwiper}</div>
                     <ProjectDetails
-                    item={props.item.data[selectedLayout]}
-                    // selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
+                        item={props.item.data[selectedLayout]}
+                        // selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
                     />
                 </div>
             ) : (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <ProjectDetails
-                    item={props.item.data[selectedLayout]}
-                    // isMobile={isMobile}
+                        item={props.item.data[selectedLayout]}
+                        // isMobile={isMobile}
                     />
                     <div className="flex">{renderSwiper}</div>
                 </div>
