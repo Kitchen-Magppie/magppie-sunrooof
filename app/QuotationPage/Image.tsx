@@ -16,15 +16,23 @@ const ImageComparison = (props: TProps) => {
     const isBefore = view === 'before'
 
     const slides = useMemo(() => {
-        const item = COMPONENT_COMPARISON_DATA_OPTIONS?.find((row) => row.value === props.item.data)
+        const item = COMPONENT_COMPARISON_DATA_OPTIONS?.find(
+            (row) => row.value === props.item.data
+        )
         return item.slides?.map((slide) => slide.pair)
     }, [props.item.data])
 
-    const swipe = useCallback((direction) => {
-        const newIndex =
-            (currentSlide + direction + COMPARISON_STATIC_ITEM.slides.length) % COMPARISON_STATIC_ITEM.slides.length
-        setCurrentSlide(newIndex)
-    }, [currentSlide])
+    const swipe = useCallback(
+        (direction) => {
+            const newIndex =
+                (currentSlide +
+                    direction +
+                    COMPARISON_STATIC_ITEM.slides.length) %
+                COMPARISON_STATIC_ITEM.slides.length
+            setCurrentSlide(newIndex)
+        },
+        [currentSlide]
+    )
 
     return (
         <div className="w-full bg-gray-100 flex flex-col items-center justify-center py-20">
@@ -68,39 +76,43 @@ const ImageComparison = (props: TProps) => {
                     <div className="border-2 p-2 rounded-md shadow-md">
                         <button
                             onClick={() => setView('before')}
-                            className={`px-6 py-2.5 text-2xl lg:text-lg ${view === 'before'
-                                ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
-                                : 'bg-gray-100 text-gray-600'
-                                }`}
+                            className={`px-6 py-2.5 text-2xl lg:text-lg ${
+                                view === 'before'
+                                    ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
+                                    : 'bg-gray-100 text-gray-600'
+                            }`}
                         >
                             Before
                         </button>
                         <button
                             onClick={() => setView('after')}
-                            className={`px-6 py-2 text-2xl lg:text-lg ${view === 'after'
-                                ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
-                                : 'bg-gray-100 text-gray-600'
-                                }`}
+                            className={`px-6 py-2 text-2xl lg:text-lg ${
+                                view === 'after'
+                                    ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
+                                    : 'bg-gray-100 text-gray-600'
+                            }`}
                         >
                             After
                         </button>
                     </div>
                 </div>
                 {/* Navigation Arrows */}
-                <div className="flex space-x-2 mt-5">
-                    <button
-                        onClick={() => swipe(-1)}
-                        className="py-3 px-5 bg-[#615b58] text-white rounded-lg shadow-md"
-                    >
-                        <FaArrowLeft className="h-8 w-8 lg:h-4 lg:w-4" />
-                    </button>
-                    <button
-                        onClick={() => swipe(1)}
-                        className="py-3 px-5 bg-[#615b58] text-white rounded-lg shadow-md"
-                    >
-                        <FaArrowRight className="h-8 w-8 lg:h-4 lg:w-4" />
-                    </button>
-                </div>
+                {slides.length > 1 ? (
+                    <div className="flex space-x-2 mt-5">
+                        <button
+                            onClick={() => swipe(-1)}
+                            className="py-3 px-5 bg-[#615b58] text-white rounded-lg shadow-md"
+                        >
+                            <FaArrowLeft className="h-8 w-8 lg:h-4 lg:w-4" />
+                        </button>
+                        <button
+                            onClick={() => swipe(1)}
+                            className="py-3 px-5 bg-[#615b58] text-white rounded-lg shadow-md"
+                        >
+                            <FaArrowRight className="h-8 w-8 lg:h-4 lg:w-4" />
+                        </button>
+                    </div>
+                ) : null}
             </div>
         </div>
     )
