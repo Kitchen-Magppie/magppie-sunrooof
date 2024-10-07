@@ -17,8 +17,6 @@ import ImageComparison from './Image'
 import { CustomerComponentEnum, } from '../../types'
 import { PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
-import { DEFAULT_CUSTOMER } from '../cms/mocks'
-
 const QuotationPage = () => {
 
     const { loading, components } = useHomeData()
@@ -31,9 +29,8 @@ const QuotationPage = () => {
         <Hero name={components.name} />
         <About />
         <Clients />
-        <ImageComparison item={DEFAULT_CUSTOMER?.components.find((item) => item.value === CustomerComponentEnum.Comparison)} />
-
-        {/* <ImageComparison item={components[CustomerComponentEnum.Comparison]} /> */}
+        {/* <ImageComparison item={DEFAULT_CUSTOMER?.components.find((item) => item.value === CustomerComponentEnum.Comparison)} /> */}
+        <ImageComparison item={components[CustomerComponentEnum.Comparison]} />
         <Features item={components[CustomerComponentEnum.Feature]} />
         <DesignedBy />
         <Team />

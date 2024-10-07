@@ -1,55 +1,30 @@
 import { useCallback, useMemo, useState } from 'react'
-// import { QuotationMock as _data } from '../cms/mocks'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
-
 import { motion, AnimatePresence } from 'framer-motion'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 // Import styles
 import 'swiper/css'
 
-import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { TCustomerComponentComparisonItem } from '../../types'
+import { _, TCustomerComponentComparisonItem } from '../../types'
+import { COMPONENT_COMPARISON_DATA_OPTIONS } from '../cms/mocks'
 
-type TProps = { item: TCustomerComponentComparisonItem }
 const ImageComparison = (props: TProps) => {
     const [view, setView] = useState('before')
     const [currentSlide, setCurrentSlide] = useState(0)
-    // const slides = [
-    //     {
-    //         before: _data.Comparison.Row1.Before,
-    //         after: _data.Comparison.Row1.After,
-    //     },
-    //     {
-    //         before: _data.Comparison.Row2.Before,
-    //         after: _data.Comparison.Row2.After,
-    //     },
-    // ]
-    const slides = props?.item?.data?.map((item) => item?.image)
 
-    const variants = useMemo(() => ({
-        enter: (direction) => {
-            return {
-                x: direction > 0 ? 1000 : -1000,
-                opacity: 0,
-            }
-        },
-        center: {
-            x: 0,
-            opacity: 1,
-        },
-        exit: (direction) => {
-            return {
-                x: direction < 0 ? 1000 : -1000,
-                opacity: 0,
-            }
-        },
-    }), [])
+    const isBefore = view === 'before'
+
+    const slides = useMemo(() => {
+        const item = COMPONENT_COMPARISON_DATA_OPTIONS?.find((row) => row.value === props.item.data)
+        return item.slides?.map((slide) => slide.pair)
+    }, [props.item.data])
 
     const swipe = useCallback((direction) => {
         const newIndex =
-            (currentSlide + direction + props.item.data.length) % slides.length
+            (currentSlide + direction + COMPARISON_STATIC_ITEM.slides.length) % COMPARISON_STATIC_ITEM.slides.length
         setCurrentSlide(newIndex)
-    }, [currentSlide, props.item.data.length, slides.length])
+    }, [currentSlide])
 
     return (
         <div className="w-full bg-gray-100 flex flex-col items-center justify-center py-20">
@@ -64,25 +39,22 @@ const ImageComparison = (props: TProps) => {
                     <motion.div
                         key={currentSlide}
                         custom={currentSlide}
-                        variants={variants}
+                        variants={ANIMATION_VARIATION}
                         initial="enter"
                         animate="center"
                         exit="exit"
-                        transition={{
-                            x: { type: 'spring', stiffness: 300, damping: 30 },
-                            opacity: { duration: 0.2 },
-                        }}
+                        transition={TRANSITION_OPTIONS}
                         className="absolute top-0 left-0 w-full h-full"
                     >
                         <div className="w-full flex items-center justify-center h-full">
                             <LazyLoadImage
                                 effect="blur"
                                 src={
-                                    view === 'before'
+                                    isBefore
                                         ? slides[currentSlide].before
                                         : slides[currentSlide].after
                                 }
-                                alt={view === 'before' ? 'Before' : 'After'}
+                                alt={isBefore ? 'Before' : 'After'}
                                 className="object-cover w-full h-full"
                             />
                         </div>
@@ -134,4 +106,30 @@ const ImageComparison = (props: TProps) => {
     )
 }
 
+const TRANSITION_OPTIONS = {
+    x: { type: 'spring', stiffness: 300, damping: 30 },
+    opacity: { duration: 0.2 },
+}
+
+const ANIMATION_VARIATION = {
+    enter: (direction) => {
+        return {
+            x: direction > 0 ? 1000 : -1000,
+            opacity: 0,
+        }
+    },
+    center: {
+        x: 0,
+        opacity: 1,
+    },
+    exit: (direction) => {
+        return {
+            x: direction < 0 ? 1000 : -1000,
+            opacity: 0,
+        }
+    },
+}
+const COMPARISON_STATIC_ITEM = _.first(COMPONENT_COMPARISON_DATA_OPTIONS)
+
+type TProps = { item: TCustomerComponentComparisonItem }
 export default ImageComparison
