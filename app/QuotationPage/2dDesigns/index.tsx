@@ -201,7 +201,7 @@ const Layout2dDesign = (props: TProps) => {
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <div className="flex">{renderSwiper}</div>
                     <ProjectDetails
-                    // item={props.item.data[selectedLayout]}
+                    item={props.item.data[selectedLayout]}
                     // selectedLayout={selectedLayout}
                     // isMobile={isMobile}
                     />
@@ -209,7 +209,7 @@ const Layout2dDesign = (props: TProps) => {
             ) : (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <ProjectDetails
-                    // item={props.item.data[selectedLayout]}
+                    item={props.item.data[selectedLayout]}
                     // isMobile={isMobile}
                     />
                     <div className="flex">{renderSwiper}</div>
