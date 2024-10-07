@@ -6,6 +6,10 @@ import louveredAfter from '../../QuotationPage/assets/BeforeAfter/Louvered Windo
 import louveredBefore from '../../QuotationPage/assets/BeforeAfter/Louvered Window/before.png'
 import modernAfter from '../../QuotationPage/assets/BeforeAfter/Modern Sunrooof/after.png'
 import modernBefore from '../../QuotationPage/assets/BeforeAfter/Modern Sunrooof/before.png'
+import flutedAfter from '../../QuotationPage/assets/BeforeAfter/Fluted Minimilist/after.jpg'
+import flutedBefore from '../../QuotationPage/assets/BeforeAfter/Fluted Minimilist/before.jpg'
+import classicalAfter from '../../QuotationPage/assets/BeforeAfter/Classical Sunrooof/after.jpg'
+import classicalBefore from '../../QuotationPage/assets/BeforeAfter/Classical Sunrooof/before.png'
 
 export const COMPONENT_COMPARISON_DATA_OPTIONS = [
     {
@@ -26,8 +30,8 @@ export const COMPONENT_COMPARISON_DATA_OPTIONS = [
             {
                 id: 1,
                 pair: {
-                    before: QuotationMock.Comparison.Row1.Before,
-                    after: QuotationMock.Comparison.Row1.After,
+                    before: classicalAfter,
+                    after: classicalBefore,
                 },
             },
         ],
@@ -38,8 +42,8 @@ export const COMPONENT_COMPARISON_DATA_OPTIONS = [
             {
                 id: 1,
                 pair: {
-                    before: QuotationMock.Comparison.Row1.Before,
-                    after: QuotationMock.Comparison.Row1.After,
+                    before: flutedBefore,
+                    after: flutedAfter,
                 },
             },
         ],
