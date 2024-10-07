@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 // import { QuotationMock as _data } from '../cms/mocks'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
 
@@ -45,11 +45,11 @@ const ImageComparison = (props: TProps) => {
         },
     }), [])
 
-    const swipe = (direction) => {
+    const swipe = useCallback((direction) => {
         const newIndex =
             (currentSlide + direction + props.item.data.length) % slides.length
         setCurrentSlide(newIndex)
-    }
+    }, [currentSlide, props.item.data.length, slides.length])
 
     return (
         <div className="w-full bg-gray-100 flex flex-col items-center justify-center py-20">
