@@ -10,6 +10,7 @@ import {
     _
 } from "../../../types"
 import { QuotationMock } from ".";
+import dayjs from "dayjs";
 
 export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
     {
@@ -79,16 +80,17 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
 }
 
 export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
-    // designBy: '',
-    // approvedBy: '',
     design: '',
     finish: '',
-    // ceilingHeightOnSite: '',
-    afterInstallation: '',
-    // yourPlan: '',
-    header: '',
+    areaName: '',
     leftImage: '',
     rightImage: '',
+    // invoiceUrl: '',
+    // designBy: '',
+    // approvedBy: '',
+    // ceilingHeightOnSite: '',
+    // afterInstallation: '',
+    // yourPlan: '',
 }
 
 
@@ -106,14 +108,14 @@ export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOpti
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
     // { label: "Design By", value: "designBy", field: 'text' },
     // { label: "Approved By", value: 'approvedBy', field: 'text' },
-    { label: "Design", value: 'design', field: 'select' },
-    { label: "Finish", value: 'finish', field: 'select' },
+    { label: "Design", value: 'design', field: 'select', placeholder: '' },
+    { label: "Finish", value: 'finish', field: 'select', placeholder: '' },
     // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
-    { label: "After Installation", value: 'afterInstallation', field: 'text' },
-    { label: "Header", value: 'header', field: 'text' },
+    // { label: "After Installation", value: 'afterInstallation', field: 'text' },
+    { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
-    { label: "Customer Image", value: 'leftImage', field: 'image' },
-    { label: "Proposed Image", value: 'rightImage', field: 'image' },
+    { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },
+    { label: "Proposed Image", value: 'rightImage', field: 'image', placeholder: '' },
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
@@ -130,11 +132,13 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
         value: CustomerComponentEnum.Quotation,
         data: {
             name: '',
+            salutation: '',
             email: '',
             mobile: '',
-            createdDate: '',
+            createdDate: dayjs().format('YYYY-MM-DD'),
             address: '',
             zone: '',
+            city: '',
             invoiceUrl: ''
         }
     },
@@ -199,9 +203,9 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
                     design: 'Classical',
                     finish: 'White',
                     // ceilingHeightOnSite: 'Pearl White',
-                    afterInstallation: '10ft',
+                    // afterInstallation: '10ft',
                     // yourPlan: '8ft 11 inch',
-                    header: 'Board Room',
+                    areaName: 'Board Room',
                     leftImage: '',
                     rightImage: '',
                 },
@@ -212,9 +216,9 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
                     design: 'Classical',
                     finish: 'White',
                     // ceilingHeightOnSite: 'French Window',
-                    afterInstallation: '',
+                    // afterInstallation: '',
                     // yourPlan: '',
-                    header: 'Board Room',
+                    areaName: 'Board Room',
                     leftImage: '',
                     rightImage: '',
                 }

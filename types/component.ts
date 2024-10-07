@@ -27,24 +27,27 @@ export type TCustomerComponentQuotationItem = {
         email: string,
         mobile: string,
         createdDate: string,
+        salutation: string,
         address: string,
         zone: string,
+        city: string,
         invoiceUrl: string
     }
 }
 
-export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem, field: 'text' | 'image' | 'select' }
+export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem, field: 'text' | 'image' | 'select', placeholder: string }
 export type TCustomerComponentDesign2DDataItem = {
-    // designBy: string,
-    // approvedBy: string,
     design: string,
     finish: string,
-    // ceilingHeightOnSite: string,
-    afterInstallation: string,
-    // yourPlan: string,
-    header: string,
+    areaName: string,
+    // invoiceUrl: string,
     leftImage: string,
     rightImage: string,
+    // designBy: string,
+    // approvedBy: string,
+    // ceilingHeightOnSite: string,
+    // afterInstallation: string,
+    // yourPlan: string,
 }
 
 export type TCustomerComponentDesign2DItem = {
@@ -171,8 +174,10 @@ const customerComponentQuotationItemSchema = yup.object().shape({
         email: yup.string().required(),
         mobile: yup.string().required(),
         createdDate: yup.string().required(),
+        salutation: yup.string().required(),
         address: yup.string().required(),
         zone: yup.string().required(),
+        city: yup.string().required(),
         invoiceUrl: yup.string().required()
     }).required(),
 });
@@ -180,14 +185,18 @@ const customerComponentQuotationItemSchema = yup.object().shape({
 const customerComponentDesign2DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
     data: yup.array().of(yup.object().shape({
+
         // designBy: yup.string().required(),
         // approvedBy: yup.string().required(),
         design: yup.string().required(),
         finish: yup.string().required(),
         // ceilingHeightOnSite: yup.string().required(),
-        afterInstallation: yup.string().required(),
+        // afterInstallation: yup.string().required(),
+        // cityName: yup.string().required(),
         // yourPlan: yup.string().required(),
-        header: yup.string().required(),
+        areaName: yup.string().required(),
+        // invoiceUrl: yup.string().required(),
+
         leftImage: yup.string().required(),
         rightImage: yup.string().required(),
     })).min(1).required(),

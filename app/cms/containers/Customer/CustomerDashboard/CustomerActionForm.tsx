@@ -18,6 +18,7 @@ import {
     // TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DItem,
     TCustomerComponentFeatureItem,
+    TCustomerComponentQuotationItem,
     TCustomerItem,
     validateCustomerItemSchema,
 } from "../../../../../types";
@@ -30,6 +31,7 @@ import {
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
     INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+    QUOTATION_SALUTATION_OPTIONS,
 } from "../../../mocks";
 import {
     CmsCopyClipboard,
@@ -66,8 +68,8 @@ export function CustomerActionForm(props: TProps) {
         },
     });
 
-    // console.log(errors)
     const values = watch();
+
 
     const renderErrorMessage = useCallback(
         (field: string) => {
@@ -104,8 +106,9 @@ export function CustomerActionForm(props: TProps) {
                 }
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }));
+            props.onSubmit();
+
         }, 2000);
-        props.onSubmit();
     });
     const renderPublishUrlContent = useMemo(() => {
         return publishedUrl?.length ? (
@@ -204,104 +207,141 @@ export function CustomerActionForm(props: TProps) {
                             );
                         }
                         case CustomerComponentEnum.Quotation: {
-                            const image = _.get(component, "data.invoiceUrl", "");
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="flex flex-col gap-2">
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Name
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        value={values.name}
-                                                        onChange={(e) => {
-                                                            setValue("name", e.target.value);
-                                                        }}
-                                                        // {...register(`components.${i}.data.name`)}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(`name`)}
-                                                </div>
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Email
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(`components.${i}.data.email`)}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(`components.${i}.data.email`)}
-                                                </div>
+                            const salutations = _.labelify(QUOTATION_SALUTATION_OPTIONS)
+                            const data = component as TCustomerComponentQuotationItem
+                            return (<div key={i}>
+                                <MinimalAccordion isExpanded title={title}>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Salutation
+                                                </label>
+                                                <Select
+                                                    defaultValue={salutations?.find((salutation) => salutation.value === data.data.salutation)}
+                                                    options={salutations}
+                                                    onChange={(e) => {
+                                                        setValue(`components.${i}.data.salutation`, e.value)
+                                                    }}
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.salutation`)}
+                                            </div>
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={values.name}
+                                                    onChange={(e) => {
+                                                        setValue("name", e.target.value);
+                                                    }}
+                                                    // {...register(`components.${i}.data.name`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`name`)}
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Mobile
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(`components.${i}.data.mobile`)}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(`components.${i}.data.mobile`)}
-                                                </div>
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Created Date
-                                                    </label>
-                                                    <input
-                                                        type="date"
-                                                        {...register(`components.${i}.data.createdDate`)}
-                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
-                                                        placeholder="Created Date"
-                                                    />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.createdDate`
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Address
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(`components.${i}.data.address`)}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(`components.${i}.data.address`)}
-                                                </div>
-                                                <div className="bg-white">
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Zone
-                                                    </label>
-                                                    <input
-                                                        type="text"
-                                                        {...register(`components.${i}.data.zone`)}
-                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                    />
-                                                    {renderErrorMessage(`components.${i}.data.zone`)}
-                                                </div>
-                                            </div>
-                                            <ImageInput
-                                                label="Invoice URL"
-                                                values={image?.length ? [image] : []}
-                                                path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
-                                                onSuccess={(e) => {
-                                                    setValue(`components.${i}.data.invoiceUrl`, e[0]);
-                                                }}
-                                            />
-                                            {renderErrorMessage(`components.${i}.data.invoiceUrl`)}
                                         </div>
-                                    </MinimalAccordion>
-                                </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Email
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(`components.${i}.data.email`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.email`)}
+                                            </div>
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Mobile
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(`components.${i}.data.mobile`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.mobile`)}
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-2">
+
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Created Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    {...register(`components.${i}.data.createdDate`)}
+                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                                                    placeholder="Created Date"
+                                                />
+                                                {renderErrorMessage(
+                                                    `components.${i}.data.createdDate`
+                                                )}
+                                            </div>
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Address
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(`components.${i}.data.address`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.address`)}
+                                            </div>
+                                        </div>
+
+
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    City
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(`components.${i}.data.city`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.city`)}
+                                            </div>
+
+                                            <div className="bg-white">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Zone
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    {...register(`components.${i}.data.zone`)}
+                                                    className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.zone`)}
+                                            </div>
+
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div className="">
+                                                <ImageInput
+                                                    label="Invoice URL"
+                                                    values={data.data.invoiceUrl?.length ? [data.data.invoiceUrl] : []}
+                                                    path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
+                                                    onSuccess={(e) => {
+                                                        setValue(`components.${i}.data.invoiceUrl`, e[0]);
+                                                    }}
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.invoiceUrl`)}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </MinimalAccordion>
+                            </div>
                             );
                         }
                         case CustomerComponentEnum.ThreeDDesign: {
@@ -403,9 +443,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         </label>
                                                                         <input
                                                                             type="text"
-                                                                            {...register(
-                                                                                `components.${i}.data.${k}.${item.value}`
-                                                                            )}
+                                                                            {...register(`components.${i}.data.${k}.${item.value}`)}
                                                                             className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                                         />
                                                                         {renderErrorMessage(
