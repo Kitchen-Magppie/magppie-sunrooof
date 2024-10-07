@@ -22,10 +22,6 @@ const ProjectDetails = ({ item }: TProps) => {
                 <div className="mb-2 text-2xl lg:text-xl">
                     <strong>Finish :</strong> {item.finish}
                 </div>
-                <div className="mb-2 text-2xl lg:text-xl">
-                    <span className="font-[400]">After Installation :</span>{' '}
-                    {item.afterInstallation}
-                </div>
                 <div className="flex lg:flex-col items-start">
                     <span className="font-[400] text-2xl lg:text-xl mr-2">Your Plan :</span>
                     <div className="rounded-lg mt-2">
