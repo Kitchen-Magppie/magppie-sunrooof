@@ -3,13 +3,15 @@ import Logo from '../../../assets/logo-black-text-withoutBg.png'
 import threeLines from '../assets/three-lines.png'
 import './index.css'
 import bgImage from '../assets/features/Background.jpg'
+import leftArrow from "../assets/team/Left Arrow.svg"
+import rightArrow from "../assets/team/Right Arrow.svg"
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { Pagination } from 'swiper/modules'
+import { Pagination, Navigation } from 'swiper/modules'
 import { TCustomerComponentFeatureItem } from '../../../types'
 import { useMemo } from 'react'
 import { COMPONENT_FEATURE_DATA_OPTIONS } from '../../cms/mocks/feature'
@@ -71,10 +73,14 @@ const Features = ({ item }: TProps) => {
                 </div>
                 <div className="flex">
                     <Swiper
-                        modules={[Pagination]}
+                        modules={[Pagination, Navigation]}
                         className="mySwiper"
                         pagination={{
-                            dynamicBullets: true,
+                            dynamicBullets: false,
+                        }}
+                        navigation={{
+                            nextEl: '.arrow-right',
+                            prevEl: '.arrow-left',
                         }}
                     >
                         {currentItem.benefits.map((feature, i) => (
@@ -98,6 +104,19 @@ const Features = ({ item }: TProps) => {
                             </SwiperSlide>
                         ))}
                     </Swiper>
+
+                    <>
+                        <button className="arrow-left absolute top-2/2 left-0 transform -translate-y-1/2 z-50 ml-20 mt-40 cursor-pointer shadow-lg">
+                            <img src={leftArrow} className="h-16 w-16" alt="" />
+                        </button>
+                        <button className="arrow-right absolute top-2/2 right-0 transform -translate-y-1/2 z-50 mr-20 mt-40 cursor-pointer shadow-lg">
+                            <img
+                                src={rightArrow}
+                                className="h-16 w-16"
+                                alt=""
+                            />
+                        </button>
+                    </>
                 </div>
             </div>
         </div>

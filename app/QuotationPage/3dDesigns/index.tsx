@@ -13,7 +13,7 @@ const ThreedDesigns = ({ item }: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')
     if (item.data?.length) {
         return (
-            <div className="container max-w-5xl py-40 mt-96 w-full mx-auto" id="3d">
+            <div className="container max-w-5xl py-40 w-full mx-auto" id="3d">
                 <div className="flex flex-col items-center justify-center mb-10 text-center">
                     <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
                         <span>3D Designs</span>
