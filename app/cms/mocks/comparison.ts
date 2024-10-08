@@ -1,5 +1,5 @@
 import { ComponentComparisonDataEnum } from '../../../types'
-import { QuotationMock } from '.'
+
 import frenchAfter from '../../QuotationPage/assets/BeforeAfter/French Window/after.png'
 import frenchBefore from '../../QuotationPage/assets/BeforeAfter/French Window/before.png'
 import louveredAfter from '../../QuotationPage/assets/BeforeAfter/Louvered Window/after.png'
@@ -10,6 +10,8 @@ import flutedAfter from '../../QuotationPage/assets/BeforeAfter/Fluted Minimilis
 import flutedBefore from '../../QuotationPage/assets/BeforeAfter/Fluted Minimilist/before.jpg'
 import classicalAfter from '../../QuotationPage/assets/BeforeAfter/Classical Sunrooof/after.jpg'
 import classicalBefore from '../../QuotationPage/assets/BeforeAfter/Classical Sunrooof/before.png'
+import archAfter from '../../QuotationPage/assets/BeforeAfter/Arch Window/after.png'
+import archBefore from '../../QuotationPage/assets/BeforeAfter/Arch Window/Before.jpg'
 
 export const COMPONENT_COMPARISON_DATA_OPTIONS = [
     {
@@ -18,8 +20,8 @@ export const COMPONENT_COMPARISON_DATA_OPTIONS = [
             {
                 id: 1,
                 pair: {
-                    before: QuotationMock.Comparison.Row1.Before,
-                    after: QuotationMock.Comparison.Row1.After,
+                    before: archBefore,
+                    after: archAfter,
                 },
             },
         ],

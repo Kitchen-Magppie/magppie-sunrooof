@@ -9,6 +9,8 @@ import sunil from '../assets/clients/Sunil Bharti Mittal  Owner, Airtel .png'
 import vandana from '../assets/clients/Vandana Munjal Owner, Hero.png'
 import chiranjeevi from '../assets/clients/Chiranjeevi Actor.png'
 import natasha from '../assets/clients/Natasha Poonawala Philanthropist, .png'
+import piyush from '../assets/clients/19.jpg'
+import shilpa from '../assets/clients/20.jpg'
 
 export const clients = [
     { id: 1, img: ranbir, heading: 'Ranbir Kapoor', subHeading: 'Actor' },
@@ -56,24 +58,30 @@ export const clients = [
     },
     {
         id: 9,
+        img: piyush,
+        // heading: 'Kamal Nath',
+        // subHeading: 'Member of Parliament India',
+    },
+    {
+        id: 10,
+        img: shilpa,
+        // heading: 'Kamal Nath',
+        // subHeading: 'Member of Parliament India',
+    },
+    {
+        id: 11,
         img: subhash,
         heading: 'Subhash Chandra',
         subHeading: 'Chairperson, Zee Tv',
     },
     {
-        id: 10,
-        img: kamal,
-        heading: 'K P Singh',
-        subHeading: 'Owner, DLF',
-    },
-    {
-        id: 11,
+        id: 12,
         img: vandana,
         heading: 'Vandana Munjal',
         subHeading: 'Owner, Hero',
     },
     {
-        id: 12,
+        id: 13,
         img: priya,
         heading: 'Priya Paul',
         subHeading: 'Chairperson, Park',
