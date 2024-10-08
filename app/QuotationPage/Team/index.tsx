@@ -1,7 +1,7 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { team } from './data'
-import leftArrow from "../assets/team/Left Arrow.svg"
-import rightArrow from "../assets/team/Right Arrow.svg"
+import leftArrow from '../assets/team/Left Arrow-min.svg'
+import rightArrow from '../assets/team/Right Arrow-min.svg'
 // import { FaArrowCircleLeft } from 'react-icons/fa'
 // import { FaArrowCircleRight } from 'react-icons/fa'
 
@@ -19,10 +19,7 @@ import { Grid, Scrollbar, FreeMode, Navigation } from 'swiper/modules'
 const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
     return (
-        <div
-            className="py-44 container mx-auto lg:max-w-7xl relative"
-            id="team"
-        >
+        <div className="py-44 relative w-full" id="team">
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
                 our team
             </h1>
@@ -94,7 +91,7 @@ const Team = () => {
                         prevEl: '.arrow-left',
                     }}
                     modules={[Grid, Scrollbar, FreeMode, Navigation]}
-                    className="mySwiper"
+                    className="mySwiper container mx-auto max-w-7xl"
                     scrollbar={{ draggable: true }}
                 >
                     {team.map((person) => {
@@ -136,10 +133,10 @@ const Team = () => {
             )}
             {!isMobile && (
                 <>
-                    <button className="arrow-left absolute top-1/2 left-0 transform -translate-y-1/2 z-20 ml-2 mt-10 cursor-pointer shadow-lg">
+                    <button className="arrow-left absolute top-1/2 left-64 transform -translate-y-1/2 z-20 ml-2 mt-10 cursor-pointer">
                         <img src={leftArrow} className="h-10 w-10" alt="" />
                     </button>
-                    <button className="arrow-right absolute top-1/2 right-0 transform -translate-y-1/2 z-20 mr-2 mt-10 cursor-pointer shadow-lg">
+                    <button className="arrow-right absolute top-1/2 right-64 transform -translate-y-1/2 z-20 mr-2 mt-10 cursor-pointer">
                         <img src={rightArrow} className="h-10 w-10" alt="" />
                     </button>
                 </>
