@@ -78,7 +78,7 @@ const Team = () => {
                 </Swiper>
             ) : (
                 <Swiper
-                    slidesPerView={4}
+                    slidesPerView={5}
                     grid={{
                         rows: 1,
                     }}
@@ -108,13 +108,13 @@ const Team = () => {
                                         />
                                     </div>
                                     <div className="flex flex-col items-center absolute text-white bottom-20 w-full">
-                                        <h1 className="text-2xl lg:text-xl font-bold">
+                                        <h1 className="text-md font-bold">
                                             {person.name}
                                         </h1>
-                                        <p className="text-2xl lg:text-xl">
+                                        <p className="text-md">
                                             {person.positon}
                                         </p>
-                                        <p className="text-2xl lg:text-xl">
+                                        <p className="text-md">
                                             {person.country}
                                         </p>
                                     </div>
