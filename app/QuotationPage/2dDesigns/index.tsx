@@ -80,7 +80,7 @@ const Layout2dDesign = (props: TProps) => {
                                 <div>
                                     <div className="swiper-zoom-container flex flex-col mb-4">
                                         <h1 className="text-4xl mb-2">
-                                            Customer Layout{' '}
+                                            Customer Layout
                                         </h1>
                                         <LazyLoadImage
                                             effect="blur"
@@ -200,7 +200,6 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <ProjectDetails
                         item={props.item.data[selectedLayout]}
-                        
                         // selectedLayout={selectedLayout}
                         // isMobile={isMobile}
                     />
