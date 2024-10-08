@@ -52,7 +52,7 @@ const Clients = () => {
                     })}
                 </Swiper>
             ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-7 container mx-auto max-w-xl lg:max-w-7xl gap-5">
+                <div className="grid grid-cols-2 lg:grid-cols-6 container mx-auto max-w-xl lg:max-w-7xl gap-5">
                     {clientsDesktop.map((client) => {
                         return (
                             <div
