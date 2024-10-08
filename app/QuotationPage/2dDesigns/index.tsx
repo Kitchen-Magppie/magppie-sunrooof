@@ -31,7 +31,6 @@ import { TCustomerComponentDesign2DItem } from '../../../types'
 // type TProps = { item: TCustomerComponentDesign2DItem }
 // props: TProps
 const Layout2dDesign = (props: TProps) => {
-
     // console.log(props)
     const [selectedLayout, setSelectedLayout] = useState(0)
     const [swiperInstance, setSwiperInstance] = useState(null)
@@ -72,36 +71,35 @@ const Layout2dDesign = (props: TProps) => {
                         setSelectedLayout(swiper.activeIndex)
                     }
                 >
-                    {/* {props.item.data.map((item, index) => {
-                        return (
-                            <SwiperSlide
-                                key={index}
-                                className="flex items-center justify-center h-full !w-full"
-                            >
-                                <div className="border border-white swiper-zoom-container">
-                                    <LazyLoadImage
-                                        effect="blur"
-                                        src={item.rightImage}
-                                        alt=""
-                                        className="block w-[900px] h-full object-contain"
-                                    />
-                                </div>
-                            </SwiperSlide>
-                        )
-                    })} */}
                     {props.item.data.map((image, i) => {
                         return (
                             <SwiperSlide
                                 key={i}
                                 className="flex items-center justify-center h-full !w-full"
                             >
-                                <div className="border border-white swiper-zoom-container">
-                                    <LazyLoadImage
-                                        effect="blur"
-                                        src={image.rightImage}
-                                        alt=""
-                                        className="block w-[900px] h-full object-contain"
-                                    />
+                                <div>
+                                    <div className="swiper-zoom-container flex flex-col mb-4">
+                                        <h1 className="text-4xl mb-2">
+                                            Customer Layout
+                                        </h1>
+                                        <LazyLoadImage
+                                            effect="blur"
+                                            src={image.rightImage}
+                                            alt=""
+                                            className="block w-screen h-full object-contain"
+                                        />
+                                    </div>
+                                    <div className="flex flex-col  swiper-zoom-container">
+                                        <h1 className="text-4xl mb-2">
+                                            Proposed Layout
+                                        </h1>
+                                        <LazyLoadImage
+                                            effect="blur"
+                                            src={image.leftImage}
+                                            alt=""
+                                            className="block w-screen h-full object-contain"
+                                        />
+                                    </div>
                                 </div>
                             </SwiperSlide>
                         )
@@ -191,26 +189,26 @@ const Layout2dDesign = (props: TProps) => {
 
     return (
         <div
-            className="flex flex-col justify-center items-center py-44 px-4 bg-gray-100"
+            className="flex flex-col justify-center items-center py-20 bg-gray-100 min-h-screen"
             id="2d"
         >
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
                 2D Designs
             </h1>
             {isMobile ? (
-                <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
+                <div className="flex gap-4 flex-col lg:flex-row container mx-auto">
                     <div className="flex">{renderSwiper}</div>
                     <ProjectDetails
-                    // item={props.item.data[selectedLayout]}
-                    // selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
+                        item={props.item.data[selectedLayout]}
+                        // selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
                     />
                 </div>
             ) : (
                 <div className="flex max-h-[40rem] gap-4 flex-col lg:flex-row">
                     <ProjectDetails
-                    // item={props.item.data[selectedLayout]}
-                    // isMobile={isMobile}
+                        item={props.item.data[selectedLayout]}
+                        // isMobile={isMobile}
                     />
                     <div className="flex">{renderSwiper}</div>
                 </div>
