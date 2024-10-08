@@ -1,7 +1,9 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { team } from './data'
-import { FaArrowCircleLeft } from 'react-icons/fa'
-import { FaArrowCircleRight } from 'react-icons/fa'
+import leftArrow from "../assets/team/Left Arrow.svg"
+import rightArrow from "../assets/team/Right Arrow.svg"
+// import { FaArrowCircleLeft } from 'react-icons/fa'
+// import { FaArrowCircleRight } from 'react-icons/fa'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useMedia } from 'react-use'
@@ -78,7 +80,7 @@ const Team = () => {
                 </Swiper>
             ) : (
                 <Swiper
-                    slidesPerView={4}
+                    slidesPerView={5}
                     grid={{
                         rows: 1,
                     }}
@@ -108,13 +110,13 @@ const Team = () => {
                                         />
                                     </div>
                                     <div className="flex flex-col items-center absolute text-white bottom-20 w-full">
-                                        <h1 className="text-2xl lg:text-xl font-bold">
+                                        <h1 className="text-md font-bold">
                                             {person.name}
                                         </h1>
-                                        <p className="text-2xl lg:text-xl">
+                                        <p className="text-md">
                                             {person.positon}
                                         </p>
-                                        <p className="text-2xl lg:text-xl">
+                                        <p className="text-md">
                                             {person.country}
                                         </p>
                                     </div>
@@ -134,11 +136,11 @@ const Team = () => {
             )}
             {!isMobile && (
                 <>
-                    <button className="arrow-left absolute top-1/2 left-0 transform -translate-y-1/2 z-20 ml-2 mt-10 bg-blue-500 cursor-pointer text-white p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
-                        <FaArrowCircleLeft className="h-5 w-5" />
+                    <button className="arrow-left absolute top-1/2 left-0 transform -translate-y-1/2 z-20 ml-2 mt-10 cursor-pointer shadow-lg">
+                        <img src={leftArrow} className="h-10 w-10" alt="" />
                     </button>
-                    <button className="arrow-right absolute top-1/2 right-0 transform -translate-y-1/2 z-20 mr-2 mt-10 bg-blue-500 text-white cursor-pointer p-3 rounded-full shadow-lg hover:bg-blue-600 transition-all">
-                        <FaArrowCircleRight className="h-5 w-5" />
+                    <button className="arrow-right absolute top-1/2 right-0 transform -translate-y-1/2 z-20 mr-2 mt-10 cursor-pointer shadow-lg">
+                        <img src={rightArrow} className="h-10 w-10" alt="" />
                     </button>
                 </>
             )}
