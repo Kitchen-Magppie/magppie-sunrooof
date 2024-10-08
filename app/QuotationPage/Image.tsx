@@ -125,21 +125,23 @@ const ImageComparison = (props: TProps) => {
                     {slides.map((slide) => {
                         return (
                             <div className="flex items-center">
-                                <div className="">
+                                <div className="flex flex-col items-center">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={slide.before}
                                         alt=""
                                         className="object-cover w-[500px] h-[500px] rounded-lg shadow-md mr-10"
                                     />
+                                    <h1 className="uppercase mt-1 text-3xl font-bold">before</h1>
                                 </div>
-                                <div>
+                                <div className="flex flex-col items-center">
                                     <LazyLoadImage
                                         effect="blur"
                                         src={slide.after}
                                         alt=""
                                         className="object-cover w-[500px] h-[500px] rounded-lg shadow-md"
                                     />
+                                    <h1 className="uppercase mt-1 text-3xl font-bold">after</h1>
                                 </div>
                             </div>
                         )
