@@ -175,6 +175,19 @@ export function CustomerActionForm(props: TProps) {
                                     <MinimalAccordion isExpanded title={title}>
                                         <div className="d-flex flex-row gap">
                                             <Select
+                                                theme={(theme) => ({
+                                                    ...theme,
+                                                    borderRadius: 6,
+                                                    colors: {
+                                                        ...theme.colors,
+                                                        text: 'white',
+                                                        primary25: '#3F51B5',
+                                                        primary: '#3F51B5',
+                                                    },
+                                                })}
+                                                classNames={{
+                                                    control: () => AUTOCOMPLETE_STYLE,
+                                                }}
                                                 onChange={(e) => {
                                                     setValue(`components.${i}.data`, e.value);
                                                 }}
@@ -194,6 +207,20 @@ export function CustomerActionForm(props: TProps) {
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
                                         <Select
+                                            theme={(theme) => ({
+                                                ...theme,
+                                                borderRadius: 6,
+                                                colors: {
+                                                    ...theme.colors,
+                                                    text: 'white',
+                                                    primary25: '#3F51B5',
+                                                    primary: '#3F51B5',
+                                                },
+                                            })}
+                                            classNames={{
+                                                control: () => AUTOCOMPLETE_STYLE,
+                                            }}
+
                                             defaultValue={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
                                                 (item) => item.value === _.get(component, "data")
                                             )}
@@ -218,7 +245,19 @@ export function CustomerActionForm(props: TProps) {
                                                     Salutation
                                                 </label>
                                                 <Select
-                                                    defaultValue={salutations?.find((salutation) => salutation.value === data.data.salutation)}
+                                                    theme={(theme) => ({
+                                                        ...theme,
+                                                        borderRadius: 6,
+                                                        colors: {
+                                                            ...theme.colors,
+                                                            text: 'white',
+                                                            primary25: '#3F51B5',
+                                                            primary: '#3F51B5',
+                                                        },
+                                                    })}
+                                                    classNames={{
+                                                        control: () => AUTOCOMPLETE_STYLE,
+                                                    }} defaultValue={salutations?.find((salutation) => salutation.value === data.data.salutation)}
                                                     options={salutations}
                                                     onChange={(e) => {
                                                         setValue(`components.${i}.data.salutation`, e.value)
@@ -416,7 +455,19 @@ export function CustomerActionForm(props: TProps) {
                                                                         key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
                                                                     >
                                                                         <Select
-                                                                            placeholder={item.label}
+                                                                            theme={(theme) => ({
+                                                                                ...theme,
+                                                                                borderRadius: 6,
+                                                                                colors: {
+                                                                                    ...theme.colors,
+                                                                                    text: 'white',
+                                                                                    primary25: '#3F51B5',
+                                                                                    primary: '#3F51B5',
+                                                                                },
+                                                                            })}
+                                                                            classNames={{
+                                                                                control: () => AUTOCOMPLETE_STYLE,
+                                                                            }} placeholder={item.label}
                                                                             defaultValue={options?.find((option) => option.value === data[item.value])}
                                                                             onChange={(e) => {
                                                                                 setValue(
@@ -521,6 +572,7 @@ export function CustomerActionForm(props: TProps) {
 type TProps = { mode: ComponentModeEnum; item: TCustomerItem; onSubmit: VoidFunction; };
 // 631
 
+const AUTOCOMPLETE_STYLE = "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
 function DESIGN_2D_SELECT_OPTION(e: string) {
     switch (e) {
         case 'design':
