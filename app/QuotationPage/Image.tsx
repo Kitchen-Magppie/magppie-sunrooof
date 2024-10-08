@@ -10,10 +10,10 @@ import { _, TCustomerComponentComparisonItem } from '../../types'
 import { COMPONENT_COMPARISON_DATA_OPTIONS } from '../cms/mocks'
 
 const ImageComparison = (props: TProps) => {
-    const [view, setView] = useState('before')
+    const [view, setView] = useState('after')
     const [currentSlide, setCurrentSlide] = useState(0)
 
-    const isBefore = view === 'before'
+    const isBefore = view === 'after'
 
     const slides = useMemo(() => {
         const item = COMPONENT_COMPARISON_DATA_OPTIONS?.find(
@@ -59,10 +59,10 @@ const ImageComparison = (props: TProps) => {
                                 effect="blur"
                                 src={
                                     isBefore
-                                        ? slides[currentSlide].before
-                                        : slides[currentSlide].after
+                                        ? slides[currentSlide].after
+                                        : slides[currentSlide].before
                                 }
-                                alt={isBefore ? 'Before' : 'After'}
+                                alt={isBefore ? 'After' : 'Before'}
                                 className="object-cover w-full h-full"
                             />
                         </div>
