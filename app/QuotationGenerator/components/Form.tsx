@@ -74,7 +74,7 @@ const Form = () => {
                 </div>
             </div>
             <div className="flex items-center mt-10">
-                <div className="text-white cursor-pointer bg-blue-700 flex items-center justify-center items-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-2.5 me-2 mb-2 ">
+                <div className="text-white cursor-pointer bg-blue-700 flex items-center justify-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-2.5 me-2 mb-2 ">
                     <span className="text-sm ml-2">Add Entry</span>
                 </div>
                 <div className="text-white cursor-pointer flex items-center bg-blue-700 hover:bg-blue-800 justify-center focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
