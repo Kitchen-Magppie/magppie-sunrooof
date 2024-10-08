@@ -1,5 +1,5 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import { clients } from './data'
+import { clientsDesktop, clientsMobile } from './data'
 import { useMedia } from 'react-use'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -34,7 +34,7 @@ const Clients = () => {
                     modules={[Grid, FreeMode, Scrollbar]}
                     className="mySwiper container max-w-2xl"
                 >
-                    {clients.map((client) => {
+                    {clientsMobile.map((client) => {
                         return (
                             <SwiperSlide key={client.id}>
                                 <div className="flex flex-col items-center pb-10 gap-1">
@@ -53,7 +53,7 @@ const Clients = () => {
                 </Swiper>
             ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-6 container mx-auto max-w-xl lg:max-w-7xl gap-5">
-                    {clients.map((client) => {
+                    {clientsDesktop.map((client) => {
                         return (
                             <div
                                 className="text-white flex flex-col items-center justify-center text-center pb-5"

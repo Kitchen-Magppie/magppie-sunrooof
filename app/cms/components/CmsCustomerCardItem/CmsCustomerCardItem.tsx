@@ -1,27 +1,37 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { IoCreateOutline, IoLocationOutline } from "react-icons/io5";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import dayjs from 'dayjs'
 import { useLocation } from "react-use";
 import { IoIosLink } from "react-icons/io";
-import { Link } from "react-router-dom";
 //====================================================================
+import { DEFAULT_CUSTOMER } from '../../mocks'
 
 import { TCmsCustomerCardItem } from "../../types";
 
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     const location = useLocation()
+    const isDefault = DEFAULT_CUSTOMER.customerId === props.item.customerId
 
     const publishedUrl = useMemo(() => {
-        if (props.item.id?.length)
+        if (props.item.id?.length) {
             return ([location.origin, 'quotation', props.item.id].join('/'))
+        }
         return ''
     }, [location.origin, props.item.id])
-    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out"
-    >
+
+    return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out">
         <div className="flex justify-between items-center mb-2">
-            <h2 className="text-lg font-semibold">{props.item.name}</h2>
+            <div className="flex gap-1">
+                <h2 className="text-lg font-semibold">{props.item.name}</h2>
+                {isDefault ? (<div
+                    className="flex flex-col align-middle justify-center rounded-md bg-orange-400 px-1 py-0 border border-transparent text-sm text-white">
+                    Default
+                </div>) : ''}
+
+            </div>
             <button className="border p-1 rounded-full border-gray-400  bg-white cursor-pointer"
                 title="Go to Published Link"
             >
@@ -29,14 +39,13 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
                     <IoIosLink className="cursor-pointer"
                     />
                 </Link>) : ''}
-
             </button>
         </div>
         <div className="flex items-center mb-2 gap-2">
             <FaRegCalendarAlt size={24} />
             {dayjs(props.item.at.created).format('DD/MM/YYYY')}
         </div>
-        <div className="flex items-center mb-2 gap-2">
+        <div className="flex items-center mb-2 gap-2 overflow-hidden">
             {publishedUrl?.length ? (<>
                 <IoIosLink className="cursor-pointer" size={24} />
                 <Link

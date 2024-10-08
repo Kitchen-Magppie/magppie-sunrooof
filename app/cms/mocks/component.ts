@@ -1,5 +1,8 @@
 import {
+    ComponentComparisonDataEnum,
+    ComponentFeatureEnum,
     CustomerComponentEnum,
+    TComponentComparisonDataOption,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
@@ -7,11 +10,47 @@ import {
     _
 } from "../../../types"
 import { QuotationMock } from ".";
+import dayjs from "dayjs";
 
+export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
+    {
+        value: ComponentFeatureEnum.Office,
+        label: 'Office',
+    },
+    {
+        value: ComponentFeatureEnum.Home,
+        label: 'Home',
+    },
+    {
+        value: ComponentFeatureEnum.Restaurant,
+        label: 'Restaurant',
+    },
+    {
+        value: ComponentFeatureEnum.Hospital,
+        label: 'Hospital',
+    },
+    {
+        value: ComponentFeatureEnum.School,
+        label: 'School',
+    },
+    {
+        value: ComponentFeatureEnum.RetailSpace,
+        label: 'Retail Space',
+    },
+    {
+        value: ComponentFeatureEnum.Hotel,
+        label: 'Hotel',
+    },
+
+]
 export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     {
         value: CustomerComponentEnum.Client,
         label: 'Client',
+    },
+    {
+        value: CustomerComponentEnum.Feature,
+        label: 'Feature',
     },
     {
         value: CustomerComponentEnum.Comparison,
@@ -31,6 +70,7 @@ export const CUSTOMER_COMPONENT_VALUE_OPTIONS = [
     },
 ]
 
+
 export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     name: '',
     components: [],
@@ -40,31 +80,42 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
 }
 
 export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
-    designBy: '',
-    approvedBy: '',
     design: '',
     finish: '',
-    ceilingHeightOnSite: '',
-    afterInstallation: '',
-    // yourPlan: '',
-    header: '',
+    areaName: '',
     leftImage: '',
     rightImage: '',
+    // invoiceUrl: '',
+    // designBy: '',
+    // approvedBy: '',
+    // ceilingHeightOnSite: '',
+    // afterInstallation: '',
+    // yourPlan: '',
 }
 
 
 
+
+export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
+    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow },
+    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
+    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
+    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
+    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
+    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
+];
+
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
-    { label: "Design By", value: "designBy", field: 'text' },
-    { label: "Approved By", value: 'approvedBy', field: 'text' },
-    { label: "Design", value: 'design', field: 'text' },
-    { label: "Finish", value: 'finish', field: 'text' },
-    { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
-    { label: "After Installation", value: 'afterInstallation', field: 'text' },
-    { label: "Header", value: 'header', field: 'text' },
+    // { label: "Design By", value: "designBy", field: 'text' },
+    // { label: "Approved By", value: 'approvedBy', field: 'text' },
+    { label: "Design", value: 'design', field: 'select', placeholder: '' },
+    { label: "Finish", value: 'finish', field: 'select', placeholder: '' },
+    // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
+    // { label: "After Installation", value: 'afterInstallation', field: 'text' },
+    { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
-    { label: "Left Image", value: 'leftImage', field: 'image' },
-    { label: "Right Image", value: 'rightImage', field: 'image' },
+    { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },
+    { label: "Proposed Image", value: 'rightImage', field: 'image', placeholder: '' },
 ];
 
 export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
@@ -74,17 +125,20 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
     // },
     {
         value: CustomerComponentEnum.Comparison,
-        data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
+        data: ComponentComparisonDataEnum.None,
+        // data: [{ value: '', image: { before: '', after: '' } }, { value: '', image: { before: '', after: '' } }]
     },
     {
         value: CustomerComponentEnum.Quotation,
         data: {
             name: '',
+            salutation: '',
             email: '',
             mobile: '',
-            createdDate: '',
+            createdDate: dayjs().format('YYYY-MM-DD'),
             address: '',
             zone: '',
+            city: '',
             invoiceUrl: ''
         }
     },
@@ -92,12 +146,18 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
         value: CustomerComponentEnum.TwoDDesign,
         data: [
             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-            INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+            // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
         ]
     },
     {
+        value: CustomerComponentEnum.Feature,
+        data: ComponentFeatureEnum.Office
+    },
+    {
         value: CustomerComponentEnum.ThreeDDesign,
-        data: ['', '']
+        // data: ['', '']
+        data: []
+
     }
 ];
 export const INIT_CUSTOMER_ITEM: TCustomerItem = {
@@ -125,20 +185,8 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         },
         {
             value: CustomerComponentEnum.Comparison,
-            data: [
-                {
-                    value: '0',
-                    image: {
-                        before: QuotationMock.Comparison.Row1.Before, after: QuotationMock.Comparison.Row1.After
-                    }
-                },
-                {
-                    value: '1',
-                    image: {
-                        before: QuotationMock.Comparison.Row2.Before, after: QuotationMock.Comparison.Row2.After
-                    }
-                }
-            ]
+            data: ComponentComparisonDataEnum.None,
+
         },
         {
             value: CustomerComponentEnum.Quotation,
@@ -150,27 +198,27 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
             data: [
                 {
                     ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                    designBy: 'Nishtha',
-                    approvedBy: 'Mrinal',
+                    // designBy: 'Nishtha',
+                    // approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    ceilingHeightOnSite: 'Pearl White',
-                    afterInstallation: '10ft',
+                    // ceilingHeightOnSite: 'Pearl White',
+                    // afterInstallation: '10ft',
                     // yourPlan: '8ft 11 inch',
-                    header: 'Board Room',
+                    areaName: 'Board Room',
                     leftImage: '',
                     rightImage: '',
                 },
                 {
                     ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                    designBy: 'Nishtha',
-                    approvedBy: 'Mrinal',
+                    // designBy: 'Nishtha',
+                    // approvedBy: 'Mrinal',
                     design: 'Classical',
                     finish: 'White',
-                    ceilingHeightOnSite: 'French Window',
-                    afterInstallation: '',
+                    // ceilingHeightOnSite: 'French Window',
+                    // afterInstallation: '',
                     // yourPlan: '',
-                    header: 'Board Room',
+                    areaName: 'Board Room',
                     leftImage: '',
                     rightImage: '',
                 }
@@ -185,3 +233,24 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
         }
     ]
 }
+
+export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
+    "Arch Window",
+    "Classical",
+    "Classical Atrium",
+    "Fluted Minimalist",
+    "Fluted Minimalist Atrium",
+    "French Window",
+    "Louvered Window",
+    "Moorgan Premium Remote",
+    "Modern"
+]
+export const COMPONENT_DESIGN2D_FINISH_OPTIONS = [
+    'Black',
+    'Chrome',
+    'Gold',
+    'Mystic Wooden',
+    'Pearl White',
+    'Regal Bronze',
+    'Titanium Grey'
+]
