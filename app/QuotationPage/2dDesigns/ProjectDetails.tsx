@@ -19,13 +19,13 @@ const ProjectDetails = ({ item }: TProps) => {
             {isMobile ? (
                 <>
                     <div className="bg-[#78746c] text-white p-6 mt-10 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
-                        <div className="mb-2 text-4xl lg:text-xl">
+                        <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Design :</strong> {item.design}
                         </div>
-                        <div className="mb-2 text-4xl lg:text-xl">
+                        <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Finish :</strong> {item.finish}
                         </div>
-                        <div className="mb-2 text-4xl lg:text-xl">
+                        <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Area Name :</strong> {item.areaName}
                         </div>
                     </div>
