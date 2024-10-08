@@ -189,7 +189,7 @@ const Layout2dDesign = (props: TProps) => {
 
     return (
         <div
-            className="flex flex-col justify-center items-center bg-gray-100 min-h-screen"
+            className="flex flex-col justify-center items-center py-20 bg-gray-100 min-h-screen"
             id="2d"
         >
             <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
