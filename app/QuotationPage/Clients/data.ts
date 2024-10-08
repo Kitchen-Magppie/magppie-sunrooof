@@ -12,78 +12,106 @@ import natasha from '../assets/clients/Natasha Poonawala Philanthropist, .png'
 import piyush from '../assets/clients/19.jpg'
 import shilpa from '../assets/clients/20.jpg'
 
-export const clients = [
-    { id: 1, img: ranbir, heading: 'Ranbir Kapoor', subHeading: 'Actor' },
+export const clientsDesktop = [
+    { id: 1, img: ranbir },
     {
         id: 2,
         img: arshad,
-        heading: 'Arshad Warsi',
-        subHeading: 'Actor',
     },
     {
         id: 3,
         img: harbajan,
-        heading: 'Harbhajan Singh',
-        subHeading: 'Cricketer, Indian Team',
     },
     {
         id: 4,
         img: natasha,
-        heading: 'Natasha Poonawala',
-        subHeading: 'Philanthropist',
     },
     {
         id: 5,
         img: msdhoni,
-        heading: 'M S Dhoni',
-        subHeading: 'Cricketer, Indian Team',
     },
     {
         id: 6,
         img: chiranjeevi,
-        heading: 'Chiranjeevi',
-        subHeading: 'Actor',
     },
     {
         id: 7,
         img: sunil,
-        heading: 'Sunil Bharti Mittal',
-        subHeading: 'Owner, Airtel',
     },
     {
         id: 8,
         img: kamal,
-        heading: 'Kamal Nath',
-        subHeading: 'Member of Parliament India',
     },
     {
         id: 9,
         img: piyush,
-        // heading: 'Kamal Nath',
-        // subHeading: 'Member of Parliament India',
     },
     {
         id: 10,
         img: shilpa,
-        // heading: 'Kamal Nath',
-        // subHeading: 'Member of Parliament India',
     },
     {
         id: 11,
         img: subhash,
-        heading: 'Subhash Chandra',
-        subHeading: 'Chairperson, Zee Tv',
     },
     {
         id: 12,
         img: vandana,
-        heading: 'Vandana Munjal',
-        subHeading: 'Owner, Hero',
     },
     {
         id: 13,
         img: priya,
-        heading: 'Priya Paul',
-        subHeading: 'Chairperson, Park',
+    },
+]
+
+export const clientsMobile = [
+    { id: 1, img: ranbir },
+    {
+        id: 2,
+        img: msdhoni,
+    },
+    {
+        id: 3,
+        img: kamal,
+    },
+    {
+        id: 4,
+        img: harbajan,
+    },
+    {
+        id: 5,
+        img: subhash,
+    },
+    {
+        id: 6,
+        img: piyush,
+    },
+    {
+        id: 7,
+        img: shilpa,
+    },
+    {
+        id: 8,
+        img: natasha,
+    },
+    {
+        id: 9,
+        img: chiranjeevi,
+    },
+    {
+        id: 10,
+        img: vandana,
+    },
+    {
+        id: 11,
+        img: sunil,
+    },
+    {
+        id: 12,
+        img: arshad,
+    },
+    {
+        id: 13,
+        img: priya,
     },
 ]
