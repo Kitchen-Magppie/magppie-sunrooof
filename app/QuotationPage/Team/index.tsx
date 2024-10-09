@@ -62,7 +62,7 @@ const Team = () => {
                                             {person.country}
                                         </p>
                                     </div>
-                                    <div className="absolute right-0 mr-10 mt-2">
+                                    <div className="absolute right-16 mt-2">
                                         <LazyLoadImage
                                             effect="blur"
                                             className="w-15 h-10 mt-2"
