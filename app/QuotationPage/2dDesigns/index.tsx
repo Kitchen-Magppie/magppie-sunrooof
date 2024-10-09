@@ -187,6 +187,7 @@ const Layout2dDesign = (props: TProps) => {
                         // selectedLayout={selectedLayout}
                         // isMobile={isMobile}
                     />
+                    <CustomerLayout item={props.item.data} />
                 </div>
             ) : (
                 <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto lg:flex-row">
