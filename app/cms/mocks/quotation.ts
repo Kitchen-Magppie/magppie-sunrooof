@@ -1,3 +1,5 @@
+export const QUOTATION_SALUTATION_OPTIONS: string[] = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."];
+
 export const QuotationMock = {
     Comparison: {
         Row1: {
@@ -20,6 +22,8 @@ export const QuotationMock = {
             createdDate: '30-Aug-24',
             address: 'Bengaluru',
             zone: 'South India',
+            salutation: '',
+            city: '',
             invoiceUrl: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4'
         }
     },
@@ -29,7 +33,7 @@ export const QuotationMock = {
             approvedBy: 'Mrinal',
             design: 'Classical',
             finish: 'White',
-            callingHeightOnSite: 'Pearl White',
+            ceilingHeightOnSite: 'Pearl White',
             afterInstallation: '10ft',
             yourPlan: '8ft 11 inch',
             header: 'Board Room',
@@ -41,7 +45,7 @@ export const QuotationMock = {
             approvedBy: 'Mrinal',
             design: 'Classical',
             finish: 'White',
-            callingHeightOnSite: 'French Window',
+            ceilingHeightOnSite: 'French Window',
             afterInstallation: '',
             yourPlan: '',
             header: 'Board Room',

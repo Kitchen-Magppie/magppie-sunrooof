@@ -23,7 +23,8 @@ export function FieldCautation(props: TProps) {
             </div>
         </div>
         <div className="mt-2 mb-4 text-sm text-indigo-800 dark:text-indigo-300">
-            This section contains multiple fields that require your attention. Ensure all the information provided is accurate, as once you submit the form, changes cannot be undone. Double-check your entries before proceeding.</div>
+            {props.remark || DEFAULT_REMARK}
+        </div>
         <div className="flex">
             <button
                 type="button"
@@ -39,5 +40,7 @@ export function FieldCautation(props: TProps) {
 type TProps = {
     onClickAdd?: VoidFunction,
     disableAppendButton?: boolean;
-    label?: string
+    label?: string,
+    remark?: string
 }
+const DEFAULT_REMARK = 'This section contains multiple fields that require your attention. Ensure all the information provided is accurate, as once you submit the form, changes cannot be undone. Double-check your entries before proceeding.';
