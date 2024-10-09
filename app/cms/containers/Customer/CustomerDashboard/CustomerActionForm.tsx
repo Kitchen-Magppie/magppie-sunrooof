@@ -586,7 +586,7 @@ function DESIGN_2D_SELECT_OPTION(e: string) {
 }
 const TOAST_OPTIONS: ToastOptions = {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 2000,
     style: { background: '#222222' },
     hideProgressBar: false,
     closeOnClick: true,
