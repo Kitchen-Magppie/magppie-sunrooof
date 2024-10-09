@@ -76,7 +76,7 @@ const Layout2dDesign = (props: TProps) => {
                                         </h1>
                                         <LazyLoadImage
                                             effect="blur"
-                                            src={image.rightImage}
+                                            src={image.leftImage}
                                             alt=""
                                             className="block w-screen h-full object-contain"
                                         />
@@ -87,7 +87,7 @@ const Layout2dDesign = (props: TProps) => {
                                         </h1>
                                         <LazyLoadImage
                                             effect="blur"
-                                            src={image.leftImage}
+                                            src={image.rightImage}
                                             alt=""
                                             className="block w-screen h-full object-contain"
                                         />
@@ -125,8 +125,8 @@ const Layout2dDesign = (props: TProps) => {
                                 >
                                     <div className="flex flex-col h-full swiper-zoom-container">
                                         <div className="flex items-center justify-center w-full">
-                                            <div className="mb-2 mt-4 text-2xl lg:text-xl">
-                                                <strong>Area Name :</strong>{' '}
+                                            <div className="mb-2 mt-4 text-2xl lg:text-lg">
+                                                <span>Area Name :</span>{' '}
                                                 {image.areaName}
                                             </div>
                                         </div>
@@ -139,12 +139,12 @@ const Layout2dDesign = (props: TProps) => {
                                         </div>
 
                                         <div className="flex justify-end w-full mt-2">
-                                            <div className="mr-2 text-2xl lg:text-xl">
-                                                <strong>Design :</strong>{' '}
+                                            <div className="mr-2 text-2xl lg:text-lg">
+                                                <span>Design :</span>{' '}
                                                 {image.design}
                                             </div>
-                                            <div className="mr-4 text-2xl lg:text-xl">
-                                                <strong>Finish :</strong>{' '}
+                                            <div className="mr-4 text-2xl lg:text-lg">
+                                                <span>Finish :</span>{' '}
                                                 {image.finish}
                                             </div>
                                         </div>
