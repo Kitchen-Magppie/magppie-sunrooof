@@ -192,7 +192,7 @@ const Layout2dDesign = (props: TProps) => {
                     <ProposedLayout item={props.item.data} />
                 </div>
             ) : (
-                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto max-w-7xl lg:flex-row w-screen">
+                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto justify-center lg:flex-row w-screen">
                     <ProposedLayout item={props.item.data} />
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
