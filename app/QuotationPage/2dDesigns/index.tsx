@@ -130,13 +130,15 @@ const Layout2dDesign = (props: TProps) => {
                                                 {image.areaName}
                                             </div>
                                         </div>
-                                        <LazyLoadImage
-                                            effect="blur"
-                                            src={image.rightImage}
-                                            alt=""
-                                            className=""
-                                            // "block w-[900px] h-full object-contain"
-                                        />
+
+
+                                        <div className="w-full h-full object-contain">
+                                            <LazyLoadImage
+                                                effect="blur"
+                                                src={image.rightImage}
+                                                alt=""
+                                            />
+                                        </div>
                                         <div className="flex mt-2 justify-end w-full">
                                             <div className="mb-2 mr-2 text-2xl lg:text-xl">
                                                 <strong>Design :</strong>{' '}
@@ -184,8 +186,8 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                        // selectedLayout={selectedLayout}
-                        // isMobile={isMobile}
+                    // selectedLayout={selectedLayout}
+                    // isMobile={isMobile}
                     />
                     <ProposedLayout item={props.item.data} />
                 </div>
@@ -195,7 +197,7 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                        // isMobile={isMobile}
+                    // isMobile={isMobile}
                     />
                 </div>
             )}
