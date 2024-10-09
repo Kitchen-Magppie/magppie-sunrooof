@@ -139,11 +139,11 @@ const Layout2dDesign = (props: TProps) => {
                                         </div>
 
                                         <div className="flex justify-end w-full mt-2">
-                                            <div className="mb-2 mr-2 text-2xl lg:text-xl">
+                                            <div className="mr-2 text-2xl lg:text-xl">
                                                 <strong>Design :</strong>{' '}
                                                 {image.design}
                                             </div>
-                                            <div className="mb-2 mr-4 text-2xl lg:text-xl">
+                                            <div className="mr-4 text-2xl lg:text-xl">
                                                 <strong>Finish :</strong>{' '}
                                                 {image.finish}
                                             </div>
