@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { collection, doc, getDoc, onSnapshot, Timestamp, } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, query, Timestamp, orderBy } from 'firebase/firestore';
 //====================================================================
 
 import { db, auth } from "../../../../config/firebase.config"
@@ -88,7 +88,9 @@ export function useFirebaseCmsCustomerListener() {
     const dispatch = useAppDispatch()
     useEffect(() => {
         const collectionRef = collection(db, FirebaseCollectionEnum.Customer);
-        onSnapshot(collectionRef, ({ docs }) => {
+        const q = query(collectionRef, orderBy('at.created', 'desc'))
+
+        onSnapshot(q, ({ docs }) => {
             const data: TCustomerItem[] = [];
             docs?.forEach((doc) => {
                 const row = doc.data();
