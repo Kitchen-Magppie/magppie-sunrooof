@@ -125,7 +125,7 @@ const Layout2dDesign = (props: TProps) => {
                                 >
                                     <div className="flex flex-col h-full swiper-zoom-container">
                                         <div className="flex items-center justify-center w-full">
-                                            <div className="mb-2 mr-4 text-2xl lg:text-xl">
+                                            <div className="mb-2 mt-4 text-2xl lg:text-xl">
                                                 <strong>Area Name :</strong>{' '}
                                                 {image.areaName}
                                             </div>
