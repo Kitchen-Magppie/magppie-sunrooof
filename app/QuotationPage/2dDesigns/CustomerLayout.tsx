@@ -6,7 +6,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 type TProps = { item: TCustomerComponentDesign2DDataItem }
 
-const ProposedLayout = ({ item }: TProps) => {
+const CustomerLayout = ({ item }: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')
     // const [corpus, setCorpus] = useState({
     //     link: item.leftImage,
@@ -31,9 +31,9 @@ const ProposedLayout = ({ item }: TProps) => {
             ) : (
                 <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col">
-                        <h1 className="text-2xl mb-2">Proposed Layout</h1>
+                        <h1 className="text-2xl mb-2">Customer Layout</h1>
                         <LazyLoadImage
-                            src={item.leftImage}
+                            src={item.rightImage}
                             alt=""
                             effect="blur"
                             className="rounded-lg cursor-pointer"
@@ -74,4 +74,4 @@ const ProposedLayout = ({ item }: TProps) => {
 //     )
 // }
 
-export default ProposedLayout
+export default CustomerLayout

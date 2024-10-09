@@ -6,7 +6,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 type TProps = { item: TCustomerComponentDesign2DDataItem[] }
 
-const CustomerLayout = ({ item }: TProps) => {
+const ProposedLayout = ({ item }: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')
     // const [corpus, setCorpus] = useState({
     //     link: item.leftImage,
@@ -22,7 +22,7 @@ const CustomerLayout = ({ item }: TProps) => {
                                 return (
                                     <div className="mt-2 flex flex-col min-w-[200px]">
                                         <LazyLoadImage
-                                            src={data.rightImage}
+                                            src={data.leftImage}
                                             alt=""
                                             effect="blur"
                                             className="rounded-lg cursor-pointer w-[200px]"
@@ -39,13 +39,13 @@ const CustomerLayout = ({ item }: TProps) => {
             ) : (
                 <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col items-center">
-                        <h1 className="text-2xl mb-2">Customer Layout</h1>
+                        <h1 className="text-2xl mb-2">Proposed Layout</h1>
                         <div className="overflow-y-auto h-[650px]">
                             {item.map((data) => {
                                 return (
                                     <div className="mt-2">
                                         <LazyLoadImage
-                                            src={data.rightImage}
+                                            src={data.leftImage}
                                             alt=""
                                             effect="blur"
                                             className="rounded-lg cursor-pointer"
@@ -92,4 +92,4 @@ const CustomerLayout = ({ item }: TProps) => {
 //     )
 // }
 
-export default CustomerLayout
+export default ProposedLayout

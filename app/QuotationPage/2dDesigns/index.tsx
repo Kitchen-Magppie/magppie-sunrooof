@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import ProposedLayout from './Proposed'
-
+import ProposedLayout from './/ProposedLayout'
+import CustomerLayout from './CustomerLayout'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
@@ -21,7 +21,6 @@ import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 //hooks
 import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DItem } from '../../../types'
-import CustomerLayout from './Customer'
 
 const Layout2dDesign = (props: TProps) => {
     // console.log(props)
@@ -182,18 +181,18 @@ const Layout2dDesign = (props: TProps) => {
             {isMobile ? (
                 <div className="flex gap-4 flex-col lg:flex-row container mx-auto">
                     <div className="flex">{renderSwiper}</div>
-                    <ProposedLayout
+                    <CustomerLayout
                         item={props.item.data[selectedLayout]}
                         // selectedLayout={selectedLayout}
                         // isMobile={isMobile}
                     />
-                    <CustomerLayout item={props.item.data} />
+                    <ProposedLayout item={props.item.data} />
                 </div>
             ) : (
                 <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto lg:flex-row">
-                    <CustomerLayout item={props.item.data} />
+                    <ProposedLayout item={props.item.data} />
                     <div className="flex">{renderSwiper}</div>
-                    <ProposedLayout
+                    <CustomerLayout
                         item={props.item.data[selectedLayout]}
                         // isMobile={isMobile}
                     />
