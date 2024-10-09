@@ -12,10 +12,10 @@ import { useMedia } from 'react-use'
 
 const ImageComparison = (props: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')
-    const [view, setView] = useState('after')
+    const [view, setView] = useState('before')
     const [currentSlide, setCurrentSlide] = useState(0)
 
-    const isBefore = view === 'after'
+    const isBefore = view === 'before'
 
     const slides = useMemo(() => {
         const item = COMPONENT_COMPARISON_DATA_OPTIONS?.find(
@@ -86,7 +86,7 @@ const ImageComparison = (props: TProps) => {
                                             : 'bg-gray-100 text-gray-600'
                                     }`}
                                 >
-                                    Before
+                                    After
                                 </button>
                                 <button
                                     onClick={() => setView('after')}
@@ -96,7 +96,7 @@ const ImageComparison = (props: TProps) => {
                                             : 'bg-gray-100 text-gray-600'
                                     }`}
                                 >
-                                    After
+                                    Before
                                 </button>
                             </div>
                         </div>
@@ -132,7 +132,9 @@ const ImageComparison = (props: TProps) => {
                                         alt=""
                                         className="object-cover w-[500px] h-[500px] rounded-lg shadow-md mr-10"
                                     />
-                                    <h1 className="uppercase mt-1 text-3xl font-bold">before</h1>
+                                    <h1 className="uppercase mt-1 text-3xl font-bold">
+                                        before
+                                    </h1>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <LazyLoadImage
@@ -141,7 +143,9 @@ const ImageComparison = (props: TProps) => {
                                         alt=""
                                         className="object-cover w-[500px] h-[500px] rounded-lg shadow-md"
                                     />
-                                    <h1 className="uppercase mt-1 text-3xl font-bold">after</h1>
+                                    <h1 className="uppercase mt-1 text-3xl font-bold">
+                                        after
+                                    </h1>
                                 </div>
                             </div>
                         )
