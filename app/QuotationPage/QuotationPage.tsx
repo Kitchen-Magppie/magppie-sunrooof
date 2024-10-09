@@ -27,7 +27,7 @@ const QuotationPage = () => {
     return (
         <div className="overflow-x-hidden">
             <Navbar />
-            <Hero name={components.name} />
+            <Hero name={components.name} item={components[CustomerComponentEnum.Quotation]} />
             <About />
             <Clients />
             {/* <ImageComparison item={DEFAULT_CUSTOMER?.components.find((item) => item.value === CustomerComponentEnum.Comparison)} /> */}
