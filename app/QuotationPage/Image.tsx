@@ -122,9 +122,9 @@ const ImageComparison = (props: TProps) => {
                 </>
             ) : (
                 <div className="flex items-center justify-center w-full container mx-auto max-w-7xl">
-                    {slides.map((slide) => {
+                    {slides.map((slide, i) => {
                         return (
-                            <div className="flex items-center">
+                            <div className="flex items-center" key={i}>
                                 <div className="flex flex-col items-center">
                                     <LazyLoadImage
                                         effect="blur"

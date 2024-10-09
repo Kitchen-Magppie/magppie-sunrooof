@@ -1,14 +1,12 @@
 import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DDataItem } from '../../../types'
-// import { TCustomerComponentDesign2DItem } from '../../../types'
-// import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
 type TProps = { item: TCustomerComponentDesign2DDataItem }
-// type ImageProps = { items: TCustomerComponentDesign2DItem }
 
-const ProjectDetails = ({ item }: TProps) => {
+const CustomerLayout = ({ item }: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')
     // const [corpus, setCorpus] = useState({
     //     link: item.leftImage,
@@ -29,31 +27,18 @@ const ProjectDetails = ({ item }: TProps) => {
                             <strong>Area Name :</strong> {item.areaName}
                         </div>
                     </div>
-                    {/* <div>
-                        {items.data?.map((image, index) => {
-                            return (
-                                <div key={index}>
-                                    <LazyLoadImage
-                                        effect="blur"
-                                        src={image.rightImage}
-                                        alt=""
-                                        className="block w-screen h-full object-contain"
-                                    />
-                                </div>
-                            )
-                        })}
-                    </div> */}
                 </>
             ) : (
-                <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full container mx-auto rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
-                    <h2 className="text-xl font-bold mb-4 underline">
-                        Project Details
-                    </h2>
-                    <div className="mb-2 text-2xl lg:text-xl">
-                        <strong>Design :</strong> {item.design}
-                    </div>
-                    <div className="mb-2 text-2xl lg:text-xl">
-                        <strong>Finish :</strong> {item.finish}
+                <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
+                    <div className="flex flex-col">
+                        <h1 className="text-2xl mb-2">Customer Layout</h1>
+                        <LazyLoadImage
+                            src={item.rightImage}
+                            alt=""
+                            effect="blur"
+                            className="rounded-lg cursor-pointer"
+                        />
+                        <span className="mt-2">Area Name: {item.areaName}</span>
                     </div>
                 </div>
             )}
@@ -89,4 +74,4 @@ const ProjectDetails = ({ item }: TProps) => {
 //     )
 // }
 
-export default ProjectDetails
+export default CustomerLayout
