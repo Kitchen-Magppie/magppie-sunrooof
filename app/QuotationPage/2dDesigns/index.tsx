@@ -121,7 +121,7 @@ const Layout2dDesign = (props: TProps) => {
                             return (
                                 <SwiperSlide
                                     key={j}
-                                    className="flex items-center justify-center h-full !w-full"
+                                    className="flex items-center justify-center h-full !w-full container mx-auto max-w-7xl"
                                 >
                                     <div className="flex flex-col h-full swiper-zoom-container">
                                         <div className="flex items-center justify-center w-full">
@@ -130,16 +130,15 @@ const Layout2dDesign = (props: TProps) => {
                                                 {image.areaName}
                                             </div>
                                         </div>
-
-
-                                        <div className="w-full h-full object-contain">
+                                        <div className="">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={image.rightImage}
                                                 alt=""
                                             />
                                         </div>
-                                        <div className="flex mt-2 justify-end w-full">
+
+                                        <div className="flex justify-end w-full mt-2">
                                             <div className="mb-2 mr-2 text-2xl lg:text-xl">
                                                 <strong>Design :</strong>{' '}
                                                 {image.design}
@@ -158,13 +157,13 @@ const Layout2dDesign = (props: TProps) => {
                         {selectedLayout > 0 && (
                             <ArrowUpIcon
                                 onClick={() => onPrev()}
-                                className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
+                                className="text-white p-2 w-16 fill-[#78746c] cursor-pointer"
                             />
                         )}
                         {selectedLayout < props.item.data?.length - 1 && (
                             <ArrowDownIcon
                                 onClick={() => onNext()}
-                                className="text-white p-2 w-20 fill-[#78746c] cursor-pointer"
+                                className="text-white p-2 w-16 fill-[#78746c] cursor-pointer"
                             />
                         )}
                     </div>
@@ -186,18 +185,18 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                    // selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
+                        // selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
                     />
                     <ProposedLayout item={props.item.data} />
                 </div>
             ) : (
-                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto justify-center lg:flex-row w-screen">
+                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto max-w-6xl lg:flex-row w-screen">
                     <ProposedLayout item={props.item.data} />
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                    // isMobile={isMobile}
+                        // isMobile={isMobile}
                     />
                 </div>
             )}
