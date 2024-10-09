@@ -32,8 +32,8 @@ export const COMPONENT_COMPARISON_DATA_OPTIONS = [
             {
                 id: 1,
                 pair: {
-                    before: classicalAfter,
-                    after: classicalBefore,
+                    before: classicalBefore,
+                    after: classicalAfter,
                 },
             },
         ],
