@@ -134,7 +134,8 @@ const Layout2dDesign = (props: TProps) => {
                                             effect="blur"
                                             src={image.rightImage}
                                             alt=""
-                                            className="block w-[900px] h-full object-contain"
+                                            className=""
+                                            // "block w-[900px] h-full object-contain"
                                         />
                                         <div className="flex mt-2 justify-end w-full">
                                             <div className="mb-2 mr-2 text-2xl lg:text-xl">
@@ -189,7 +190,7 @@ const Layout2dDesign = (props: TProps) => {
                     <ProposedLayout item={props.item.data} />
                 </div>
             ) : (
-                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto lg:flex-row">
+                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto max-w-7xl lg:flex-row w-screen">
                     <ProposedLayout item={props.item.data} />
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
