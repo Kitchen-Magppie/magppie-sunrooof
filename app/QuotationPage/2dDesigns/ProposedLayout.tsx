@@ -46,16 +46,16 @@ const ProposedLayout = ({ item }: TProps) => {
             ) : (
                 <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col items-center">
-                        <h1 className="text-xl mb-2">Proposed Layout</h1>
+                        {/* <h1 className="text-xl mb-2">Proposed Layout</h1> */}
                         <div className="overflow-y-auto h-[650px]">
                             {item.map((data, i) => {
                                 return (
-                                    <div className="mt-2" key={i}>
+                                    <div className="mt-2 text-center" key={i}>
                                         <div className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg  bg-white`}
                                         >
                                             <img src={data.leftImage} alt="" className='cursor-pointer' />
                                         </div>
-                                        <span className="mt-2 text-sm">
+                                        <span className="mt-2 text-sm ">
                                             Area Name: {data.areaName}
                                         </span>
                                     </div>
