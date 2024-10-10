@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import ProposedLayout from './/ProposedLayout'
+import ProposedLayout from './ProposedLayout'
 import CustomerLayout from './CustomerLayout'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -202,8 +202,8 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                        // selectedLayout={selectedLayout}
-                        // isMobile={isMobile}
+                    // selectedLayout={selectedLayout}
+                    // isMobile={isMobile}
                     />
                     {leftImagesLength.length > 1 ? (
                         <ProposedLayout item={props.item.data} />
@@ -215,7 +215,7 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                        // isMobile={isMobile}
+                    // isMobile={isMobile}
                     />
                 </div>
             )}
