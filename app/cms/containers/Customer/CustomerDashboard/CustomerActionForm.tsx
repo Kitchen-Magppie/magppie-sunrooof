@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoCreateOutline } from "react-icons/io5";
 import { IoIosLink } from "react-icons/io";
-import { toast } from "react-toastify";
+import { toast, ToastOptions } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-use";
 import Select from "react-select";
@@ -91,18 +91,19 @@ export function CustomerActionForm(props: TProps) {
         setCorpus((prev) => ({ ...prev, isSubmitting: true }));
         setTimeout(() => {
             if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
+
                 if (isCreateAction) {
                     action.add({
                         ...data,
                         at: { ...data.at, created: new Date() },
                     });
-                    toast("Record has been created");
+                    toast.success("Record has been created", TOAST_OPTIONS);
                 } else {
                     action.edit({
                         ...data,
                         at: { ...data.at, updated: new Date() },
                     });
-                    toast("Record has been edited");
+                    toast.success("Record has been edited", TOAST_OPTIONS);
                 }
             }
             setCorpus((prev) => ({ ...prev, isSubmitting: false }));
@@ -582,4 +583,15 @@ function DESIGN_2D_SELECT_OPTION(e: string) {
         default:
             return []
     }
+}
+const TOAST_OPTIONS: ToastOptions = {
+    position: "top-right",
+    autoClose: 2000,
+    style: { background: '#222222' },
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
 }
