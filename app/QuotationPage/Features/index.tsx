@@ -34,7 +34,7 @@ const Features = ({ item }: TProps) => {
             <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto px-4">
                 <div className="flex flex-col mb-24 items-center justify-center text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
-                    <h1 className="text-4xl font-semibold capitalize">
+                    <h1 className="text-3xl font-medium capitalize">
                         {/* Benefits for offices */}
                         {currentItem.header}
                     </h1>
@@ -67,7 +67,7 @@ const Features = ({ item }: TProps) => {
             <div className="flex flex-col lg:hidden py-20 container mx-auto w-full">
                 <div className="flex flex-col items-center justify-center mb-32 text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
-                    <h1 className="text-4xl font-semibold capitalize">
+                    <h1 className="text-3xl font-medium capitalize">
                         Benefits for offices
                     </h1>
                 </div>
