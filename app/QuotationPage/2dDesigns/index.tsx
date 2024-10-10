@@ -187,7 +187,7 @@ const Layout2dDesign = (props: TProps) => {
                 </>
             )
         }
-    }, [isMobile, onNext, onPrev, props.item.data, selectedLayout])
+    }, [isMobile, onNext, onPrev, props.item.data, selectedLayout, leftImagesLength])
 
     return (
         <div

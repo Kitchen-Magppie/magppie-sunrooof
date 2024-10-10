@@ -31,7 +31,7 @@ const CustomerLayout = ({ item }: TProps) => {
             ) : (
                 <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col">
-                        <h1 className="text-xl mb-2">Customer Layout</h1>
+                        <h1 className="text-xl mb-2">Proposed Layout</h1>
                         <LazyLoadImage
                             src={item.rightImage}
                             alt=""
