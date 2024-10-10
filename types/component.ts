@@ -1,48 +1,53 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
-export type TComponentMeta = { order: { used: number[], next: number } }
+export type TComponentMeta = { order: { used: number[]; next: number } }
 
 export type TCustomerComponentComparisonDataItem = {
-    value: string,
-    image: { before: string, after: string }
+    value: string
+    image: { before: string; after: string }
 }
 export type TCustomerComponentComparisonItem = {
-    value: CustomerComponentEnum.Comparison,
+    value: CustomerComponentEnum.Comparison
     // data: TCustomerComponentComparisonDataItem[]
     data: ComponentComparisonDataEnum
 }
 export type TCustomerComponentFeatureItem = {
-    value: CustomerComponentEnum.Feature,
+    value: CustomerComponentEnum.Feature
     data: ComponentFeatureEnum
 }
 export type TCustomerComponentClientItem = {
-    value: CustomerComponentEnum.Client,
-    data: { name: string, description: string }
+    value: CustomerComponentEnum.Client
+    data: { name: string; description: string }
 }
 
 export type TCustomerComponentQuotationItem = {
-    value: CustomerComponentEnum.Quotation,
+    value: CustomerComponentEnum.Quotation
     data: {
-        name: string,
-        email: string,
-        mobile: string,
-        createdDate: string,
-        salutation: string,
-        address: string,
-        zone: string,
-        city: string,
+        name: string
+        email: string
+        mobile: string
+        createdDate: string
+        salutation: string
+        address: string
+        zone: string
+        city: string
         invoiceUrl: string
     }
 }
 
-export type TCustomerComponent2DDesignOptionItem = { label: string; value: keyof TCustomerComponentDesign2DDataItem, field: 'text' | 'image' | 'select', placeholder: string }
+export type TCustomerComponent2DDesignOptionItem = {
+    label: string
+    value: keyof TCustomerComponentDesign2DDataItem
+    field: 'text' | 'image' | 'select'
+    placeholder: string
+}
 export type TCustomerComponentDesign2DDataItem = {
-    design: string,
-    finish: string,
-    areaName: string,
+    design: string
+    finish: string
+    areaName: string
     // invoiceUrl: string,
-    leftImage: string,
-    rightImage: string,
+    leftImage: string
+    rightImage: string
     // designBy: string,
     // approvedBy: string,
     // ceilingHeightOnSite: string,
@@ -51,7 +56,7 @@ export type TCustomerComponentDesign2DDataItem = {
 }
 
 export type TCustomerComponentDesign2DItem = {
-    value: CustomerComponentEnum.TwoDDesign,
+    value: CustomerComponentEnum.TwoDDesign
     data: TCustomerComponentDesign2DDataItem[]
 }
 export enum CustomerComponentEnum {
@@ -61,7 +66,7 @@ export enum CustomerComponentEnum {
     Comparison = 'comparisons',
     Feature = 'feature',
     Quotation = 'quotations',
-    None = ''
+    None = '',
 }
 export enum ComponentComparisonDataEnum {
     FrenchWindow = 'french-window',
@@ -71,40 +76,37 @@ export enum ComponentComparisonDataEnum {
     FlutedMinimalistSunrooof = 'fluted-minimalist-sunrooof',
     ModernSunrooof = 'modern-sunrooof',
     None = '',
-
 }
-export type TComponentComparisonDataOption = { label: string, value: ComponentComparisonDataEnum }
-
-
+export type TComponentComparisonDataOption = {
+    label: string
+    value: ComponentComparisonDataEnum
+}
 
 export type TCustomerComponentDesign3DItem = {
-    value: CustomerComponentEnum.ThreeDDesign,
+    value: CustomerComponentEnum.ThreeDDesign
     data: string[]
 }
 
-export type TCustomerComponentItem = TCustomerComponentClientItem |
-    TCustomerComponentComparisonItem |
-    TCustomerComponentQuotationItem |
-    TCustomerComponentDesign2DItem |
-    TCustomerComponentDesign3DItem |
-    TCustomerComponentFeatureItem
-
+export type TCustomerComponentItem =
+    | TCustomerComponentClientItem
+    | TCustomerComponentComparisonItem
+    | TCustomerComponentQuotationItem
+    | TCustomerComponentDesign2DItem
+    | TCustomerComponentDesign3DItem
+    | TCustomerComponentFeatureItem
 
 export type TCustomerItem = {
-    name: string,
-    components: TCustomerComponentItem[],
-    id: string,
-    customerId: string,
-    at: { created: Date, updated: Date }
+    name: string
+    components: TCustomerComponentItem[]
+    id: string
+    customerId: string
+    at: { created: Date; updated: Date }
 }
-
-
-
 
 export enum ComponentModeEnum {
     Create = 'create',
     Edit = 'edit',
-    None = ''
+    None = '',
 }
 
 export enum ComponentFeatureEnum {
@@ -114,14 +116,13 @@ export enum ComponentFeatureEnum {
     School = 'school',
     Restaurant = 'restaurant',
     Hotel = 'hotel',
-    Office = 'office'
+    Office = 'office',
 }
 
-export type TComponentMode = ComponentModeEnum.Create
+export type TComponentMode =
+    | ComponentModeEnum.Create
     | ComponentModeEnum.Edit
     | ComponentModeEnum.None
-
-
 
 export enum SpecialCharacterEnum {
     BreakLine = '==nextline==',
@@ -131,15 +132,14 @@ export enum SpecialCharacterEnum {
     BoldEnd = 'bold==',
 }
 
-
 export const SPECIAL_CHARACTER_TO_DOM = (text: string) => {
-    return text.replace(/==nextline==\s*<br \/>/g, '\n')
+    return text
+        .replace(/==nextline==\s*<br \/>/g, '\n')
         .replace(/==italic\s*(\w+)==\s*/g, '<i>$1</i>')
         .replace(/==bold\s*(\w+)==\s*/g, '<b>$1</b>')
-        .split('\n').map((line) => line)
-};
-
-
+        .split('\n')
+        .map((line) => line)
+}
 
 // const comparisonDataItemSchema = yup.object().shape({
 //     value: yup.string().nullable(),
@@ -152,8 +152,8 @@ export const SPECIAL_CHARACTER_TO_DOM = (text: string) => {
 const customerComponentComparisonItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Comparison]).required(),
     // data: yup.array().of(comparisonDataItemSchema).required(),
-    data: yup.string().required(),
-});
+    data: yup.string().required('Comparison field is required'),
+})
 
 // const customerComponentClientItemSchema = yup.object().shape({
 //     value: yup.mixed().oneOf([CustomerComponentEnum.Client]).required(),
@@ -165,74 +165,89 @@ const customerComponentComparisonItemSchema = yup.object().shape({
 
 const customerComponentFeatureItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Feature]).required(),
-    data: yup.string().required(),
-});
+    data: yup.string().required('Feature field is required'),
+})
+
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
-    data: yup.object({
-        name: yup.string().nullable(),
-        email: yup.string().required(),
-        mobile: yup.string().required(),
-        createdDate: yup.string().required(),
-        salutation: yup.string().required(),
-        address: yup.string().required(),
-        zone: yup.string().required(),
-        city: yup.string().required(),
-        invoiceUrl: yup.string().required()
-    }).required(),
-});
+    data: yup
+        .object({
+            name: yup.string().nullable(),
+            email: yup.string().required('Email field is required'),
+            mobile: yup.string().required('Mobile field is required'),
+            createdDate: yup.string().required(),
+            salutation: yup.string().required('Salutation field is required'),
+            address: yup.string().required('Address field is required'),
+            zone: yup.string().required('Zone field is required'),
+            city: yup.string().required('City field is required'),
+            invoiceUrl: yup.string().required('Invoice URL field is required'),
+        })
+        .required(),
+})
 
 const customerComponentDesign2DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
-    data: yup.array().of(yup.object().shape({
+    data: yup
+        .array()
+        .of(
+            yup.object().shape({
+                // designBy: yup.string().required(),
+                // approvedBy: yup.string().required(),
+                design: yup.string().required('Design field is Required'),
+                finish: yup.string().required('Finish field is Required'),
+                // ceilingHeightOnSite: yup.string().required(),
+                // afterInstallation: yup.string().required(),
+                // cityName: yup.string().required(),
+                // yourPlan: yup.string().required(),
+                areaName: yup.string().required('Area Name field is Required'),
+                // invoiceUrl: yup.string().required(),
 
-        // designBy: yup.string().required(),
-        // approvedBy: yup.string().required(),
-        design: yup.string().required(),
-        finish: yup.string().required(),
-        // ceilingHeightOnSite: yup.string().required(),
-        // afterInstallation: yup.string().required(),
-        // cityName: yup.string().required(),
-        // yourPlan: yup.string().required(),
-        areaName: yup.string().required(),
-        // invoiceUrl: yup.string().required(),
-
-        leftImage: yup.string().required(),
-        rightImage: yup.string().required(),
-    })).min(1).required(),
-});
+                leftImage: yup
+                    .string()
+                    .required('Customer Image field is Required'),
+                rightImage: yup
+                    .string()
+                    .required('Proposed Image field is Required'),
+            })
+        )
+        .min(1)
+        .required(),
+})
 
 const customerComponentDesign3DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.ThreeDDesign]).required(),
     data: yup.array().of(yup.string().required()).required(),
-});
+})
 
 const customerComponentSchema = yup.lazy((value) => {
     switch (value.value) {
         // case CustomerComponentEnum.Client:
         //     return customerComponentClientItemSchema;
         case CustomerComponentEnum.Feature:
-            return customerComponentFeatureItemSchema;
+            return customerComponentFeatureItemSchema
         case CustomerComponentEnum.Comparison:
-            return customerComponentComparisonItemSchema;
+            return customerComponentComparisonItemSchema
         case CustomerComponentEnum.Quotation:
-            return customerComponentQuotationItemSchema;
+            return customerComponentQuotationItemSchema
         case CustomerComponentEnum.TwoDDesign:
-            return customerComponentDesign2DItemSchema;
+            return customerComponentDesign2DItemSchema
         case CustomerComponentEnum.ThreeDDesign:
-            return customerComponentDesign3DItemSchema;
+            return customerComponentDesign3DItemSchema
         default:
-            return yup.mixed().required();
+            return yup.mixed().required()
     }
-});
+})
 
 export const validateCustomerItemSchema = yup.object().shape({
     name: yup.string().required(),
     components: yup.array().of(customerComponentSchema).required(),
     id: yup.string().nullable(),
     customerId: yup.string().required(),
-    at: yup.object().shape({
-        created: yup.date().required(),
-        updated: yup.date().required(),
-    }).required(),
-});
+    at: yup
+        .object()
+        .shape({
+            created: yup.date().required(),
+            updated: yup.date().required(),
+        })
+        .required(),
+})

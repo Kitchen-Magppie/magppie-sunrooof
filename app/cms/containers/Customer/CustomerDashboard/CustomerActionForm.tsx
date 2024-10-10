@@ -230,6 +230,7 @@ export function CustomerActionForm(props: TProps) {
                                             }}
                                             options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                                         />
+                                        {renderErrorMessage(`components.${i}.data`)}
                                     </MinimalAccordion>
                                 </div>
                             );
