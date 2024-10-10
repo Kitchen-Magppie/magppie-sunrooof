@@ -191,7 +191,7 @@ const Layout2dDesign = (props: TProps) => {
                         // selectedLayout={selectedLayout}
                         // isMobile={isMobile}
                     />
-                    {leftImagesLength.length === 1 ? (
+                    {leftImagesLength.length > 1 ? (
                         <ProposedLayout item={props.item.data} />
                     ) : null}
                 </div>
