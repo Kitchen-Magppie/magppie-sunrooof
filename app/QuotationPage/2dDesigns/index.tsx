@@ -77,7 +77,7 @@ const Layout2dDesign = (props: TProps) => {
                             >
                                 <div>
                                     <div className="swiper-zoom-container flex flex-col mb-4">
-                                        <h1 className="text-4xl mb-2">
+                                        <h1 className="text-4xl mb-2 font-[500]">
                                             Customer Layout
                                         </h1>
                                         {images.map((image) => {
@@ -99,7 +99,7 @@ const Layout2dDesign = (props: TProps) => {
                                         /> */}
                                     </div>
                                     <div className="flex flex-col  swiper-zoom-container">
-                                        <h1 className="text-4xl mb-2">
+                                        <h1 className="text-4xl mb-2 font-[500]">
                                             Proposed Layout
                                         </h1>
                                         <LazyLoadImage
@@ -142,8 +142,8 @@ const Layout2dDesign = (props: TProps) => {
                                 >
                                     <div className="flex flex-col h-full swiper-zoom-container">
                                         <div className="flex items-center justify-center w-full">
-                                            <div className="mb-2 mt-4 text-2xl lg:text-lg">
-                                                <span>Area Name :</span>{' '}
+                                            <div className="mb-2 mt-4 text-2xl lg:text-lg font-bold">
+                                                {/* <span>Area Name :</span>{' '} */}
                                                 {image.areaName}
                                             </div>
                                         </div>
