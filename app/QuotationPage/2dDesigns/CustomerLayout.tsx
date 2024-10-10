@@ -38,7 +38,11 @@ const CustomerLayout = ({ item }: TProps) => {
                             <img src={item.rightImage} alt="" className='cursor-pointer' />
                         </div>
 
-                        <span className="mt-2 text-sm">Area Name: {item.areaName}</span>
+                        <span className="mt-2 text-sm text-center">
+
+                            {/* Area Name: */}
+
+                            {item.areaName}</span>
                     </div>
                 </div>
             )}
