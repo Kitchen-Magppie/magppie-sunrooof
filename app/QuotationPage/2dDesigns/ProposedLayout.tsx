@@ -8,6 +8,10 @@ type TProps = { item: TCustomerComponentDesign2DDataItem[] }
 
 const ProposedLayout = ({ item }: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')
+    // const leftImagesLength = item.map((data) => {
+    //     return data.leftImage.length
+    // })
+
     // const [corpus, setCorpus] = useState({
     //     link: item.leftImage,
     //     isOpenModal: false,
@@ -20,7 +24,10 @@ const ProposedLayout = ({ item }: TProps) => {
                         <div className="flex items-center overflow-x-auto w-full space-x-4 no-scrollbar">
                             {item.map((data, i) => {
                                 return (
-                                    <div className="mt-2 flex flex-col min-w-[200px]" key={i}>
+                                    <div
+                                        className="mt-2 flex flex-col min-w-[200px]"
+                                        key={i}
+                                    >
                                         <LazyLoadImage
                                             src={data.leftImage}
                                             alt=""
@@ -39,7 +46,7 @@ const ProposedLayout = ({ item }: TProps) => {
             ) : (
                 <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col items-center">
-                        <h1 className="text-2xl mb-2">Proposed Layout</h1>
+                        <h1 className="text-xl mb-2">Proposed Layout</h1>
                         <div className="overflow-y-auto h-[650px]">
                             {item.map((data, i) => {
                                 return (
@@ -50,7 +57,7 @@ const ProposedLayout = ({ item }: TProps) => {
                                             effect="blur"
                                             className="rounded-lg cursor-pointer"
                                         />
-                                        <span className="mt-2">
+                                        <span className="mt-2 text-sm">
                                             Area Name: {data.areaName}
                                         </span>
                                     </div>
