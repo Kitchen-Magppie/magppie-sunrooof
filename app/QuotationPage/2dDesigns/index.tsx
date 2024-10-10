@@ -23,6 +23,9 @@ import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DItem } from '../../../types'
 
 const Layout2dDesign = (props: TProps) => {
+    const leftImagesLength = props.item.data.map((item) => {
+        return item.leftImage
+    })
     // console.log(props)
     const [selectedLayout, setSelectedLayout] = useState(0)
     const [swiperInstance, setSwiperInstance] = useState(null)
@@ -188,7 +191,9 @@ const Layout2dDesign = (props: TProps) => {
                         // selectedLayout={selectedLayout}
                         // isMobile={isMobile}
                     />
-                    <ProposedLayout item={props.item.data} />
+                    {leftImagesLength.length === 1 ? (
+                        <ProposedLayout item={props.item.data} />
+                    ) : null}
                 </div>
             ) : (
                 <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto max-w-6xl lg:flex-row w-screen">
