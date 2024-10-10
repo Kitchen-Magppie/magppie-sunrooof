@@ -1,6 +1,6 @@
 import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DDataItem } from '../../../types'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+// import { LazyLoadImage } from 'react-lazy-load-image-component'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
@@ -32,12 +32,12 @@ const CustomerLayout = ({ item }: TProps) => {
                 <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col">
                         <h1 className="text-xl mb-2">Proposed Layout</h1>
-                        <LazyLoadImage
-                            src={item.rightImage}
-                            alt=""
-                            effect="blur"
-                            className="rounded-lg cursor-pointer"
-                        />
+
+                        <div className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg bg-white`}
+                        >
+                            <img src={item.rightImage} alt="" className='cursor-pointer' />
+                        </div>
+
                         <span className="mt-2 text-sm">Area Name: {item.areaName}</span>
                     </div>
                 </div>

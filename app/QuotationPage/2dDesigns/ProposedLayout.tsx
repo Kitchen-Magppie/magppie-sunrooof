@@ -51,14 +51,9 @@ const ProposedLayout = ({ item }: TProps) => {
                             {item.map((data, i) => {
                                 return (
                                     <div className="mt-2" key={i}>
-                                        <div className="flex justify-center border w-60 h-40  rounded-lg object-contain">
-                                            <img
-                                                src={data.leftImage}
-                                                alt=""
-                                                className=' object-contain'
-                                            // effect="blur"
-                                            // className="rounded-lg cursor-pointer"
-                                            />
+                                        <div className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg  bg-white`}
+                                        >
+                                            <img src={data.leftImage} alt="" className='cursor-pointer' />
                                         </div>
                                         <span className="mt-2 text-sm">
                                             Area Name: {data.areaName}
