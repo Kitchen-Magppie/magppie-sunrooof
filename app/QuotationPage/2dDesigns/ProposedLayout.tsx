@@ -51,12 +51,15 @@ const ProposedLayout = ({ item }: TProps) => {
                             {item.map((data, i) => {
                                 return (
                                     <div className="mt-2" key={i}>
-                                        <LazyLoadImage
-                                            src={data.leftImage}
-                                            alt=""
-                                            effect="blur"
-                                            className="rounded-lg cursor-pointer"
-                                        />
+                                        <div className="flex justify-center border w-60 h-40  rounded-lg object-contain">
+                                            <img
+                                                src={data.leftImage}
+                                                alt=""
+                                                className=' object-contain'
+                                            // effect="blur"
+                                            // className="rounded-lg cursor-pointer"
+                                            />
+                                        </div>
                                         <span className="mt-2 text-sm">
                                             Area Name: {data.areaName}
                                         </span>
