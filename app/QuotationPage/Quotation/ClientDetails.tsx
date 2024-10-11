@@ -3,6 +3,8 @@ import { TCustomerComponentQuotationItem } from '../../../types'
 // import { clientData } from './data' // Importing the JSON data from the file
 
 const ClientDetails = (props: TProps) => {
+    console.log(props.item.data.name);
+    
     return (
         <div className="flex justify-between items-start w-full gap-4">
             <div className="flex flex-col gap-4">
