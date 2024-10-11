@@ -21,7 +21,7 @@ import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 //hooks
 import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DItem } from '../../../types'
-import { images } from './data'
+// import { images } from './data'
 
 const Layout2dDesign = (props: TProps) => {
     const leftImagesLength = props.item.data.map((item) => {
@@ -80,17 +80,15 @@ const Layout2dDesign = (props: TProps) => {
                                         <h1 className="text-4xl mb-2 font-[500]">
                                             Customer Layout
                                         </h1>
-                                        {images.map((image) => {
-                                            return (
-                                                <LazyLoadImage
-                                                    key={image.id}
-                                                    effect="blur"
-                                                    src={image.url}
-                                                    alt=""
-                                                    className="block w-screen h-full object-contain"
-                                                />
-                                            )
-                                        })}
+                                        <div>
+                                        <h2 className='text-2xl mb-2'>{image.areaName}</h2>
+                                            <LazyLoadImage
+                                                effect="blur"
+                                                src={image.leftImage}
+                                                alt=""
+                                                className="block w-screen h-full object-contain"
+                                            />
+                                        </div>
                                         {/* <LazyLoadImage
                                             effect="blur"
                                             src={image.leftImage}
@@ -102,12 +100,15 @@ const Layout2dDesign = (props: TProps) => {
                                         <h1 className="text-4xl mb-2 font-[500]">
                                             Proposed Layout
                                         </h1>
-                                        <LazyLoadImage
-                                            effect="blur"
-                                            src={image.rightImage}
-                                            alt=""
-                                            className="block w-screen h-full object-contain"
-                                        />
+                                        <div>
+                                            <h2 className='text-2xl mb-2'>{image.areaName}</h2>
+                                            <LazyLoadImage
+                                                effect="blur"
+                                                src={image.rightImage}
+                                                alt=""
+                                                className="block w-screen h-full object-contain"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </SwiperSlide>
@@ -187,7 +188,14 @@ const Layout2dDesign = (props: TProps) => {
                 </>
             )
         }
-    }, [isMobile, onNext, onPrev, props.item.data, selectedLayout, leftImagesLength])
+    }, [
+        isMobile,
+        onNext,
+        onPrev,
+        props.item.data,
+        selectedLayout,
+        leftImagesLength,
+    ])
 
     return (
         <div
@@ -202,8 +210,8 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                    // selectedLayout={selectedLayout}
-                    // isMobile={isMobile}
+                        // selectedLayout={selectedLayout}
+                        // isMobile={isMobile}
                     />
                     {leftImagesLength.length > 1 ? (
                         <ProposedLayout item={props.item.data} />
@@ -215,7 +223,7 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                    // isMobile={isMobile}
+                        // isMobile={isMobile}
                     />
                 </div>
             )}
