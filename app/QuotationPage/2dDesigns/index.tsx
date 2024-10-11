@@ -12,11 +12,11 @@ import 'swiper/css/navigation'
 import 'swiper/css/zoom'
 import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
-//Icons
-// @ts-expect-error svg-issue
-import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
-// @ts-expect-error svg-issue
-import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
+// //Icons
+// // @ts-expect-error svg-issue
+// import ArrowUpIcon from '../../../assets/icons/arrowUp.svg?react'
+// // @ts-expect-error svg-issue
+// import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 
 //hooks
 import { useMedia } from 'react-use'
@@ -76,32 +76,24 @@ const Layout2dDesign = (props: TProps) => {
                                 className="flex items-center justify-center h-full !w-full"
                             >
                                 <div>
+                                    <h2 className="text-5xl text-center mb-4">
+                                        Cafe
+                                    </h2>
                                     <div className="swiper-zoom-container flex flex-col mb-4">
-                                        <h1 className="text-4xl mb-2 font-[500]">
-                                            Customer Layout
-                                        </h1>
                                         <div>
-                                        <h2 className='text-2xl mb-2'>{image.areaName}</h2>
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={image.leftImage}
                                                 alt=""
                                                 className="block w-screen h-full object-contain"
                                             />
+                                            <h1 className="text-4xl my-4 font-[500]">
+                                                Customer Layout
+                                            </h1>
                                         </div>
-                                        {/* <LazyLoadImage
-                                            effect="blur"
-                                            src={image.leftImage}
-                                            alt=""
-                                            className="block w-screen h-full object-contain"
-                                        /> */}
                                     </div>
-                                    <div className="flex flex-col  swiper-zoom-container">
-                                        <h1 className="text-4xl mb-2 font-[500]">
-                                            Proposed Layout
-                                        </h1>
+                                    <div className="flex flex-col swiper-zoom-container">
                                         <div>
-                                            <h2 className='text-2xl mb-2'>{image.areaName}</h2>
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={image.rightImage}
@@ -109,6 +101,9 @@ const Layout2dDesign = (props: TProps) => {
                                                 className="block w-screen h-full object-contain"
                                             />
                                         </div>
+                                        <h1 className="text-4xl my-4 font-[500]">
+                                            Proposed Layout
+                                        </h1>
                                     </div>
                                 </div>
                             </SwiperSlide>
@@ -120,6 +115,80 @@ const Layout2dDesign = (props: TProps) => {
             return (
                 <>
                     <Swiper
+                        grabCursor={true}
+                        slidesPerView={1}
+                        mousewheel={leftImagesLength.length > 1 ? true : false}
+                        direction={'horizontal'}
+                        centeredSlides={true}
+                        spaceBetween={30}
+                        zoom={true}
+                        modules={[Mousewheel, Scrollbar, Zoom]}
+                        scrollbar={{ draggable: true }}
+                        onSwiper={setSwiperInstance}
+                        onSlideChange={(swiper) =>
+                            setSelectedLayout(swiper.activeIndex)
+                        }
+                    >
+                        {props.item.data.map((image, i) => {
+                            return (
+                                <>
+                                    <SwiperSlide
+                                        key={i}
+                                        className="flex items-center justify-center h-full !w-full"
+                                    >
+                                        <div className="flex flex-col">
+                                            <h2 className="text-3xl text-center mb-10">
+                                                Cafe
+                                            </h2>
+                                            <div className="flex">
+                                                <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
+                                                    <h1 className="text-3xl mb-2 font-[500]">
+                                                        Customer Layout
+                                                    </h1>
+                                                    <div>
+                                                        <LazyLoadImage
+                                                            effect="blur"
+                                                            src={
+                                                                image.leftImage
+                                                            }
+                                                            alt=""
+                                                            className="block w-screen h-full object-contain rounded-lg shadow-md"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col  swiper-zoom-container">
+                                                    <h1 className="text-3xl mb-2 font-[500]">
+                                                        Proposed Layout
+                                                    </h1>
+                                                    <div>
+                                                        <LazyLoadImage
+                                                            effect="blur"
+                                                            src={
+                                                                image.rightImage
+                                                            }
+                                                            alt=""
+                                                            className="block w-screen h-full object-contain rounded-lg shadow-md"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-end mb-5">
+                                                <div className="mr-4 text-2xl lg:text-lg">
+                                                    <span>Design :</span>{' '}
+                                                    {image.design}
+                                                </div>
+                                                <div className="mr-4 text-2xl lg:text-lg">
+                                                    <span>Finish :</span>{' '}
+                                                    {image.finish}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                </>
+                            )
+                        })}
+                    </Swiper>
+                    {/* <Swiper
                         grabCursor={true}
                         slidesPerView={1}
                         mousewheel={true}
@@ -134,8 +203,8 @@ const Layout2dDesign = (props: TProps) => {
                         onSlideChange={(swiper) =>
                             setSelectedLayout(swiper.activeIndex)
                         }
-                    >
-                        {props.item.data.map((image, j) => {
+                    > */}
+                    {/* {props.item.data.map((image, j) => {
                             return (
                                 <SwiperSlide
                                     key={j}
@@ -144,7 +213,7 @@ const Layout2dDesign = (props: TProps) => {
                                     <div className="flex flex-col h-full swiper-zoom-container">
                                         <div className="flex items-center justify-center w-full">
                                             <div className="mb-2 mt-4 text-2xl lg:text-lg font-bold">
-                                                {/* <span>Area Name :</span>{' '} */}
+                                                <span>Area Name :</span>{' '}
                                                 {image.areaName}
                                             </div>
                                         </div>
@@ -169,8 +238,8 @@ const Layout2dDesign = (props: TProps) => {
                                     </div>
                                 </SwiperSlide>
                             )
-                        })}
-                    </Swiper>
+                        })} */}
+                    {/* </Swiper>
                     <div className="flex items-center justify-center flex-col gap-8">
                         {selectedLayout > 0 && (
                             <ArrowUpIcon
@@ -184,7 +253,7 @@ const Layout2dDesign = (props: TProps) => {
                                 className="text-white p-2 w-16 fill-[#78746c] cursor-pointer"
                             />
                         )}
-                    </div>
+                    </div> */}
                 </>
             )
         }
@@ -202,7 +271,7 @@ const Layout2dDesign = (props: TProps) => {
             className="flex flex-col justify-center items-center py-20 bg-gray-100 min-h-screen"
             id="2d"
         >
-            <h1 className="text-6xl pb-16 w-full text-center uppercase text-[#78746c]">
+            <h1 className="text-6xl pb-10 w-full text-center uppercase text-[#78746c]">
                 2D Designs
             </h1>
             {isMobile ? (
@@ -218,13 +287,16 @@ const Layout2dDesign = (props: TProps) => {
                     ) : null}
                 </div>
             ) : (
-                <div className="flex max-h-[46rem] gap-4 flex-col container mx-auto max-w-6xl lg:flex-row w-screen">
-                    <ProposedLayout item={props.item.data} />
+                <div className="flex flex-col gap-4 container mx-auto max-w-6xl w-screen">
+                    {/* <ProposedLayout item={props.item.data} /> */}
                     <div className="flex">{renderSwiper}</div>
-                    <CustomerLayout
+                    {/* <CustomerLayout
                         item={props.item.data[selectedLayout]}
                         // isMobile={isMobile}
-                    />
+                    /> */}
+                    {leftImagesLength.length > 1 ? (
+                        <ProposedLayout item={props.item.data} />
+                    ) : null}
                 </div>
             )}
         </div>
