@@ -91,7 +91,7 @@ const Team = () => {
                         prevEl: '.arrow-left',
                     }}
                     modules={[Grid, Scrollbar, FreeMode, Navigation]}
-                    className="mySwiper container mx-auto max-w-7xl"
+                    className="mySwiper container mx-auto max-w-6xl 2xl:max-w-7xl"
                     scrollbar={{ draggable: true }}
                 >
                     {team.map((person) => {
@@ -133,10 +133,10 @@ const Team = () => {
             )}
             {!isMobile && (
                 <div className=''>
-                    <button className="arrow-left absolute top-1/2 left-24 2xl:left-64 transform -translate-y-1/2 z-20 ml-2 mt-10 cursor-pointer">
+                    <button className="arrow-left absolute top-1/2 left-10 2xl:left-64 transform -translate-y-1/2 z-20 ml-2 mt-10 cursor-pointer">
                         <img src={leftArrow} className="h-10 w-10" alt="" />
                     </button>
-                    <button className="arrow-right absolute top-1/2 right-24 2xl:right-64 transform -translate-y-1/2 z-20 mr-2 mt-10 cursor-pointer">
+                    <button className="arrow-right absolute top-1/2 right-10 2xl:right-64 transform -translate-y-1/2 z-20 mr-2 mt-10 cursor-pointer">
                         <img src={rightArrow} className="h-10 w-10" alt="" />
                     </button>
                 </div>
