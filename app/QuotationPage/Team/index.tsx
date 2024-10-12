@@ -14,7 +14,7 @@ import 'swiper/css/grid'
 import 'swiper/css/pagination'
 
 // import required modules
-import { Grid, Scrollbar, FreeMode, Navigation } from 'swiper/modules'
+import { Grid, Scrollbar, FreeMode, Navigation, Mousewheel } from 'swiper/modules'
 
 const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
@@ -33,16 +33,17 @@ const Team = () => {
                     pagination={{
                         clickable: true,
                     }}
+                    mousewheel={true}
                     spaceBetween={10}
                     freeMode={true}
-                    modules={[Grid, Scrollbar]}
-                    className="mySwiper"
+                    modules={[Grid, Scrollbar, Mousewheel]}
+                    className="mySwiper container mx-auto max-w-2xl"
                     scrollbar={{ draggable: true }}
                 >
                     {team.map((person) => {
                         return (
                             <SwiperSlide key={person.id}>
-                                <div className="text-black flex flex-col items-center pb-10 gap-1">
+                                <div className="text-black relative flex flex-col items-center pb-10 gap-1">
                                     <div className="h-72 w-80 mb-48 lg:mb-4">
                                         <LazyLoadImage
                                             effect="blur"
@@ -62,10 +63,10 @@ const Team = () => {
                                             {person.country}
                                         </p>
                                     </div>
-                                    <div className="absolute right-16 mt-2">
+                                    <div className="absolute right-4 top-4">
                                         <LazyLoadImage
                                             effect="blur"
-                                            className="w-15 h-10 mt-2"
+                                            className="w-15 h-10"
                                             src={person.countryLogo}
                                             alt=""
                                         />
@@ -97,7 +98,7 @@ const Team = () => {
                     {team.map((person) => {
                         return (
                             <SwiperSlide key={person.id}>
-                                <div className="text-black flex flex-col items-center pb-10 h-full">
+                                <div className="text-black flex relative flex-col items-center pb-10 h-full">
                                     <div className="h-full w-full lg:mb-4">
                                         <LazyLoadImage
                                             effect="blur"
@@ -117,10 +118,10 @@ const Team = () => {
                                             {person.country}
                                         </p>
                                     </div>
-                                    <div className="absolute right-0 mr-4 mt-2">
+                                    <div className="absolute right-4 top-2">
                                         <LazyLoadImage
                                             effect="blur"
-                                            className="w-15 h-6 mt-2"
+                                            className="w-15 h-6"
                                             src={person.countryLogo}
                                             alt=""
                                         />
