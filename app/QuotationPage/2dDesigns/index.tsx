@@ -76,7 +76,7 @@ const Layout2dDesign = (props: TProps) => {
                                 className="flex items-center justify-center h-full !w-full"
                             >
                                 <div>
-                                    <h2 className="text-5xl text-center mb-4">
+                                    <h2 className="text-4xl text-center mb-4 font-medium capitalize">
                                         Cafe
                                     </h2>
                                     <div className="swiper-zoom-container flex flex-col mb-4">
@@ -137,7 +137,7 @@ const Layout2dDesign = (props: TProps) => {
                                         className="flex items-center justify-center h-full !w-full"
                                     >
                                         <div className="flex flex-col">
-                                            <h2 className="text-3xl text-center mb-10">
+                                            <h2 className="text-3xl font-medium capitalize text-center mb-5">
                                                 Cafe
                                             </h2>
                                             <div className="flex">

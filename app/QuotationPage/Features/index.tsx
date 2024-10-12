@@ -36,7 +36,7 @@ const Features = ({ item }: TProps) => {
                     <div className='w-96 h-20'>
                     <img src={Logo} alt="Company Logo" className="h-full w-full" />
                     </div>
-                    <h1 className="text-2xl font-medium capitalize">
+                    <h1 className="text-3xl font-medium capitalize">
                         {/* Benefits for offices */}
                         {currentItem.header}
                     </h1>
