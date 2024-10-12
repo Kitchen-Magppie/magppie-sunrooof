@@ -1,6 +1,12 @@
+import { useEffect } from "react"
 import { TCustomerComponentQuotationItem } from "../../types"
 
 const Hero = (props: TProps) => {
+    useEffect(() => {
+        const fetchedTitle = `SUNROOOF || ${props.item.data.name}`;
+        document.title = fetchedTitle; 
+    }, [props.item.data])
+
     return (
         <div className="flex flex-col py-44 justify-center items-center h-[1500px] lg:h-screen w-full bg-[#1B1A1A] text-white">
             <div className="flex flex-col text-center">
