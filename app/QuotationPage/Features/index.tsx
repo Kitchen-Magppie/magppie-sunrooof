@@ -1,5 +1,5 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import Logo from '../../../assets/logo-black-text-withoutBg.png'
+import Logo from '../assets/logo-final.svg'
 import threeLines from '../assets/three-lines.png'
 import './index.css'
 import bgImage from '../assets/features/Background.jpg'
@@ -33,8 +33,10 @@ const Features = ({ item }: TProps) => {
         >
             <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto px-4">
                 <div className="flex flex-col mb-24 items-center justify-center text-center">
-                    <img src={Logo} alt="Company Logo" className="w-96" />
-                    <h1 className="text-3xl font-medium capitalize">
+                    <div className='w-96 h-20'>
+                    <img src={Logo} alt="Company Logo" className="h-full w-full" />
+                    </div>
+                    <h1 className="text-2xl font-medium capitalize">
                         {/* Benefits for offices */}
                         {currentItem.header}
                     </h1>
