@@ -20,7 +20,7 @@ const ProposedLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="bg-[#78746c] text-white p-6 mt-2 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
+                    <div className="bg-white text-black p-6 mt-2 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
                         <div className="flex items-center overflow-x-auto w-full space-x-4 no-scrollbar">
                             {item.map((data, i) => {
                                 return (
@@ -44,20 +44,25 @@ const ProposedLayout = ({ item }: TProps) => {
                     </div>
                 </>
             ) : (
-                <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
-                    <div className="flex flex-col items-center">
+                <div className="bg-white text-black p-6 w-full rounded-lg shadow-md flex gap-6">
+                    <div className="flex items-center">
                         {/* <h1 className="text-xl mb-2">Proposed Layout</h1> */}
-                        <div className="overflow-y-auto h-[650px]">
+                        <div className="overflow-y-auto gap-4 flex">
                             {item.map((data, i) => {
                                 return (
                                     <div className="flex gap-2" key={i}>
                                         <div className=" py-1">{i + 1}.</div>
-                                        <div className="mt-2 text-center" >
-                                            <div className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg  bg-white`}
+                                        <div className="mt-2 text-center">
+                                            <div
+                                                className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg  bg-white`}
                                             >
-                                                <img src={data.leftImage} alt="" className='cursor-pointer' />
+                                                <img
+                                                    src={data.leftImage}
+                                                    alt=""
+                                                    className="cursor-pointer"
+                                                />
                                             </div>
-                                            <span className="mt-2 text-sm ">
+                                            <span className="mt-2 text-md">
                                                 {/* Area Name:  */}
                                                 {data.areaName}
                                             </span>

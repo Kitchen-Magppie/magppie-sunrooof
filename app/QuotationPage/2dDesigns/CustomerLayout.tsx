@@ -16,20 +16,17 @@ const CustomerLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="bg-[#78746c] text-white p-6 mt-10 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
+                    <div className="text-black lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap">
                         <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Design :</strong> {item.design}
                         </div>
                         <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Finish :</strong> {item.finish}
                         </div>
-                        <div className="mb-2 text-3xl lg:text-xl">
-                            <strong>Area Name :</strong> {item.areaName}
-                        </div>
                     </div>
                 </>
             ) : (
-                <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
+                <div className="bg-white text-black p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col">
                         <h1 className="text-xl mb-2 ">Customer Layout</h1>
 
@@ -42,7 +39,8 @@ const CustomerLayout = ({ item }: TProps) => {
 
                             {/* Area Name: */}
 
-                            {item.areaName}</span>
+                            {/* {item.areaName}  */} Hello
+                            </span>
                     </div>
                 </div>
             )}
