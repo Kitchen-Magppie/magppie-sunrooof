@@ -3,15 +3,11 @@ import { TCustomerComponentQuotationItem } from '../../../types'
 // import { clientData } from './data' // Importing the JSON data from the file
 
 const ClientDetails = (props: TProps) => {
-    console.log(props.item.data)
-
     return (
         <div className="flex justify-between items-start w-full gap-4">
             <div className="flex flex-col gap-4">
                 <p className="text-xl">
                     <span className="font-bold">Client Name: </span>
-                    {/* {clientData.clientName} */}
-                    {props.item.data.salutation}
                     {props.name}
                 </p>
                 <p className="text-xl">
