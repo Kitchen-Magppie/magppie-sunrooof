@@ -17,10 +17,20 @@ import ImageComparison from './Image'
 import { CustomerComponentEnum } from '../../types'
 import { PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
+import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const QuotationPage = () => {
     const { loading, components } = useHomeData()
 
+    const params = useParams()
+    useEffect(() => {
+
+        if ('id' in params) {
+            document.title = `Quotation for ${components.name}`
+        }
+
+    }, [components, params])
     if (loading) {
         return <PageProgress />
     }
