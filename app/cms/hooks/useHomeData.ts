@@ -26,13 +26,14 @@ export default function useHomeData() {
             }
             return row.customerId === DEFAULT_CUSTOMER.customerId
         })
+        const quotation = data?.components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as unknown as TCustomerComponentQuotationItem
         return ({
-            name: `${_.get(data, 'name', '')}`,
+            name: [quotation?.data?.salutation, _.get(data, 'name', '')].join(' '),
             [CustomerComponentEnum.Comparison]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Comparison) as unknown as TCustomerComponentComparisonItem,
             // [CustomerComponentEnum.Client]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Client) as unknown as TCustomerComponentClientItem,
             [CustomerComponentEnum.TwoDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as unknown as TCustomerComponentDesign2DItem,
             [CustomerComponentEnum.ThreeDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.ThreeDDesign) as unknown as TCustomerComponentDesign3DItem,
-            [CustomerComponentEnum.Quotation]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as unknown as TCustomerComponentQuotationItem,
+            [CustomerComponentEnum.Quotation]: quotation,
             [CustomerComponentEnum.Feature]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Feature) as unknown as TCustomerComponentFeatureItem,
 
         })
