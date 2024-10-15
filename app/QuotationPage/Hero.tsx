@@ -1,6 +1,12 @@
-import { TCustomerComponentQuotationItem } from "../../types"
+import { useEffect } from 'react'
+import { TCustomerComponentQuotationItem } from '../../types'
 
 const Hero = (props: TProps) => {
+    useEffect(() => {
+        const fetchedTitle = `SUNROOOF | ${props.item.data.salutation} ${props.name}`
+        document.title = fetchedTitle
+    }, [props.item.data, props])
+
     return (
         <div className="flex flex-col py-44 justify-center items-center h-[1500px] lg:h-screen w-full bg-[#1B1A1A] text-white">
             <div className="flex flex-col text-center">
@@ -8,11 +14,13 @@ const Hero = (props: TProps) => {
                     EXCLUSIVE PROPOSAL FOR
                 </h1>
                 <hr className="bg-white h-1 mt-4 rounded-full lg:mt-2" />
-                <h1 className="text-6xl py-10 font-kudryashev">{props.item.data.salutation} {props.name}</h1>
+                <h1 className="text-6xl py-10 font-kudryashev">
+                    {props.item.data.salutation} {props.name}
+                </h1>
             </div>
         </div>
     )
 }
 export default Hero
 
-type TProps = { name: string, item: TCustomerComponentQuotationItem }
+type TProps = { name: string; item: TCustomerComponentQuotationItem }
