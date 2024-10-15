@@ -4,7 +4,7 @@ import { TCustomerComponentQuotationItem } from '../../../types'
 
 const ClientDetails = (props: TProps) => {
     return (
-        <div className="flex justify-between items-start w-full gap-4">
+        <div className="flex justify-between items-start w-full gap-4 container mx-auto">
             <div className="flex flex-col gap-4">
                 <p className="text-xl">
                     <span className="font-bold">Client Name: </span>
