@@ -14,7 +14,7 @@ const Quotation = (props: TProps) => {
                 <div className='w-[700px] lg:w-full h-full'>
                     <LazyLoadImage
                         effect="blur"
-                        // src={props.item.data.invoiceUrl}
+                        src={props.item.data.invoiceUrl}
                         className=" lg:w-full lg:h-full object-contain rounded-lg quotation-image mt-5"
                         alt=""
                     />
