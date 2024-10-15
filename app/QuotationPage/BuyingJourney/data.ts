@@ -12,7 +12,7 @@ export const data = [
         id: 2,
         icon: '',
         heading: 'Order Booking',
-        subHeading: 'After receiving 25% advance',
+        subHeading: 'After receiving 50% advance',
     },
     {
         id: 3,
@@ -24,7 +24,7 @@ export const data = [
         id: 4,
         icon: '',
         heading: 'Production',
-        subHeading: 'Takes 8 weeks to manufacture',
+        subHeading: 'Takes 6 weeks to manufacture',
     },
     {
         id: 5,
