@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -23,6 +23,14 @@ const ImageComparison = (props: TProps) => {
         )
         return item.slides?.map((slide) => slide.pair)
     }, [props.item.data])
+
+    useEffect(() => {
+        const imgBefore = new Image()
+        const imgAfter = new Image()
+
+        imgBefore.src = slides[currentSlide].before
+        imgAfter.src = slides[currentSlide].after
+    }, [slides, currentSlide])
 
     const swipe = useCallback(
         (direction) => {
