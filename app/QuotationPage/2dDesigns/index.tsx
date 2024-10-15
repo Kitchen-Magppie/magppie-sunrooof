@@ -77,7 +77,7 @@ const Layout2dDesign = (props: TProps) => {
                             >
                                 <div>
                                     <h2 className="text-4xl text-center mb-4 font-medium capitalize">
-                                        Cafe
+                                        {image.areaName}
                                     </h2>
                                     <div className="swiper-zoom-container flex flex-col mb-4">
                                         <div>
@@ -138,7 +138,7 @@ const Layout2dDesign = (props: TProps) => {
                                     >
                                         <div className="flex flex-col">
                                             <h2 className="text-3xl font-medium capitalize text-center mb-5">
-                                                Cafe
+                                                {image.areaName}
                                             </h2>
                                             <div className="flex">
                                                 <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
