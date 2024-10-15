@@ -59,8 +59,8 @@ const ImageComparison = (props: TProps) => {
                                 className="absolute top-0 left-0 w-full h-full"
                             >
                                 <div className="w-full flex items-center justify-center h-full">
-                                    <LazyLoadImage
-                                        effect="blur"
+                                    <img
+                                        // effect="blur"
                                         src={
                                             isBefore
                                                 ? slides[currentSlide].after
