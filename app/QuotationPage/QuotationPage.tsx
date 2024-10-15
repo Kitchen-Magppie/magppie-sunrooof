@@ -17,20 +17,27 @@ import ImageComparison from './Image'
 import { CustomerComponentEnum } from '../../types'
 import { PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { CMS_NAV_ITEMS } from '../cms/mocks'
 
 const QuotationPage = () => {
     const { loading, components } = useHomeData()
+    const { pathname } = useLocation()
 
     const params = useParams()
     useEffect(() => {
 
-        if ('id' in params) {
-            document.title = `Quotation for ${components.name}`
+        if (!loading) {
+            if ('id' in params) {
+                document.title = `Quotation for ${components.name}`
+            } else {
+                const item = CMS_NAV_ITEMS?.find((row) => row.url === pathname)
+                document.title = `${item?.title?.length ? item?.title : 'Home'} | Sunrooof`
+            }
         }
 
-    }, [components, params])
+    }, [components, loading, params, pathname])
     if (loading) {
         return <PageProgress />
     }
