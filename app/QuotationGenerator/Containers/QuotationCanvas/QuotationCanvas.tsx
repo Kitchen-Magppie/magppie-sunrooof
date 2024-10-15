@@ -19,9 +19,8 @@ function QuotationCanvas() {
     const values = watch()
 
     const renderQuantityContent = useMemo(() => {
-        return (<div>
+        return (<div className="flex flex-col">
             <label
-                htmlFor="quantity-input"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
                 Choose quantity:
@@ -37,9 +36,14 @@ function QuotationCanvas() {
                     <BsDash />
                 </button>
 
-                <div className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    {values.value}
-                </div>
+
+                <input className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value={values.value}
+
+                    onChange={(e) => {
+                        setValue('value', Number(e.target.value))
+                    }}
+                />
                 <button
                     type="button"
                     onClick={() => {
@@ -66,25 +70,39 @@ function QuotationCanvas() {
             </div>
         </div>
 
-        <div className="flex w-72">
-            <Select
-                className="w-100"
-                onChange={(e) => { setValue('unit', e.value) }}
-                options={QUOTATION_UNIT_OPTIONS}
-            />
-        </div>
-        <div className="flex gap-2 flex-col">
-            {renderQuantityContent}
-            <div className="flex ">
-                <button
-                    type="button"
-                    className="text-white bg-gradient-to-r from-green-500 via-green-700 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                >
-                    Start Drawing
-                </button>
+        <div className="container mx-auto">
+            <div className="mt-10">
+                <div className="flex w-72 flex-col">
+                    <label
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        Enter the length of the line and click to draw:
+                    </label>
+                    <Select
+                        className="w-100"
+                        onChange={(e) => { setValue('unit', e.value) }}
+                        options={QUOTATION_UNIT_OPTIONS}
+                    />
+                </div>
+                <div className="flex flex-row gap-10">
+                    {renderQuantityContent}
+                    <div className="">
+
+                        <div className="mt-7">
+                            <button
+                                type="button"
+                                className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                            >
+                                Start Drawing
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="my-5">
+                Loading...
             </div>
         </div>
-        Loading...
     </form>);
 }
 const QUOTATION_UNIT_OPTIONS = [
