@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
 import {
     FaArrowUp,
-    FaFacebook,
-    FaTwitter,
     FaInstagram,
     FaYoutube,
     FaLinkedinIn,
@@ -49,20 +47,14 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-row items-center gap-3 mb-5 mt-5 justify-end">
-                <Link to="">
-                    <FaFacebook className="h-8 w-8 lg:h-6 lg:w-6 cursor-pointer" />
-                </Link>
-                <Link to="">
-                    <FaTwitter className="h-8 w-8 lg:h-6 lg:w-6 cursor-pointer" />
-                </Link>
                 <Link to="https://www.instagram.com/sunrooof_?igsh=ODlqMTA1OTNybzBw">
-                    <FaInstagram className="h-8 w-8 lg:h-6 lg:w-6 cursor-pointer" />
+                    <FaInstagram className="h-10 w-10 lg:h-6 lg:w-6 cursor-pointer" />
                 </Link>
                 <Link to="https://youtube.com/@sunrooof?si=Ee8yJPm2TByNpjVY">
-                    <FaYoutube className="h-8 w-8 lg:h-6 lg:w-6 cursor-pointer" />
+                    <FaYoutube className="h-10 w-10 lg:h-6 lg:w-6 cursor-pointer" />
                 </Link>
                 <Link to="https://www.linkedin.com/company/sunrooof/">
-                    <FaLinkedinIn className="h-8 w-8 lg:h-6 lg:w-6 cursor-pointer" />
+                    <FaLinkedinIn className="h-10 w-10 lg:h-6 lg:w-6 cursor-pointer" />
                 </Link>
             </div>
 
