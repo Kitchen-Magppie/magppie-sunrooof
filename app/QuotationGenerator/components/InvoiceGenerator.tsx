@@ -50,6 +50,12 @@ const prices = {
 }
 
 const InvoiceGenerator = () => {
+    const [isRendered, setIsRendered] = useState(false)
+
+    const renderQuotation = () => {
+        setIsRendered(true)
+    }
+
     const [clientName, setClientName] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [email, setEmail] = useState('')
@@ -86,6 +92,7 @@ const InvoiceGenerator = () => {
     }
 
     const generateInvoice = () => {
+        renderQuotation()
         const invoiceElement = invoiceRef.current
         if (invoiceElement) {
             invoiceElement.style.display = 'block'
@@ -395,247 +402,270 @@ const InvoiceGenerator = () => {
                     </div>
                 </form>
 
-                <div
-                    ref={invoiceRef}
-                    className="container mx-auto max-w-7xl mt-10 px-10"
-                >
-                    <div className="flex justify-between">
-                        <div>
-                            <img
-                                src={logoBlack}
-                                className="w-[220px] mb-5"
-                                alt="Logo"
-                            />
-                            <p className="text-lg mb-5">
-                                Sunrooof Luminaries Pvt Ltd.
-                            </p>
-                            <p className="text-lg mb-5">
-                                Plot No 3, Sector 8, IMT Manesar,
-                            </p>
-                            <p className="text-lg mb-5">
-                                Gurgaon, Haryana - 122052
-                            </p>
-                        </div>
-                        <div>
-                            <img src={qr} alt="QR Code" className="w-[150px]" />
-                            <a
-                                href="https://www.sunrooof.com"
-                                className="text-lg mb-5"
-                            >
-                                www.sunrooof.com
-                            </a>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 className="text-3xl font-bold mb-4">Quotation</h3>
-                        <p className="text-lg mb-5">
-                            <span className="font-bold">Client: </span>
-                            {clientName}
-                        </p>
-                        <p className="text-lg mb-5">
-                            <span className="font-bold">Phone:</span>{' '}
-                            {phoneNumber}
-                        </p>
-                        <p className="text-lg mb-5">
-                            <span className="font-bold">Email:</span> {email}
-                        </p>
-                        <p className="text-lg mb-5">
-                            <span className="font-bold">Site Address:</span>{' '}
-                            {siteAddress}
-                        </p>
-                        <p className="text-lg mb-5">
-                            <span className="font-bold">Zone:</span> {zone}
-                        </p>
-                        <p className="text-lg mb-5">
-                            <span className="font-bold">Date:</span> {date}
-                        </p>
-                        <table className="mt-5 container mx-auto max-w-7xl border border-black">
-                            <thead className="bg-[darkorange]">
-                                <tr className="">
-                                    <th className="border border-black py-2 px-4">
-                                        S.No
-                                    </th>
-                                    <th className="border text-start border-black py-2 px-4">
-                                        Design and Finish
-                                    </th>
-                                    <th className="border border-black text-start py-2 px-4">
-                                        Area
-                                    </th>
-                                    <th className="border border-black py-2 px-4">
-                                        Floor
-                                    </th>
-                                    <th className="border border-black py-2 px-4">
-                                        Qty
-                                    </th>
-                                    <th className="border border-black py-2 px-4">
-                                        Unit Price
-                                    </th>
-                                    <th className="border border-black py-2 px-4">
-                                        Total Price
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {entries.map((entry, index) => {
-                                    const price =
-                                        prices[entry.design]?.[entry.finish] ||
-                                        0
-                                    const total = price * (entry.qty || 1)
-                                    const discountAmount =
-                                        total * (discount / 100)
-                                    const freightCharges = 50000
-                                    const totalAmount =
-                                        total - discountAmount + freightCharges
-                                    const taxAmount = totalAmount * (18 / 100)
-                                    const grandTotal = totalAmount + taxAmount
-                                    return (
-                                        <>
-                                            <tr
-                                                key={index}
-                                                className="border-b border-black"
-                                            >
-                                                <td className="border border-black text-center px-4 py-2">
-                                                    {index + 1}
-                                                </td>
-                                                <td className="border border-black px-4 py-2">
-                                                    {entry.design}{' '}
-                                                    {entry.finish}
-                                                </td>
-                                                <td className="border border-black px-4 py-2">
-                                                    {entry.area}
-                                                </td>
-                                                <td className="border border-black text-center px-4 py-2">
-                                                    {entry.floor}
-                                                </td>
-                                                <td className="border border-black text-center px-4 py-2">
-                                                    {entry.qty}
-                                                </td>
-                                                <td className="border border-black text-center px-4 py-2">
-                                                    ₹{price.toLocaleString()}
-                                                </td>
-                                                <td className="border border-black text-center px-4 py-2">
-                                                    ₹
-                                                    {total
-                                                        // .toFixed(2)
-                                                        .toLocaleString()}
-                                                </td>
-                                            </tr>
-                                            <tr className="font-bold">
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 py-2 text-right border border-black"
-                                                >
-                                                    Gross Amount
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    {/* ₹50000 */}
-                                                    {total.toLocaleString()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 py-2 text-right border border-black"
-                                                >
-                                                    Discount %
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    {discount}%{/* ₹50000 */}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 py-2 text-right border border-black"
-                                                >
-                                                    Discount Amount
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    {/* ₹ 50000 */}₹
-                                                    {discountAmount.toLocaleString()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 col-span-6 py-2 text-right border border-black"
-                                                >
-                                                    Freight Charges
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    ₹
-                                                    {freightCharges.toLocaleString()}
-                                                    {/* {freightCharges.toLocaleString()} */}
-                                                </td>
-                                            </tr>
-                                            <tr className="font-bold">
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 py-2 text-right border border-black"
-                                                >
-                                                    Total
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    {/* ₹50000 */}
-                                                    {totalAmount.toLocaleString()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 py-2 text-right border border-black"
-                                                >
-                                                    Tax @ 18%
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    {/* ₹50000 */}
-                                                    {taxAmount.toLocaleString()}
-                                                </td>
-                                            </tr>
-                                            <tr className="font-bold">
-                                                <td
-                                                    colSpan={6}
-                                                    className="px-4 py-2 text-right border border-black"
-                                                >
-                                                    Grand Total
-                                                </td>
-                                                <td className="border border-black px-4 py-2 text-center">
-                                                    ₹
-                                                    {grandTotal.toLocaleString()}
-                                                </td>
-                                            </tr>
-                                        </>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-
-                        <div className="mt-10">
-                            <h1 className="text-2xl font-bold mb-2">
-                                Payment Terms
-                            </h1>
-                            {paymentTermsData.map((data) => {
-                                return (
-                                    <li
-                                        className="text-lg mb-2 list-decimal"
-                                        key={data.id}
+                {isRendered && (
+                    <>
+                        <div
+                            ref={invoiceRef}
+                            className="container mx-auto max-w-7xl mt-10 px-10"
+                        >
+                            <div className="flex justify-between">
+                                <div>
+                                    <img
+                                        src={logoBlack}
+                                        className="w-[220px] mb-5"
+                                        alt="Logo"
+                                    />
+                                    <p className="text-lg mb-5">
+                                        Sunrooof Luminaries Pvt Ltd.
+                                    </p>
+                                    <p className="text-lg mb-5">
+                                        Plot No 3, Sector 8, IMT Manesar,
+                                    </p>
+                                    <p className="text-lg mb-5">
+                                        Gurgaon, Haryana - 122052
+                                    </p>
+                                </div>
+                                <div>
+                                    <img
+                                        src={qr}
+                                        alt="QR Code"
+                                        className="w-[150px]"
+                                    />
+                                    <a
+                                        href="https://www.sunrooof.com"
+                                        className="text-lg mb-5"
                                     >
-                                        {data.content}
-                                    </li>
-                                )
-                            })}
+                                        www.sunrooof.com
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="text-3xl font-bold mb-4">
+                                    Quotation
+                                </h3>
+                                <p className="text-lg mb-5">
+                                    <span className="font-bold">Client: </span>
+                                    {clientName}
+                                </p>
+                                <p className="text-lg mb-5">
+                                    <span className="font-bold">Phone:</span>{' '}
+                                    {phoneNumber}
+                                </p>
+                                <p className="text-lg mb-5">
+                                    <span className="font-bold">Email:</span>{' '}
+                                    {email}
+                                </p>
+                                <p className="text-lg mb-5">
+                                    <span className="font-bold">
+                                        Site Address:
+                                    </span>{' '}
+                                    {siteAddress}
+                                </p>
+                                <p className="text-lg mb-5">
+                                    <span className="font-bold">Zone:</span>{' '}
+                                    {zone}
+                                </p>
+                                <p className="text-lg mb-5">
+                                    <span className="font-bold">Date:</span>{' '}
+                                    {date}
+                                </p>
+                                <table className="mt-5 container mx-auto max-w-7xl border border-black">
+                                    <thead className="bg-[darkorange]">
+                                        <tr className="">
+                                            <th className="border border-black py-2 px-4">
+                                                S.No
+                                            </th>
+                                            <th className="border text-start border-black py-2 px-4">
+                                                Design and Finish
+                                            </th>
+                                            <th className="border border-black text-start py-2 px-4">
+                                                Area
+                                            </th>
+                                            <th className="border border-black py-2 px-4">
+                                                Floor
+                                            </th>
+                                            <th className="border border-black py-2 px-4">
+                                                Qty
+                                            </th>
+                                            <th className="border border-black py-2 px-4">
+                                                Unit Price
+                                            </th>
+                                            <th className="border border-black py-2 px-4">
+                                                Total Price
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {entries.map((entry, index) => {
+                                            const price =
+                                                prices[entry.design]?.[
+                                                    entry.finish
+                                                ] || 0
+                                            const total =
+                                                price * (entry.qty || 1)
+                                            const discountAmount =
+                                                total * (discount / 100)
+                                            const freightCharges = 50000
+                                            const totalAmount =
+                                                total -
+                                                discountAmount +
+                                                freightCharges
+                                            const taxAmount =
+                                                totalAmount * (18 / 100)
+                                            const grandTotal =
+                                                totalAmount + taxAmount
+                                            return (
+                                                <>
+                                                    <tr
+                                                        key={index}
+                                                        className="border-b border-black"
+                                                    >
+                                                        <td className="border border-black text-center px-4 py-2">
+                                                            {index + 1}
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2">
+                                                            {entry.design}{' '}
+                                                            {entry.finish}
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2">
+                                                            {entry.area}
+                                                        </td>
+                                                        <td className="border border-black text-center px-4 py-2">
+                                                            {entry.floor}
+                                                        </td>
+                                                        <td className="border border-black text-center px-4 py-2">
+                                                            {entry.qty}
+                                                        </td>
+                                                        <td className="border border-black text-center px-4 py-2">
+                                                            ₹
+                                                            {price.toLocaleString()}
+                                                        </td>
+                                                        <td className="border border-black text-center px-4 py-2">
+                                                            ₹
+                                                            {total
+                                                                // .toFixed(2)
+                                                                .toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                    <tr className="font-bold">
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 py-2 text-right border border-black"
+                                                        >
+                                                            Gross Amount
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            {/* ₹50000 */}
+                                                            {total.toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 py-2 text-right border border-black"
+                                                        >
+                                                            Discount %
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            {discount}%
+                                                            {/* ₹50000 */}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 py-2 text-right border border-black"
+                                                        >
+                                                            Discount Amount
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            {/* ₹ 50000 */}₹
+                                                            {discountAmount.toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 col-span-6 py-2 text-right border border-black"
+                                                        >
+                                                            Freight Charges
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            ₹
+                                                            {freightCharges.toLocaleString()}
+                                                            {/* {freightCharges.toLocaleString()} */}
+                                                        </td>
+                                                    </tr>
+                                                    <tr className="font-bold">
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 py-2 text-right border border-black"
+                                                        >
+                                                            Total
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            {/* ₹50000 */}
+                                                            {totalAmount.toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 py-2 text-right border border-black"
+                                                        >
+                                                            Tax @ 18%
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            {/* ₹50000 */}
+                                                            {taxAmount.toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                    <tr className="font-bold">
+                                                        <td
+                                                            colSpan={6}
+                                                            className="px-4 py-2 text-right border border-black"
+                                                        >
+                                                            Grand Total
+                                                        </td>
+                                                        <td className="border border-black px-4 py-2 text-center">
+                                                            ₹
+                                                            {grandTotal.toLocaleString()}
+                                                        </td>
+                                                    </tr>
+                                                </>
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+
+                                <div className="mt-10">
+                                    <h1 className="text-2xl font-bold mb-2">
+                                        Payment Terms
+                                    </h1>
+                                    {paymentTermsData.map((data) => {
+                                        return (
+                                            <li
+                                                className="text-lg mb-2 list-decimal"
+                                                key={data.id}
+                                            >
+                                                {data.content}
+                                            </li>
+                                        )
+                                    })}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className="container mx-auto max-w-7xl px-10 my-4">
-                    <button
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
-                        onClick={downloadInvoice}
-                    >
-                        Download Invoice
-                    </button>
-                </div>
+                        <div className="container mx-auto max-w-7xl px-10 my-4">
+                            <button
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+                                onClick={downloadInvoice}
+                            >
+                                Download Invoice
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     )
