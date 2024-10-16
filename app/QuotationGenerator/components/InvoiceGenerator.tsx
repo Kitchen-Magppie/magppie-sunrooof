@@ -4,6 +4,7 @@ import { RiDeleteBin6Fill } from 'react-icons/ri'
 import logoBlack from '../assets/logo_black.png'
 import qr from '../assets/qr.png'
 import { paymentTermsData } from './paymentTermsData'
+import jsPDF from 'jspdf'
 
 const prices = {
     Classical: {
@@ -62,7 +63,14 @@ const InvoiceGenerator = () => {
     const addEntry = () => {
         setEntries([
             ...entries,
-            { design: '', finish: '', area: '', floor: '', qty: 1 },
+            {
+                design: '',
+                finish: '',
+                area: '',
+                floor: '',
+                qty: 1,
+                unitPrice: '',
+            },
         ])
     }
 
@@ -84,13 +92,40 @@ const InvoiceGenerator = () => {
         }
     }
 
+    // const downloadInvoice = () => {
+    //     const invoiceElement = invoiceRef.current
+    //     html2canvas(invoiceElement).then((canvas) => {
+    //         const link = document.createElement('a')
+    //         link.href = canvas.toDataURL()
+    //         link.download = 'invoice.png'
+    //         link.click()
+    //     })
+    // }
+
     const downloadInvoice = () => {
         const invoiceElement = invoiceRef.current
         html2canvas(invoiceElement).then((canvas) => {
-            const link = document.createElement('a')
-            link.href = canvas.toDataURL()
-            link.download = 'invoice.pdf'
-            link.click()
+            const imgData = canvas.toDataURL('image/png') // Convert the canvas to a PNG image
+
+            const pdf = new jsPDF('p', 'mm', 'a4') // Create a new PDF document (portrait, A4 size)
+            const imgWidth = 210 // A4 width in mm
+            const pageHeight = 295 // A4 height in mm
+            const imgHeight = (canvas.height * imgWidth) / canvas.width
+            let heightLeft = imgHeight
+            let position = 0
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight) // Add image to the PDF
+
+            heightLeft -= pageHeight
+
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight
+                pdf.addPage()
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
+                heightLeft -= pageHeight
+            }
+
+            pdf.save('invoice.pdf') // Save the PDF with the name 'invoice.pdf'
         })
     }
 
@@ -247,7 +282,6 @@ const InvoiceGenerator = () => {
                             Generate Invoice
                         </button>
                     </div>
-                    <div></div>
                     <div
                         id="entries"
                         className="flex flex-col justify-center items-center mt-2 container mx-auto"
@@ -416,54 +450,167 @@ const InvoiceGenerator = () => {
                         <p className="text-lg mb-5">
                             <span className="font-bold">Date:</span> {date}
                         </p>
-                        <table className="mt-5 flex flex-col container mx-auto max-w-7xl border border-black">
-                            <thead className="flex w-full bg-[darkorange] py-2">
-                                <tr className="flex items-start w-full px-2">
-                                    <th className="mr-10">S.No</th>
-                                    <th className="mr-28">Design and Finish</th>
-                                    {/* <th>Finish</th> */}
-                                    <th className="mr-24">Area</th>
-                                    <th className="mr-20">Floor</th>
-                                    <th className="mr-20">Quantity</th>
-                                    <th className="mr-20">Unit Price</th>
-                                    <th>Price</th>
+                        <table className="mt-5 container mx-auto max-w-7xl border border-black">
+                            <thead className="bg-[darkorange]">
+                                <tr className="">
+                                    <th className="border border-black py-2 px-4">
+                                        S.No
+                                    </th>
+                                    <th className="border text-start border-black py-2 px-4">
+                                        Design and Finish
+                                    </th>
+                                    <th className="border border-black text-start py-2 px-4">
+                                        Area
+                                    </th>
+                                    <th className="border border-black py-2 px-4">
+                                        Floor
+                                    </th>
+                                    <th className="border border-black py-2 px-4">
+                                        Qty
+                                    </th>
+                                    <th className="border border-black py-2 px-4">
+                                        Unit Price
+                                    </th>
+                                    <th className="border border-black py-2 px-4">
+                                        Total Price
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody className="px-2">
+                            <tbody>
                                 {entries.map((entry, index) => {
                                     const price =
                                         prices[entry.design]?.[entry.finish] ||
                                         0
                                     const total = price * (entry.qty || 1)
+                                    const discountAmount =
+                                        total * (discount / 100)
+                                    const freightCharges = 50000
+                                    const totalAmount =
+                                        total - discountAmount + freightCharges
+                                    const taxAmount = totalAmount * (18 / 100)
+                                    const grandTotal = totalAmount + taxAmount
                                     return (
-                                        <tr key={index} className="flex w-full">
-                                            <td className="text-center w-10 mr-10">
-                                                {index + 1}
-                                            </td>
-                                            <td className="text-start w-60">
-                                                {entry.design} {entry.finish}
-                                            </td>
-                                            {/* <td>{entry.finish}</td> */}
-                                            <td className="w-32">
-                                                {entry.area}
-                                            </td>
-                                            <td className="mr-20 text-center w-10">
-                                                {entry.floor}
-                                            </td>
-                                            <td className="mr-20 text-center w-14">
-                                                {entry.qty}
-                                            </td>
-                                            <td className="mr-20 text-center w-14">
-                                                {entry.unitPrice}
-                                            </td>
-                                            <td className="mr-20 text-center w-14">
-                                                {total.toFixed(2)}
-                                            </td>
-                                        </tr>
+                                        <>
+                                            <tr
+                                                key={index}
+                                                className="border-b border-black"
+                                            >
+                                                <td className="border border-black text-center px-4 py-2">
+                                                    {index + 1}
+                                                </td>
+                                                <td className="border border-black px-4 py-2">
+                                                    {entry.design}{' '}
+                                                    {entry.finish}
+                                                </td>
+                                                <td className="border border-black px-4 py-2">
+                                                    {entry.area}
+                                                </td>
+                                                <td className="border border-black text-center px-4 py-2">
+                                                    {entry.floor}
+                                                </td>
+                                                <td className="border border-black text-center px-4 py-2">
+                                                    {entry.qty}
+                                                </td>
+                                                <td className="border border-black text-center px-4 py-2">
+                                                    ₹{price.toLocaleString()}
+                                                </td>
+                                                <td className="border border-black text-center px-4 py-2">
+                                                    ₹
+                                                    {total
+                                                        // .toFixed(2)
+                                                        .toLocaleString()}
+                                                </td>
+                                            </tr>
+                                            <tr className="font-bold">
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 py-2 text-right border border-black"
+                                                >
+                                                    Gross Amount
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    {/* ₹50000 */}
+                                                    {total.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 py-2 text-right border border-black"
+                                                >
+                                                    Discount %
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    {discount}%{/* ₹50000 */}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 py-2 text-right border border-black"
+                                                >
+                                                    Discount Amount
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    {/* ₹ 50000 */}₹
+                                                    {discountAmount.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 col-span-6 py-2 text-right border border-black"
+                                                >
+                                                    Freight Charges
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    ₹
+                                                    {freightCharges.toLocaleString()}
+                                                    {/* {freightCharges.toLocaleString()} */}
+                                                </td>
+                                            </tr>
+                                            <tr className="font-bold">
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 py-2 text-right border border-black"
+                                                >
+                                                    Total
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    {/* ₹50000 */}
+                                                    {totalAmount.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 py-2 text-right border border-black"
+                                                >
+                                                    Tax @ 18%
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    {/* ₹50000 */}
+                                                    {taxAmount.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                            <tr className="font-bold">
+                                                <td
+                                                    colSpan={6}
+                                                    className="px-4 py-2 text-right border border-black"
+                                                >
+                                                    Grand Total
+                                                </td>
+                                                <td className="border border-black px-4 py-2 text-center">
+                                                    ₹
+                                                    {grandTotal.toLocaleString()}
+                                                </td>
+                                            </tr>
+                                        </>
                                     )
                                 })}
                             </tbody>
                         </table>
+
                         <div className="mt-10">
                             <h1 className="text-2xl font-bold mb-2">
                                 Payment Terms
@@ -481,7 +628,7 @@ const InvoiceGenerator = () => {
                         </div>
                     </div>
                 </div>
-                <div className='container mx-auto max-w-7xl px-10 my-4'>
+                <div className="container mx-auto max-w-7xl px-10 my-4">
                     <button
                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
                         onClick={downloadInvoice}
@@ -495,3 +642,143 @@ const InvoiceGenerator = () => {
 }
 
 export default InvoiceGenerator
+
+{
+    /* <table className="mt-5 flex flex-col  container mx-auto max-w-7xl border border-black">
+<thead className="flex w-full bg-[darkorange] py-2">
+    <tr className="flex items-start justify-between w-full px-2">
+        <th className="mr-10">S.No</th>
+        <th className="mr-28">Design and Finish</th>
+        <th className="mr-24">Area</th>
+        <th className="mr-20">Floor</th>
+        <th className="mr-20">Quantity</th>
+        <th className="mr-20">Unit Price</th>
+        <th>Total Price</th>
+    </tr>
+</thead>
+<tbody className="">
+    {entries.map((entry, index) => {
+        const price =
+            prices[entry.design]?.[entry.finish] ||
+            0
+        const total = price * (entry.qty || 1)
+        return (
+            <>
+                <tr
+                    key={index}
+                    className="flex w-full border border-black py-1"
+                >
+                    <td className="text-center w-10">
+                        {index + 1}
+                    </td>
+                    <td className='ml-20'>
+                        {entry.design} {''}
+                        {entry.finish}
+                    </td>
+                    <td className="ml-12 text-start">
+                        {entry.area}
+                    </td>
+                    <td className="ml-36">
+                        {entry.floor}
+                    </td>
+                    <td className="ml-36">
+                        {entry.qty}
+                    </td>
+                    <td className="ml-40">
+                        {price}
+                    </td>
+                    <td className="text-center ml-32">
+                        {total.toFixed(2)}
+                    </td>
+                </tr>
+            </>
+        )
+    })}
+</tbody>
+</table> */
+}
+
+// {/* <tr className="font-bold">
+// <td
+//     colSpan={6}
+//     className="px-4 py-2 text-right border border-black"
+// >
+//     Gross Amount
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     {/* ₹50000 */}
+//     {total.toLocaleString()}
+// </td>
+// </tr>
+// <tr>
+// <td
+//     colSpan={6}
+//     className="px-4 py-2 text-right border border-black"
+// >
+//     Discount %
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     {discount}%{/* ₹50000 */}
+// </td>
+// </tr>
+// <tr>
+// <td
+//     colSpan={6}
+//     className="px-4 py-2 text-right border border-black"
+// >
+//     Discount Amount
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     {/* ₹ 50000 */}₹
+//     {discountAmount.toLocaleString()}
+// </td>
+// </tr>
+// <tr>
+// <td
+//     colSpan={6}
+//     className="px-4 col-span-6 py-2 text-right border border-black"
+// >
+//     Freight Charges
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     ₹
+//     {freightCharges.toLocaleString()}
+//     {/* {freightCharges.toLocaleString()} */}
+// </td>
+// </tr>
+// <tr className="font-bold">
+// <td
+//     colSpan={6}
+//     className="px-4 py-2 text-right border border-black"
+// >
+//     Total
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     {/* ₹50000 */}
+//     {totalAmount.toLocaleString()}
+// </td>
+// </tr>
+// <tr>
+// <td
+//     colSpan={6}
+//     className="px-4 py-2 text-right border border-black"
+// >
+//     Tax @ 18%
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     {/* ₹50000 */}
+//     {taxAmount.toLocaleString()}
+// </td>
+// </tr>
+// <tr className="font-bold">
+// <td
+//     colSpan={6}
+//     className="px-4 py-2 text-right border border-black"
+// >
+//     Grand Total
+// </td>
+// <td className="border border-black px-4 py-2 text-center">
+//     ₹
+//     {grandTotal.toLocaleString()}
+// </td>
+// </tr> */}
