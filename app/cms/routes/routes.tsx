@@ -10,11 +10,11 @@ import {
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
 import Customer from '../containers/Customer'
-import { useAppService } from '../hooks'
+// import { useAppService } from '../hooks'
 
 export default function CmsRoutes() {
     useFirebaseCmsAuthListener()
-    useAppService()
+    // useAppService()
 
     return {
         path: 'cms',

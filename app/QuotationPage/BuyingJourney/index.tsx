@@ -10,7 +10,7 @@ const BuyingJourney = () => {
                 </div>
 
                 {/* Timeline Container */}
-                <div className="relative w-full container py-10">
+                <div className="relative w-full container py-10 mx-auto max-w-5xl">
                     {/* Horizontal Line */}
                     <div className="absolute top-1/2 left-0 w-full h-1 mt-[6px] bg-gray-300"></div>
 
@@ -41,12 +41,12 @@ const BuyingJourney = () => {
                                     key={step.id}
                                     className={`col-span-1 flex flex-col items-center ${
                                         isOdd ? 'mb-44' : 'mt-60'
-                                    } ${one ? 'mr-56 w-60' : ''} ${
-                                        two ? 'mr-36 w-60 mb-10' : ''
+                                    } ${one ? 'mr-36 w-60' : ''} ${
+                                        two ? 'mr-24 w-60 mb-10' : ''
                                     } ${three ? 'mr-10 w-60' : ''} ${
-                                        four ? 'ml-10 w-60 mb-10' : ''
-                                    } ${five ? 'ml-28 w-60' : ''} ${
-                                        six ? 'ml-56 w-60 mb-10' : ''
+                                        four ? 'ml-6 w-60 mb-10' : ''
+                                    } ${five ? 'ml-20 w-60' : ''} ${
+                                        six ? 'ml-36 w-60 mb-10' : ''
                                     }`}
                                 >
                                     {/* Step Text */}
