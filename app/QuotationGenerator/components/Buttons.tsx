@@ -1,18 +1,28 @@
+import { useRef } from 'react';
 import { FaUpload } from 'react-icons/fa'
 import { FaArrowRight } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-const Buttons = () => {
+type TProps = { onChangeFile: (file: File) => void }
+const Buttons = (props: TProps) => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
     return (
         <div className="flex justify-evenly items-center w-full mb-20">
             <div className="flex flex-col items-center">
                 <h1 className="text-4xl mb-4">Design Generation</h1>
-                <Link to="/quotation-generator/design">
-                    <div className="text-white cursor-pointer bg-blue-700 flex items-center justify-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 ">
-                        <FaUpload className="h-5 w-5" />
-                        <span className="text-2xl ml-2">Upload File</span>
-                    </div>
-                </Link>
+                <div className="text-white cursor-pointer bg-blue-700 flex items-center justify-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+                    onClick={() => { fileInputRef?.current?.click() }}
+                >
+                    <FaUpload className="h-5 w-5" />
+                    <span className="text-2xl ml-2">Upload File</span>
+                </div>
+                {/* </Link> */}
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={(e) => { props.onChangeFile(e.target.files[0]) }}
+                    className='  hidden'
+                />
             </div>
             <hr className="h-40 w-1 bg-black" />
             <div className="flex flex-col items-center">

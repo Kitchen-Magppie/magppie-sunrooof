@@ -21,7 +21,7 @@ const Navbar = () => {
                     isSidebarOpen ? 'blur-md' : ''
                 }`} // Apply blur when sidebar is open
             >
-                <div className="flex flex-col items-center lg:justify-center lg:w-full">
+                <div className="flex flex-col items-center justify-center w-full">
                     <img src={logoHeader} alt="" className="w-80 lg:w-60" />
                 </div>
 
