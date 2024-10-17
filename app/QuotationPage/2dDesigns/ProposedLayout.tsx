@@ -25,9 +25,10 @@ const ProposedLayout = ({ item }: TProps) => {
                             {item.map((data, i) => {
                                 return (
                                     <div
-                                        className="mt-2 flex flex-col min-w-[200px]"
+                                        className="mt-2 flex min-w-[200px]"
                                         key={i}
                                     >
+                                        <div className=" py-1">{i + 1}.</div>
                                         <LazyLoadImage
                                             src={data.leftImage}
                                             alt=""
