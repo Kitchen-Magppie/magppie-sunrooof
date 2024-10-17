@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import ProposedLayout from './ProposedLayout'
 import CustomerLayout from './CustomerLayout'
@@ -27,25 +27,25 @@ const Layout2dDesign = (props: TProps) => {
     const leftImagesLength = props.item.data.map((item) => {
         return item.leftImage
     })
-    // console.log(props)
     const [selectedLayout, setSelectedLayout] = useState(0)
     const [swiperInstance, setSwiperInstance] = useState(null)
 
     const isMobile = useMedia('(orientation: portrait)')
 
-    const onNext = useCallback(() => {
-        if (swiperInstance && selectedLayout < props.item.data.length - 1) {
-            swiperInstance.slideNext()
-            setSelectedLayout(selectedLayout + 1)
-        }
-    }, [swiperInstance, selectedLayout, props.item.data.length])
+    // const onNext = useCallback(() => {
+    //     if (swiperInstance && selectedLayout < props.item.data.length - 1) {
+    //         swiperInstance.slideNext()
+    //         setSelectedLayout(selectedLayout + 1)
+    //     }
+    // }, [swiperInstance, selectedLayout, props.item.data.length])
 
-    const onPrev = useCallback(() => {
-        if (swiperInstance && selectedLayout > 0) {
-            swiperInstance.slidePrev()
-            setSelectedLayout(selectedLayout - 1)
-        }
-    }, [swiperInstance, selectedLayout])
+    // const onPrev = useCallback(() => {
+    //     if (swiperInstance && selectedLayout > 0) {
+    //         swiperInstance.slidePrev()
+    //         setSelectedLayout(selectedLayout - 1)
+    //     }
+    // }, [swiperInstance, selectedLayout])
+
 
     const renderSwiper = useMemo(() => {
         // console.log('🚀 ~ renderSwiper ~ isMobile:', isMobile)
@@ -257,14 +257,7 @@ const Layout2dDesign = (props: TProps) => {
                 </>
             )
         }
-    }, [
-        isMobile,
-        onNext,
-        onPrev,
-        props.item.data,
-        selectedLayout,
-        leftImagesLength,
-    ])
+    }, [isMobile, props.item.data, leftImagesLength])
 
     return (
         <div
@@ -279,11 +272,13 @@ const Layout2dDesign = (props: TProps) => {
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
                         item={props.item.data[selectedLayout]}
-                        // selectedLayout={selectedLayout}
-                        // isMobile={isMobile}
+                    // selectedLayout={selectedLayout}
+                    // isMobile={isMobile}
                     />
                     {leftImagesLength.length > 1 ? (
-                        <ProposedLayout item={props.item.data} />
+                        <ProposedLayout item={props.item.data}
+                            swiper={swiperInstance}
+                        />
                     ) : null}
                 </div>
             ) : (
@@ -295,7 +290,9 @@ const Layout2dDesign = (props: TProps) => {
                         // isMobile={isMobile}
                     /> */}
                     {leftImagesLength.length > 1 ? (
-                        <ProposedLayout item={props.item.data} />
+                        <ProposedLayout item={props.item.data}
+                            swiper={swiperInstance}
+                        />
                     ) : null}
                 </div>
             )}
