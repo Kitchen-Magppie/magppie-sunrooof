@@ -2,9 +2,9 @@ import { Navigate, useRoutes } from 'react-router-dom'
 // ======================================================================
 import CmsRoutes from '../app/cms/routes/routes'
 import QuotationPage from '../app/QuotationPage/QuotationPage'
-import Home from '../app/QuotationGenerator/Containers/Home'
+import QuotationHome from '../app/QuotationGenerator/Containers/Home'
 import QuotationGenerator from '../app/QuotationGenerator/Containers/QuotationGenerator'
-
+import QuotationCanvas from '../app/QuotationGenerator/Containers/QuotationCanvas'
 export default function Routes() {
     const CMS_ROUTES = CmsRoutes()
     return useRoutes([
@@ -24,7 +24,11 @@ export default function Routes() {
         },
         {
             path: '/quotation-generator',
-            element: <Home />,
+            element: <QuotationHome />,
+        },
+        {
+            path: '/design-generator',
+            element: <QuotationCanvas />,
         },
         {
             path: '/quotation-generator/quotation',
