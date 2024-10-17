@@ -1,6 +1,6 @@
 import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DDataItem } from '../../../types'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
+// import { LazyLoadImage } from 'react-lazy-load-image-component'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
@@ -16,29 +16,31 @@ const CustomerLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="bg-[#78746c] text-white p-6 mt-10 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
+                    <div className="text-black lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap">
                         <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Design :</strong> {item.design}
                         </div>
                         <div className="mb-2 text-3xl lg:text-xl">
                             <strong>Finish :</strong> {item.finish}
                         </div>
-                        <div className="mb-2 text-3xl lg:text-xl">
-                            <strong>Area Name :</strong> {item.areaName}
-                        </div>
                     </div>
                 </>
             ) : (
-                <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
+                <div className="bg-white text-black p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
                     <div className="flex flex-col">
-                        <h1 className="text-2xl mb-2">Customer Layout</h1>
-                        <LazyLoadImage
-                            src={item.rightImage}
-                            alt=""
-                            effect="blur"
-                            className="rounded-lg cursor-pointer"
-                        />
-                        <span className="mt-2">Area Name: {item.areaName}</span>
+                        <h1 className="text-xl mb-2 ">Customer Layout</h1>
+
+                        <div className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg bg-white`}
+                        >
+                            <img src={item.rightImage} alt="" className='cursor-pointer' />
+                        </div>
+
+                        <span className="mt-2 text-sm text-center">
+
+                            {/* Area Name: */}
+
+                            {/* {item.areaName}  */} Hello
+                            </span>
                     </div>
                 </div>
             )}

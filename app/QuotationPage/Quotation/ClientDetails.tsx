@@ -4,12 +4,11 @@ import { TCustomerComponentQuotationItem } from '../../../types'
 
 const ClientDetails = (props: TProps) => {
     return (
-        <div className="flex justify-between items-start w-full gap-4">
+        <div className="flex justify-between items-start w-full gap-4 container mx-auto">
             <div className="flex flex-col gap-4">
                 <p className="text-xl">
-                    <span className="font-bold">Client Name:</span>{' '}
-                    {/* {clientData.clientName} */}
-                    {props.item.data.name}
+                    <span className="font-bold">Client Name: </span>
+                    {props.name}
                 </p>
                 <p className="text-xl">
                     <span>Mobile No.:</span> {/* {clientData.mobileNo} */}
@@ -41,4 +40,4 @@ const ClientDetails = (props: TProps) => {
 }
 
 export default ClientDetails
-type TProps = { item: TCustomerComponentQuotationItem }
+type TProps = { name: string; item: TCustomerComponentQuotationItem }

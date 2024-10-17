@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
 import {
     FaArrowUp,
-    FaFacebook,
-    FaTwitter,
     FaInstagram,
     FaYoutube,
     FaLinkedinIn,
@@ -11,6 +9,7 @@ import {
 import { MdEmail } from 'react-icons/md'
 import { FaMapLocationDot } from 'react-icons/fa6'
 import logo from '../../assets/WithoutBG.png'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
     const onScrollToTop = useCallback(() => {
@@ -48,11 +47,15 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-row items-center gap-3 mb-5 mt-5 justify-end">
-                <FaFacebook className="h-6 w-6 cursor-pointer" />
-                <FaTwitter className="h-6 w-6 cursor-pointer" />
-                <FaInstagram className="h-6 w-6 cursor-pointer" />
-                <FaYoutube className="h-6 w-6 cursor-pointer" />
-                <FaLinkedinIn className="h-6 w-6 cursor-pointer" />
+                <Link to="https://www.instagram.com/sunrooof_?igsh=ODlqMTA1OTNybzBw">
+                    <FaInstagram className="h-10 w-10 lg:h-6 lg:w-6 cursor-pointer" />
+                </Link>
+                <Link to="https://youtube.com/@sunrooof?si=Ee8yJPm2TByNpjVY">
+                    <FaYoutube className="h-10 w-10 lg:h-6 lg:w-6 cursor-pointer" />
+                </Link>
+                <Link to="https://www.linkedin.com/company/sunrooof/">
+                    <FaLinkedinIn className="h-10 w-10 lg:h-6 lg:w-6 cursor-pointer" />
+                </Link>
             </div>
 
             <hr className="" />
