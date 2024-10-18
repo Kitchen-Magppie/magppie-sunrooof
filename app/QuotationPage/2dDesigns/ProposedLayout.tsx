@@ -6,12 +6,12 @@ import { Swiper } from 'swiper/types'
 // import { useState } from 'react'
 
 type TProps = {
-    item: TCustomerComponentDesign2DDataItem[],
+    item: TCustomerComponentDesign2DDataItem[]
     swiper: Swiper
 }
 
 const ProposedLayout = (props: TProps) => {
-    const { item, swiper } = props;
+    const { item, swiper } = props
     const isMobile = useMedia('(orientation: portrait)')
     // const [swiperInstance, setSwiperInstance] = useState(null)
 
@@ -33,7 +33,6 @@ const ProposedLayout = (props: TProps) => {
                                 const isActive = swiper?.activeIndex === i
                                 return (
                                     <div
-
                                         className={`mt-2 flex min-w-[200px] cursor-pointer gap-2 `}
                                         onClick={() => {
                                             swiper.slideTo(i)
@@ -41,18 +40,25 @@ const ProposedLayout = (props: TProps) => {
                                         key={i}
                                     >
                                         <div className=" py-1">{i + 1}.</div>
-                                        <LazyLoadImage
-                                            src={data.leftImage}
-
-                                            alt=""
-                                            effect="blur"
-                                            style={{ border: `2px solid ${isActive ? '#0066FF' : 'white'}` }}
-
-                                            className={`rounded-lg cursor-pointer w-[200px] `}
-                                        />
-                                        <span className="mt-2 text-xl">
-                                            {data.areaName}
-                                        </span>
+                                        <div className="flex flex-col items-center">
+                                            <LazyLoadImage
+                                                src={data.leftImage}
+                                                alt=""
+                                                effect="blur"
+                                                style={{
+                                                    border: `2px solid ${
+                                                        isActive
+                                                            ? '#0066FF'
+                                                            : 'white'
+                                                    }`,
+                                                }}
+                                                className={`rounded-lg cursor-pointer w-[200px] `}
+                                            />
+                                            <span className="mt-2 text-xl">
+                                                {data.areaName}
+                                                {/* Kitchen */}
+                                            </span>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -72,8 +78,13 @@ const ProposedLayout = (props: TProps) => {
                                         <div className=" py-1">{i + 1}.</div>
                                         <div className="mt-2 text-center">
                                             <div
-
-                                                style={{ border: `2px solid ${isActive ? '#0066FF' : 'white'}` }}
+                                                style={{
+                                                    border: `2px solid ${
+                                                        isActive
+                                                            ? '#0066FF'
+                                                            : 'white'
+                                                    }`,
+                                                }}
                                                 className={`flex justify-center overflow-hidden  w-60 h-40 rounded-lg  bg-white cursor-pointer`}
                                                 onClick={() => {
                                                     swiper.slideTo(i)
