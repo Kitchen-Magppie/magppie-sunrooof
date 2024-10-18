@@ -108,10 +108,10 @@ const Features = ({ item }: TProps) => {
                     </Swiper>
 
                     <>
-                        <button className="arrow-left absolute top-2/2 left-0 transform -translate-y-1/2 z-50 ml-20 mt-40 cursor-pointer">
+                        <button className="arrow-left absolute top-2/2 left-0 transform -translate-y-1/2 z-50 ml-20 mt-28 cursor-pointer">
                             <img src={leftArrow} className="h-16 w-16" alt="" />
                         </button>
-                        <button className="arrow-right absolute top-2/2 right-0 transform -translate-y-1/2 z-50 mr-20 mt-40 cursor-pointer">
+                        <button className="arrow-right absolute top-2/2 right-0 transform -translate-y-1/2 z-50 mr-20 mt-28 cursor-pointer">
                             <img
                                 src={rightArrow}
                                 className="h-16 w-16"
