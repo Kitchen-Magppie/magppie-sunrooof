@@ -14,6 +14,7 @@ import frenchSunrooof from "./../../assets/sunrooof/low/French.png"
 import classicalSunroof from '../../assets/sunrooof/low/Classical.png'
 import plot from "../../../QuotationPage/assets/2d2.png"
 import { ComponentComparisonDataEnum, TComponentComparisonDataOption } from '../../../../types';
+import LineComponent from './LineComponent';
 
 const App: React.FC = () => {
     const stageRef = useRef<Konva.Stage>(null);
@@ -156,6 +157,8 @@ const App: React.FC = () => {
         </Stage>
         {/* Button to Download the Final Image */}
         <button onClick={handleDownload}>Download Image</button>
+
+        <LineComponent />
     </div>
     );
 };
