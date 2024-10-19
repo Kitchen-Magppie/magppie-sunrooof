@@ -8,23 +8,27 @@ import {
 } from 'react-konva';
 import useImage from 'use-image';
 import Konva from 'konva';
+import Select from "react-select"
 // ======================================================================
-
+import frenchSunrooof from "./../../assets/sunrooof/low/French.png"
+import classicalSunroof from '../../assets/sunrooof/low/Classical.png'
 import plot from "../../../QuotationPage/assets/2d2.png"
+import { ComponentComparisonDataEnum, TComponentComparisonDataOption } from '../../../../types';
 
 const App: React.FC = () => {
     const stageRef = useRef<Konva.Stage>(null);
     const rectRef = useRef<Konva.Rect>(null);
     const transformerRef = useRef<Konva.Transformer>(null);
+    const [currentSunrooof, setCurrentSunrooof] = useState('');
 
     // Load the image
     const [image] = useImage(plot); // replace with your image URL
 
     // Rectangle state
     const [rectProps, setRectProps] = useState({
-        x: 50,
-        y: 50,
-        width: 100,
+        x: 500,
+        y: 500,
+        width: 300,
         height: 100,
         stroke: 'red',
         strokeWidth: 2,
@@ -85,19 +89,30 @@ const App: React.FC = () => {
     }, [])
 
     const [patternImage, setPatternImage] = useState(null);
-    // const imageRef = useRef<HTMLImageElement>(null);
 
     // Load the image and set it as the pattern image
     useEffect(() => {
         const img = new window.Image();
-        img.src = '../../../../public/rectangle.png'; // Update the image path
+        img.src = currentSunrooof?.length ? currentSunrooof : '../../../../public/rectangle.png'; // Update the image path
         img.onload = () => {
             // const pattern = rectRef.current.getContext().createPattern(img, 'repeat');
             setPatternImage(img);
 
         };
-    }, []);
+    }, [currentSunrooof]);
+    console.log(currentSunrooof)
     return (<div>
+
+        <Select
+
+
+            onChange={(e) => {
+
+                setCurrentSunrooof(e.image)
+            }}
+            options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.filter((item) => item.image?.length)}
+        />
+        {/* <img src={currentSunrooof} width={100} /> */}
         <Stage
             width={window.innerWidth}
             height={window.innerHeight}
@@ -145,4 +160,14 @@ const App: React.FC = () => {
     );
 };
 
+const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
+    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, image: frenchSunrooof },
+    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow, },
+    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
+    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof, image: classicalSunroof },
+    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
+    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
+];
+
 export default App;
+
