@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     Stage,
     Layer,
@@ -84,6 +84,19 @@ const App: React.FC = () => {
         }
     }, [])
 
+    const [patternImage, setPatternImage] = useState(null);
+    // const imageRef = useRef<HTMLImageElement>(null);
+
+    // Load the image and set it as the pattern image
+    useEffect(() => {
+        const img = new window.Image();
+        img.src = '../../../../public/rectangle.png'; // Update the image path
+        img.onload = () => {
+            // const pattern = rectRef.current.getContext().createPattern(img, 'repeat');
+            setPatternImage(img);
+
+        };
+    }, []);
     return (<div>
         <Stage
             width={window.innerWidth}
@@ -99,13 +112,16 @@ const App: React.FC = () => {
                     {...rectProps}
                     ref={rectRef}
                     onClick={handleSelect}
+                    // fillPatternScale={{ x: 1, y: 1 }}
                     onTransformEnd={handleTransform}
+                    fillPatternRepeat='repeat'
+                    fillPatternImage={patternImage}
                     onDragEnd={(e) => {
                         setRectProps({
                             ...rectProps,
                             x: e.target.x(),
                             y: e.target.y(),
-                        });
+                        })
                     }}
                 />
 
