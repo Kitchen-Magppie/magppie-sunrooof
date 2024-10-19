@@ -1,7 +1,15 @@
-import React, { useRef, useState } from 'react';
-import { Stage, Layer, Image as KonvaImage, Rect, Transformer } from 'react-konva';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+    Stage,
+    Layer,
+    Image as KonvaImage,
+    Rect,
+    Transformer
+} from 'react-konva';
 import useImage from 'use-image';
 import Konva from 'konva';
+// ======================================================================
+
 import plot from "../../../QuotationPage/assets/2d2.png"
 
 const App: React.FC = () => {
@@ -24,15 +32,15 @@ const App: React.FC = () => {
     });
 
     // Make the transformer active when the rectangle is selected
-    const handleSelect = () => {
+    const handleSelect = useCallback(() => {
         if (transformerRef.current && rectRef.current) {
             transformerRef.current.nodes([rectRef.current]);
             transformerRef.current.getLayer()?.batchDraw();
         }
-    };
+    }, [])
 
     // Handle changes in rectangle dimensions
-    const handleTransform = () => {
+    const handleTransform = useCallback(() => {
         if (rectRef.current) {
             const node = rectRef.current;
             const newScaleX = node.scaleX();
@@ -50,10 +58,10 @@ const App: React.FC = () => {
             node.scaleX(1);
             node.scaleY(1);
         }
-    };
+    }, [rectProps])
 
     // Download the stage as an image without the transformer controls
-    const handleDownload = () => {
+    const handleDownload = useCallback(() => {
         if (stageRef.current && transformerRef.current) {
             // Deselect transformer nodes to hide the controls
             transformerRef.current.nodes([]);
@@ -74,53 +82,50 @@ const App: React.FC = () => {
             link.click();
             document.body.removeChild(link);
         }
-    };
+    }, [])
 
-    return (
-        <div>
-            <Stage
-                width={window.innerWidth}
-                height={window.innerHeight}
-                ref={stageRef}
-                onMouseDown={handleSelect}
-            >
-                <Layer>
-                    {/* Background Image */}
-                    <KonvaImage image={image} width={window.innerWidth} height={window.innerHeight} />
+    return (<div>
+        <Stage
+            width={window.innerWidth}
+            height={window.innerHeight}
+            ref={stageRef}
+            onMouseDown={handleSelect}
+        >
+            <Layer>
+                {/* Background Image */}
+                <KonvaImage image={image} width={window.innerWidth} height={window.innerHeight} />
+                {/* Draggable and Resizable Rectangle with Red Outline */}
+                <Rect
+                    {...rectProps}
+                    ref={rectRef}
+                    onClick={handleSelect}
+                    onTransformEnd={handleTransform}
+                    onDragEnd={(e) => {
+                        setRectProps({
+                            ...rectProps,
+                            x: e.target.x(),
+                            y: e.target.y(),
+                        });
+                    }}
+                />
 
-                    {/* Draggable and Resizable Rectangle with Red Outline */}
-                    <Rect
-                        {...rectProps}
-                        ref={rectRef}
-                        onClick={handleSelect}
-                        onTransformEnd={handleTransform}
-                        onDragEnd={(e) => {
-                            setRectProps({
-                                ...rectProps,
-                                x: e.target.x(),
-                                y: e.target.y(),
-                            });
-                        }}
-                    />
-
-                    {/* Transformer for resizing */}
-                    <Transformer
-                        ref={transformerRef}
-                        rotateEnabled={false}
-                        boundBoxFunc={(oldBox, newBox) => {
-                            // Limit resizing to avoid negative width or height
-                            if (newBox.width < 20 || newBox.height < 20) {
-                                return oldBox;
-                            }
-                            return newBox;
-                        }}
-                    />
-                </Layer>
-            </Stage>
-
-            {/* Button to Download the Final Image */}
-            <button onClick={handleDownload}>Download Image</button>
-        </div>
+                {/* Transformer for resizing */}
+                <Transformer
+                    ref={transformerRef}
+                    rotateEnabled={false}
+                    boundBoxFunc={(oldBox, newBox) => {
+                        // Limit resizing to avoid negative width or height
+                        if (newBox.width < 20 || newBox.height < 20) {
+                            return oldBox;
+                        }
+                        return newBox;
+                    }}
+                />
+            </Layer>
+        </Stage>
+        {/* Button to Download the Final Image */}
+        <button onClick={handleDownload}>Download Image</button>
+    </div>
     );
 };
 
