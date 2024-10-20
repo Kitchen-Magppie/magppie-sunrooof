@@ -1,11 +1,9 @@
+import { useMemo, useState } from "react";
 import Select from "react-select"
 import * as Yup from 'yup';
 import { BsDash, BsPlus } from "react-icons/bs";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useMemo, useState } from "react";
-import bgImg from '../../.././../assets/hero-bg.jpeg'
-import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
 import { TbFileOrientation } from "react-icons/tb";
 import { IoIosMove } from "react-icons/io";
 import { MdDraw } from "react-icons/md";
@@ -15,9 +13,15 @@ import { RxMaskOn } from "react-icons/rx";
 import { CiRuler } from "react-icons/ci";
 import { SiExcalidraw } from "react-icons/si"
 import { PiDownloadSimpleFill } from "react-icons/pi";
-import designImage from "./../../../QuotationPage/assets/2d2.png";
+//====================================================================
+import bgImg from '../../.././../assets/hero-bg.jpeg'
+import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
+import { useAppSelector } from "../../../../redux";
+
 function QuotationCanvas() {
 
+    const presentation = useAppSelector((state) => state.Cms.Presentation);
+    console.log(presentation)
     const {
         watch,
         setValue,
@@ -69,46 +73,119 @@ function QuotationCanvas() {
         </div>)
     }, [setValue, values.value])
 
-    const renderBegninning = useMemo(() => {
-        return (<>
-            <div className="flex w-72 flex-col">
-                <label
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                    Enter the length of the line and click to draw:
-                </label>
-                <Select
-                    className="w-100"
-                    onChange={(e) => { setValue('unit', e.value) }}
-                    options={QUOTATION_UNIT_OPTIONS}
-                />
+    const renderDrawingEditor = useMemo(() => {
+        return <div className="">
+            <div className="flex w-72 flex-col mb-3">
+                <Select options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS} />
             </div>
-            <div className="flex flex-row gap-10">
-                {renderQuantityContent}
-                <div className="">
+            <div className="mt-20">
+                <div className="grid grid-flow-row grid-cols-2 gap-2">
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <MdDraw className="my-auto text-xl" />
+                        Draw SUNROOOF
+                    </button>
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <TbFileOrientation className="my-auto text-xl" />
+                        Orientation II
 
-                    <div className="mt-7">
+                    </button>
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <IoIosMove className="my-auto text-xl" />
+                        Move SUNROOOF
+
+                    </button>
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <MdOutlineRotate90DegreesCcw className="my-auto text-xl" />
+                        Rotate SUNROOOF
+
+                    </button>
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <BsEraser className="my-auto text-xl" />
+                        Remove SUNROOOF
+
+                    </button>
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <RxMaskOn className="my-auto text-xl" />
+                        Remove  MASK
+
+                    </button>
+                    <button
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                    >
+                        <CiRuler className="my-auto text-xl" />
+                        Scale for Measurement
+                    </button>
+
+                </div>
+
+            </div>
+            <div className="mt-20">
+                <button
+                    type="button"
+                    className="text-white bg-gradient-to-r bg-[#b5b496ff]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#b5b496ff] dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                >
+                    <PiDownloadSimpleFill className="my-auto text-xl" />
+                    Download Final Image
+                </button>
+            </div>
+        </div>
+    }, [])
+
+    const renderBeginning = useMemo(() => {
+        return (
+            <>
+                <div className="flex w-72 flex-col">
+                    <label
+                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        Enter the length of the line and click to draw:
+                    </label>
+                    <Select
+                        className="w-100"
+                        onChange={(e) => { setValue('unit', e.value) }}
+                        options={QUOTATION_UNIT_OPTIONS}
+                    />
+                </div>
+                <div className="flex gap-1 align-middle flex-row">
+                    {renderQuantityContent}
+                    <div className="">
+                        <div className="mt-7" />
                         <button
-                            onClick={() => {
-                                setIsDrawingStarted(true)
-                            }}
+                            onClick={() => { setIsDrawingStarted(true) }}
                             type="button"
-                            className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                            className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
                         >
                             <SiExcalidraw className="my-auto text-xl" />
                             Start Drawing
                         </button>
                     </div>
-                </div>
-            </div>
-            <div className="my-5">
-                Loading...
-            </div>
-        </>)
-    }, [renderQuantityContent, setValue])
 
+                </div>
+            </>
+
+        )
+    }, [renderQuantityContent, setValue])
     return (<form className="">
-        <div className={`${isDrawingStarted ? 'h-[25vh]' : 'h-[75vh]'} text-white font-extrabold flex justify-center align-middle ${isDrawingStarted ? 'text-[100px]' : 'text-[200px]'} `}
+        <div className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
                 background: `url(${bgImg})`,
                 backgroundSize: 'cover'
@@ -121,87 +198,15 @@ function QuotationCanvas() {
 
         <div className="container mx-auto">
             <div className="mt-10">
-                {isDrawingStarted ? (<div className="grid grid-flow-row grid-cols-2">
-                    <div className="">
-                        <div className="flex w-72 flex-col mb-3">
-                            <Select options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS} />
-                        </div>
-                        <div className="mt-20">
-                            <div className="grid grid-flow-row grid-cols-2 gap-2">
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <MdDraw className="my-auto text-xl" />
-                                    Draw SUNROOOF
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <TbFileOrientation className="my-auto text-xl" />
-                                    Orientation II
-
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <IoIosMove className="my-auto text-xl" />
-                                    Move SUNROOOF
-
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <MdOutlineRotate90DegreesCcw className="my-auto text-xl" />
-                                    Rotate SUNROOOF
-
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <BsEraser className="my-auto text-xl" />
-                                    Remove SUNROOOF
-
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <RxMaskOn className="my-auto text-xl" />
-                                    Remove  MASK
-
-                                </button>
-                                <button
-                                    type="button"
-                                    className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                                >
-                                    <CiRuler className="my-auto text-xl" />
-                                    Scale for Measurement
-                                </button>
-
-                            </div>
-
-                        </div>
-                        <div className="mt-20">
-                            <button
-                                type="button"
-                                className="text-white bg-gradient-to-r bg-[#b5b496ff]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#b5b496ff] dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                            >
-                                <PiDownloadSimpleFill className="my-auto text-xl" />
-                                Download Final Image
-                            </button>
-                        </div>
+                <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col align-middle justify-center">
+                        {isDrawingStarted ? renderDrawingEditor : renderBeginning}
                     </div>
-                    <img src={designImage} />
-
-                </div>) : renderBegninning}
-
+                    <div className="">
+                        <img src={`${URL.createObjectURL(presentation?.value?.file)}`} />
+                    </div>
+                </div>
             </div>
-
         </div>
     </form>);
 }

@@ -23,7 +23,11 @@ const PresentationSlice = createSlice({
     reducers: {
         setPresentationFile: (state, action?: PayloadAction<File | undefined>) => {
             state.status = action.payload ? 'loading' : 'success';
-            state.value.file = action.payload;
+            if (state.value && 'file' in state.value) {
+                state.value.file = action.payload
+            } else {
+                state.value = { ...state.value, file: action.payload }
+            }
         },
     },
 });
