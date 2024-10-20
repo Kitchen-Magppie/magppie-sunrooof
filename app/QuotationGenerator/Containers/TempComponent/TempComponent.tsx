@@ -94,7 +94,7 @@ const App: React.FC = () => {
     // Load the image and set it as the pattern image
     useEffect(() => {
         const img = new window.Image();
-        img.src = currentSunrooof?.length ? currentSunrooof : '../../../../public/rectangle.png'; // Update the image path
+        img.src = currentSunrooof?.length ? currentSunrooof : '../../../../rectangle.png'; // Update the image path
         img.onload = () => {
             // const pattern = rectRef.current.getContext().createPattern(img, 'repeat');
             setPatternImage(img);
