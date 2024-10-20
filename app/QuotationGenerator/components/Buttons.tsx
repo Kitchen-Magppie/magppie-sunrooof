@@ -27,7 +27,9 @@ const Buttons = () => {
                     ref={fileInputRef}
                     onChange={(e) => {
                         dispatch(setPresentationFile(e.target.files[0]))
-                        navigate('/design-generator')
+                        setTimeout(() => {
+                            navigate('/design-generator')
+                        }, 2000)
                     }}
                     className='  hidden'
                 />

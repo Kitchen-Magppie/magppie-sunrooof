@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select"
 import * as Yup from 'yup';
 import { BsDash, BsPlus } from "react-icons/bs";
@@ -13,6 +14,7 @@ import { RxMaskOn } from "react-icons/rx";
 import { CiRuler } from "react-icons/ci";
 import { SiExcalidraw } from "react-icons/si"
 import { PiDownloadSimpleFill } from "react-icons/pi";
+
 //====================================================================
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
@@ -20,8 +22,9 @@ import { useAppSelector } from "../../../../redux";
 
 function QuotationCanvas() {
 
-    const presentation = useAppSelector((state) => state.Cms.Presentation);
-    console.log(presentation)
+    const { Presentation } = useAppSelector((state) => state.Cms);
+    const [isDrawingStarted, setIsDrawingStarted] = useState(false)
+
     const {
         watch,
         setValue,
@@ -31,7 +34,14 @@ function QuotationCanvas() {
     });
 
     const values = watch()
-    const [isDrawingStarted, setIsDrawingStarted] = useState(false)
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!Presentation?.value?.file?.size) {
+            navigate(`/quotation-generator`)
+        }
+    }, [Presentation?.value?.file?.size, navigate])
 
     const renderQuantityContent = useMemo(() => {
         return (<div className="flex flex-col">
@@ -74,7 +84,7 @@ function QuotationCanvas() {
     }, [setValue, values.value])
 
     const renderDrawingEditor = useMemo(() => {
-        return <div className="">
+        return (<div>
             <div className="flex w-72 flex-col mb-3">
                 <Select options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS} />
             </div>
@@ -147,7 +157,7 @@ function QuotationCanvas() {
                     Download Final Image
                 </button>
             </div>
-        </div>
+        </div>)
     }, [])
 
     const renderBeginning = useMemo(() => {
@@ -203,7 +213,10 @@ function QuotationCanvas() {
                         {isDrawingStarted ? renderDrawingEditor : renderBeginning}
                     </div>
                     <div className="">
-                        <img src={`${URL.createObjectURL(presentation?.value?.file)}`} />
+                        {Presentation?.value?.file?.size ? (
+                            <img src={`${URL.createObjectURL(Presentation?.value?.file)}`} />
+                        ) : ''}
+
                     </div>
                 </div>
             </div>
