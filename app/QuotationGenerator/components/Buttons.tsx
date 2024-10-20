@@ -1,11 +1,16 @@
 import { useRef } from 'react';
 import { FaUpload } from 'react-icons/fa'
 import { FaArrowRight } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+//====================================================================
 
-type TProps = { onChangeFile: (file: File) => void }
-const Buttons = (props: TProps) => {
+import { useAppDispatch } from '../../../redux';
+import { setPresentationFile } from '../../cms/redux/slices';
+
+const Buttons = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     return (
         <div className="flex justify-evenly items-center w-full mb-20">
             <div className="flex flex-col items-center">
@@ -20,7 +25,12 @@ const Buttons = (props: TProps) => {
                 <input
                     type="file"
                     ref={fileInputRef}
-                    onChange={(e) => { props.onChangeFile(e.target.files[0]) }}
+                    onChange={(e) => {
+                        dispatch(setPresentationFile(e.target.files[0]))
+                        setTimeout(() => {
+                            navigate('/design-generator')
+                        }, 2000)
+                    }}
                     className='  hidden'
                 />
             </div>
