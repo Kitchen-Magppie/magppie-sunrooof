@@ -6,7 +6,7 @@ import { BsDash, BsPlus } from "react-icons/bs";
 import Konva from 'konva';
 import {
     Stage, Layer, Line,
-    // Image as KonvaImage
+    Image as KonvaImage
 } from 'react-konva';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,7 @@ import { RxMaskOn } from "react-icons/rx";
 import { CiRuler } from "react-icons/ci";
 import { SiExcalidraw } from "react-icons/si"
 import { PiDownloadSimpleFill } from "react-icons/pi";
-
+import useImage from "use-image";
 //====================================================================
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
@@ -30,7 +30,34 @@ function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms);
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false);
+    const [imageURL, setImageURL] = useState<string | null>(null);
     const [linePoints, setLinePoints] = useState<number[]>([]);
+    const [image, setImage] = useImage(imageURL)
+    const [stageWidth, setStageWidth] = useState<number>(800);
+    const [stageHeight, setStageHeight] = useState<number>(600);
+
+    useEffect(() => {
+        if (Presentation?.value?.file?.size) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (typeof reader.result === 'string') {
+                    setImageURL(reader.result);
+                }
+            };
+            reader.readAsDataURL(Presentation?.value?.file);
+
+            // setImage(URL.createObjectURL(Presentation?.value?.file))
+        }
+    }, [Presentation?.value?.file, setImage])
+
+    useEffect(() => {
+        if (image) {
+            // Set stage dimensions based on image dimensions while maintaining aspect ratio
+            const aspectRatio = image.width / image.height;
+            setStageWidth(800); // Set a fixed width or adjust as needed
+            setStageHeight(800 / aspectRatio);
+        }
+    }, [image]);
 
     const {
         watch,
@@ -244,15 +271,14 @@ function QuotationCanvas() {
                     </div>
                     <div className="">
                         {Presentation?.value?.file?.size ? (<Stage
-                            width={window.innerWidth}
-                            height={window.innerHeight}
+                            width={stageWidth}
+                            height={stageHeight}
                             onClick={handleCanvasClick}
                             onMouseMove={handleMouseMove}
-                            style={{ backgroundColor: '#f0f0f0' }}
                         >
                             <Layer>
+                                {Presentation?.value?.file?.size ? (<KonvaImage image={image} />) : ''}
 
-                                {/* <KonvaImage image={URL.createObjectURL(Presentation?.value?.file)} /> */}
                                 {linePoints.length > 0 && (
                                     <Line
                                         points={linePoints}
@@ -264,11 +290,11 @@ function QuotationCanvas() {
                                 )}
                             </Layer>
                         </Stage>) : ''}
-                        {Presentation?.value?.file?.size ? (
+                        {/* {Presentation?.value?.file?.size ? (
                             <img
                                 src={`${URL.createObjectURL(Presentation?.value?.file)}`}
                             />
-                        ) : ''}
+                        ) : ''} */}
 
                     </div>
                 </div>
