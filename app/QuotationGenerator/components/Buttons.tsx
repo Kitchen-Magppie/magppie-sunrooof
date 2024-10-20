@@ -1,16 +1,27 @@
-import { useRef } from 'react';
+import { ChangeEvent, useCallback, useRef, useState } from 'react';
 import { FaUpload } from 'react-icons/fa'
 import { FaArrowRight } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
+import { RiLoader4Line } from "react-icons/ri";
 //====================================================================
 
-import { useAppDispatch } from '../../../redux';
-import { setPresentationFile } from '../../cms/redux/slices';
+import { useAppDispatch, setPresentationFile } from '../../../redux';
 
 const Buttons = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [corpus, setCorpus] = useState(INIT_CORPUS)
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+
+    const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        dispatch(setPresentationFile(e.target.files[0]))
+        setCorpus((prev) => ({ ...prev, toggle: { ...prev.toggle, isImageLoading: true } }))
+        setTimeout(() => {
+            navigate('/design-generator')
+            setCorpus((prev) => ({ ...prev, toggle: { ...prev.toggle, isImageLoading: false } }))
+
+        }, 2000)
+    }, [dispatch, navigate])
     return (
         <div className="flex justify-evenly items-center w-full mb-20">
             <div className="flex flex-col items-center">
@@ -18,19 +29,14 @@ const Buttons = () => {
                 <div className="text-white cursor-pointer bg-blue-700 flex items-center justify-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
                     onClick={() => { fileInputRef?.current?.click() }}
                 >
-                    <FaUpload className="h-5 w-5" />
+                    {corpus.toggle.isImageLoading ? (<RiLoader4Line className="text-xl animate-spin " />) : (<FaUpload className="h-5 w-5" />)}
                     <span className="text-2xl ml-2">Upload File</span>
                 </div>
                 {/* </Link> */}
                 <input
                     type="file"
                     ref={fileInputRef}
-                    onChange={(e) => {
-                        dispatch(setPresentationFile(e.target.files[0]))
-                        setTimeout(() => {
-                            navigate('/design-generator')
-                        }, 2000)
-                    }}
+                    onChange={onFileChange}
                     className='  hidden'
                 />
             </div>
@@ -47,5 +53,5 @@ const Buttons = () => {
         </div>
     )
 }
-
+const INIT_CORPUS = { toggle: { isImageLoading: false } }
 export default Buttons
