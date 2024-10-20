@@ -1,8 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Select from "react-select"
 import * as Yup from 'yup';
 import { BsDash, BsPlus } from "react-icons/bs";
+import Konva from 'konva';
+import {
+    Stage, Layer, Line,
+    // Image as KonvaImage
+} from 'react-konva';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { TbFileOrientation } from "react-icons/tb";
@@ -24,6 +29,8 @@ function QuotationCanvas() {
 
     const { Presentation } = useAppSelector((state) => state.Cms);
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
+    const [isDrawing, setIsDrawing] = useState(false);
+    const [linePoints, setLinePoints] = useState<number[]>([]);
 
     const {
         watch,
@@ -32,6 +39,29 @@ function QuotationCanvas() {
         resolver: yupResolver(validateItem),
         defaultValues,
     });
+
+    const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+        const stage = event.target.getStage();
+        const { x, y } = stage.getPointerPosition()!;
+
+        if (!isDrawing) {
+            // Start drawing the line
+            setLinePoints([x, y, x, y]);
+            setIsDrawing(true);
+        } else {
+            // End the line
+            setIsDrawing(false);
+        }
+    }, [isDrawing])
+
+    const handleMouseMove = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+        if (!isDrawing) return;
+
+        const stage = event.target.getStage();
+        const { x, y } = stage.getPointerPosition()!;
+        setLinePoints([linePoints[0], linePoints[1], x, y]);
+    }, [isDrawing, linePoints])
+
 
     const values = watch()
 
@@ -213,8 +243,31 @@ function QuotationCanvas() {
                         {isDrawingStarted ? renderDrawingEditor : renderBeginning}
                     </div>
                     <div className="">
+                        {Presentation?.value?.file?.size ? (<Stage
+                            width={window.innerWidth}
+                            height={window.innerHeight}
+                            onClick={handleCanvasClick}
+                            onMouseMove={handleMouseMove}
+                            style={{ backgroundColor: '#f0f0f0' }}
+                        >
+                            <Layer>
+
+                                {/* <KonvaImage image={URL.createObjectURL(Presentation?.value?.file)} /> */}
+                                {linePoints.length > 0 && (
+                                    <Line
+                                        points={linePoints}
+                                        stroke="red"
+                                        strokeWidth={2}
+                                        lineCap="round"
+                                        lineJoin="round"
+                                    />
+                                )}
+                            </Layer>
+                        </Stage>) : ''}
                         {Presentation?.value?.file?.size ? (
-                            <img src={`${URL.createObjectURL(Presentation?.value?.file)}`} />
+                            <img
+                                src={`${URL.createObjectURL(Presentation?.value?.file)}`}
+                            />
                         ) : ''}
 
                     </div>
