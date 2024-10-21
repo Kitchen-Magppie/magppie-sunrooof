@@ -99,7 +99,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
-    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow },
+    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, },
     { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
     { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
     { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
