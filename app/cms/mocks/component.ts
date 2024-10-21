@@ -13,7 +13,6 @@ import {
     _
 } from "../../../types"
 import { QuotationMock } from ".";
-
 export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
     {
         value: ComponentFeatureEnum.Office,
@@ -99,12 +98,12 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
-    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, },
-    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
-    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
-    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
-    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
-    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
+    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, image: { high: '', low: '' } },
+    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow, image: { high: '', low: '' } },
+    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow, image: { high: '', low: '' } },
+    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof, image: { high: '', low: '' } },
+    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof, image: { high: '', low: '' } },
+    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof, image: { high: '', low: '' } },
 ];
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
