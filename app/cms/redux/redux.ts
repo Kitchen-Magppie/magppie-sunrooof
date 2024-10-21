@@ -9,6 +9,7 @@ import {
     LandingReducer,
     ConsultationReducer,
     CustomerReducer,
+    PresentationReducer
 } from "./slices"
 
 
@@ -21,6 +22,7 @@ const CmsReducers = combineReducers({
     Projects: ProjectReducer,
     SuperUsers: SuperUserReducer,
     Consultations: ConsultationReducer,
+    Presentation: PresentationReducer
 
 })
 

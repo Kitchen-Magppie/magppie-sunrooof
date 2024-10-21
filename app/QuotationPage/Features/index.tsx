@@ -1,5 +1,5 @@
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import Logo from '../../../assets/logo-black-text-withoutBg.png'
+import Logo from '../assets/logo-final.svg'
 import threeLines from '../assets/three-lines.png'
 import './index.css'
 import bgImage from '../assets/features/Background.jpg'
@@ -33,8 +33,10 @@ const Features = ({ item }: TProps) => {
         >
             <div className="hidden lg:flex flex-col items-center justify-center w-full container mx-auto px-4">
                 <div className="flex flex-col mb-24 items-center justify-center text-center">
-                    <img src={Logo} alt="Company Logo" className="w-96" />
-                    <h1 className="text-4xl font-semibold capitalize">
+                    <div className='w-96 h-20'>
+                        <img src={Logo} alt="Company Logo" className="h-full w-full" />
+                    </div>
+                    <h1 className="text-3xl font-medium capitalize">
                         {/* Benefits for offices */}
                         {currentItem.header}
                     </h1>
@@ -67,8 +69,8 @@ const Features = ({ item }: TProps) => {
             <div className="flex flex-col lg:hidden py-20 container mx-auto w-full">
                 <div className="flex flex-col items-center justify-center mb-32 text-center">
                     <img src={Logo} alt="Company Logo" className="w-96" />
-                    <h1 className="text-4xl font-semibold capitalize">
-                        Benefits for offices
+                    <h1 className="text-3xl font-medium capitalize">
+                        {currentItem.header}
                     </h1>
                 </div>
                 <div className="flex">
@@ -106,10 +108,10 @@ const Features = ({ item }: TProps) => {
                     </Swiper>
 
                     <>
-                        <button className="arrow-left absolute top-2/2 left-0 transform -translate-y-1/2 z-50 ml-20 mt-40 cursor-pointer">
+                        <button className="arrow-left absolute top-2/2 left-0 transform -translate-y-1/2 z-50 ml-20 mt-28 cursor-pointer">
                             <img src={leftArrow} className="h-16 w-16" alt="" />
                         </button>
-                        <button className="arrow-right absolute top-2/2 right-0 transform -translate-y-1/2 z-50 mr-20 mt-40 cursor-pointer">
+                        <button className="arrow-right absolute top-2/2 right-0 transform -translate-y-1/2 z-50 mr-20 mt-28 cursor-pointer">
                             <img
                                 src={rightArrow}
                                 className="h-16 w-16"

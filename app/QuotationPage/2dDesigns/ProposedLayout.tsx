@@ -1,13 +1,24 @@
 import { useMedia } from 'react-use'
 import { TCustomerComponentDesign2DDataItem } from '../../../types'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { Swiper } from 'swiper/types'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
-type TProps = { item: TCustomerComponentDesign2DDataItem[] }
+type TProps = {
+    item: TCustomerComponentDesign2DDataItem[]
+    swiper: Swiper
+}
 
-const ProposedLayout = ({ item }: TProps) => {
+const ProposedLayout = (props: TProps) => {
+    const { item, swiper } = props
     const isMobile = useMedia('(orientation: portrait)')
+    // const [swiperInstance, setSwiperInstance] = useState(null)
+
+    // const leftImagesLength = item.map((data) => {
+    //     return data.leftImage.length
+    // })
+
     // const [corpus, setCorpus] = useState({
     //     link: item.leftImage,
     //     isOpenModal: false,
@@ -16,20 +27,38 @@ const ProposedLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="bg-[#78746c] text-white p-6 mt-2 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
+                    <div className="bg-white text-black p-6 mt-2 lg:w-80 w-full rounded-lg shadow-md flex gap-6 justify-evenly items-start flex-row flex-wrap">
                         <div className="flex items-center overflow-x-auto w-full space-x-4 no-scrollbar">
-                            {item.map((data) => {
+                            {item.map((data, i) => {
+                                const isActive = swiper?.activeIndex === i
                                 return (
-                                    <div className="mt-2 flex flex-col min-w-[200px]">
-                                        <LazyLoadImage
-                                            src={data.leftImage}
-                                            alt=""
-                                            effect="blur"
-                                            className="rounded-lg cursor-pointer w-[200px]"
-                                        />
-                                        <span className="mt-2 text-xl">
-                                            {data.areaName}
-                                        </span>
+                                    <div
+                                        className={`mt-2 flex min-w-[200px] cursor-pointer gap-2 `}
+                                        onClick={() => {
+                                            swiper.slideTo(i)
+                                        }}
+                                        key={i}
+                                    >
+                                        <div className=" py-1">{i + 1}.</div>
+                                        <div className="flex flex-col items-center">
+                                            <LazyLoadImage
+                                                src={data.leftImage}
+                                                alt=""
+                                                effect="blur"
+                                                style={{
+                                                    border: `2px solid ${
+                                                        isActive
+                                                            ? '#0066FF'
+                                                            : 'white'
+                                                    }`,
+                                                }}
+                                                className={`rounded-lg cursor-pointer w-[200px] `}
+                                            />
+                                            <span className="mt-2 text-xl">
+                                                {data.areaName}
+                                                {/* Kitchen */}
+                                            </span>
+                                        </div>
                                     </div>
                                 )
                             })}
@@ -37,22 +66,41 @@ const ProposedLayout = ({ item }: TProps) => {
                     </div>
                 </>
             ) : (
-                <div className="bg-[#78746c] text-white p-6 lg:w-80 w-full rounded-lg shadow-md flex gap-6 lg:flex-col justify-evenly lg:justify-start items-start flex-row lg:flex-nowrap flex-wrap">
-                    <div className="flex flex-col items-center">
-                        <h1 className="text-2xl mb-2">Proposed Layout</h1>
-                        <div className="overflow-y-auto h-[650px]">
-                            {item.map((data) => {
+                <div className="bg-white text-black p-6 w-full rounded-lg shadow-md flex gap-6">
+                    <div className="flex items-center">
+                        {/* <h1 className="text-xl mb-2">Proposed Layout</h1> */}
+                        <div className="overflow-y-auto gap-4 flex">
+                            {item.map((data, i) => {
+                                const isActive = swiper?.activeIndex === i
+
                                 return (
-                                    <div className="mt-2">
-                                        <LazyLoadImage
-                                            src={data.leftImage}
-                                            alt=""
-                                            effect="blur"
-                                            className="rounded-lg cursor-pointer"
-                                        />
-                                        <span className="mt-2">
-                                            Area Name: {data.areaName}
-                                        </span>
+                                    <div className="flex gap-2" key={i}>
+                                        <div className=" py-1">{i + 1}.</div>
+                                        <div className="mt-2 text-center">
+                                            <div
+                                                style={{
+                                                    border: `2px solid ${
+                                                        isActive
+                                                            ? '#0066FF'
+                                                            : 'white'
+                                                    }`,
+                                                }}
+                                                className={`flex justify-center overflow-hidden  w-60 h-40 rounded-lg  bg-white cursor-pointer`}
+                                                onClick={() => {
+                                                    swiper.slideTo(i)
+                                                }}
+                                            >
+                                                <img
+                                                    src={data.leftImage}
+                                                    alt=""
+                                                    className="cursor-pointer"
+                                                />
+                                            </div>
+                                            <span className="mt-2 text-md">
+                                                {/* Area Name:  */}
+                                                {data.areaName}
+                                            </span>
+                                        </div>
                                     </div>
                                 )
                             })}
