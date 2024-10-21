@@ -32,9 +32,10 @@ function QuotationCanvas() {
     const [isDrawing, setIsDrawing] = useState(false);
     const [imageURL, setImageURL] = useState<string | null>(null);
     const [linePoints, setLinePoints] = useState<number[]>([]);
-    const [image, setImage] = useImage(imageURL)
     const [stageWidth, setStageWidth] = useState<number>(800);
     const [stageHeight, setStageHeight] = useState<number>(600);
+    const [measurement, setMeasurement] = useState({ unit: '', value: 0 })
+    const [image, setImage] = useImage(imageURL)
 
     useEffect(() => {
         if (Presentation?.value?.file?.size) {
@@ -45,11 +46,28 @@ function QuotationCanvas() {
                 }
             };
             reader.readAsDataURL(Presentation?.value?.file);
-
-            // setImage(URL.createObjectURL(Presentation?.value?.file))
         }
     }, [Presentation?.value?.file, setImage])
 
+
+    const calculateLineLength = useCallback(() => {
+        const points = linePoints;
+        if (points?.length === 4) {
+            const startX = points[0];
+            const startY = points[1];
+            const endX = points[2];
+            const endY = points[3];
+            const dx = endX - startX;
+            const dy = endY - startY;
+            const value = Math.sqrt(dx * dx + dy * dy);
+            // console.log('Inches:', pixelsToInches(length))
+            // console.log('mm:' ,pixelsToMm(length))
+            setMeasurement((prev) => ({ ...prev, value }))
+        }
+    }, [linePoints])
+    useEffect(() => {
+        calculateLineLength()
+    }, [calculateLineLength])
     useEffect(() => {
         if (image) {
             // Set stage dimensions based on image dimensions while maintaining aspect ratio
@@ -86,6 +104,7 @@ function QuotationCanvas() {
 
         const stage = event.target.getStage();
         const { x, y } = stage.getPointerPosition()!;
+        // console.log(x * x + y * y)
         setLinePoints([linePoints[0], linePoints[1], x, y]);
     }, [isDrawing, linePoints])
 
@@ -142,7 +161,7 @@ function QuotationCanvas() {
 
     const renderDrawingEditor = useMemo(() => {
         return (<div>
-            <div className="flex w-72 flex-col mb-3">
+            <div className="flex  flex-col mb-3">
                 <Select options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS} />
             </div>
             <div className="mt-20">
@@ -218,39 +237,44 @@ function QuotationCanvas() {
     }, [])
 
     const renderBeginning = useMemo(() => {
-        return (
-            <>
-                <div className="flex w-72 flex-col">
-                    <label
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        return (<div>
+            <div className="flex flex-col">
+                <label
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                    Enter the length of the line and click to draw:
+                </label>
+                <Select
+                    className="w-100"
+                    onChange={(e) => {
+                        setValue('unit', e.value)
+                        setMeasurement((prev) => ({ ...prev, unit: e.value }))
+                    }}
+                    options={QUOTATION_UNIT_OPTIONS}
+                />
+            </div>
+            <div className="flex gap-1 align-middle flex-row justify-between">
+                {renderQuantityContent}
+                <div className="">
+                    <div className="mt-7" />
+                    <button
+                        onClick={() => { setIsDrawingStarted(true) }}
+                        type="button"
+                        className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
                     >
-                        Enter the length of the line and click to draw:
-                    </label>
-                    <Select
-                        className="w-100"
-                        onChange={(e) => { setValue('unit', e.value) }}
-                        options={QUOTATION_UNIT_OPTIONS}
-                    />
+                        <SiExcalidraw className="my-auto text-xl" />
+                        Start Drawing
+                    </button>
                 </div>
-                <div className="flex gap-1 align-middle flex-row">
-                    {renderQuantityContent}
-                    <div className="">
-                        <div className="mt-7" />
-                        <button
-                            onClick={() => { setIsDrawingStarted(true) }}
-                            type="button"
-                            className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                        >
-                            <SiExcalidraw className="my-auto text-xl" />
-                            Start Drawing
-                        </button>
-                    </div>
 
-                </div>
-            </>
+            </div>
+            <div className="">
+                {measurement.unit?.length ? `${measurement.value?.toLocaleString()} ${measurement.unit}` : ''}
+            </div>
+        </div>
 
         )
-    }, [renderQuantityContent, setValue])
+    }, [measurement, renderQuantityContent, setValue])
     return (<form className="">
         <div className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
@@ -278,7 +302,6 @@ function QuotationCanvas() {
                         >
                             <Layer>
                                 {Presentation?.value?.file?.size ? (<KonvaImage image={image} />) : ''}
-
                                 {linePoints.length > 0 && (
                                     <Line
                                         points={linePoints}
@@ -290,11 +313,6 @@ function QuotationCanvas() {
                                 )}
                             </Layer>
                         </Stage>) : ''}
-                        {/* {Presentation?.value?.file?.size ? (
-                            <img
-                                src={`${URL.createObjectURL(Presentation?.value?.file)}`}
-                            />
-                        ) : ''} */}
 
                     </div>
                 </div>
@@ -315,3 +333,9 @@ const validateItem = Yup.object({
 
 const defaultValues: TInput = { unit: '', value: 1 }
 export default QuotationCanvas;
+// function pixelsToMm(pixels: number, dpi: number): number {
+//     return pixels / (dpi / 25.4);
+// }
+// function pixelsToInches(pixels: number, dpi: number = 96): number {
+//     return pixels / dpi;
+// }
