@@ -5,7 +5,6 @@ import {
     ComponentComparisonDataEnum,
     ComponentFeatureEnum,
     CustomerComponentEnum,
-    TComponentComparisonDataOption,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
@@ -97,14 +96,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 
-export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
-    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, image: { high: '', low: '' } },
-    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow, image: { high: '', low: '' } },
-    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow, image: { high: '', low: '' } },
-    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof, image: { high: '', low: '' } },
-    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof, image: { high: '', low: '' } },
-    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof, image: { high: '', low: '' } },
-];
+
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
     // { label: "Design By", value: "designBy", field: 'text' },

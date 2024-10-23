@@ -29,9 +29,10 @@ import { useAppSelector } from "../../../../redux";
 function QuotationCanvas() {
 
     const { Presentation } = useAppSelector((state) => state.Cms);
+    const [corpus, setCorpus] = useState({ selection: { sunrooofWindow: '', image: null } })
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false);
-    const [imageURL, setImageURL] = useState<string | null>(null);
+    // const [imageURL, setImageURL] = useState<string | null>(null);
     const [linePoints, setLinePoints] = useState<number[]>([]);
     const [stageWidth, setStageWidth] = useState<number>(800);
     const [stageHeight, setStageHeight] = useState<number>(600);
@@ -40,15 +41,16 @@ function QuotationCanvas() {
     const stageRef = useRef<Konva.Stage>(null);
     const rectRef = useRef<Konva.Rect>(null);
     const transformerRef = useRef<Konva.Transformer>(null);
-    const [image, setImage] = useImage(imageURL)
-
+    const [image, setImage] = useImage(corpus.selection.image)
+    console.log(corpus.selection.image, image)
 
     useEffect(() => {
         if (Presentation?.value?.file?.size) {
             const reader = new FileReader();
             reader.onload = () => {
                 if (typeof reader.result === 'string') {
-                    setImageURL(reader.result);
+                    // setImageURL(reader.result);
+                    setCorpus((prev) => ({ ...prev, selection: { ...prev.selection, image: reader.result } }))
                 }
             };
             reader.readAsDataURL(Presentation?.value?.file);
@@ -168,7 +170,18 @@ function QuotationCanvas() {
     const renderDrawingEditor = useMemo(() => {
         return (<div>
             <div className="flex  flex-col mb-3">
-                <Select options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS} />
+                <Select options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
+
+                    onChange={(e) => {
+                        setCorpus((prev) => ({
+                            ...prev,
+                            selection: {
+                                ...prev.selection,
+                                sunrooofWindow: e.value
+                            }
+                        }))
+                    }}
+                />
             </div>
             <div className="mt-20">
                 <div className="grid grid-flow-row grid-cols-2 gap-2">
@@ -282,6 +295,16 @@ function QuotationCanvas() {
         )
     }, [measurement, renderQuantityContent])
 
+
+    const fillPatternImage = useMemo(() => {
+        if (corpus?.selection?.sunrooofWindow?.length) {
+            const url = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow).image.low || undefined
+            if (url?.length) {
+                return convertUrlToImage(url)
+            }
+        }
+    }, [corpus.selection.sunrooofWindow])
+
     // Make the transformer active when the rectangle is selected
     const handleRectSelect = useCallback(() => {
         if (transformerRef.current && rectRef.current) {
@@ -336,16 +359,17 @@ function QuotationCanvas() {
                             onMouseMove={handleMouseMove}
                         >
                             <Layer>
-                                {Presentation?.value?.file?.size ? (<KonvaImage image={image} />) : ''}
+                                {Presentation?.value?.file?.size ? (<KonvaImage
+                                    image={image} />) : ''}
                                 {isDrawingStarted ? <>
                                     <Rect
                                         {...rectProps}
                                         ref={rectRef}
                                         onClick={handleRectSelect}
-                                        // fillPatternScale={{ x: 1, y: 1 }}
+                                        fillPatternScale={{ x: 1, y: 1 }}
                                         onTransformEnd={handleRectTransform}
                                         // fillPatternRepeat='repeat'
-                                        // fillPatternImage={patternImage}
+                                        // fillPatternImage={fillPatternImage}
                                         onDragEnd={(e) => {
                                             setRectProps({
                                                 ...rectProps,
@@ -367,16 +391,15 @@ function QuotationCanvas() {
                                             return newBox;
                                         }}
                                     />
-                                </>
-                                    : linePoints.length > 0 && (
-                                        <Line
-                                            points={linePoints}
-                                            stroke="red"
-                                            strokeWidth={2}
-                                            lineCap="round"
-                                            lineJoin="round"
-                                        />
-                                    )}
+                                </> : linePoints.length > 0 && (
+                                    <Line
+                                        points={linePoints}
+                                        stroke="red"
+                                        strokeWidth={2}
+                                        lineCap="round"
+                                        lineJoin="round"
+                                    />
+                                )}
                             </Layer>
                         </Stage>) : ''}
 
@@ -407,3 +430,16 @@ export default QuotationCanvas;
 // function pixelsToInches(pixels: number, dpi: number = 96): number {
 //     return pixels / dpi;
 // }
+function convertUrlToImage(url: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+        const img: HTMLImageElement = new Image();
+        img.src = url;
+
+        // Handle image load
+        img.onload = () => resolve(img);
+
+        // Handle image load error
+        img.onerror = (err) => reject(err);
+    });
+}
+
