@@ -31,6 +31,7 @@ export type TCustomerComponentQuotationItem = {
         address: string
         zone: string
         city: string
+        discount: number
         invoiceUrl: string
     }
 }
@@ -180,6 +181,7 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             salutation: yup.string().required('Salutation field is required'),
             address: yup.string().required('Address field is required'),
             zone: yup.string().required('Zone field is required'),
+            discount: yup.string().required('Discount field is required'),
             city: yup.string().required('City field is required'),
             invoiceUrl: yup.string().required('Invoice URL field is required'),
         })
