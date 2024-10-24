@@ -42,15 +42,33 @@ function QuotationCanvas() {
     const rectRef = useRef<Konva.Rect>(null);
     const transformerRef = useRef<Konva.Transformer>(null);
     const [image, setImage] = useImage(corpus.selection.image)
-    console.log(corpus.selection.image, image)
+    const [patternImage, setPatternImage] = useState(null);
+
+    // Load the image and set it as the pattern image
+    useEffect(() => {
+        const img = new window.Image();
+
+        const currentItem = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow)
+        if (currentItem?.image?.low?.length) {
+            img.src = currentItem?.image?.low
+        }
+        img.onload = () => {
+            setPatternImage(img);
+        };
+    }, [corpus.selection.sunrooofWindow]);
 
     useEffect(() => {
         if (Presentation?.value?.file?.size) {
             const reader = new FileReader();
             reader.onload = () => {
                 if (typeof reader.result === 'string') {
-                    // setImageURL(reader.result);
-                    setCorpus((prev) => ({ ...prev, selection: { ...prev.selection, image: reader.result } }))
+                    setCorpus((prev) => ({
+                        ...prev,
+                        selection: {
+                            ...prev.selection,
+                            image: reader.result
+                        }
+                    }))
                 }
             };
             reader.readAsDataURL(Presentation?.value?.file);
@@ -88,9 +106,9 @@ function QuotationCanvas() {
             setMeasurement((prev) => ({ ...prev, value }))
         }
     }, [linePoints])
-    useEffect(() => {
-        calculateLineLength()
-    }, [calculateLineLength])
+
+    useEffect(() => { calculateLineLength() }, [calculateLineLength])
+
     useEffect(() => {
         if (image) {
             const aspectRatio = image.width / image.height;
@@ -296,14 +314,15 @@ function QuotationCanvas() {
     }, [measurement, renderQuantityContent])
 
 
-    const fillPatternImage = useMemo(() => {
-        if (corpus?.selection?.sunrooofWindow?.length) {
-            const url = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow).image.low || undefined
-            if (url?.length) {
-                return convertUrlToImage(url)
-            }
-        }
-    }, [corpus.selection.sunrooofWindow])
+    // console.log(CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow))
+    // const fillPatternImage = useMemo(() => {
+    //     if (corpus?.selection?.sunrooofWindow?.length) {
+    //         const url = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow).image.low || undefined
+    //         if (url?.length) {
+    //             return convertUrlToImage(url)
+    //         }
+    //     }
+    // }, [corpus.selection.sunrooofWindow])
 
     // Make the transformer active when the rectangle is selected
     const handleRectSelect = useCallback(() => {
@@ -368,8 +387,8 @@ function QuotationCanvas() {
                                         onClick={handleRectSelect}
                                         fillPatternScale={{ x: 1, y: 1 }}
                                         onTransformEnd={handleRectTransform}
-                                        // fillPatternRepeat='repeat'
-                                        // fillPatternImage={fillPatternImage}
+                                        fillPatternRepeat='repeat'
+                                        fillPatternImage={patternImage}
                                         onDragEnd={(e) => {
                                             setRectProps({
                                                 ...rectProps,
@@ -424,22 +443,3 @@ const INIT_RECT_PROPS = {
 }
 const INIT_MEASUREMENT = { unit: '', value: 0, quantity: 0 }
 export default QuotationCanvas;
-// function pixelsToMm(pixels: number, dpi: number): number {
-//     return pixels / (dpi / 25.4);
-// }
-// function pixelsToInches(pixels: number, dpi: number = 96): number {
-//     return pixels / dpi;
-// }
-function convertUrlToImage(url: string): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-        const img: HTMLImageElement = new Image();
-        img.src = url;
-
-        // Handle image load
-        img.onload = () => resolve(img);
-
-        // Handle image load error
-        img.onerror = (err) => reject(err);
-    });
-}
-
