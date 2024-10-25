@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -23,6 +23,14 @@ const ImageComparison = (props: TProps) => {
         )
         return item.slides?.map((slide) => slide.pair)
     }, [props.item.data])
+
+    useEffect(() => {
+        const imgBefore = new Image()
+        const imgAfter = new Image()
+
+        imgBefore.src = slides[currentSlide].before
+        imgAfter.src = slides[currentSlide].after
+    }, [slides, currentSlide])
 
     const swipe = useCallback(
         (direction) => {
@@ -59,8 +67,8 @@ const ImageComparison = (props: TProps) => {
                                 className="absolute top-0 left-0 w-full h-full"
                             >
                                 <div className="w-full flex items-center justify-center h-full">
-                                    <LazyLoadImage
-                                        effect="blur"
+                                    <img
+                                        // effect="blur"
                                         src={
                                             isBefore
                                                 ? slides[currentSlide].after
@@ -80,9 +88,9 @@ const ImageComparison = (props: TProps) => {
                             <div className="border-2 p-2 rounded-md shadow-md">
                                 <button
                                     onClick={() => setView('before')}
-                                    className={`px-6 py-2.5 text-2xl lg:text-lg ${
+                                    className={`px-8 py-4 text-3xl lg:text-lg ${
                                         view === 'before'
-                                            ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
+                                            ? 'bg-black rounded-lg text-white'
                                             : 'bg-gray-100 text-gray-600'
                                     }`}
                                 >
@@ -90,9 +98,9 @@ const ImageComparison = (props: TProps) => {
                                 </button>
                                 <button
                                     onClick={() => setView('after')}
-                                    className={`px-6 py-2 text-2xl lg:text-lg ${
+                                    className={`px-8 py-4 text-3xl lg:text-lg ${
                                         view === 'after'
-                                            ? 'bg-gradient-to-r from-gray-800 rounded-md to-gray-600 text-white'
+                                            ? 'bg-black rounded-lg text-white'
                                             : 'bg-gray-100 text-gray-600'
                                     }`}
                                 >
@@ -132,7 +140,7 @@ const ImageComparison = (props: TProps) => {
                                         alt=""
                                         className="object-cover w-[500px] h-[500px] rounded-lg shadow-md mr-10"
                                     />
-                                    <h1 className="uppercase mt-1 text-3xl font-bold">
+                                    <h1 className="uppercase mt-1 text-2xl font-medium">
                                         before
                                     </h1>
                                 </div>
@@ -143,7 +151,7 @@ const ImageComparison = (props: TProps) => {
                                         alt=""
                                         className="object-cover w-[500px] h-[500px] rounded-lg shadow-md"
                                     />
-                                    <h1 className="uppercase mt-1 text-3xl font-bold">
+                                    <h1 className="uppercase mt-1 text-2xl font-medium">
                                         after
                                     </h1>
                                 </div>
