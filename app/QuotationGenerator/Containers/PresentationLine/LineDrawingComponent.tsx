@@ -3,7 +3,7 @@ import { Stage, Layer, Line, Circle, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
 import { KonvaEventObject } from "konva/lib/Node";
 import Konva from "konva";
-import './line.css';
+// import './line.css';
 
 interface LinePoints {
   points: number[];
@@ -116,7 +116,7 @@ const LineDrawingComponent: React.FC = () => {
           <button onClick={handleDrawLineClick}>Draw Line</button>
           {(
             <p style={{ fontWeight: "bold", marginTop: "10px" }}>
-              Draw a line by clicking on the canvas. The line will represent {selectedUnit === 'mm' ? +enteredUnits : +enteredUnits * 25.4 } units.
+              Draw a line by clicking on the canvas. The line will represent {selectedUnit === 'mm' ? +enteredUnits : +enteredUnits * 25.4} units.
             </p>
           )}
         </div>
