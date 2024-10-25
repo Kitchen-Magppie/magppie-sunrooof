@@ -1,59 +1,70 @@
 import React, { useState, useRef } from "react";
-import { Stage, Layer, Line, Image as KonvaImage } from "react-konva";
+import { Stage, Layer, Line, Circle, Image as KonvaImage } from "react-konva";
 import useImage from "use-image";
+import { KonvaEventObject } from "konva/lib/Node";
+import Konva from "konva";
 import './line.css';
 
-interface Props {}
+interface LinePoints {
+  points: number[];
+}
 
-const LineDrawingComponent: React.FC<Props> = () => {
-  const [line, setLine] = useState<any>(null); // Only one line allowed
+const LineDrawingComponent: React.FC = () => {
+  const [line, setLine] = useState<LinePoints | null>(null); // Line state
   const [pixelLength, setPixelLength] = useState<number>(0); // Length of line in pixels
   const [unitValue, setUnitValue] = useState<number>(0); // Pixels per unit
   const [selectedUnit, setSelectedUnit] = useState("mm");
-  const [enteredUnits, setEnteredUnits] = useState<string>(''); // User input for units, starts as an empty string
+  const [enteredUnits, setEnteredUnits] = useState<string>(''); // User input for units
   const [imageUrl, setImageUrl] = useState<string | null>(null); // Image URL for user-uploaded image
   const [image] = useImage(imageUrl);
-  const [drawing, setDrawing] = useState(false);
+  const [drawing, setDrawing] = useState(false); // Track if drawing is active
   const [isDrawingEnabled, setIsDrawingEnabled] = useState(false); // Control drawing permission
-  const stageRef = useRef(null);
+  const stageRef = useRef<Konva.Stage | null>(null); // Stage reference
 
-  const handleMouseDown = (e: any) => {
-    if (drawing || line) return; // Do not allow more than one line
-    const pos = e.target.getStage().getPointerPosition();
-    setLine({ points: [pos.x, pos.y] });
-    setDrawing(true);
-  };
+  const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
+    const pos = e.target.getStage()?.getPointerPosition();
+    if (!pos || !isDrawingEnabled) return;
 
-  const handleMouseMove = (e: any) => {
-    if (!drawing || !line) return;
-    const pos = e.target.getStage().getPointerPosition();
-    const updatedLine = { points: [line.points[0], line.points[1], pos.x, pos.y] };
-    setLine(updatedLine);
-
-    // Update the pixel length dynamically while drawing
-    calculatePixelLength(updatedLine);
-  };
-
-  const handleMouseUp = () => {
-    if (drawing) {
-      setDrawing(false);
-      calculatePixelsPerUnit(); // Final calculation of pixels per unit when drawing is done
+    if (!drawing) {
+      // First click: Set the starting point of the line
+      setLine({ points: [pos.x, pos.y] });
+      setDrawing(true); // Start drawing process
+    } else if (line) {
+      // Second click: Finalize the line
+      setLine({ points: [line.points[0], line.points[1], pos.x, pos.y] });
+      setDrawing(false); // Stop drawing
+      calculatePixelLength({ points: [line.points[0], line.points[1], pos.x, pos.y] }); // Final pixel length
+      calculatePixelsPerUnit(); // Calculate pixels per unit
+      setIsDrawingEnabled(false); // Disable drawing after completion
     }
   };
 
-  const calculatePixelLength = (line: any) => {
-    if (!line) return;
+  const handleMouseMove = (e: KonvaEventObject<MouseEvent>) => {
+    if (!drawing || !line) return;
+    const pos = e.target.getStage()?.getPointerPosition();
+    if (pos) {
+      // Update the line while moving the mouse, before the second click
+      const updatedLine = { points: [line.points[0], line.points[1], pos.x, pos.y] };
+      setLine(updatedLine);
+
+      // Update the pixel length dynamically while drawing
+      calculatePixelLength(updatedLine);
+    }
+  };
+
+  const calculatePixelLength = (line: LinePoints) => {
+    if (!line || line.points.length < 4) return;
 
     const x1 = line.points[0];
     const y1 = line.points[1];
     const x2 = line.points[2];
     const y2 = line.points[3];
     const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)); // Pythagorean theorem to calculate pixel distance
-    setPixelLength(length); // Update the pixel length during drawing
+    setPixelLength(length); // Update pixel length
   };
 
   const calculatePixelsPerUnit = () => {
-    if (!pixelLength || parseFloat(enteredUnits) === 0) return; // Ensure units are parsed correctly
+    if (!pixelLength || parseFloat(enteredUnits) === 0) return; // Ensure units are valid
 
     const pixelsPerUnit = pixelLength / parseFloat(enteredUnits);
     setUnitValue(pixelsPerUnit);
@@ -71,11 +82,14 @@ const LineDrawingComponent: React.FC<Props> = () => {
   };
 
   const handleDrawLineClick = () => {
-    if (enteredUnits.trim() === '') { // Check if the input is empty
-      alert('Please enter a value in the input box before drawing the line.'); // Show alert
-      return; // Exit the function if input is empty
+    if (enteredUnits.trim() === '') {
+      alert('Please enter a valid value as an input');
+      return;
     }
-    setIsDrawingEnabled(true); // Enable drawing if input is valid
+    setLine(null); // Clear any previously drawn line
+    setIsDrawingEnabled(true); // Enable drawing
+    setUnitValue(0);
+    setPixelLength(0);
   };
 
   return (
@@ -89,21 +103,20 @@ const LineDrawingComponent: React.FC<Props> = () => {
             onChange={(e) => setSelectedUnit(e.target.value)}
           >
             <option value="mm">mm</option>
-            <option value="cm">cm</option>
             <option value="in">in</option>
           </select>
 
           <input
             type="number"
             value={enteredUnits}
-            onChange={(e) => setEnteredUnits(e.target.value)} // Keep it as string for empty state
+            onChange={(e) => setEnteredUnits(e.target.value)}
             placeholder="Enter length in units"
           />
 
-          <button onClick={handleDrawLineClick}>Draw Line</button> {/* Set drawing enabled */}
-          {isDrawingEnabled && (
+          <button onClick={handleDrawLineClick}>Draw Line</button>
+          {(
             <p style={{ fontWeight: "bold", marginTop: "10px" }}>
-              Draw a line by clicking on the canvas twice. The line will represent {enteredUnits} {selectedUnit}.
+              Draw a line by clicking on the canvas. The line will represent {selectedUnit === 'mm' ? +enteredUnits : +enteredUnits * 25.4 } units.
             </p>
           )}
         </div>
@@ -111,7 +124,7 @@ const LineDrawingComponent: React.FC<Props> = () => {
         <input type="file" accept="image/*" onChange={handleImageUpload} />
 
         <p>Total pixels of the drawn line: {pixelLength.toFixed(2)} pixels</p>
-        <p>1 unit equals {unitValue.toFixed(2)} pixels</p>
+        <p>1 unit equals {selectedUnit === 'mm' ? unitValue.toFixed(2) : (+unitValue.toFixed(2) / 25.4)} pixels</p>
       </div>
 
       <div className="canvas-container">
@@ -119,22 +132,36 @@ const LineDrawingComponent: React.FC<Props> = () => {
           <Stage
             width={window.innerWidth * 0.6}
             height={window.innerHeight * 0.6}
-            onMouseDown={isDrawingEnabled ? handleMouseDown : undefined} // Enable mouse down only if drawing is enabled
-            onMouseMove={isDrawingEnabled ? handleMouseMove : undefined} // Enable mouse move only if drawing is enabled
-            onMouseUp={isDrawingEnabled ? handleMouseUp : undefined} // Enable mouse up only if drawing is enabled
+            onMouseDown={handleMouseDown} // First click sets start point, second click sets end point
+            onMouseMove={handleMouseMove} // Line updates as the mouse moves
             ref={stageRef}
             style={{ border: "1px solid gray" }}
           >
             <Layer>
               <KonvaImage image={image} x={0} y={0} />
               {line && (
-                <Line
-                  points={line.points}
-                  stroke="red"
-                  strokeWidth={2}
-                  lineCap="round"
-                  lineJoin="round"
-                />
+                <>
+                  <Line
+                    points={line.points}
+                    stroke="red"
+                    strokeWidth={2}
+                    lineCap="round"
+                    lineJoin="round"
+                  />
+                  {/* Draw circles at the start and end points */}
+                  <Circle
+                    x={line.points[0]}
+                    y={line.points[1]}
+                    radius={4} // Adjust radius as needed
+                    fill="red"
+                  />
+                  <Circle
+                    x={line.points[2]}
+                    y={line.points[3]}
+                    radius={4} // Adjust radius as needed
+                    fill="red"
+                  />
+                </>
               )}
             </Layer>
           </Stage>
