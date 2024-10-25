@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Rect, Image as KonvaImage } from "react-konva";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Stage, Layer, Rect, Image as KonvaImage, Transformer } from "react-konva";
 import useImage from 'use-image';
-// import Konva from "konva";
 import canvasImage from "../../../QuotationPage/assets/2d1.png"
 import afterImage from "../../../QuotationPage/assets/BeforeAfter/Arch Window/Before.jpg"
+import Konva from "konva";
 
 
 interface Portrait {
@@ -17,6 +17,9 @@ interface Portrait {
 
 const CanvasComponent = () => {
     const stageRef = useRef(null);
+    const transformerRef = useRef<Konva.Transformer>(null);
+    const rectRef = useRef<Konva.Rect>(null);
+
     const [backgroundImage] = useImage(canvasImage); // Replace with your background image path
     const [portraitImage] = useImage(afterImage); // Replace with your portrait image path
     const [portraits, setPortraits] = useState<Portrait[]>([]);
@@ -60,7 +63,32 @@ const CanvasComponent = () => {
         // Resize the rectangular shape and update portraits accordingly
         setRectProps({ ...rectProps, width: newWidth, height: newHeight });
     };
+    const handleRectSelect = useCallback(() => {
+        if (transformerRef.current && rectRef.current) {
+            transformerRef.current.nodes([rectRef.current]);
+            transformerRef.current.getLayer()?.batchDraw();
+        }
+    }, [])
 
+    const handleRectTransform = useCallback(() => {
+        if (rectRef.current) {
+            const node = rectRef.current;
+            const newScaleX = node.scaleX();
+            const newScaleY = node.scaleY();
+
+            // Update the shape's dimensions and reset scale
+            setRectProps({
+                ...rectProps,
+                x: node.x(),
+                y: node.y(),
+                width: node.width() * newScaleX,
+                height: node.height() * newScaleY,
+            });
+
+            node.scaleX(1);
+            node.scaleY(1);
+        }
+    }, [rectProps])
     return (
         <div>
             <Stage width={window.innerWidth} height={window.innerHeight} ref={stageRef}>
@@ -73,16 +101,26 @@ const CanvasComponent = () => {
                             height={window.innerHeight}
                         />
                     )}
-
                     {/* Resizable, draggable rectangle */}
                     <Rect
-                        x={rectProps.x}
-                        y={rectProps.y}
+                        // x={rectProps.x}
+                        // y={rectProps.y}
+                        {...rectProps}
+                        ref={rectRef}
+                        onTransformEnd={handleRectTransform}
+
                         width={rectProps.width}
                         height={rectProps.height}
                         stroke="black" // Outline
                         strokeWidth={2}
                         draggable
+                        onDragEnd={(e) => {
+                            setRectProps({
+                                ...rectProps,
+                                x: e.target.x(),
+                                y: e.target.y(),
+                            })
+                        }}
                         onTransform={(e) => {
                             const node = e.target;
                             handleResize(node.width() * node.scaleX(), node.height() * node.scaleY());
@@ -92,21 +130,36 @@ const CanvasComponent = () => {
                     />
 
                     {/* Render portraits inside the rectangle */}
-                    {portraitImage &&
-                        portraits.map((portrait) => (
-                            <KonvaImage
-                                key={portrait.id}
-                                image={portraitImage}
-                                x={portrait.x}
-                                y={portrait.y}
-                                width={portrait.width}
-                                height={portrait.height}
-                                opacity={portrait.visible ? 1 : 0} // Make the portrait transparent if removed
-                                onClick={() => handleClickPortrait(portrait.id)} // Remove portrait on click
-                            />
-                        ))}
+                    {portraitImage && portraits.map((portrait) => (
+                        <KonvaImage
+                            key={portrait.id}
+                            image={portraitImage}
+                            x={portrait.x}
+                            y={portrait.y}
+                            width={portrait.width}
+                            height={portrait.height}
+                            opacity={portrait.visible ? 1 : 0}
+                            onClick={() => handleClickPortrait(portrait.id)}
+
+                        // Remove portrait on click
+                        />
+                    ))}
+                    <Transformer
+                        ref={transformerRef}
+                        onClick={handleRectSelect}
+
+                        rotateEnabled={false}
+                        boundBoxFunc={(oldBox, newBox) => {
+                            // Limit resizing to avoid negative width or height
+                            if (newBox.width < 20 || newBox.height < 20) {
+                                return oldBox;
+                            }
+                            return newBox;
+                        }}
+                    />
                 </Layer>
             </Stage>
+
         </div>
     );
 };

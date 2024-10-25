@@ -25,7 +25,6 @@ import useImage from "use-image";
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
 import { useAppSelector } from "../../../../redux";
-import CanvasRectangle from "../../../cms/components/CanvasRectangle/CanvasRectangle";
 
 function QuotationCanvas() {
 
@@ -33,7 +32,6 @@ function QuotationCanvas() {
     const [corpus, setCorpus] = useState({ selection: { sunrooofWindow: '', image: null } })
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false);
-    // const [imageURL, setImageURL] = useState<string | null>(null);
     const [linePoints, setLinePoints] = useState<number[]>([]);
     const [stageWidth, setStageWidth] = useState<number>(800);
     const [stageHeight, setStageHeight] = useState<number>(600);
@@ -45,7 +43,6 @@ function QuotationCanvas() {
     const [image, setImage] = useImage(corpus.selection.image)
     const [patternImage, setPatternImage] = useState(null);
 
-    // Load the image and set it as the pattern image
     useEffect(() => {
         const img = new window.Image();
 
@@ -275,6 +272,8 @@ function QuotationCanvas() {
         </div>)
     }, [handleDownload])
 
+
+
     const renderBeginning = useMemo(() => {
         return (<div>
             <div className="flex flex-col">
@@ -388,7 +387,7 @@ function QuotationCanvas() {
                                         onClick={handleRectSelect}
                                         fillPatternScale={{ x: 1, y: 1 }}
                                         onTransformEnd={handleRectTransform}
-                                        fillPatternRepeat='no-repeat'
+                                        fillPatternRepeat='repeat'
                                         fillPatternImage={patternImage}
                                         onDragEnd={(e) => {
                                             setRectProps({
@@ -398,6 +397,7 @@ function QuotationCanvas() {
                                             })
                                         }}
                                     />
+
 
                                     {/* Transformer for resizing */}
                                     <Transformer
@@ -427,7 +427,6 @@ function QuotationCanvas() {
                 </div>
             </div>
         </div>
-        <CanvasRectangle />
     </form>);
 }
 const QUOTATION_UNIT_OPTIONS = [
