@@ -14,7 +14,7 @@ import 'swiper/css/grid'
 import 'swiper/css/pagination'
 
 // import required modules
-import { Grid, Scrollbar, FreeMode, Navigation } from 'swiper/modules'
+import { Grid, Scrollbar, FreeMode, Navigation, Mousewheel } from 'swiper/modules'
 
 const Team = () => {
     const isMobile = useMedia('(orientation: portrait)')
@@ -33,16 +33,17 @@ const Team = () => {
                     pagination={{
                         clickable: true,
                     }}
+                    mousewheel={true}
                     spaceBetween={10}
                     freeMode={true}
-                    modules={[Grid, Scrollbar]}
-                    className="mySwiper"
+                    modules={[Grid, Scrollbar, Mousewheel]}
+                    className="mySwiper container mx-auto max-w-2xl"
                     scrollbar={{ draggable: true }}
                 >
                     {team.map((person) => {
                         return (
                             <SwiperSlide key={person.id}>
-                                <div className="text-black flex flex-col items-center pb-10 gap-1">
+                                <div className="text-black relative flex flex-col items-center pb-10 gap-1">
                                     <div className="h-72 w-80 mb-48 lg:mb-4">
                                         <LazyLoadImage
                                             effect="blur"
@@ -62,10 +63,10 @@ const Team = () => {
                                             {person.country}
                                         </p>
                                     </div>
-                                    <div className="absolute right-16 mt-2">
+                                    <div className="absolute right-4 top-4">
                                         <LazyLoadImage
                                             effect="blur"
-                                            className="w-15 h-10 mt-2"
+                                            className="w-15 h-10"
                                             src={person.countryLogo}
                                             alt=""
                                         />
@@ -76,70 +77,68 @@ const Team = () => {
                     })}
                 </Swiper>
             ) : (
-                <Swiper
-                    slidesPerView={5}
-                    grid={{
-                        rows: 1,
-                    }}
-                    pagination={{
-                        clickable: true,
-                    }}
-                    spaceBetween={20}
-                    freeMode={true}
-                    navigation={{
-                        nextEl: '.arrow-right',
-                        prevEl: '.arrow-left',
-                    }}
-                    modules={[Grid, Scrollbar, FreeMode, Navigation]}
-                    className="mySwiper container mx-auto max-w-7xl"
-                    scrollbar={{ draggable: true }}
-                >
-                    {team.map((person) => {
-                        return (
-                            <SwiperSlide key={person.id}>
-                                <div className="text-black flex flex-col items-center pb-10 h-full">
-                                    <div className="h-full w-full lg:mb-4">
-                                        <LazyLoadImage
-                                            effect="blur"
-                                            src={person.img}
-                                            alt=""
-                                            className="w-full h-full rounded-3xl"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col items-center absolute text-white bottom-20 w-full">
-                                        <h1 className="text-md font-bold">
-                                            {person.name}
-                                        </h1>
-                                        <p className="text-md">
-                                            {person.positon}
-                                        </p>
-                                        <p className="text-md">
-                                            {person.country}
-                                        </p>
-                                    </div>
-                                    <div className="absolute right-0 mr-4 mt-2">
-                                        <LazyLoadImage
-                                            effect="blur"
-                                            className="w-15 h-6 mt-2"
-                                            src={person.countryLogo}
-                                            alt=""
-                                        />
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                        )
-                    })}
-                </Swiper>
-            )}
-            {!isMobile && (
-                <>
-                    <button className="arrow-left absolute top-1/2 left-64 transform -translate-y-1/2 z-20 ml-2 mt-10 cursor-pointer">
+                <div className="flex items-center">
+                    <button className="arrow-left transform -translate-y-1/2 z-20 ml-auto cursor-pointer mr-4">
                         <img src={leftArrow} className="h-10 w-10" alt="" />
                     </button>
-                    <button className="arrow-right absolute top-1/2 right-64 transform -translate-y-1/2 z-20 mr-2 mt-10 cursor-pointer">
+                    <Swiper
+                        slidesPerView={5}
+                        grid={{
+                            rows: 1,
+                        }}
+                        pagination={{
+                            clickable: true,
+                        }}
+                        spaceBetween={20}
+                        freeMode={true}
+                        navigation={{
+                            nextEl: '.arrow-right',
+                            prevEl: '.arrow-left',
+                        }}
+                        modules={[Grid, Scrollbar, FreeMode, Navigation]}
+                        className="mySwiper container max-w-6xl 2xl:max-w-7xl mx-0"
+                        scrollbar={{ draggable: true }}
+                    >
+                        {team.map((person) => {
+                            return (
+                                <SwiperSlide key={person.id}>
+                                    <div className="text-black flex relative flex-col items-center pb-10 h-full">
+                                        <div className="h-full w-full lg:mb-4">
+                                            <LazyLoadImage
+                                                effect="blur"
+                                                src={person.img}
+                                                alt=""
+                                                className="w-full h-full rounded-3xl"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col items-center absolute text-white bottom-20 w-full">
+                                            <h1 className="text-md font-bold">
+                                                {person.name}
+                                            </h1>
+                                            <p className="text-md">
+                                                {person.positon}
+                                            </p>
+                                            <p className="text-md">
+                                                {person.country}
+                                            </p>
+                                        </div>
+                                        <div className="absolute right-4 top-2">
+                                            <LazyLoadImage
+                                                effect="blur"
+                                                className="w-15 h-6"
+                                                src={person.countryLogo}
+                                                alt=""
+                                            />
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+                            )
+                        })}
+                    </Swiper>
+                    <button className="arrow-right transform -translate-y-1/2 z-20 mr-auto cursor-pointer ml-4">
                         <img src={rightArrow} className="h-10 w-10" alt="" />
                     </button>
-                </>
+                </div>
             )}
         </div>
     )
