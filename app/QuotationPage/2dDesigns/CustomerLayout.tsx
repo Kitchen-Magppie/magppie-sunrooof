@@ -16,11 +16,11 @@ const CustomerLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="text-black lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap">
-                        <div className="mb-2 text-3xl lg:text-xl">
+                    <div className="text-black lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap text-[#78746c]">
+                        <div className="mb-2 text-3xl lg:text-xl text-[#78746c]">
                             <strong>Design :</strong> {item.design}
                         </div>
-                        <div className="mb-2 text-3xl lg:text-xl">
+                        <div className="mb-2 text-3xl lg:text-xl text-[#78746c]">
                             <strong>Finish :</strong> {item.finish}
                         </div>
                     </div>
@@ -30,17 +30,20 @@ const CustomerLayout = ({ item }: TProps) => {
                     <div className="flex flex-col">
                         <h1 className="text-xl mb-2 ">Customer Layout</h1>
 
-                        <div className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg bg-white`}
+                        <div
+                            className={`flex justify-center overflow-hidden border w-60 h-40 rounded-lg bg-white`}
                         >
-                            <img src={item.rightImage} alt="" className='cursor-pointer' />
+                            <img
+                                src={item.rightImage}
+                                alt=""
+                                className="cursor-pointer"
+                            />
                         </div>
 
                         <span className="mt-2 text-sm text-center">
-
                             {/* Area Name: */}
-
                             {/* {item.areaName}  */} Hello
-                            </span>
+                        </span>
                     </div>
                 </div>
             )}
