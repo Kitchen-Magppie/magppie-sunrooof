@@ -9,7 +9,8 @@ import {
     Line,
     Image as KonvaImage,
     Rect,
-    Transformer
+    Transformer,
+    Circle
 } from 'react-konva';
 import { TbFileOrientation } from "react-icons/tb";
 import { IoIosMove } from "react-icons/io";
@@ -55,6 +56,25 @@ function QuotationCanvas() {
         };
     }, [corpus.selection.sunrooofWindow]);
 
+    const calculatePixelLength = useCallback((line: number[]) => {
+        if (!line || linePoints.length < 4) return;
+        const x1 = linePoints[0];
+        const y1 = linePoints[1];
+        const x2 = linePoints[2];
+        const y2 = linePoints[3];
+        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)); // Pythagorean theorem to calculate pixel distance
+        setMeasurement((prev) => ({ ...prev, pixelLength: length }))// Update pixel length
+    }, [linePoints])
+
+    const calculatePixelsPerUnit = useCallback(() => {
+        if (!measurement.pixelLength || (measurement.quantity) === 0) return; // Ensure units are valid
+
+        const pixelsPerUnit = measurement.pixelLength / (measurement.quantity);
+        // setUnitValue(pixelsPerUnit);
+        setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
+    }, [measurement.quantity, measurement.pixelLength])
+
+
     useEffect(() => {
         if (Presentation?.value?.file?.size) {
             const reader = new FileReader();
@@ -89,23 +109,9 @@ function QuotationCanvas() {
         }
     }, [])
 
-    const calculateLineLength = useCallback(() => {
-        const points = linePoints;
-        if (points?.length === 4) {
-            const startX = points[0];
-            const startY = points[1];
-            const endX = points[2];
-            const endY = points[3];
-            const dx = endX - startX;
-            const dy = endY - startY;
-            const value = Math.sqrt(dx * dx + dy * dy);
-            // console.log('Inches:', pixelsToInches(length))
-            // console.log('mm:' ,pixelsToMm(length))
-            setMeasurement((prev) => ({ ...prev, value }))
-        }
-    }, [linePoints])
 
-    useEffect(() => { calculateLineLength() }, [calculateLineLength])
+
+    // useEffect(() => { calculateLineLength() }, [calculateLineLength])
 
     useEffect(() => {
         if (image) {
@@ -127,13 +133,16 @@ function QuotationCanvas() {
         }
     }, [isDrawing])
 
+
     const handleMouseMove = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
         if (!isDrawing) return;
 
         const stage = event.target.getStage();
         const { x, y } = stage.getPointerPosition()!;
         setLinePoints([linePoints[0], linePoints[1], x, y]);
-    }, [isDrawing, linePoints])
+        calculatePixelLength([linePoints[0], linePoints[1], linePoints[2], linePoints[3]])
+        calculatePixelsPerUnit()
+    }, [calculatePixelLength, calculatePixelsPerUnit, isDrawing, linePoints])
 
 
     const navigate = useNavigate()
@@ -306,23 +315,14 @@ function QuotationCanvas() {
 
             </div>
             <div className="">
-                {measurement.unit?.length ? `${measurement.value?.toLocaleString()} ${measurement.unit}` : ''}
+                <p>Total pixels of the drawn line: {measurement.pixelLength.toLocaleString()} pixels</p>
+                <p>1 unit equals {measurement.unit === 'mm' ? measurement.value.toLocaleString() : (+measurement.value.toFixed(2) / 25.4)} pixels</p>
+                {/* {measurement.unit?.length ? `${measurement.value?.toLocaleString()} ${measurement.unit}` : ''} */}
             </div>
         </div>
 
         )
-    }, [measurement, renderQuantityContent])
-
-
-    // console.log(CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow))
-    // const fillPatternImage = useMemo(() => {
-    //     if (corpus?.selection?.sunrooofWindow?.length) {
-    //         const url = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find((item) => item.value === corpus.selection.sunrooofWindow).image.low || undefined
-    //         if (url?.length) {
-    //             return convertUrlToImage(url)
-    //         }
-    //     }
-    // }, [corpus.selection.sunrooofWindow])
+    }, [measurement.unit, measurement.value, measurement.pixelLength, renderQuantityContent])
 
     // Make the transformer active when the rectangle is selected
     const handleRectSelect = useCallback(() => {
@@ -351,6 +351,32 @@ function QuotationCanvas() {
             node.scaleY(1);
         }
     }, [rectProps])
+    const renderUnitMeasurementComponent = useMemo(() => {
+        return linePoints.length > 0 && (
+            <>
+                <Line
+                    points={linePoints}
+                    stroke="red"
+                    strokeWidth={2}
+                    lineCap="round"
+                    lineJoin="round"
+                />
+                <Circle
+                    x={linePoints[0]}
+                    y={linePoints[1]}
+                    radius={4} // Adjust radius as needed
+                    fill="red"
+                />
+                <Circle
+                    x={linePoints[2]}
+                    y={linePoints[3]}
+                    radius={4} // Adjust radius as needed
+                    fill="red"
+                />
+            </>
+        )
+    }, [linePoints])
+
     return (<form className="">
         <div className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
@@ -411,15 +437,7 @@ function QuotationCanvas() {
                                             return newBox;
                                         }}
                                     />
-                                </> : linePoints.length > 0 && (
-                                    <Line
-                                        points={linePoints}
-                                        stroke="red"
-                                        strokeWidth={2}
-                                        lineCap="round"
-                                        lineJoin="round"
-                                    />
-                                )}
+                                </> : renderUnitMeasurementComponent}
                             </Layer>
                         </Stage>) : ''}
 
@@ -442,5 +460,10 @@ const INIT_RECT_PROPS = {
     strokeWidth: 2,
     draggable: true,
 }
-const INIT_MEASUREMENT = { unit: '', value: 0, quantity: 0 }
+const INIT_MEASUREMENT = {
+    unit: '',
+    value: 0,
+    quantity: 0,
+    pixelLength: 0
+}
 export default QuotationCanvas;
