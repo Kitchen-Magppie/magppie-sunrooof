@@ -25,6 +25,7 @@ import useImage from "use-image";
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
 import { useAppSelector } from "../../../../redux";
+import CanvasRectangle from "../../../cms/components/CanvasRectangle/CanvasRectangle";
 
 function QuotationCanvas() {
 
@@ -387,7 +388,7 @@ function QuotationCanvas() {
                                         onClick={handleRectSelect}
                                         fillPatternScale={{ x: 1, y: 1 }}
                                         onTransformEnd={handleRectTransform}
-                                        fillPatternRepeat='repeat'
+                                        fillPatternRepeat='no-repeat'
                                         fillPatternImage={patternImage}
                                         onDragEnd={(e) => {
                                             setRectProps({
@@ -426,6 +427,7 @@ function QuotationCanvas() {
                 </div>
             </div>
         </div>
+        <CanvasRectangle />
     </form>);
 }
 const QUOTATION_UNIT_OPTIONS = [

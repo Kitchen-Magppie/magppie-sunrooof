@@ -9,8 +9,10 @@ import CmsNotFound from "./CmsNotFound";
 import { CmsCustomerCardItem } from "./CmsCustomerCardItem";
 import CmsCopyClipboard from "./CmsCopyClipboard"
 export * from "./FieldCautation"
+import ImageSelectorActionKonva from "./ImageSelectorActionKonva";
 
 export {
+    ImageSelectorActionKonva,
     CmsCopyClipboard,
     CmsCustomerCardItem,
     CmsNotFound,
