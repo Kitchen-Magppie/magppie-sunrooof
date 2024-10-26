@@ -559,7 +559,7 @@ export function CustomerActionForm(props: TProps) {
                     type="submit"
                     className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    {isCreateAction ? "Create" : "Edit"} Component
+                    {isCreateAction ? "Create" : "Update"} Component
                     {corpus.isSubmitting ? (
                         <AiOutlineLoading3Quarters className="text-xl animate-spin" />
                     ) : (
