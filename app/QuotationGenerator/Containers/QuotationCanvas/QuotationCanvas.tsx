@@ -30,11 +30,10 @@ import { _ } from '../../../../types'
 import MeasurementExample from '../MeasurementExample'
 import { KonvaActionButton } from '../../components'
 
+
 function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms)
-    const [corpus, setCorpus] = useState({
-        selection: { sunrooofWindow: '', image: null },
-    })
+    const [corpus, setCorpus] = useState(INIT_CORPUS)
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false)
     const [linePoints, setLinePoints] = useState<number[]>([])
@@ -48,6 +47,10 @@ function QuotationCanvas() {
     const [image, setImage] = useImage(corpus.selection.image)
     const [patternImage, setPatternImage] = useState(null)
 
+    console.log(measurement)
+
+    console.log(isDrawingStarted)
+    console.log(isDrawingStarted && measurement.unit?.length && measurement?.value)
     useEffect(() => {
         const img = new window.Image()
 
@@ -327,16 +330,16 @@ function QuotationCanvas() {
                     {renderQuantityContent}
                     <div className="">
                         <div className="mt-7" />
-                        <button
+
+                        <KonvaActionButton
+                            label='Start Drawing'
+                            disabled={!(measurement?.unit?.length && measurement?.quantity)}
+                            icon={<SiExcalidraw className="my-auto text-xl" />}
                             onClick={() => {
                                 setIsDrawingStarted(true)
                             }}
-                            type="button"
-                            className="text-white bg-gradient-to-r bg-[#6b8a7a]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-3 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                        >
-                            <SiExcalidraw className="my-auto text-xl" />
-                            Start Drawing
-                        </button>
+                        />
+
                     </div>
                 </div>
                 <div className="">
@@ -356,10 +359,11 @@ function QuotationCanvas() {
             </div>
         )
     }, [
-        measurement.unit,
-        measurement.value,
-        measurement.pixelLength,
         renderQuantityContent,
+        measurement.unit,
+        measurement?.quantity,
+        measurement.pixelLength,
+        measurement.value
     ])
 
     // Make the transformer active when the rectangle is selected
@@ -568,3 +572,6 @@ const INIT_MEASUREMENT = {
     pixelLength: 0,
 }
 export default QuotationCanvas
+const INIT_CORPUS = {
+    selection: { sunrooofWindow: '', image: null },
+}
