@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Select from 'react-select'
 import { BsDash, BsPlus } from 'react-icons/bs'
@@ -28,6 +28,7 @@ import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from '../../../cms/mocks'
 import { useAppSelector } from '../../../../redux'
 import { _ } from '../../../../types'
 import MeasurementExample from '../MeasurementExample'
+import { KonvaActionButton } from '../../components'
 
 function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms)
@@ -247,39 +248,39 @@ function QuotationCanvas() {
                 <div className="mt-20">
                     <div className="grid grid-flow-row grid-cols-2 gap-2">
 
-                        <ActionButton
+                        <KonvaActionButton
                             label='Draw SUNROOOF'
                             icon={<MdDraw className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
 
-                        <ActionButton
+                        <KonvaActionButton
                             label='Orientation II'
                             icon={<TbFileOrientation className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
-                        <ActionButton
+                        <KonvaActionButton
                             label='Move SUNROOOF'
                             icon={<IoIosMove className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
-                        <ActionButton
+                        <KonvaActionButton
                             label='Rotate SUNROOOF'
                             icon={<MdOutlineRotate90DegreesCcw className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
-                        <ActionButton
+                        <KonvaActionButton
                             label='Remove SUNROOOF'
                             icon={<BsEraser className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
 
-                        <ActionButton
+                        <KonvaActionButton
                             label='Remove MASK'
                             icon={<RxMaskOn className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
-                        <ActionButton
+                        <KonvaActionButton
                             variant='secondary'
                             label='Scale for Measurement'
                             icon={<CiRuler className="my-auto text-xl" />}
@@ -546,26 +547,7 @@ function QuotationCanvas() {
     )
 }
 
-type TActionButtonProps = {
-    onClick: VoidFunction,
-    variant?: 'primary' | 'secondary',
-    icon?: ReactNode,
-    label: string,
-}
-function ActionButton(props: TActionButtonProps) {
 
-    const variation = props.variant === 'secondary' ? 'border border-[#6b8a7a] text-[#6b8a7a]' : 'bg-[#6b8a7a]'
-    return (<button
-        type="button"
-        onClick={props.onClick}
-        className={`text-white bg-gradient-to-r ${variation} hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#6b8a7a] dark:focus:ring-[#6b8a7a]  dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center`}
-    >
-        {props.icon}
-        {props.label}
-        {/* <CiRuler className="my-auto text-xl" /> */}
-        {/* Scale for Measurement */}
-    </button>)
-}
 const QUOTATION_UNIT_OPTIONS = [
     { value: 'mm', label: 'mm' },
     { value: 'inch', label: 'Feet & Inches' },
