@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import _ from "lodash";
 type TApplyOrder = { original: string[], prev: string[], prefer: string }
 type TLabelify = { value: string, label: string }
+type TDownload = { url: string, name: string }
+
 interface TLodashMixin extends _.LoDashStatic {
     labelify: (e: string[]) => TLabelify[]
     titleCase: (e: string) => string,
@@ -10,7 +12,8 @@ interface TLodashMixin extends _.LoDashStatic {
     isNumericString: (e: string) => boolean,
     mapNums: (e: unknown[]) => number[],
     applyOrder: (e: string[]) => TApplyOrder,
-    uuid: () => string
+    uuid: () => string,
+    download: (e: TDownload) => void
 }
 
 
@@ -48,7 +51,17 @@ function labelify(e: string[]): TLabelify[] {
     return e?.map((value) => ({ value, label: value }))
 }
 
+function download(args: TDownload): void {
+    const link = document.createElement('a');
+    link.download = args.name;
+    link.href = args.url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
 _.mixin({
+    download,
     labelify,
     titleCase,
     labelCase,

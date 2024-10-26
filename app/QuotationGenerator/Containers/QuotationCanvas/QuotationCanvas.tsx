@@ -26,6 +26,7 @@ import useImage from "use-image";
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
 import { useAppSelector } from "../../../../redux";
+import { _ } from "../../../../types";
 
 function QuotationCanvas() {
 
@@ -92,20 +93,35 @@ function QuotationCanvas() {
     }, [Presentation?.value?.file, setImage])
 
     const handleDownload = useCallback(() => {
+
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width;
+        canvas.height = image.height;
+
+        // Draw the image on the canvas
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0);
+
+        const uniq = +new Date()
+        // Convert the canvas to a Data URL
+        const dataURL = canvas.toDataURL("image/png");
+
+        // Create a download link and trigger download
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = `client-layout-${uniq}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
         if (stageRef.current && transformerRef.current) {
             transformerRef.current.nodes([]);
             transformerRef.current.getLayer()?.batchDraw();
             const uri = stageRef.current.toDataURL();
             transformerRef.current.nodes([rectRef.current]);
             transformerRef.current.getLayer()?.batchDraw();
-            const link = document.createElement('a');
-            link.download = `canvas-image-${+new Date()}.png`;
-            link.href = uri;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            _.download({ url: uri, name: `proposed-layout-${uniq}` })
         }
-    }, [])
+    }, [image])
 
     useEffect(() => {
         if (image) {
@@ -275,7 +291,7 @@ function QuotationCanvas() {
         </div>)
     }, [handleDownload])
 
-
+    console.log(rectProps)
 
     const renderBeginning = useMemo(() => {
         return (<div>
@@ -370,6 +386,10 @@ function QuotationCanvas() {
             </>
         )
     }, [linePoints])
+    const imageSize = 40;
+    const spacing = 10;
+
+    const imagesPerRow = Math.floor(rectProps.width / (imageSize + spacing));
 
     return (<form className="">
         <div className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
@@ -407,8 +427,8 @@ function QuotationCanvas() {
                                         onClick={handleRectSelect}
                                         fillPatternScale={{ x: 1, y: 1 }}
                                         onTransformEnd={handleRectTransform}
-                                        fillPatternRepeat='repeat'
-                                        fillPatternImage={patternImage}
+                                        // fillPatternRepeat='repeat'
+                                        // fillPatternImage={patternImage}
                                         onDragEnd={(e) => {
                                             setRectProps({
                                                 ...rectProps,
@@ -417,7 +437,19 @@ function QuotationCanvas() {
                                             })
                                         }}
                                     />
-
+                                    {[...Array.from({ length: 6 })]?.map((_, i) => {
+                                        const row = Math.floor(i / imagesPerRow);
+                                        const col = i % imagesPerRow;
+                                        const x = 50 + col * (imageSize + spacing);
+                                        const y = 50 + row * (imageSize + spacing);
+                                        return (<KonvaImage
+                                            key={i}
+                                            x={x}
+                                            y={y}
+                                            height={rectProps.y}
+                                            image={patternImage}
+                                        />)
+                                    })}
 
                                     {/* Transformer for resizing */}
                                     <Transformer
