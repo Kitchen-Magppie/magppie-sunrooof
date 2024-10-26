@@ -6,6 +6,7 @@ import { RiLoader4Line } from "react-icons/ri";
 //====================================================================
 
 import { useAppDispatch, setPresentationFile } from '../../../redux';
+import { toast } from 'react-toastify';
 
 const Buttons = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -14,13 +15,19 @@ const Buttons = () => {
     const navigate = useNavigate()
 
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(setPresentationFile(e.target.files[0]))
-        setCorpus((prev) => ({ ...prev, toggle: { ...prev.toggle, isImageLoading: true } }))
-        setTimeout(() => {
-            navigate('/design-generator')
-            setCorpus((prev) => ({ ...prev, toggle: { ...prev.toggle, isImageLoading: false } }))
+        if (e.target?.files[0]?.type?.startsWith('image/')) {
+            dispatch(setPresentationFile(e.target.files[0]))
+            setCorpus((prev) => ({ ...prev, toggle: { ...prev.toggle, isImageLoading: true } }))
+            setTimeout(() => {
+                navigate('/design-generator')
+                setCorpus((prev) => ({ ...prev, toggle: { ...prev.toggle, isImageLoading: false } }))
 
-        }, 2000)
+            }, 2000)
+        } else {
+            toast('*Please upload an image.')
+        }
+
+
     }, [dispatch, navigate])
     return (
         <div className="flex justify-evenly items-center w-full mb-20">
@@ -36,6 +43,7 @@ const Buttons = () => {
                 <input
                     type="file"
                     ref={fileInputRef}
+                    accept='image/*'
                     onChange={onFileChange}
                     className='  hidden'
                 />
