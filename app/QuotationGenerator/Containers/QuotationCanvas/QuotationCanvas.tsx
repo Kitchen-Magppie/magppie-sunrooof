@@ -68,9 +68,7 @@ function QuotationCanvas() {
 
     const calculatePixelsPerUnit = useCallback(() => {
         if (!measurement.pixelLength || (measurement.quantity) === 0) return; // Ensure units are valid
-
         const pixelsPerUnit = measurement.pixelLength / (measurement.quantity);
-        // setUnitValue(pixelsPerUnit);
         setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
     }, [measurement.quantity, measurement.pixelLength])
 
@@ -108,10 +106,6 @@ function QuotationCanvas() {
             document.body.removeChild(link);
         }
     }, [])
-
-
-
-    // useEffect(() => { calculateLineLength() }, [calculateLineLength])
 
     useEffect(() => {
         if (image) {
