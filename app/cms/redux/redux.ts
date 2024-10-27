@@ -1,7 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
 import {
-    CustomerSiteComponentReducer,
     AuthReducer,
     SuperUserReducer,
     ProjectReducer,
@@ -9,18 +8,21 @@ import {
     UserReducer,
     LandingReducer,
     ConsultationReducer,
+    CustomerReducer,
+    PresentationReducer
 } from "./slices"
 
 
 const CmsReducers = combineReducers({
     Auth: AuthReducer,
     Landing: LandingReducer,
-    CustomerSiteComponent: CustomerSiteComponentReducer,
+    Customer: CustomerReducer,
     Users: UserReducer,
     Kitchens: KitchenReducer,
     Projects: ProjectReducer,
     SuperUsers: SuperUserReducer,
     Consultations: ConsultationReducer,
+    Presentation: PresentationReducer
 
 })
 

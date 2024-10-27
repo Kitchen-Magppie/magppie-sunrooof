@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { collection, doc, getDoc, onSnapshot, } from 'firebase/firestore';
+import { collection, doc, getDoc, onSnapshot, query, Timestamp, orderBy } from 'firebase/firestore';
 //====================================================================
 
 import { db, auth } from "../../../../config/firebase.config"
@@ -11,7 +11,8 @@ import { TKitchen } from '../../types/Kitchen';
 import { setKitchens } from '../../redux/slices/Kitchen.slice';
 import { TProject } from '../../types/Project';
 import { setProjects } from '../../redux/slices/Project.slice';
-import { FirebaseCollectionEnum } from '../../../../types';
+import { FirebaseCollectionEnum, TCustomerItem } from '../../../../types';
+import { setCustomers } from '../../redux/slices';
 const { getAuth, onAuthStateChanged } = auth;
 
 export function useFirebaseCmsAuthListener() {
@@ -81,6 +82,32 @@ export const useFirebaseCmsKitchensListener = () => {
     }, [dispatch])
 }
 
+
+
+export function useFirebaseCmsCustomerListener() {
+    const dispatch = useAppDispatch()
+    useEffect(() => {
+        const collectionRef = collection(db, FirebaseCollectionEnum.Customer);
+        const q = query(collectionRef, orderBy('at.created', 'desc'))
+
+        onSnapshot(q, ({ docs }) => {
+            const data: TCustomerItem[] = [];
+            docs?.forEach((doc) => {
+                const row = doc.data();
+                data.push({
+                    ...row,
+                    id: doc.id,
+                    at: {
+                        created: (row.at.created as Timestamp).toDate(),
+                        updated: (row.at.updated as Timestamp).toDate(),
+                    }
+                } as TCustomerItem);
+            });
+            dispatch(setCustomers(data))
+
+        });
+    }, [dispatch])
+}
 
 export const useFirebaseCmsProjectsListener = () => {
     const dispatch = useAppDispatch()

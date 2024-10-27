@@ -5,6 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import _ from 'lodash'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
+import loginBg from '../../../../../assets/loginBg.png'
+import logoTextBlack from '../../../../../assets/logo-black-text.png'
 
 //====================================================================
 
@@ -15,14 +17,16 @@ import { INIT_SUPER_USER } from '../../../types/SuperUser'
 
 export default function CmsSignIn() {
     return (
-        <div className="min-h-screen flex md:flex-row ">
-            <div className="w-full md:w-1.2/4 flex items-center justify-center bg-gradient-to-r from-gray-100 to-gray-300 min-h-screen">
-                <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-lg">
+        <div className="min-h-screen flex">
+            <div className="w-full flex items-center justify-between">
+                <div className="w-full p-8 space-y-6 max-w-xl mx-auto bg-white border-r-2 shadow-lg rounded-lg flex flex-col justify-center">
+                    <img src={logoTextBlack} alt="" className="h-[100px]" />
                     <h2 className="text-2xl font-bold text-center">
-                        CMS SignIn
+                        CMS SIGN IN
                     </h2>
                     <SignInForm />
                 </div>
+                <img src={loginBg} className="h-[910px] lg:flex hidden" alt="" />
             </div>
         </div>
     )
@@ -61,10 +65,12 @@ export function SignInForm() {
             AuthAction.signIn(data)
                 .then((e) => {
                     if (e?.user) {
-                        dispatch(setAuth({
-                            ...INIT_SUPER_USER,
-                            email: e.user.email
-                        }))
+                        dispatch(
+                            setAuth({
+                                ...INIT_SUPER_USER,
+                                email: e.user.email,
+                            })
+                        )
                         navigate('/cms')
                         toast('Signed In SuccessFully')
                     }
@@ -75,7 +81,6 @@ export function SignInForm() {
                 })
                 .finally(() => {
                     setValue('loading', false)
-
                 })
         }, 500)
     })
@@ -99,7 +104,7 @@ export function SignInForm() {
     )
 
     return (
-        <>
+        <div>
             <form onSubmit={onSubmit} className="space-y-4 ">
                 <div>
                     <input
@@ -121,8 +126,8 @@ export function SignInForm() {
                         type="password"
                         placeholder="Password"
                         className={`w-full text-xl border-t-0 border-l-0 border-r-0 ${errors.password
-                            ? 'border-red-500'
-                            : 'border-gray-400'
+                                ? 'border-red-500'
+                                : 'border-gray-400'
                             }`}
                     />
                     {helperText('password')}
@@ -132,7 +137,7 @@ export function SignInForm() {
                 </div>
                 <div>{renderSubmitButton}</div>
             </form>
-        </>
+        </div>
     )
 }
 

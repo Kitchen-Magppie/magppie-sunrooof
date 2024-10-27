@@ -2,7 +2,11 @@ import { ChangeEvent, useCallback, useState } from "react"
 import { IoMdClose } from "react-icons/io"
 import { useFirebaseStorageActions } from "../../hooks/firebase"
 
-import { CircularProgress } from ".."
+import {
+    CircularProgress,
+    // CustomConfirmationDialog
+} from ".."
+import { LazyLoadImage } from "react-lazy-load-image-component"
 
 export default function ImageInput(props: TImageActionProps) {
 
@@ -14,10 +18,10 @@ export default function ImageInput(props: TImageActionProps) {
     const StorageActions = useFirebaseStorageActions()
 
     const onRemove = useCallback((e: string) => {
-        StorageActions.remove(e)
+        // StorageActions.remove(e)
         setCorpus((prev) => ({ ...prev, values: prev.values?.filter((row) => row !== e) }))
         props.onSuccess(corpus.values?.filter((row) => row !== e))
-    }, [StorageActions, corpus.values, props])
+    }, [corpus.values, props])
 
     const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files)
@@ -42,7 +46,7 @@ export default function ImageInput(props: TImageActionProps) {
         }
 
     }
-    return (<>
+    return (<div>
         {props.label?.length ? (<label className="block text-sm font-medium text-gray-700">
             {props.label}
         </label>) : ''}
@@ -57,22 +61,36 @@ export default function ImageInput(props: TImageActionProps) {
         <div className="flex flex-wrap">
             {corpus.loading ? <CircularProgress /> : corpus?.values?.map((link, i) => {
                 return <div key={i} className="relative my-2 ">
-                    <ImageCard link={link} onRemove={onRemove} />
+                    <ImageCard link={link} onRemove={(e) => {
+                        onRemove(e)
+                    }} />
                 </div>
             })}
         </div>
+        {/* <CustomConfirmationDialog
+            show
+            text={{
+                header: 'Delete Confirmation',
+                remark: "Are you sure, you want to remove this image?"
+            }}
+            onHide={() => { }}
+            onConfirm={() => {
+            }}
+        /> */}
 
-    </>)
+    </div>)
 }
 
 function ImageCard(props: TImageCardProps) {
     return (<div className="relative my-2 ">
-        <img
+        <LazyLoadImage
+            effect="blur"
             src={props.link}
             alt=""
             className="w-32 h-32 object-cover rounded-lg ms-1"
         />
         <button
+            type="button"
             onClick={() => { props.onRemove(props.link) }}
             className="absolute top-0 right-0 mt-1 mr-1 bg-red-600 text-white rounded-full p-1 hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
