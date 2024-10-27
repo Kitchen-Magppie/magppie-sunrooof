@@ -1,25 +1,24 @@
-import { useCallback, useMemo, useState, useRef } from 'react'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
-import { IoCreateOutline } from 'react-icons/io5'
-import { IoIosLink } from 'react-icons/io'
-import { toast, ToastOptions } from 'react-toastify'
-import { Link } from 'react-router-dom'
-import { useLocation } from 'react-use'
-import Select from 'react-select'
-import { IoIosRemoveCircleOutline } from 'react-icons/io'
-import { RiDeleteBin6Fill } from 'react-icons/ri'
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
+import { useCallback, useMemo, useState, useRef } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { IoCreateOutline } from "react-icons/io5";
+import { IoIosLink } from "react-icons/io";
+import { toast, ToastOptions } from "react-toastify";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-use";
+import Select from "react-select";
+import { IoIosRemoveCircleOutline } from "react-icons/io";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 // import { IoMdCloudDownload } from 'react-icons/io'
-
 
 //====================================================================
 
-import logoBlack from '../../../../QuotationGenerator/assets/logo_black.png'
-import qr from '../../../../QuotationGenerator/assets/qr.png'
-import { paymentTermsData } from '../../../../QuotationGenerator/components/paymentTermsData'
+import logoBlack from "../../../../QuotationGenerator/assets/logo_black.png";
+import qr from "../../../../QuotationGenerator/assets/qr.png";
+import { paymentTermsData } from "../../../../QuotationGenerator/components/paymentTermsData";
 import {
     _,
     ComponentModeEnum,
@@ -30,7 +29,7 @@ import {
     TCustomerComponentQuotationItem,
     TCustomerItem,
     validateCustomerItemSchema,
-} from '../../../../../types'
+} from "../../../../../types";
 import {
     CMS_QUOTATION_FLOOR_OPTIONS,
     CMS_QUOTATION_OPTIONS,
@@ -44,84 +43,88 @@ import {
     INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
     INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
     QUOTATION_SALUTATION_OPTIONS,
-} from '../../../mocks'
+} from "../../../mocks";
 import {
     CmsCopyClipboard,
     FieldCautation,
     MinimalAccordion,
-} from '../../../components'
-import { ImageInput } from '../../../../../components'
-import { useFirebaseCustomerAction } from '../../../utils/firebase/customer'
-import { useFirebaseStorageActions } from '../../../../../hooks/firebase'
-
+} from "../../../components";
+import { ImageInput } from "../../../../../components";
+import { useFirebaseCustomerAction } from "../../../utils/firebase/customer";
+import { useFirebaseStorageActions } from "../../../../../hooks/firebase";
 
 export function CustomerActionForm(props: TProps) {
-    const invoiceRef = useRef(null)
-    const invoiceRefPng = useRef(null)
-    const StorageActions = useFirebaseStorageActions()
+    const invoiceRef = useRef(null);
+    const invoiceRefPng = useRef(null);
+    const StorageActions = useFirebaseStorageActions();
 
     const downloadInvoice = useCallback(() => {
-        const invoiceElement = invoiceRef.current
+        const invoiceElement = invoiceRef.current;
 
         html2canvas(invoiceElement, { scale: 2 }).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png') // Convert canvas to PNG
+            const imgData = canvas.toDataURL("image/png"); // Convert canvas to PNG
 
-            const pdf = new jsPDF('p', 'mm', 'a4') // A4 PDF in portrait mode
-            const imgWidth = 210 // A4 width in mm
-            const pageHeight = 295 // A4 height in mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width // Calculate image height based on aspect ratio
-            let heightLeft = imgHeight
-            let position = 0
+            const pdf = new jsPDF("p", "mm", "a4"); // A4 PDF in portrait mode
+            const imgWidth = 210; // A4 width in mm
+            const pageHeight = 295; // A4 height in mm
+            const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculate image height based on aspect ratio
+            let heightLeft = imgHeight;
+            let position = 0;
 
             // Add the first page
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-            heightLeft -= pageHeight
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
 
             // Add more pages if necessary
             while (heightLeft > 0) {
-                position = heightLeft - imgHeight // Move to next page position
-                pdf.addPage() // Add new page
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight) // Add the image at the correct position
-                heightLeft -= pageHeight // Reduce the height left to render
+                position = heightLeft - imgHeight; // Move to next page position
+                pdf.addPage(); // Add new page
+                pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight); // Add the image at the correct position
+                heightLeft -= pageHeight; // Reduce the height left to render
             }
-
-            pdf.save('invoice.pdf') // Save the generated PDF
-        })
-    }, [])
+            const fileName = `invoice-${+new Date()}.pdf`;
+            pdf.save(fileName); // Save the generated PDF
+        });
+    }, []);
 
     const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
-        const invoiceElement = invoiceRefPng.current
-        html2canvas(invoiceElement).then((canvas) => {
-            // FIXME: Maye be we remove the download feature from here;
-            const link = document.createElement('a')
-            const dataUrl = canvas.toDataURL('image/png')
-            link.href = dataUrl
-            link.download = `invoice-${+new Date()}.png`
-            const blob = _.dataURLtoBlob(dataUrl)
-            const file = new File([blob], link.download, { type: 'image/png' });
-            StorageActions.upload({
-                file,
-                path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
-                onSuccess(e) {
-                    setValue(`components.${i}.data.invoiceUrl`, e.link)
-                },
+        const invoiceElement = invoiceRefPng.current;
+        setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
+        html2canvas(invoiceElement)
+            .then((canvas) => {
+                // FIXME: Maye be we remove the download feature from here;
+                const link = document.createElement("a");
+                const dataUrl = canvas.toDataURL("image/png");
+                link.href = dataUrl;
+                link.download = `invoice-${+new Date()}.png`;
+                const blob = _.dataURLtoBlob(dataUrl);
+                const file = new File([blob], link.download, { type: "image/png" });
+                StorageActions.upload({
+                    file,
+                    path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
+                    onSuccess(e) {
+                        setValue(`components.${i}.data.invoiceUrl`, e.link);
+                    },
+                });
+                link.click();
             })
-            link.click()
-        })
-    }, [])
+            .finally(() => {
+                setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
+            });
+    }, []);
 
-    const [corpus, setCorpus] = useState({ isSubmitting: false })
-    const { mode, item } = props
+    const [corpus, setCorpus] = useState(INIT_CORPUS);
+    const { mode, item } = props;
 
-    const isCreateAction = mode === ComponentModeEnum.Create
+    const isCreateAction = mode === ComponentModeEnum.Create;
 
-    const location = useLocation()
+    const location = useLocation();
 
     const publishedUrl = useMemo(() => {
         if (item.id?.length)
-            return [location.origin, 'quotation', item.id].join('/')
-        return ''
-    }, [item.id, location.origin])
+            return [location.origin, "quotation", item.id].join("/");
+        return "";
+    }, [item.id, location.origin]);
     const {
         watch,
         register,
@@ -134,61 +137,63 @@ export function CustomerActionForm(props: TProps) {
             ...item,
             customerId: isCreateAction ? _.uuid() : item.customerId,
         },
-    })
+    });
 
-    const values = watch()
+    const values = watch();
 
     // console.log(values)
-    // console.log(errors)
     const totalGrossAmount = useMemo(() => {
-        const quotation = (values?.components as TCustomerComponentQuotationItem[])?.find((item) => item.value === CustomerComponentEnum.Quotation)
-        if (quotation?.data?.entries?.length)
+        const quotation = (
+            values?.components as TCustomerComponentQuotationItem[]
+        )?.find((item) => item.value === CustomerComponentEnum.Quotation);
+        if (quotation?.data?.entries?.length) {
             return quotation.data.entries.reduce((acc, entry) => {
-                const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0
-                const total = price * (entry.qty || 1)
-                return acc + total
-            }, 0)
-        return 0
-    }, [])
-
-
-    const renderErrorMessage = useCallback((field: string) => {
-        if (_.get(errors, field)) {
-            return (
-                <p className="text-red-500 text-xs mt-1">
-                    {_.get(errors, `${field}.message`)}
-                </p>
-            )
+                const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+                const total = price * (entry.qty || 1);
+                return acc + total;
+            }, 0);
         }
-        return ''
-    },
-        [errors]
-    )
+        return 0;
+    }, []);
 
-    const action = useFirebaseCustomerAction()
+    const renderErrorMessage = useCallback(
+        (field: string) => {
+            if (_.get(errors, field)) {
+                return (
+                    <p className="text-red-500 text-xs mt-1">
+                        {_.get(errors, `${field}.message`)}
+                    </p>
+                );
+            }
+            return "";
+        },
+        [errors]
+    );
+
+    const action = useFirebaseCustomerAction();
 
     const onSubmit = handleSubmit((data: TCustomerItem) => {
-        setCorpus((prev) => ({ ...prev, isSubmitting: true }))
+        setCorpus((prev) => ({ ...prev, isSubmitting: true }));
         setTimeout(() => {
             if (DEFAULT_CUSTOMER.customerId !== item.customerId) {
                 if (isCreateAction) {
                     action.add({
                         ...data,
                         at: { ...data.at, created: new Date() },
-                    })
-                    toast.success('Record has been created', TOAST_OPTIONS)
+                    });
+                    toast.success("Record has been created", TOAST_OPTIONS);
                 } else {
                     action.edit({
                         ...data,
                         at: { ...data.at, updated: new Date() },
-                    })
-                    toast.success('Record has been edited', TOAST_OPTIONS)
+                    });
+                    toast.success("Record has been edited", TOAST_OPTIONS);
                 }
             }
-            setCorpus((prev) => ({ ...prev, isSubmitting: false }))
-            props.onSubmit()
-        }, 2000)
-    })
+            setCorpus((prev) => ({ ...prev, isSubmitting: false }));
+            props.onSubmit();
+        }, 2000);
+    });
     const renderPublishUrlContent = useMemo(() => {
         return publishedUrl?.length ? (
             <div className="flex flex-row gap-2 justify-between my-2 ">
@@ -219,8 +224,8 @@ export function CustomerActionForm(props: TProps) {
                     remark="Once all fields are valid, the URL will be generated automatically upon saving the form."
                 />
             </div>
-        )
-    }, [publishedUrl])
+        );
+    }, [publishedUrl]);
 
     return (
         <form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll ">
@@ -231,10 +236,10 @@ export function CustomerActionForm(props: TProps) {
                     </label>
                     <input
                         type="text"
-                        {...register('name')}
+                        {...register("name")}
                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     />
-                    {renderErrorMessage('name')}
+                    {renderErrorMessage("name")}
                 </div>
                 <div className="px-6"></div>
             </div>
@@ -242,14 +247,13 @@ export function CustomerActionForm(props: TProps) {
             {/* Components (rendering depends on the type of component) */}
             <div className="px-6">
                 {values?.components?.map((component, i) => {
-                    const value = _.get(component, 'value')
+                    const value = _.get(component, "value");
                     const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find(
                         (item) => item.value === value
-                    ).label
+                    ).label;
                     switch (value) {
                         case CustomerComponentEnum.Feature: {
-                            const data =
-                                component as TCustomerComponentFeatureItem
+                            const data = component as TCustomerComponentFeatureItem;
                             return (
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
@@ -260,36 +264,27 @@ export function CustomerActionForm(props: TProps) {
                                                     borderRadius: 6,
                                                     colors: {
                                                         ...theme.colors,
-                                                        text: 'white',
-                                                        primary25: '#3F51B5',
-                                                        primary: '#3F51B5',
+                                                        text: "white",
+                                                        primary25: "#3F51B5",
+                                                        primary: "#3F51B5",
                                                     },
                                                 })}
                                                 classNames={{
-                                                    control: () =>
-                                                        AUTOCOMPLETE_STYLE,
+                                                    control: () => AUTOCOMPLETE_STYLE,
                                                 }}
                                                 onChange={(e) => {
-                                                    setValue(
-                                                        `components.${i}.data`,
-                                                        e.value
-                                                    )
+                                                    setValue(`components.${i}.data`, e.value);
                                                 }}
                                                 defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
-                                                    ({ value }) =>
-                                                        value === data.data
+                                                    ({ value }) => value === data.data
                                                 )}
-                                                options={
-                                                    CUSTOMER_COMPONENT_FEATURE_OPTIONS
-                                                }
+                                                options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
                                             />
-                                            {renderErrorMessage(
-                                                `components.${i}.data`
-                                            )}
+                                            {renderErrorMessage(`components.${i}.data`)}
                                         </div>
                                     </MinimalAccordion>
                                 </div>
-                            )
+                            );
                         }
                         case CustomerComponentEnum.Comparison: {
                             return (
@@ -301,53 +296,38 @@ export function CustomerActionForm(props: TProps) {
                                                 borderRadius: 6,
                                                 colors: {
                                                     ...theme.colors,
-                                                    text: 'white',
-                                                    primary25: '#3F51B5',
-                                                    primary: '#3F51B5',
+                                                    text: "white",
+                                                    primary25: "#3F51B5",
+                                                    primary: "#3F51B5",
                                                 },
                                             })}
                                             classNames={{
-                                                control: () =>
-                                                    AUTOCOMPLETE_STYLE,
+                                                control: () => AUTOCOMPLETE_STYLE,
                                             }}
                                             defaultValue={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
-                                                (item) =>
-                                                    item.value ===
-                                                    _.get(component, 'data')
+                                                (item) => item.value === _.get(component, "data")
                                             )}
                                             onChange={(e) => {
-                                                setValue(
-                                                    `components.${i}.data`,
-                                                    e.value
-                                                )
+                                                setValue(`components.${i}.data`, e.value);
                                             }}
-                                            options={
-                                                CUSTOMER_COMPONENT_COMPARISON_OPTIONS
-                                            }
+                                            options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                                         />
-                                        {renderErrorMessage(
-                                            `components.${i}.data`
-                                        )}
+                                        {renderErrorMessage(`components.${i}.data`)}
                                     </MinimalAccordion>
                                 </div>
-                            )
+                            );
                         }
                         case CustomerComponentEnum.Quotation: {
-                            const salutations = _.labelify(
-                                QUOTATION_SALUTATION_OPTIONS
-                            )
-                            const data =
-                                component as TCustomerComponentQuotationItem
+                            const salutations = _.labelify(QUOTATION_SALUTATION_OPTIONS);
+                            const data = component as TCustomerComponentQuotationItem;
 
                             const discountAmount =
-                                totalGrossAmount * (data.data.discount / 100)
-                            const freightCharges = 50000
+                                totalGrossAmount * (data.data.discount / 100);
+                            const freightCharges = 50000;
                             const totalAmount =
-                                totalGrossAmount -
-                                discountAmount +
-                                freightCharges
-                            const taxAmount = totalAmount * (18 / 100)
-                            const grandTotal = totalAmount + taxAmount
+                                totalGrossAmount - discountAmount + freightCharges;
+                            const taxAmount = totalAmount * (18 / 100);
+                            const grandTotal = totalAmount + taxAmount;
 
                             return (
                                 <div key={i}>
@@ -364,29 +344,24 @@ export function CustomerActionForm(props: TProps) {
                                                             borderRadius: 6,
                                                             colors: {
                                                                 ...theme.colors,
-                                                                text: 'white',
-                                                                primary25:
-                                                                    '#3F51B5',
-                                                                primary:
-                                                                    '#3F51B5',
+                                                                text: "white",
+                                                                primary25: "#3F51B5",
+                                                                primary: "#3F51B5",
                                                             },
                                                         })}
                                                         classNames={{
-                                                            control: () =>
-                                                                AUTOCOMPLETE_STYLE,
+                                                            control: () => AUTOCOMPLETE_STYLE,
                                                         }}
                                                         defaultValue={salutations?.find(
                                                             (salutation) =>
-                                                                salutation.value ===
-                                                                data.data
-                                                                    .salutation
+                                                                salutation.value === data.data.salutation
                                                         )}
                                                         options={salutations}
                                                         onChange={(e) => {
                                                             setValue(
                                                                 `components.${i}.data.salutation`,
                                                                 e.value
-                                                            )
+                                                            );
                                                         }}
                                                     />
                                                     {renderErrorMessage(
@@ -401,10 +376,7 @@ export function CustomerActionForm(props: TProps) {
                                                         type="text"
                                                         value={values.name}
                                                         onChange={(e) => {
-                                                            setValue(
-                                                                'name',
-                                                                e.target.value
-                                                            )
+                                                            setValue("name", e.target.value);
                                                         }}
                                                         // {...register(`components.${i}.data.name`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -419,14 +391,10 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        {...register(
-                                                            `components.${i}.data.email`
-                                                        )}
+                                                        {...register(`components.${i}.data.email`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.email`
-                                                    )}
+                                                    {renderErrorMessage(`components.${i}.data.email`)}
                                                 </div>
                                                 <div className="bg-white">
                                                     <label className="block text-sm font-medium text-gray-700">
@@ -434,14 +402,10 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        {...register(
-                                                            `components.${i}.data.mobile`
-                                                        )}
+                                                        {...register(`components.${i}.data.mobile`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.mobile`
-                                                    )}
+                                                    {renderErrorMessage(`components.${i}.data.mobile`)}
                                                 </div>
                                             </div>
 
@@ -452,9 +416,7 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="date"
-                                                        {...register(
-                                                            `components.${i}.data.createdDate`
-                                                        )}
+                                                        {...register(`components.${i}.data.createdDate`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                         // className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
                                                         placeholder="Created Date"
@@ -469,14 +431,10 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        {...register(
-                                                            `components.${i}.data.address`
-                                                        )}
+                                                        {...register(`components.${i}.data.address`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.address`
-                                                    )}
+                                                    {renderErrorMessage(`components.${i}.data.address`)}
                                                 </div>
                                             </div>
 
@@ -487,14 +445,10 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        {...register(
-                                                            `components.${i}.data.city`
-                                                        )}
+                                                        {...register(`components.${i}.data.city`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.city`
-                                                    )}
+                                                    {renderErrorMessage(`components.${i}.data.city`)}
                                                 </div>
 
                                                 <div className="bg-white">
@@ -503,14 +457,10 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="text"
-                                                        {...register(
-                                                            `components.${i}.data.zone`
-                                                        )}
+                                                        {...register(`components.${i}.data.zone`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.zone`
-                                                    )}
+                                                    {renderErrorMessage(`components.${i}.data.zone`)}
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2">
@@ -520,14 +470,10 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <input
                                                         type="number"
-                                                        {...register(
-                                                            `components.${i}.data.discount`
-                                                        )}
+                                                        {...register(`components.${i}.data.discount`)}
                                                         className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                                     />
-                                                    {renderErrorMessage(
-                                                        `components.${i}.data.discount`
-                                                    )}
+                                                    {renderErrorMessage(`components.${i}.data.discount`)}
                                                 </div>
                                                 <div>
                                                     <label className="block text-sm font-medium text-gray-700">
@@ -538,118 +484,160 @@ export function CustomerActionForm(props: TProps) {
                                                         onClick={() => {
                                                             // setValue(`components.${i}.data.entries`, data.data?.entries?.filter((_, entryIndex) => entryIndex !== index))
 
-                                                            setValue(`components.${i}.data.entries`, [...data.data.entries, INIT_COMPONENT_QUOTATION_ENTRY_ITEM])
+                                                            setValue(`components.${i}.data.entries`, [
+                                                                ...data.data.entries,
+                                                                INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
+                                                            ]);
                                                         }}
                                                         className="text-white bg-blue-700 mt-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
                                                     >
                                                         Add Entry
                                                     </button>
+                                                    {renderErrorMessage(`components.${i}.data.entries`)}
                                                 </div>
                                             </div>
 
                                             <div className="">
                                                 <div>
-                                                    <div
-                                                        id="entries"
-                                                        className="w-full"
-                                                    >
+                                                    <div id="entries" className="w-full">
                                                         {data.data.entries.map((entry, index) => {
-                                                            return (<div
-                                                                key={index}
-                                                                className="entry grid grid-cols-3 items-center mt-2"
-                                                            >
-                                                                <select
-                                                                    value={entry.design}
-                                                                    {...register(`components.${i}.data.entries.${index}.design`)}
-                                                                    // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
-                                                                    className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                            return (
+                                                                <div
+                                                                    key={index}
+                                                                    className="entry grid grid-cols-3 items-center mt-2"
                                                                 >
-                                                                    <option value="">
-                                                                        Select Design
-                                                                    </option>
-                                                                    {Object.keys(CMS_QUOTATION_OPTIONS).map((value, i) => (<option
-                                                                        key={i}
-                                                                        value={value}
+                                                                    <select
+                                                                        value={entry.design}
+                                                                        {...register(
+                                                                            `components.${i}.data.entries.${index}.design`
+                                                                        )}
+                                                                        // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
+                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
                                                                     >
-                                                                        {value}
-                                                                    </option>))}
-                                                                </select>
+                                                                        <option value="">Select Design</option>
+                                                                        {Object.keys(CMS_QUOTATION_OPTIONS).map(
+                                                                            (value, i) => (
+                                                                                <option key={i} value={value}>
+                                                                                    {value}
+                                                                                </option>
+                                                                            )
+                                                                        )}
+                                                                    </select>
 
-                                                                <select
-                                                                    value={entry.finish}
-                                                                    {...register(`components.${i}.data.entries.${index}.finish`)}
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.entries.${index}.design`
+                                                                    )}
 
-                                                                    // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
-                                                                    className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                >
-                                                                    <option value="">
-                                                                        Select Finish
-                                                                    </option>
-                                                                    {entry.design && Object.keys(CMS_QUOTATION_OPTIONS[entry.design] || {}).map((finishOption) => (
-                                                                        <option key={finishOption} value={finishOption}                                                                                >
-                                                                            {finishOption}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
+                                                                    <select
+                                                                        value={entry.finish}
+                                                                        {...register(
+                                                                            `components.${i}.data.entries.${index}.finish`
+                                                                        )}
+                                                                        // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
+                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                    >
+                                                                        <option value="">Select Finish</option>
+                                                                        {entry.design &&
+                                                                            Object.keys(
+                                                                                CMS_QUOTATION_OPTIONS[entry.design] ||
+                                                                                {}
+                                                                            ).map((finishOption) => (
+                                                                                <option
+                                                                                    key={finishOption}
+                                                                                    value={finishOption}
+                                                                                >
+                                                                                    {finishOption}
+                                                                                </option>
+                                                                            ))}
+                                                                    </select>
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.entries.${index}.finish`
+                                                                    )}
 
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Enter Area"
-                                                                    value={entry.area}
-                                                                    {...register(`components.${i}.data.entries.${index}.area`)}
-
-                                                                    // onChange={(e) => handleChangeEntry(index, 'area', e.target.value)}
-                                                                    className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                />
-
-                                                                <select
-                                                                    value={entry.floor}
-                                                                    // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
-                                                                    {...register(`components.${i}.data.entries.${index}.floor`)}
-
-                                                                    className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                >
-                                                                    <option value="">
-                                                                        Select Floor
-                                                                    </option>
-                                                                    {CMS_QUOTATION_FLOOR_OPTIONS.map((floor) => (<option key={floor} value={floor}>
-                                                                        {floor}
-                                                                    </option>))}
-                                                                </select>
-
-                                                                <input
-                                                                    type="number"
-                                                                    placeholder="Quantity"
-                                                                    value={entry.qty}
-                                                                    {...register(`components.${i}.data.entries.${index}.qty`)}
-                                                                    // onChange={(e) => handleChangeEntry(index, 'qty', e.target.value)}
-                                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                />
-                                                                <div className="flex items-center">
-                                                                    <RiDeleteBin6Fill
-                                                                        onClick={() => {
-                                                                            setValue(`components.${i}.data.entries`, data.data?.entries?.filter((_, entryIndex) => entryIndex !== index))
-                                                                        }}
-                                                                        className="h-5 w-5 ml-2 cursor-pointer"
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Enter Area"
+                                                                        value={entry.area}
+                                                                        {...register(
+                                                                            `components.${i}.data.entries.${index}.area`
+                                                                        )}
+                                                                        // onChange={(e) => handleChangeEntry(index, 'area', e.target.value)}
+                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
                                                                     />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.entries.${index}.area`
+                                                                    )}
+
+                                                                    <select
+                                                                        value={entry.floor}
+                                                                        // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
+                                                                        {...register(
+                                                                            `components.${i}.data.entries.${index}.floor`
+                                                                        )}
+                                                                        className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                    >
+                                                                        <option value="">Select Floor</option>
+                                                                        {CMS_QUOTATION_FLOOR_OPTIONS.map(
+                                                                            (floor) => (
+                                                                                <option key={floor} value={floor}>
+                                                                                    {floor}
+                                                                                </option>
+                                                                            )
+                                                                        )}
+                                                                    </select>
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.entries.${index}.floor`
+                                                                    )}
+
+                                                                    <input
+                                                                        type="number"
+                                                                        placeholder="Quantity"
+                                                                        value={entry.qty}
+                                                                        {...register(
+                                                                            `components.${i}.data.entries.${index}.qty`
+                                                                        )}
+                                                                        // onChange={(e) => handleChangeEntry(index, 'qty', e.target.value)}
+                                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.entries.${index}.qty`
+                                                                    )}
+                                                                    <div className="flex items-center">
+                                                                        <RiDeleteBin6Fill
+                                                                            onClick={() => {
+                                                                                setValue(
+                                                                                    `components.${i}.data.entries`,
+                                                                                    data.data?.entries?.filter(
+                                                                                        (_, entryIndex) =>
+                                                                                            entryIndex !== index
+                                                                                    )
+                                                                                );
+                                                                            }}
+                                                                            className="h-5 w-5 ml-2 cursor-pointer"
+                                                                        />
+                                                                    </div>
                                                                 </div>
-                                                            </div>)
+                                                            );
                                                         })}
                                                     </div>
-                                                    <div className="flex justify-end w-full">
+                                                    <div className="flex justify-end w-full gap-3">
                                                         <button
+                                                            disabled={corpus.isQuotationImageDownload}
                                                             type="button"
                                                             onClick={() => onClickGenerateSaveInvoiceImage(i)}
-                                                            className="text-white bg-blue-700 mt-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
+                                                            className=" flex justify-center gap-3 flex-row align-middle p-3  border border-transparent text-sm font-medium rounded-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                                         >
                                                             Generate Design
+                                                            {corpus.isQuotationImageDownload ? (
+                                                                <AiOutlineLoading3Quarters className="text-xl animate-spin" />
+                                                            ) : (
+                                                                ""
+                                                            )}
                                                         </button>
                                                         <button
                                                             type="button"
-                                                            onClick={
-                                                                downloadInvoice
-                                                            }
-                                                            className="text-white bg-blue-700 mt-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
+                                                            onClick={downloadInvoice}
+                                                            className=" flex justify-center gap-3 flex-row align-middle p-3  border border-transparent text-sm font-medium rounded-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                                         >
                                                             PDF
                                                         </button>
@@ -753,8 +741,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     S.No
                                                                 </th>
                                                                 <th className="border text-start border-black py-2 px-4">
-                                                                    Design and
-                                                                    Finish
+                                                                    Design and Finish
                                                                 </th>
                                                                 <th className="border border-black text-start py-2 px-4">
                                                                     Area
@@ -774,72 +761,42 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {data.data.entries.map(
-                                                                (
-                                                                    entry,
-                                                                    index
-                                                                ) => {
-                                                                    const price =
-                                                                        CMS_QUOTATION_OPTIONS[
-                                                                        entry
-                                                                            .design
-                                                                        ]?.[
-                                                                        entry
-                                                                            .finish
-                                                                        ] || 0
-                                                                    const total =
-                                                                        price *
-                                                                        (entry.qty ||
-                                                                            1)
+                                                            {data.data.entries.map((entry, index) => {
+                                                                const price =
+                                                                    CMS_QUOTATION_OPTIONS[entry.design]?.[
+                                                                    entry.finish
+                                                                    ] || 0;
+                                                                const total = price * (entry.qty || 1);
 
-                                                                    return (
-                                                                        <tr
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                            className="border-b border-black"
-                                                                        >
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                {index +
-                                                                                    1}
-                                                                            </td>
-                                                                            <td className="border border-black px-4 py-2">
-                                                                                {
-                                                                                    entry.design
-                                                                                }{' '}
-                                                                                {
-                                                                                    entry.finish
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black px-4 py-2">
-                                                                                {
-                                                                                    entry.area
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                {
-                                                                                    entry.floor
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                {
-                                                                                    entry.qty
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                ₹
-                                                                                {price.toLocaleString()}
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                ₹
-                                                                                {total.toLocaleString(
-                                                                                    'en-IN'
-                                                                                )}
-                                                                            </td>
-                                                                        </tr>
-                                                                    )
-                                                                }
-                                                            )}
+                                                                return (
+                                                                    <tr
+                                                                        key={index}
+                                                                        className="border-b border-black"
+                                                                    >
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            {index + 1}
+                                                                        </td>
+                                                                        <td className="border border-black px-4 py-2">
+                                                                            {entry.design} {entry.finish}
+                                                                        </td>
+                                                                        <td className="border border-black px-4 py-2">
+                                                                            {entry.area}
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            {entry.floor}
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            {entry.qty}
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            ₹{price.toLocaleString()}
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            ₹{total.toLocaleString("en-IN")}
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
                                                             {/* After all entries, render the totals */}
                                                             <tr className="font-bold">
                                                                 <td
@@ -849,10 +806,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Gross Amount
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {totalGrossAmount.toLocaleString(
-                                                                        'en-IN'
-                                                                    )}
+                                                                    ₹{totalGrossAmount.toLocaleString("en-IN")}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -863,12 +817,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Discount %
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    {
-                                                                        data
-                                                                            .data
-                                                                            .discount
-                                                                    }
-                                                                    %
+                                                                    {data.data.discount}%
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -876,12 +825,10 @@ export function CustomerActionForm(props: TProps) {
                                                                     colSpan={6}
                                                                     className="px-4 py-2 text-right border border-black"
                                                                 >
-                                                                    Discount
-                                                                    Amount
+                                                                    Discount Amount
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {discountAmount.toLocaleString()}
+                                                                    ₹{discountAmount.toLocaleString()}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -889,12 +836,10 @@ export function CustomerActionForm(props: TProps) {
                                                                     colSpan={6}
                                                                     className="px-4 py-2 text-right border border-black"
                                                                 >
-                                                                    Freight
-                                                                    Charges
+                                                                    Freight Charges
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {freightCharges.toLocaleString()}
+                                                                    ₹{freightCharges.toLocaleString()}
                                                                 </td>
                                                             </tr>
                                                             <tr className="font-bold">
@@ -905,10 +850,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Total
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {totalAmount.toLocaleString(
-                                                                        'en-IN'
-                                                                    )}
+                                                                    ₹{totalAmount.toLocaleString("en-IN")}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -919,8 +861,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Tax @ 18%
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {taxAmount.toLocaleString()}
+                                                                    ₹{taxAmount.toLocaleString()}
                                                                 </td>
                                                             </tr>
                                                             <tr className="font-bold">
@@ -931,10 +872,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Grand Total
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {grandTotal.toLocaleString(
-                                                                        'en-IN'
-                                                                    )}
+                                                                    ₹{grandTotal.toLocaleString("en-IN")}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -986,24 +924,17 @@ export function CustomerActionForm(props: TProps) {
                                                             alt="Logo"
                                                         />
                                                         <p className="text-lg mb-5">
-                                                            Sunrooof Luminaries
-                                                            Pvt Ltd.
+                                                            Sunrooof Luminaries Pvt Ltd.
                                                         </p>
                                                         <p className="text-lg mb-5">
-                                                            Plot No 3, Sector 8,
-                                                            IMT Manesar,
+                                                            Plot No 3, Sector 8, IMT Manesar,
                                                         </p>
                                                         <p className="text-lg mb-5">
-                                                            Gurgaon, Haryana -
-                                                            122052
+                                                            Gurgaon, Haryana - 122052
                                                         </p>
                                                     </div>
                                                     <div>
-                                                        <img
-                                                            src={qr}
-                                                            alt="QR Code"
-                                                            className="w-[150px]"
-                                                        />
+                                                        <img src={qr} alt="QR Code" className="w-[150px]" />
                                                         <a
                                                             href="https://www.sunrooof.com"
                                                             className="text-lg mb-5"
@@ -1014,43 +945,29 @@ export function CustomerActionForm(props: TProps) {
                                                 </div>
 
                                                 <div>
-                                                    <h3 className="text-3xl font-bold mb-4">
-                                                        Quotation
-                                                    </h3>
+                                                    <h3 className="text-3xl font-bold mb-4">Quotation</h3>
                                                     <p className="text-lg mb-5">
-                                                        <span className="font-bold">
-                                                            Client:{' '}
-                                                        </span>
+                                                        <span className="font-bold">Client: </span>
                                                         {values.name}
                                                     </p>
                                                     <p className="text-lg mb-5">
-                                                        <span className="font-bold">
-                                                            Phone:
-                                                        </span>{' '}
+                                                        <span className="font-bold">Phone:</span>{" "}
                                                         {data.data.mobile}
                                                     </p>
                                                     <p className="text-lg mb-5">
-                                                        <span className="font-bold">
-                                                            Email:
-                                                        </span>{' '}
+                                                        <span className="font-bold">Email:</span>{" "}
                                                         {data.data.email}
                                                     </p>
                                                     <p className="text-lg mb-5">
-                                                        <span className="font-bold">
-                                                            Site Address:
-                                                        </span>{' '}
+                                                        <span className="font-bold">Site Address:</span>{" "}
                                                         {data.data.address}
                                                     </p>
                                                     <p className="text-lg mb-5">
-                                                        <span className="font-bold">
-                                                            Zone:
-                                                        </span>{' '}
+                                                        <span className="font-bold">Zone:</span>{" "}
                                                         {data.data.zone}
                                                     </p>
                                                     <p className="text-lg mb-5">
-                                                        <span className="font-bold">
-                                                            Date:
-                                                        </span>{' '}
+                                                        <span className="font-bold">Date:</span>{" "}
                                                         {data.data.createdDate}
                                                     </p>
                                                     <table className="container mx-auto max-w-7xl border border-black">
@@ -1060,8 +977,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     S.No
                                                                 </th>
                                                                 <th className="border text-start border-black py-2 px-4">
-                                                                    Design and
-                                                                    Finish
+                                                                    Design and Finish
                                                                 </th>
                                                                 <th className="border border-black text-start py-2 px-4">
                                                                     Area
@@ -1081,71 +997,42 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {data.data.entries.map((
-                                                                entry,
-                                                                index
-                                                            ) => {
+                                                            {data.data.entries.map((entry, index) => {
                                                                 const price =
-                                                                    CMS_QUOTATION_OPTIONS[
-                                                                    entry
-                                                                        .design
-                                                                    ]?.[
-                                                                    entry
-                                                                        .finish
-                                                                    ] || 0
-                                                                const total =
-                                                                    price *
-                                                                    (entry.qty ||
-                                                                        1)
+                                                                    CMS_QUOTATION_OPTIONS[entry.design]?.[
+                                                                    entry.finish
+                                                                    ] || 0;
+                                                                const total = price * (entry.qty || 1);
 
                                                                 return (
                                                                     <tr
-                                                                        key={
-                                                                            index
-                                                                        }
+                                                                        key={index}
                                                                         className="border-b border-black"
                                                                     >
                                                                         <td className="border border-black text-center px-4 py-2">
-                                                                            {index +
-                                                                                1}
+                                                                            {index + 1}
                                                                         </td>
                                                                         <td className="border border-black px-4 py-2">
-                                                                            {
-                                                                                entry.design
-                                                                            }{' '}
-                                                                            {
-                                                                                entry.finish
-                                                                            }
+                                                                            {entry.design} {entry.finish}
                                                                         </td>
                                                                         <td className="border border-black px-4 py-2">
-                                                                            {
-                                                                                entry.area
-                                                                            }
+                                                                            {entry.area}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
-                                                                            {
-                                                                                entry.floor
-                                                                            }
+                                                                            {entry.floor}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
-                                                                            {
-                                                                                entry.qty
-                                                                            }
+                                                                            {entry.qty}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
-                                                                            ₹
-                                                                            {price.toLocaleString()}
+                                                                            ₹{price.toLocaleString()}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
-                                                                            ₹
-                                                                            {total.toLocaleString(
-                                                                                'en-IN'
-                                                                            )}
+                                                                            ₹{total.toLocaleString("en-IN")}
                                                                         </td>
                                                                     </tr>
-                                                                )
-                                                            }
-                                                            )}
+                                                                );
+                                                            })}
                                                             {/* After all entries, render the totals */}
                                                             <tr className="font-bold">
                                                                 <td
@@ -1155,10 +1042,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Gross Amount
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {totalGrossAmount.toLocaleString(
-                                                                        'en-IN'
-                                                                    )}
+                                                                    ₹{totalGrossAmount.toLocaleString("en-IN")}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1169,12 +1053,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Discount %
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    {
-                                                                        data
-                                                                            .data
-                                                                            .discount
-                                                                    }
-                                                                    %
+                                                                    {data.data.discount}%
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1182,12 +1061,10 @@ export function CustomerActionForm(props: TProps) {
                                                                     colSpan={6}
                                                                     className="px-4 py-2 text-right border border-black"
                                                                 >
-                                                                    Discount
-                                                                    Amount
+                                                                    Discount Amount
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {discountAmount.toLocaleString()}
+                                                                    ₹{discountAmount.toLocaleString()}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1195,12 +1072,10 @@ export function CustomerActionForm(props: TProps) {
                                                                     colSpan={6}
                                                                     className="px-4 py-2 text-right border border-black"
                                                                 >
-                                                                    Freight
-                                                                    Charges
+                                                                    Freight Charges
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {freightCharges.toLocaleString()}
+                                                                    ₹{freightCharges.toLocaleString()}
                                                                 </td>
                                                             </tr>
                                                             <tr className="font-bold">
@@ -1211,10 +1086,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Total
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {totalAmount.toLocaleString(
-                                                                        'en-IN'
-                                                                    )}
+                                                                    ₹{totalAmount.toLocaleString("en-IN")}
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -1225,8 +1097,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Tax @ 18%
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {taxAmount.toLocaleString()}
+                                                                    ₹{taxAmount.toLocaleString()}
                                                                 </td>
                                                             </tr>
                                                             <tr className="font-bold">
@@ -1237,10 +1108,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     Grand Total
                                                                 </td>
                                                                 <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹
-                                                                    {grandTotal.toLocaleString(
-                                                                        'en-IN'
-                                                                    )}
+                                                                    ₹{grandTotal.toLocaleString("en-IN")}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -1250,33 +1118,19 @@ export function CustomerActionForm(props: TProps) {
                                                         <h1 className="text-2xl font-bold mb-2">
                                                             Payment Terms
                                                         </h1>
-                                                        {paymentTermsData.map(
-                                                            (data) => {
-                                                                return (
-                                                                    <div
-                                                                        className="text-lg mb-2 list-decimal"
-                                                                        key={
-                                                                            data.id
-                                                                        }
-                                                                    >
-                                                                        <div className="flex items-start">
-                                                                            <span className="mr-2">
-                                                                                {
-                                                                                    data.id
-                                                                                }
-
-                                                                                .
-                                                                            </span>
-                                                                            <p>
-                                                                                {
-                                                                                    data.content
-                                                                                }
-                                                                            </p>
-                                                                        </div>
+                                                        {paymentTermsData.map((data) => {
+                                                            return (
+                                                                <div
+                                                                    className="text-lg mb-2 list-decimal"
+                                                                    key={data.id}
+                                                                >
+                                                                    <div className="flex items-start">
+                                                                        <span className="mr-2">{data.id}.</span>
+                                                                        <p>{data.content}</p>
                                                                     </div>
-                                                                )
-                                                            }
-                                                        )}
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1287,14 +1141,8 @@ export function CustomerActionForm(props: TProps) {
                                                         <ImageInput
                                                             label="Invoice URL"
                                                             values={
-                                                                data.data
-                                                                    .invoiceUrl
-                                                                    ?.length
-                                                                    ? [
-                                                                        data
-                                                                            .data
-                                                                            .invoiceUrl,
-                                                                    ]
+                                                                data.data.invoiceUrl?.length
+                                                                    ? [data.data.invoiceUrl]
                                                                     : []
                                                             }
                                                             path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
@@ -1302,7 +1150,7 @@ export function CustomerActionForm(props: TProps) {
                                                                 setValue(
                                                                     `components.${i}.data.invoiceUrl`,
                                                                     e[0]
-                                                                )
+                                                                );
                                                             }}
                                                         />
                                                         {renderErrorMessage(
@@ -1314,14 +1162,10 @@ export function CustomerActionForm(props: TProps) {
                                         </div>
                                     </MinimalAccordion>
                                 </div>
-                            )
+                            );
                         }
                         case CustomerComponentEnum.ThreeDDesign: {
-                            const items = _.get(
-                                component,
-                                'data',
-                                []
-                            ) as string[]
+                            const items = _.get(component, "data", []) as string[];
                             return (
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
@@ -1330,22 +1174,16 @@ export function CustomerActionForm(props: TProps) {
                                             values={items}
                                             path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
                                             onSuccess={(e) => {
-                                                setValue(
-                                                    `components.${i}.data`,
-                                                    e
-                                                )
+                                                setValue(`components.${i}.data`, e);
                                             }}
                                         />
-                                        {renderErrorMessage(
-                                            `components.${i}.data`
-                                        )}
+                                        {renderErrorMessage(`components.${i}.data`)}
                                     </MinimalAccordion>
                                 </div>
-                            )
+                            );
                         }
                         case CustomerComponentEnum.TwoDDesign: {
-                            const prev =
-                                component as TCustomerComponentDesign2DItem
+                            const prev = component as TCustomerComponentDesign2DItem;
 
                             return (
                                 <div key={i}>
@@ -1353,18 +1191,14 @@ export function CustomerActionForm(props: TProps) {
                                         <div className="">
                                             <FieldCautation
                                                 onClickAdd={() => {
-                                                    setValue(
-                                                        `components.${i}.data`,
-                                                        [
-                                                            ...prev.data,
-                                                            INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                                                        ]
-                                                    )
+                                                    setValue(`components.${i}.data`, [
+                                                        ...prev.data,
+                                                        INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+                                                    ]);
                                                 }}
                                             />
                                             {prev.data?.map((data, k) => {
-                                                const hasMoreThenOne =
-                                                    prev.data?.length > 1
+                                                const hasMoreThenOne = prev.data?.length > 1;
                                                 return (
                                                     <div
                                                         key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
@@ -1376,198 +1210,129 @@ export function CustomerActionForm(props: TProps) {
                                                                 <IoIosRemoveCircleOutline
                                                                     className={
                                                                         hasMoreThenOne
-                                                                            ? 'text-red-500 cursor-pointer hover:text-red-800'
-                                                                            : ''
+                                                                            ? "text-red-500 cursor-pointer hover:text-red-800"
+                                                                            : ""
                                                                     }
                                                                     onClick={() => {
-                                                                        if (
-                                                                            hasMoreThenOne
-                                                                        )
+                                                                        if (hasMoreThenOne)
                                                                             setValue(
                                                                                 `components.${i}.data`,
-                                                                                prev.data.filter(
-                                                                                    (
-                                                                                        _,
-                                                                                        m
-                                                                                    ) =>
-                                                                                        m !==
-                                                                                        k
-                                                                                )
-                                                                            )
+                                                                                prev.data.filter((_, m) => m !== k)
+                                                                            );
                                                                     }}
                                                                 />
                                                             </div>
                                                         </div>
                                                         <div className="grid grid-cols-2 gap-2">
                                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) =>
-                                                                    field ===
-                                                                    'select'
-                                                            )?.map(
-                                                                (item, j) => {
-                                                                    const options =
-                                                                        DESIGN_2D_SELECT_OPTION(
-                                                                            item.value
-                                                                        )
-                                                                    return (
-                                                                        <div
-                                                                            className="bg-white"
-                                                                            key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                        >
-                                                                            <Select
-                                                                                theme={(
-                                                                                    theme
-                                                                                ) => ({
-                                                                                    ...theme,
-                                                                                    borderRadius: 6,
-                                                                                    colors: {
-                                                                                        ...theme.colors,
-                                                                                        text: 'white',
-                                                                                        primary25:
-                                                                                            '#3F51B5',
-                                                                                        primary:
-                                                                                            '#3F51B5',
-                                                                                    },
-                                                                                })}
-                                                                                classNames={{
-                                                                                    control:
-                                                                                        () =>
-                                                                                            AUTOCOMPLETE_STYLE,
-                                                                                }}
-                                                                                placeholder={
-                                                                                    item.label
-                                                                                }
-                                                                                defaultValue={options?.find(
-                                                                                    (
-                                                                                        option
-                                                                                    ) =>
-                                                                                        option.value ===
-                                                                                        data[
-                                                                                        item
-                                                                                            .value
-                                                                                        ]
-                                                                                )}
-                                                                                onChange={(
-                                                                                    e
-                                                                                ) => {
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.${item.value}`,
-                                                                                        e
-                                                                                            ?.value
-                                                                                            ?.length
-                                                                                            ? e.value
-                                                                                            : ''
-                                                                                    )
-                                                                                }}
-                                                                                options={
-                                                                                    options
-                                                                                }
-                                                                            />
-                                                                            {renderErrorMessage(
-                                                                                `components.${i}.data.${k}.${item.value}`
+                                                                ({ field }) => field === "select"
+                                                            )?.map((item, j) => {
+                                                                const options = DESIGN_2D_SELECT_OPTION(
+                                                                    item.value
+                                                                );
+                                                                return (
+                                                                    <div
+                                                                        className="bg-white"
+                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                    >
+                                                                        <Select
+                                                                            theme={(theme) => ({
+                                                                                ...theme,
+                                                                                borderRadius: 6,
+                                                                                colors: {
+                                                                                    ...theme.colors,
+                                                                                    text: "white",
+                                                                                    primary25: "#3F51B5",
+                                                                                    primary: "#3F51B5",
+                                                                                },
+                                                                            })}
+                                                                            classNames={{
+                                                                                control: () => AUTOCOMPLETE_STYLE,
+                                                                            }}
+                                                                            placeholder={item.label}
+                                                                            defaultValue={options?.find(
+                                                                                (option) =>
+                                                                                    option.value === data[item.value]
                                                                             )}
-                                                                        </div>
-                                                                    )
-                                                                }
-                                                            )}
+                                                                            onChange={(e) => {
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.${item.value}`,
+                                                                                    e?.value?.length ? e.value : ""
+                                                                                );
+                                                                            }}
+                                                                            options={options}
+                                                                        />
+                                                                        {renderErrorMessage(
+                                                                            `components.${i}.data.${k}.${item.value}`
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
                                                         </div>
                                                         <div className="grid grid-cols-2 gap-2">
                                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) =>
-                                                                    field ===
-                                                                    'text'
-                                                            )?.map(
-                                                                (item, j) => {
-                                                                    return (
-                                                                        <div
-                                                                            className="bg-white"
-                                                                            key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                        >
-                                                                            <label className="block text-sm font-medium text-gray-700">
-                                                                                {
-                                                                                    item.label
-                                                                                }
-                                                                            </label>
-                                                                            <input
-                                                                                type="text"
-                                                                                {...register(
-                                                                                    `components.${i}.data.${k}.${item.value}`
-                                                                                )}
-                                                                                placeholder={
-                                                                                    item.placeholder
-                                                                                }
-                                                                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                                            />
-                                                                            {renderErrorMessage(
+                                                                ({ field }) => field === "text"
+                                                            )?.map((item, j) => {
+                                                                return (
+                                                                    <div
+                                                                        className="bg-white"
+                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                    >
+                                                                        <label className="block text-sm font-medium text-gray-700">
+                                                                            {item.label}
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            {...register(
                                                                                 `components.${i}.data.${k}.${item.value}`
                                                                             )}
-                                                                        </div>
-                                                                    )
-                                                                }
-                                                            )}
+                                                                            placeholder={item.placeholder}
+                                                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                        />
+                                                                        {renderErrorMessage(
+                                                                            `components.${i}.data.${k}.${item.value}`
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
                                                         </div>
                                                         <div className="grid grid-cols-2 gap-2">
                                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                (item) =>
-                                                                    item.field ===
-                                                                    'image'
-                                                            )?.map(
-                                                                (item, j) => {
-                                                                    const value =
-                                                                        data[
-                                                                        item
-                                                                            .value
-                                                                        ]
-                                                                    const items =
-                                                                        value?.length
-                                                                            ? [
-                                                                                value,
-                                                                            ]
-                                                                            : []
-                                                                    return (
-                                                                        <div
-                                                                            key={
-                                                                                j
-                                                                            }
-                                                                        >
-                                                                            <ImageInput
-                                                                                label={
-                                                                                    item.label
-                                                                                }
-                                                                                key={
-                                                                                    j
-                                                                                }
-                                                                                path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                                values={
-                                                                                    items
-                                                                                }
-                                                                                onSuccess={(
-                                                                                    e
-                                                                                ) => {
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.${item.value}`,
-                                                                                        e[0]
-                                                                                    )
-                                                                                }}
-                                                                            />
-                                                                            {renderErrorMessage(
-                                                                                `components.${i}.data.${k}.${item.value}`
-                                                                            )}
-                                                                        </div>
-                                                                    )
-                                                                }
-                                                            )}
+                                                                (item) => item.field === "image"
+                                                            )?.map((item, j) => {
+                                                                const value = data[item.value];
+                                                                const items = value?.length ? [value] : [];
+                                                                return (
+                                                                    <div key={j}>
+                                                                        <ImageInput
+                                                                            label={item.label}
+                                                                            key={j}
+                                                                            path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                                            values={items}
+                                                                            onSuccess={(e) => {
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.${item.value}`,
+                                                                                    e[0]
+                                                                                );
+                                                                            }}
+                                                                        />
+                                                                        {renderErrorMessage(
+                                                                            `components.${i}.data.${k}.${item.value}`
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
                                                         </div>
                                                     </div>
-                                                )
+                                                );
                                             })}
                                         </div>
                                     </MinimalAccordion>
                                 </div>
-                            )
+                            );
                         }
                         default:
-                            return <div key={i} />
+                            return <div key={i} />;
                     }
                 })}
                 {errors.components && <p>{errors.components.message}</p>}
@@ -1590,36 +1355,41 @@ export function CustomerActionForm(props: TProps) {
                 </button>
             </div>
         </form>
-    )
+    );
 }
 
 type TProps = {
-    mode: ComponentModeEnum
-    item: TCustomerItem
-    onSubmit: VoidFunction
-}
+    mode: ComponentModeEnum;
+    item: TCustomerItem;
+    onSubmit: VoidFunction;
+};
 // 631
 
 const AUTOCOMPLETE_STYLE =
-    'mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+    "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 function DESIGN_2D_SELECT_OPTION(e: string) {
     switch (e) {
-        case 'design':
-            return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS)
-        case 'finish':
-            return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS)
+        case "design":
+            return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS);
+        case "finish":
+            return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS);
         default:
-            return []
+            return [];
     }
 }
 const TOAST_OPTIONS: ToastOptions = {
-    position: 'top-right',
+    position: "top-right",
     autoClose: 2000,
-    style: { background: '#222222' },
+    style: { background: "#222222" },
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: 'dark',
-}
+    theme: "dark",
+};
+
+const INIT_CORPUS = {
+    isSubmitting: false,
+    isQuotationImageDownload: false,
+};

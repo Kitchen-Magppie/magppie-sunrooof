@@ -201,7 +201,7 @@ const customerComponentQuotationItemSchema = yup.object().shape({
                 floor: yup.string().required('Floor field is Required'),
                 qty: yup.number().required('Quantity Name field is Required'),
                 // unitPrice: yup.string().required('Unit Price field is Required'),
-            })).min(1).required(),
+            })).min(1).required('Atleast 1 entry is required'),
         })
         .required(),
 })
