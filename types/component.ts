@@ -182,6 +182,7 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             address: yup.string().nullable(),
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
+            discount: yup.string().nullable(),
             invoiceUrl: yup.string().required('Invoice URL field is required'),
         })
         .required(),

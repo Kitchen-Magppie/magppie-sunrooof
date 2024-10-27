@@ -24,6 +24,7 @@ export const QuotationMock = {
             zone: 'South India',
             salutation: '',
             city: '',
+            discount: 0,
             invoiceUrl: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4'
         }
     },

@@ -141,6 +141,7 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
             address: '',
             zone: '',
             city: '',
+            discount: 0,
             invoiceUrl: ''
         }
     },
