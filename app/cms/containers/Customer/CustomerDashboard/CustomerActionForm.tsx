@@ -9,14 +9,17 @@ import { Link } from 'react-router-dom'
 import { useLocation } from 'react-use'
 import Select from 'react-select'
 import { IoIosRemoveCircleOutline } from 'react-icons/io'
+import { RiDeleteBin6Fill } from 'react-icons/ri'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 // import { IoMdCloudDownload } from 'react-icons/io'
+
+
+//====================================================================
 
 import logoBlack from '../../../../QuotationGenerator/assets/logo_black.png'
 import qr from '../../../../QuotationGenerator/assets/qr.png'
 import { paymentTermsData } from '../../../../QuotationGenerator/components/paymentTermsData'
-
-//====================================================================
-
 import {
     _,
     ComponentModeEnum,
@@ -29,6 +32,7 @@ import {
     validateCustomerItemSchema,
 } from '../../../../../types'
 import {
+    CMS_QUOTATION_OPTIONS,
     COMPONENT_DESIGN2D_DESIGN_OPTIONS,
     COMPONENT_DESIGN2D_FINISH_OPTIONS,
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
@@ -46,59 +50,14 @@ import {
 } from '../../../components'
 import { ImageInput } from '../../../../../components'
 import { useFirebaseCustomerAction } from '../../../utils/firebase/customer'
-import { RiDeleteBin6Fill } from 'react-icons/ri'
-import jsPDF from 'jspdf'
-import html2canvas from 'html2canvas'
 
-const prices = {
-    Classical: {
-        White: 40250,
-        Wood: 37950,
-    },
-    Modern: {
-        Wood: 35650,
-        White: 37950,
-        Bronze: 39650,
-        Grey: 39650,
-    },
-    'Fluted Minimalist': {
-        Wooden: 35650,
-        White: 37950,
-        Grey: 39650,
-        Bronze: 39650,
-    },
-    'French Window': {
-        White: 55200,
-    },
-    'Louvered Window': {
-        White: 51750,
-        Wooden: 51750,
-    },
-    'Classical Atrium': {
-        White: 40250,
-        Wooden: 37950,
-    },
-    'Fluted Minimalist Atrium': {
-        Wooden: 37950,
-        Bronze: 41950,
-        Grey: 41950,
-    },
-    'Arch Window': {
-        White: 55200,
-    },
-    'Moorgan Premium Remote': {
-        Gold: 42000,
-        Black: 38500,
-        Chrome: 38500,
-    },
-}
 
 export function CustomerActionForm(props: TProps) {
     const [entries, setEntries] = useState([])
     const invoiceRef = useRef(null)
     const invoiceRefPng = useRef(null)
     const totalGrossAmount = entries.reduce((acc, entry) => {
-        const price = prices[entry.design]?.[entry.finish] || 0
+        const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0
         const total = price * (entry.qty || 1)
         return acc + total
     }, 0)
@@ -621,7 +580,7 @@ export function CustomerActionForm(props: TProps) {
                                                                             Design
                                                                         </option>
                                                                         {Object.keys(
-                                                                            prices
+                                                                            CMS_QUOTATION_OPTIONS
                                                                         ).map(
                                                                             (
                                                                                 designOption
@@ -665,7 +624,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         </option>
                                                                         {entry.design &&
                                                                             Object.keys(
-                                                                                prices[
+                                                                                CMS_QUOTATION_OPTIONS[
                                                                                 entry
                                                                                     .design
                                                                                 ] ||
@@ -936,7 +895,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     index
                                                                 ) => {
                                                                     const price =
-                                                                        prices[
+                                                                        CMS_QUOTATION_OPTIONS[
                                                                         entry
                                                                             .design
                                                                         ]?.[
@@ -1243,7 +1202,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     index
                                                                 ) => {
                                                                     const price =
-                                                                        prices[
+                                                                        CMS_QUOTATION_OPTIONS[
                                                                         entry
                                                                             .design
                                                                         ]?.[
