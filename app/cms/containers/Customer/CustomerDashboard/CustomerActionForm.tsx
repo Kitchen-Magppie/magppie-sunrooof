@@ -32,6 +32,7 @@ import {
     validateCustomerItemSchema,
 } from '../../../../../types'
 import {
+    CMS_QUOTATION_FLOOR_OPTIONS,
     CMS_QUOTATION_OPTIONS,
     COMPONENT_DESIGN2D_DESIGN_OPTIONS,
     COMPONENT_DESIGN2D_FINISH_OPTIONS,
@@ -40,6 +41,7 @@ import {
     CUSTOMER_COMPONENT_FEATURE_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
+    INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
     INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
     QUOTATION_SALUTATION_OPTIONS,
 } from '../../../mocks'
@@ -54,43 +56,11 @@ import { useFirebaseStorageActions } from '../../../../../hooks/firebase'
 
 
 export function CustomerActionForm(props: TProps) {
-    const [entries, setEntries] = useState([])
     const invoiceRef = useRef(null)
     const invoiceRefPng = useRef(null)
-    const totalGrossAmount = entries.reduce((acc, entry) => {
-        const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0
-        const total = price * (entry.qty || 1)
-        return acc + total
-    }, 0)
-
-    const addEntry = () => {
-        setEntries([
-            ...entries,
-            {
-                design: '',
-                finish: '',
-                area: '',
-                floor: '',
-                qty: 1,
-                unitPrice: '',
-            },
-        ])
-    }
-
     const StorageActions = useFirebaseStorageActions()
 
-    const removeEntry = (index) => {
-        const newEntries = entries.filter((_, i) => i !== index)
-        setEntries(newEntries)
-    }
-
-    const handleChangeEntry = (index, key, value) => {
-        const newEntries = [...entries]
-        newEntries[index][key] = value
-        setEntries(newEntries)
-    }
-
-    const downloadInvoice = () => {
+    const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current
 
         html2canvas(invoiceElement, { scale: 2 }).then((canvas) => {
@@ -117,32 +87,28 @@ export function CustomerActionForm(props: TProps) {
 
             pdf.save('invoice.pdf') // Save the generated PDF
         })
-    }
+    }, [])
 
-    const onClickGenerateSaveInvoiceImage = (i: number) => {
+    const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
         const invoiceElement = invoiceRefPng.current
         html2canvas(invoiceElement).then((canvas) => {
-
+            // FIXME: Maye be we remove the download feature from here;
             const link = document.createElement('a')
             const dataUrl = canvas.toDataURL('image/png')
             link.href = dataUrl
-            link.download = 'invoice.png'
+            link.download = `invoice-${+new Date()}.png`
             const blob = _.dataURLtoBlob(dataUrl)
-            const file = new File([blob], 'canvasImage.png', { type: 'image/png' });
+            const file = new File([blob], link.download, { type: 'image/png' });
             StorageActions.upload({
                 file,
                 path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
                 onSuccess(e) {
-                    console.log(e)
-                    setValue(
-                        `components.${i}.data.invoiceUrl`,
-                        e.link
-                    )
+                    setValue(`components.${i}.data.invoiceUrl`, e.link)
                 },
             })
             link.click()
         })
-    }
+    }, [])
 
     const [corpus, setCorpus] = useState({ isSubmitting: false })
     const { mode, item } = props
@@ -171,17 +137,31 @@ export function CustomerActionForm(props: TProps) {
     })
 
     const values = watch()
-    const renderErrorMessage = useCallback(
-        (field: string) => {
-            if (_.get(errors, field)) {
-                return (
-                    <p className="text-red-500 text-xs mt-1">
-                        {_.get(errors, `${field}.message`)}
-                    </p>
-                )
-            }
-            return ''
-        },
+
+    // console.log(values)
+    // console.log(errors)
+    const totalGrossAmount = useMemo(() => {
+        const quotation = (values?.components as TCustomerComponentQuotationItem[])?.find((item) => item.value === CustomerComponentEnum.Quotation)
+        if (quotation?.data?.entries?.length)
+            return quotation.data.entries.reduce((acc, entry) => {
+                const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0
+                const total = price * (entry.qty || 1)
+                return acc + total
+            }, 0)
+        return 0
+    }, [])
+
+
+    const renderErrorMessage = useCallback((field: string) => {
+        if (_.get(errors, field)) {
+            return (
+                <p className="text-red-500 text-xs mt-1">
+                    {_.get(errors, `${field}.message`)}
+                </p>
+            )
+        }
+        return ''
+    },
         [errors]
     )
 
@@ -555,7 +535,11 @@ export function CustomerActionForm(props: TProps) {
                                                     </label>
                                                     <button
                                                         type="button"
-                                                        onClick={addEntry}
+                                                        onClick={() => {
+                                                            // setValue(`components.${i}.data.entries`, data.data?.entries?.filter((_, entryIndex) => entryIndex !== index))
+
+                                                            setValue(`components.${i}.data.entries`, [...data.data.entries, INIT_COMPONENT_QUOTATION_ENTRY_ITEM])
+                                                        }}
                                                         className="text-white bg-blue-700 mt-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
                                                     >
                                                         Add Entry
@@ -569,202 +553,88 @@ export function CustomerActionForm(props: TProps) {
                                                         id="entries"
                                                         className="w-full"
                                                     >
-                                                        {entries.map(
-                                                            (entry, index) => (
-                                                                <div
-                                                                    key={index}
-                                                                    className="entry grid grid-cols-3 items-center mt-2"
+                                                        {data.data.entries.map((entry, index) => {
+                                                            return (<div
+                                                                key={index}
+                                                                className="entry grid grid-cols-3 items-center mt-2"
+                                                            >
+                                                                <select
+                                                                    value={entry.design}
+                                                                    {...register(`components.${i}.data.entries.${index}.design`)}
+                                                                    // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
+                                                                    className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
                                                                 >
-                                                                    <select
-                                                                        value={
-                                                                            entry.design
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleChangeEntry(
-                                                                                index,
-                                                                                'design',
-                                                                                e
-                                                                                    .target
-                                                                                    .value
-                                                                            )
-                                                                        }
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                    <option value="">
+                                                                        Select Design
+                                                                    </option>
+                                                                    {Object.keys(CMS_QUOTATION_OPTIONS).map((value, i) => (<option
+                                                                        key={i}
+                                                                        value={value}
                                                                     >
-                                                                        <option value="">
-                                                                            Select
-                                                                            Design
-                                                                        </option>
-                                                                        {Object.keys(
-                                                                            CMS_QUOTATION_OPTIONS
-                                                                        ).map(
-                                                                            (
-                                                                                designOption
-                                                                            ) => (
-                                                                                <option
-                                                                                    key={
-                                                                                        designOption
-                                                                                    }
-                                                                                    value={
-                                                                                        designOption
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        designOption
-                                                                                    }
-                                                                                </option>
-                                                                            )
-                                                                        )}
-                                                                    </select>
+                                                                        {value}
+                                                                    </option>))}
+                                                                </select>
 
-                                                                    <select
-                                                                        value={
-                                                                            entry.finish
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleChangeEntry(
-                                                                                index,
-                                                                                'finish',
-                                                                                e
-                                                                                    .target
-                                                                                    .value
-                                                                            )
-                                                                        }
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                    >
-                                                                        <option value="">
-                                                                            Select
-                                                                            Finish
-                                                                        </option>
-                                                                        {entry.design &&
-                                                                            Object.keys(
-                                                                                CMS_QUOTATION_OPTIONS[
-                                                                                entry
-                                                                                    .design
-                                                                                ] ||
-                                                                                {}
-                                                                            ).map(
-                                                                                (
-                                                                                    finishOption
-                                                                                ) => (
-                                                                                    <option
-                                                                                        key={
-                                                                                            finishOption
-                                                                                        }
-                                                                                        value={
-                                                                                            finishOption
-                                                                                        }
-                                                                                    >
-                                                                                        {
-                                                                                            finishOption
-                                                                                        }
-                                                                                    </option>
-                                                                                )
-                                                                            )}
-                                                                    </select>
+                                                                <select
+                                                                    value={entry.finish}
+                                                                    {...register(`components.${i}.data.entries.${index}.finish`)}
 
-                                                                    <input
-                                                                        type="text"
-                                                                        placeholder="Enter Area"
-                                                                        value={
-                                                                            entry.area
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleChangeEntry(
-                                                                                index,
-                                                                                'area',
-                                                                                e
-                                                                                    .target
-                                                                                    .value
-                                                                            )
-                                                                        }
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                    // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
+                                                                    className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                >
+                                                                    <option value="">
+                                                                        Select Finish
+                                                                    </option>
+                                                                    {entry.design && Object.keys(CMS_QUOTATION_OPTIONS[entry.design] || {}).map((finishOption) => (
+                                                                        <option key={finishOption} value={finishOption}                                                                                >
+                                                                            {finishOption}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="Enter Area"
+                                                                    value={entry.area}
+                                                                    {...register(`components.${i}.data.entries.${index}.area`)}
+
+                                                                    // onChange={(e) => handleChangeEntry(index, 'area', e.target.value)}
+                                                                    className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                />
+
+                                                                <select
+                                                                    value={entry.floor}
+                                                                    // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
+                                                                    {...register(`components.${i}.data.entries.${index}.floor`)}
+
+                                                                    className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                >
+                                                                    <option value="">
+                                                                        Select Floor
+                                                                    </option>
+                                                                    {CMS_QUOTATION_FLOOR_OPTIONS.map((floor) => (<option key={floor} value={floor}>
+                                                                        {floor}
+                                                                    </option>))}
+                                                                </select>
+
+                                                                <input
+                                                                    type="number"
+                                                                    placeholder="Quantity"
+                                                                    value={entry.qty}
+                                                                    {...register(`components.${i}.data.entries.${index}.qty`)}
+                                                                    // onChange={(e) => handleChangeEntry(index, 'qty', e.target.value)}
+                                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                />
+                                                                <div className="flex items-center">
+                                                                    <RiDeleteBin6Fill
+                                                                        onClick={() => {
+                                                                            setValue(`components.${i}.data.entries`, data.data?.entries?.filter((_, entryIndex) => entryIndex !== index))
+                                                                        }}
+                                                                        className="h-5 w-5 ml-2 cursor-pointer"
                                                                     />
-
-                                                                    <select
-                                                                        value={
-                                                                            entry.floor
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleChangeEntry(
-                                                                                index,
-                                                                                'floor',
-                                                                                e
-                                                                                    .target
-                                                                                    .value
-                                                                            )
-                                                                        }
-                                                                        className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                    >
-                                                                        <option value="">
-                                                                            Select
-                                                                            Floor
-                                                                        </option>
-                                                                        {[
-                                                                            'BSMT',
-                                                                            'GF',
-                                                                            'FF',
-                                                                            'SF',
-                                                                            'TF',
-                                                                        ].map(
-                                                                            (
-                                                                                floor
-                                                                            ) => (
-                                                                                <option
-                                                                                    key={
-                                                                                        floor
-                                                                                    }
-                                                                                    value={
-                                                                                        floor
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        floor
-                                                                                    }
-                                                                                </option>
-                                                                            )
-                                                                        )}
-                                                                    </select>
-
-                                                                    <input
-                                                                        type="number"
-                                                                        placeholder="Quantity"
-                                                                        value={
-                                                                            entry.qty
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleChangeEntry(
-                                                                                index,
-                                                                                'qty',
-                                                                                e
-                                                                                    .target
-                                                                                    .value
-                                                                            )
-                                                                        }
-                                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
-                                                                    />
-                                                                    <div className="flex items-center">
-                                                                        <RiDeleteBin6Fill
-                                                                            onClick={() =>
-                                                                                removeEntry(
-                                                                                    index
-                                                                                )
-                                                                            }
-                                                                            className="h-5 w-5 ml-2 cursor-pointer"
-                                                                        />
-                                                                    </div>
                                                                 </div>
-                                                            )
-                                                        )}
+                                                            </div>)
+                                                        })}
                                                     </div>
                                                     <div className="flex justify-end w-full">
                                                         <button
@@ -904,7 +774,7 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {entries.map(
+                                                            {data.data.entries.map(
                                                                 (
                                                                     entry,
                                                                     index
@@ -1211,71 +1081,70 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {entries.map(
-                                                                (
-                                                                    entry,
-                                                                    index
-                                                                ) => {
-                                                                    const price =
-                                                                        CMS_QUOTATION_OPTIONS[
-                                                                        entry
-                                                                            .design
-                                                                        ]?.[
-                                                                        entry
-                                                                            .finish
-                                                                        ] || 0
-                                                                    const total =
-                                                                        price *
-                                                                        (entry.qty ||
-                                                                            1)
+                                                            {data.data.entries.map((
+                                                                entry,
+                                                                index
+                                                            ) => {
+                                                                const price =
+                                                                    CMS_QUOTATION_OPTIONS[
+                                                                    entry
+                                                                        .design
+                                                                    ]?.[
+                                                                    entry
+                                                                        .finish
+                                                                    ] || 0
+                                                                const total =
+                                                                    price *
+                                                                    (entry.qty ||
+                                                                        1)
 
-                                                                    return (
-                                                                        <tr
-                                                                            key={
-                                                                                index
+                                                                return (
+                                                                    <tr
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                        className="border-b border-black"
+                                                                    >
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            {index +
+                                                                                1}
+                                                                        </td>
+                                                                        <td className="border border-black px-4 py-2">
+                                                                            {
+                                                                                entry.design
+                                                                            }{' '}
+                                                                            {
+                                                                                entry.finish
                                                                             }
-                                                                            className="border-b border-black"
-                                                                        >
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                {index +
-                                                                                    1}
-                                                                            </td>
-                                                                            <td className="border border-black px-4 py-2">
-                                                                                {
-                                                                                    entry.design
-                                                                                }{' '}
-                                                                                {
-                                                                                    entry.finish
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black px-4 py-2">
-                                                                                {
-                                                                                    entry.area
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                {
-                                                                                    entry.floor
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                {
-                                                                                    entry.qty
-                                                                                }
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                ₹
-                                                                                {price.toLocaleString()}
-                                                                            </td>
-                                                                            <td className="border border-black text-center px-4 py-2">
-                                                                                ₹
-                                                                                {total.toLocaleString(
-                                                                                    'en-IN'
-                                                                                )}
-                                                                            </td>
-                                                                        </tr>
-                                                                    )
-                                                                }
+                                                                        </td>
+                                                                        <td className="border border-black px-4 py-2">
+                                                                            {
+                                                                                entry.area
+                                                                            }
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            {
+                                                                                entry.floor
+                                                                            }
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            {
+                                                                                entry.qty
+                                                                            }
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            ₹
+                                                                            {price.toLocaleString()}
+                                                                        </td>
+                                                                        <td className="border border-black text-center px-4 py-2">
+                                                                            ₹
+                                                                            {total.toLocaleString(
+                                                                                'en-IN'
+                                                                            )}
+                                                                        </td>
+                                                                    </tr>
+                                                                )
+                                                            }
                                                             )}
                                                             {/* After all entries, render the totals */}
                                                             <tr className="font-bold">

@@ -1,3 +1,5 @@
+import { TCustomerComponentQuotationEntryItem } from "../../../types";
+
 export const QUOTATION_SALUTATION_OPTIONS: string[] = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."];
 
 export const QuotationMock = {
@@ -25,7 +27,8 @@ export const QuotationMock = {
             salutation: '',
             city: '',
             discount: 0,
-            invoiceUrl: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4'
+            invoiceUrl: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4',
+            entries: [] as TCustomerComponentQuotationEntryItem[]
         }
     },
     Design2D: {
@@ -104,3 +107,11 @@ export const CMS_QUOTATION_OPTIONS = {
         Chrome: 38500,
     },
 }
+
+export const CMS_QUOTATION_FLOOR_OPTIONS = [
+    'BSMT',
+    'GF',
+    'FF',
+    'SF',
+    'TF',
+]
