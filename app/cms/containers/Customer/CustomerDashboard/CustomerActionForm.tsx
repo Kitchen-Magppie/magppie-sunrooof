@@ -50,6 +50,7 @@ import {
 } from '../../../components'
 import { ImageInput } from '../../../../../components'
 import { useFirebaseCustomerAction } from '../../../utils/firebase/customer'
+import { useFirebaseStorageActions } from '../../../../../hooks/firebase'
 
 
 export function CustomerActionForm(props: TProps) {
@@ -75,6 +76,8 @@ export function CustomerActionForm(props: TProps) {
             },
         ])
     }
+
+    const StorageActions = useFirebaseStorageActions()
 
     const removeEntry = (index) => {
         const newEntries = entries.filter((_, i) => i !== index)
@@ -116,12 +119,27 @@ export function CustomerActionForm(props: TProps) {
         })
     }
 
-    const downloadInvoicePng = () => {
+    const onClickGenerateSaveInvoiceImage = (i: number) => {
         const invoiceElement = invoiceRefPng.current
         html2canvas(invoiceElement).then((canvas) => {
+
             const link = document.createElement('a')
-            link.href = canvas.toDataURL()
+            const dataUrl = canvas.toDataURL('image/png')
+            link.href = dataUrl
             link.download = 'invoice.png'
+            const blob = _.dataURLtoBlob(dataUrl)
+            const file = new File([blob], 'canvasImage.png', { type: 'image/png' });
+            StorageActions.upload({
+                file,
+                path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
+                onSuccess(e) {
+                    console.log(e)
+                    setValue(
+                        `components.${i}.data.invoiceUrl`,
+                        e.link
+                    )
+                },
+            })
             link.click()
         })
     }
@@ -153,7 +171,6 @@ export function CustomerActionForm(props: TProps) {
     })
 
     const values = watch()
-
     const renderErrorMessage = useCallback(
         (field: string) => {
             if (_.get(errors, field)) {
@@ -752,12 +769,10 @@ export function CustomerActionForm(props: TProps) {
                                                     <div className="flex justify-end w-full">
                                                         <button
                                                             type="button"
-                                                            onClick={
-                                                                downloadInvoicePng
-                                                            }
+                                                            onClick={() => onClickGenerateSaveInvoiceImage(i)}
                                                             className="text-white bg-blue-700 mt-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
                                                         >
-                                                            PNG
+                                                            Generate Design
                                                         </button>
                                                         <button
                                                             type="button"

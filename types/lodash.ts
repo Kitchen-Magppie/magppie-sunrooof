@@ -10,7 +10,8 @@ interface TLodashMixin extends _.LoDashStatic {
     isNumericString: (e: string) => boolean,
     mapNums: (e: unknown[]) => number[],
     applyOrder: (e: string[]) => TApplyOrder,
-    uuid: () => string
+    uuid: () => string,
+    dataURLtoBlob: (e: string) => Blob
 }
 
 
@@ -48,6 +49,20 @@ function labelify(e: string[]): TLabelify[] {
     return e?.map((value) => ({ value, label: value }))
 }
 
+function dataURLtoBlob(dataUrl: string): Blob {
+    const arr = dataUrl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {
+        type: mime
+    });
+}
 _.mixin({
     labelify,
     titleCase,
@@ -55,6 +70,7 @@ _.mixin({
     isNumericString,
     mapNums,
     applyOrder,
-    uuid
+    uuid,
+    dataURLtoBlob
 })
 export default _ as TLodashMixin
