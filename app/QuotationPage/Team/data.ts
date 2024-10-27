@@ -19,7 +19,7 @@ export const team = [
         img: ishat,
         name: 'Ishat Jain',
         positon: 'Co Founder',
-        country: 'INDIA',
+        country: 'India',
         countryLogo: india,
     },
     {

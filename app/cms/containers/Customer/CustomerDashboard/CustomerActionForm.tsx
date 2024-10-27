@@ -666,10 +666,10 @@ export function CustomerActionForm(props: TProps) {
                                                                         {entry.design &&
                                                                             Object.keys(
                                                                                 prices[
-                                                                                    entry
-                                                                                        .design
+                                                                                entry
+                                                                                    .design
                                                                                 ] ||
-                                                                                    {}
+                                                                                {}
                                                                             ).map(
                                                                                 (
                                                                                     finishOption
@@ -937,11 +937,11 @@ export function CustomerActionForm(props: TProps) {
                                                                 ) => {
                                                                     const price =
                                                                         prices[
-                                                                            entry
-                                                                                .design
+                                                                        entry
+                                                                            .design
                                                                         ]?.[
-                                                                            entry
-                                                                                .finish
+                                                                        entry
+                                                                            .finish
                                                                         ] || 0
                                                                     const total =
                                                                         price *
@@ -1095,7 +1095,7 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                    {/* 
+                                                    {/*
                                                         <div className="mt-20">
                                                             <h1 className="text-2xl font-bold mb-2">
                                                                 Payment Terms
@@ -1244,11 +1244,11 @@ export function CustomerActionForm(props: TProps) {
                                                                 ) => {
                                                                     const price =
                                                                         prices[
-                                                                            entry
-                                                                                .design
+                                                                        entry
+                                                                            .design
                                                                         ]?.[
-                                                                            entry
-                                                                                .finish
+                                                                        entry
+                                                                            .finish
                                                                         ] || 0
                                                                     const total =
                                                                         price *
@@ -1448,10 +1448,10 @@ export function CustomerActionForm(props: TProps) {
                                                                     .invoiceUrl
                                                                     ?.length
                                                                     ? [
-                                                                          data
-                                                                              .data
-                                                                              .invoiceUrl,
-                                                                      ]
+                                                                        data
+                                                                            .data
+                                                                            .invoiceUrl,
+                                                                    ]
                                                                     : []
                                                             }
                                                             path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
@@ -1600,8 +1600,8 @@ export function CustomerActionForm(props: TProps) {
                                                                                     ) =>
                                                                                         option.value ===
                                                                                         data[
-                                                                                            item
-                                                                                                .value
+                                                                                        item
+                                                                                            .value
                                                                                         ]
                                                                                 )}
                                                                                 onChange={(
@@ -1672,14 +1672,14 @@ export function CustomerActionForm(props: TProps) {
                                                                 (item, j) => {
                                                                     const value =
                                                                         data[
-                                                                            item
-                                                                                .value
+                                                                        item
+                                                                            .value
                                                                         ]
                                                                     const items =
                                                                         value?.length
                                                                             ? [
-                                                                                  value,
-                                                                              ]
+                                                                                value,
+                                                                            ]
                                                                             : []
                                                                     return (
                                                                         <div
@@ -1738,7 +1738,7 @@ export function CustomerActionForm(props: TProps) {
                     type="submit"
                     className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    {isCreateAction ? 'Create' : 'Edit'} Component
+                    {isCreateAction ? "Create" : "Update"} Component
                     {corpus.isSubmitting ? (
                         <AiOutlineLoading3Quarters className="text-xl animate-spin" />
                     ) : (
