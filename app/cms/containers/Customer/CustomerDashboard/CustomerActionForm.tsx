@@ -9,9 +9,10 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-use";
 import Select from "react-select";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { FaRegFilePdf } from "react-icons/fa";
+import { MdOutlineCloudUpload } from "react-icons/md";
 // import { IoMdCloudDownload } from 'react-icons/io'
 
 //====================================================================
@@ -87,31 +88,7 @@ export function CustomerActionForm(props: TProps) {
         });
     }, []);
 
-    const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
-        const invoiceElement = invoiceRefPng.current;
-        setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
-        html2canvas(invoiceElement)
-            .then((canvas) => {
-                // FIXME: Maye be we remove the download feature from here;
-                const link = document.createElement("a");
-                const dataUrl = canvas.toDataURL("image/png");
-                link.href = dataUrl;
-                link.download = `invoice-${+new Date()}.png`;
-                const blob = _.dataURLtoBlob(dataUrl);
-                const file = new File([blob], link.download, { type: "image/png" });
-                StorageActions.upload({
-                    file,
-                    path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
-                    onSuccess(e) {
-                        setValue(`components.${i}.data.invoiceUrl`, e.link);
-                    },
-                });
-                link.click();
-            })
-            .finally(() => {
-                setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
-            });
-    }, []);
+
 
     const [corpus, setCorpus] = useState(INIT_CORPUS);
     const { mode, item } = props;
@@ -141,6 +118,32 @@ export function CustomerActionForm(props: TProps) {
 
     const values = watch();
 
+    const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
+        const invoiceElement = invoiceRefPng.current;
+        setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
+        html2canvas(invoiceElement)
+            .then((canvas) => {
+                // FIXME: Maye be we remove the download feature from here;
+                const link = document.createElement("a");
+                const dataUrl = canvas.toDataURL("image/png");
+                link.href = dataUrl;
+                link.download = `invoice-${+new Date()}.png`;
+                const blob = _.dataURLtoBlob(dataUrl);
+                const file = new File([blob], link.download, { type: "image/png" });
+                StorageActions.upload({
+                    file,
+                    path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
+                    onSuccess(e) {
+                        setValue(`components.${i}.data.invoiceUrl`, e.link);
+                    },
+                });
+                link.click();
+            })
+            .finally(() => {
+                setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
+            });
+    }, [StorageActions, setValue, values?.customerId]);
+
     // console.log(values)
     const totalGrossAmount = useMemo(() => {
         const quotation = (
@@ -154,7 +157,7 @@ export function CustomerActionForm(props: TProps) {
             }, 0);
         }
         return 0;
-    }, []);
+    }, [values?.components]);
 
     const renderErrorMessage = useCallback(
         (field: string) => {
@@ -328,6 +331,8 @@ export function CustomerActionForm(props: TProps) {
                                 totalGrossAmount - discountAmount + freightCharges;
                             const taxAmount = totalAmount * (18 / 100);
                             const grandTotal = totalAmount + taxAmount;
+                            const entries = data?.data?.entries?.length ? data?.data?.entries : []
+                            const hasMoreThenOne = entries?.length > 1;
 
                             return (
                                 <div key={i}>
@@ -475,44 +480,59 @@ export function CustomerActionForm(props: TProps) {
                                                     />
                                                     {renderErrorMessage(`components.${i}.data.discount`)}
                                                 </div>
-                                                <div>
-                                                    <label className="block text-sm font-medium text-gray-700">
-                                                        Add Design Entries
-                                                    </label>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            // setValue(`components.${i}.data.entries`, data.data?.entries?.filter((_, entryIndex) => entryIndex !== index))
 
-                                                            setValue(`components.${i}.data.entries`, [
-                                                                ...data.data.entries,
-                                                                INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
-                                                            ]);
-                                                        }}
-                                                        className="text-white bg-blue-700 mt-1 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2"
-                                                    >
-                                                        Add Entry
-                                                    </button>
-                                                    {renderErrorMessage(`components.${i}.data.entries`)}
-                                                </div>
                                             </div>
 
-                                            <div className="">
-                                                <div>
-                                                    <div id="entries" className="w-full">
-                                                        {data.data.entries.map((entry, index) => {
-                                                            return (
-                                                                <div
-                                                                    key={index}
-                                                                    className="entry grid grid-cols-3 items-center mt-2"
-                                                                >
+                                            <div className="border rounded-lg p-3">
+                                                <FieldCautation
+                                                    label="Entries"
+                                                    onClickAdd={() => {
+                                                        setValue(`components.${i}.data.entries`, [
+                                                            ...entries,
+                                                            INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
+                                                        ]);
+                                                    }}
+
+                                                />
+                                                {renderErrorMessage(`components.${i}.data.entries`)}
+                                                <div id="entries" className="w-full">
+                                                    {entries?.map((entry, index) => {
+
+                                                        return (<div key={i}>
+                                                            <div className="text-gray-400 italic text-lg flex justify-between">
+                                                                #{index + 1}
+                                                                <div className="py-1">
+                                                                    <IoIosRemoveCircleOutline
+                                                                        className={
+                                                                            hasMoreThenOne
+                                                                                ? "text-red-500 cursor-pointer hover:text-red-800"
+                                                                                : ""
+                                                                        }
+                                                                        onClick={() => {
+                                                                            setValue(
+                                                                                `components.${i}.data.entries`,
+                                                                                data.data?.entries?.filter(
+                                                                                    (_, entryIndex) =>
+                                                                                        entryIndex !== index
+                                                                                )
+                                                                            );
+                                                                        }}
+
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div className="grid grid-cols-2 gap-2 ">
+                                                                <div className="bg-white ">
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        Design
+                                                                    </label>
                                                                     <select
                                                                         value={entry.design}
                                                                         {...register(
                                                                             `components.${i}.data.entries.${index}.design`
                                                                         )}
                                                                         // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                        className="bg-gray-50 border w-full mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
                                                                     >
                                                                         <option value="">Select Design</option>
                                                                         {Object.keys(CMS_QUOTATION_OPTIONS).map(
@@ -527,6 +547,11 @@ export function CustomerActionForm(props: TProps) {
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.entries.${index}.design`
                                                                     )}
+                                                                </div>
+                                                                <div className="bg-white">
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        Finish
+                                                                    </label>
 
                                                                     <select
                                                                         value={entry.finish}
@@ -534,7 +559,7 @@ export function CustomerActionForm(props: TProps) {
                                                                             `components.${i}.data.entries.${index}.finish`
                                                                         )}
                                                                         // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
                                                                     >
                                                                         <option value="">Select Finish</option>
                                                                         {entry.design &&
@@ -553,28 +578,35 @@ export function CustomerActionForm(props: TProps) {
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.entries.${index}.finish`
                                                                     )}
+                                                                </div>
+                                                            </div>
 
+                                                            <div className="grid grid-cols-2 gap-2 ">
+                                                                <div className="bg-white ">
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        Area
+                                                                    </label>
                                                                     <input
                                                                         type="text"
                                                                         placeholder="Enter Area"
                                                                         value={entry.area}
-                                                                        {...register(
-                                                                            `components.${i}.data.entries.${index}.area`
-                                                                        )}
+                                                                        {...register(`components.${i}.data.entries.${index}.area`)}
                                                                         // onChange={(e) => handleChangeEntry(index, 'area', e.target.value)}
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
                                                                     />
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.entries.${index}.area`
-                                                                    )}
-
+                                                                    {renderErrorMessage(`components.${i}.data.entries.${index}.area`)}
+                                                                </div>
+                                                                <div className="bg-white">
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        Floor
+                                                                    </label>
                                                                     <select
                                                                         value={entry.floor}
                                                                         // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
                                                                         {...register(
                                                                             `components.${i}.data.entries.${index}.floor`
                                                                         )}
-                                                                        className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                        className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
                                                                     >
                                                                         <option value="">Select Floor</option>
                                                                         {CMS_QUOTATION_FLOOR_OPTIONS.map(
@@ -589,6 +621,15 @@ export function CustomerActionForm(props: TProps) {
                                                                         `components.${i}.data.entries.${index}.floor`
                                                                     )}
 
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div className="grid grid-cols-2 gap-2 ">
+                                                                <div className="bg-white ">
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        Quantity
+                                                                    </label>
                                                                     <input
                                                                         type="number"
                                                                         placeholder="Quantity"
@@ -597,321 +638,204 @@ export function CustomerActionForm(props: TProps) {
                                                                             `components.${i}.data.entries.${index}.qty`
                                                                         )}
                                                                         // onChange={(e) => handleChangeEntry(index, 'qty', e.target.value)}
-                                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-60"
+                                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
                                                                     />
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.entries.${index}.qty`
                                                                     )}
-                                                                    <div className="flex items-center">
-                                                                        <RiDeleteBin6Fill
-                                                                            onClick={() => {
-                                                                                setValue(
-                                                                                    `components.${i}.data.entries`,
-                                                                                    data.data?.entries?.filter(
-                                                                                        (_, entryIndex) =>
-                                                                                            entryIndex !== index
-                                                                                    )
-                                                                                );
-                                                                            }}
-                                                                            className="h-5 w-5 ml-2 cursor-pointer"
-                                                                        />
-                                                                    </div>
                                                                 </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                    <div className="flex justify-end w-full gap-3">
-                                                        <button
-                                                            disabled={corpus.isQuotationImageDownload}
-                                                            type="button"
-                                                            onClick={() => onClickGenerateSaveInvoiceImage(i)}
-                                                            className=" flex justify-center gap-3 flex-row align-middle p-3  border border-transparent text-sm font-medium rounded-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                        >
-                                                            Generate Design
-                                                            {corpus.isQuotationImageDownload ? (
-                                                                <AiOutlineLoading3Quarters className="text-xl animate-spin" />
-                                                            ) : (
-                                                                ""
-                                                            )}
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            onClick={downloadInvoice}
-                                                            className=" flex justify-center gap-3 flex-row align-middle p-3  border border-transparent text-sm font-medium rounded-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                                        >
-                                                            PDF
-                                                        </button>
-                                                        {/* <IoMdCloudDownload
+                                                                <div />
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        );
+                                                    })}
+                                                </div>
+                                                <div className="flex gap-2 mt-2 flex-row-reverse">
+                                                    <button
+                                                        disabled={corpus.isQuotationImageDownload}
+                                                        type="button"
+                                                        onClick={() => onClickGenerateSaveInvoiceImage(i)}
+                                                        className=" flex justify-center gap-3 flex-row align-middle p-2  border border-transparent text-sm font-medium rounded-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                    >
+                                                        <MdOutlineCloudUpload className="text-xl" />
+                                                        Generate Design
+                                                        {corpus.isQuotationImageDownload ? (
+                                                            <AiOutlineLoading3Quarters className="text-xl animate-spin" />
+                                                        ) : ''}
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={downloadInvoice}
+                                                        className=" flex justify-center gap-3 flex-row align-middle p-2  border border-transparent text-sm font-medium rounded-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                                    >
+                                                        <FaRegFilePdf className="text-lg" />
+                                                        PDF
+                                                    </button>
+                                                    {/* <IoMdCloudDownload
                                                             onClick={
                                                                 downloadInvoice
                                                             }
                                                             className="h-6 w-6 ml-2 cursor-pointer"
                                                         /> */}
+                                                </div>
+                                                <div
+                                                    className=" py-10 px-5  w-full"
+                                                    ref={invoiceRefPng}
+                                                >
+                                                    <div className="w-full">
+                                                        <table
+                                                            style={{ width: "100%" }}
+                                                        >
+                                                            <thead className="bg-[darkorange]" >
+                                                                <tr className="">
+                                                                    <th className="border border-black py-2 px-4">
+                                                                        S.No
+                                                                    </th>
+                                                                    <th className="border text-start border-black py-2 px-4">
+                                                                        Design and Finish
+                                                                    </th>
+                                                                    <th className="border border-black text-start py-2 px-4">
+                                                                        Area
+                                                                    </th>
+                                                                    <th className="border border-black py-2 px-4">
+                                                                        Floor
+                                                                    </th>
+                                                                    <th className="border border-black py-2 px-4">
+                                                                        Qty
+                                                                    </th>
+                                                                    <th className="border border-black py-2 px-4">
+                                                                        Unit Price
+                                                                    </th>
+                                                                    <th className="border border-black py-2 px-4">
+                                                                        Total Price
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {entries.map((entry, index) => {
+                                                                    const price =
+                                                                        CMS_QUOTATION_OPTIONS[entry.design]?.[
+                                                                        entry.finish
+                                                                        ] || 0;
+                                                                    const total = price * (entry.qty || 1);
+
+                                                                    return (
+                                                                        <tr
+                                                                            key={index}
+                                                                            className="border-b border-black"
+                                                                        >
+                                                                            <td className="border border-black text-center px-4 py-2">
+                                                                                {index + 1}
+                                                                            </td>
+                                                                            <td className="border border-black px-4 py-2">
+                                                                                {entry.design} {entry.finish}
+                                                                            </td>
+                                                                            <td className="border border-black px-4 py-2">
+                                                                                {entry.area}
+                                                                            </td>
+                                                                            <td className="border border-black text-center px-4 py-2">
+                                                                                {entry.floor}
+                                                                            </td>
+                                                                            <td className="border border-black text-center px-4 py-2">
+                                                                                {entry.qty}
+                                                                            </td>
+                                                                            <td className="border border-black text-center px-4 py-2">
+                                                                                ₹{price.toLocaleString()}
+                                                                            </td>
+                                                                            <td className="border border-black text-center px-4 py-2">
+                                                                                ₹{total.toLocaleString("en-IN")}
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                                {/* After all entries, render the totals */}
+                                                                <tr className="font-bold">
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Gross Amount
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        ₹{totalGrossAmount.toLocaleString("en-IN")}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Discount %
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        {data.data.discount}%
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Discount Amount
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        ₹{discountAmount.toLocaleString()}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Freight Charges
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        ₹{freightCharges.toLocaleString()}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr className="font-bold">
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Total
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        ₹{totalAmount.toLocaleString("en-IN")}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Tax @ 18%
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        ₹{taxAmount.toLocaleString()}
+                                                                    </td>
+                                                                </tr>
+                                                                <tr className="font-bold">
+                                                                    <td
+                                                                        colSpan={6}
+                                                                        className="px-4 py-2 text-right border border-black"
+                                                                    >
+                                                                        Grand Total
+                                                                    </td>
+                                                                    <td className="border border-black px-4 py-2 text-center">
+                                                                        ₹{grandTotal.toLocaleString("en-IN")}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div
-                                                className="container mx-auto max-w-7xl py-10 px-5"
-                                                ref={invoiceRefPng}
-                                            >
-                                                {/* <div className="flex justify-between">
-                                                        <div>
-                                                            <img
-                                                                src={logoBlack}
-                                                                className="w-[220px] mb-5"
-                                                                alt="Logo"
-                                                            />
-                                                            <p className="text-lg mb-5">
-                                                                Sunrooof
-                                                                Luminaries Pvt
-                                                                Ltd.
-                                                            </p>
-                                                            <p className="text-lg mb-5">
-                                                                Plot No 3,
-                                                                Sector 8, IMT
-                                                                Manesar,
-                                                            </p>
-                                                            <p className="text-lg mb-5">
-                                                                Gurgaon, Haryana
-                                                                - 122052
-                                                            </p>
-                                                        </div>
-                                                        <div>
-                                                            <img
-                                                                src={qr}
-                                                                alt="QR Code"
-                                                                className="w-[150px]"
-                                                            />
-                                                            <a
-                                                                href="https://www.sunrooof.com"
-                                                                className="text-lg mb-5"
-                                                            >
-                                                                www.sunrooof.com
-                                                            </a>
-                                                        </div>
-                                                    </div> */}
 
-                                                <div>
-                                                    {/* <h3 className="text-3xl font-bold mb-4">
-                                                            Quotation
-                                                        </h3>
-                                                        <p className="text-lg mb-5">
-                                                            <span className="font-bold">
-                                                                Client:{' '}
-                                                            </span>
-                                                            {values.name}
-                                                        </p> */}
-                                                    {/* <p className="text-lg mb-5">
-                                                            <span className="font-bold">
-                                                                Phone:
-                                                            </span>{' '}
-                                                            {data.data.mobile}
-                                                        </p>
-                                                        <p className="text-lg mb-5">
-                                                            <span className="font-bold">
-                                                                Email:
-                                                            </span>{' '}
-                                                            {data.data.email}
-                                                        </p>
-                                                        <p className="text-lg mb-5">
-                                                            <span className="font-bold">
-                                                                Site Address:
-                                                            </span>{' '}
-                                                            {data.data.address}
-                                                        </p> */}
-                                                    {/* <p className="text-lg mb-5">
-                                                            <span className="font-bold">
-                                                                Zone:
-                                                            </span>{' '}
-                                                            {data.data.zone}
-                                                        </p> */}
-                                                    {/* <p className="text-lg mb-5">
-                                                            <span className="font-bold">
-                                                                Date:
-                                                            </span>{' '}
-                                                            {
-                                                                data.data
-                                                                    .createdDate
-                                                            }
-                                                        </p> */}
-                                                    <table className="container mx-auto max-w-7xl border border-black">
-                                                        <thead className="bg-[darkorange]">
-                                                            <tr className="">
-                                                                <th className="border border-black py-2 px-4">
-                                                                    S.No
-                                                                </th>
-                                                                <th className="border text-start border-black py-2 px-4">
-                                                                    Design and Finish
-                                                                </th>
-                                                                <th className="border border-black text-start py-2 px-4">
-                                                                    Area
-                                                                </th>
-                                                                <th className="border border-black py-2 px-4">
-                                                                    Floor
-                                                                </th>
-                                                                <th className="border border-black py-2 px-4">
-                                                                    Qty
-                                                                </th>
-                                                                <th className="border border-black py-2 px-4">
-                                                                    Unit Price
-                                                                </th>
-                                                                <th className="border border-black py-2 px-4">
-                                                                    Total Price
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {data.data.entries.map((entry, index) => {
-                                                                const price =
-                                                                    CMS_QUOTATION_OPTIONS[entry.design]?.[
-                                                                    entry.finish
-                                                                    ] || 0;
-                                                                const total = price * (entry.qty || 1);
 
-                                                                return (
-                                                                    <tr
-                                                                        key={index}
-                                                                        className="border-b border-black"
-                                                                    >
-                                                                        <td className="border border-black text-center px-4 py-2">
-                                                                            {index + 1}
-                                                                        </td>
-                                                                        <td className="border border-black px-4 py-2">
-                                                                            {entry.design} {entry.finish}
-                                                                        </td>
-                                                                        <td className="border border-black px-4 py-2">
-                                                                            {entry.area}
-                                                                        </td>
-                                                                        <td className="border border-black text-center px-4 py-2">
-                                                                            {entry.floor}
-                                                                        </td>
-                                                                        <td className="border border-black text-center px-4 py-2">
-                                                                            {entry.qty}
-                                                                        </td>
-                                                                        <td className="border border-black text-center px-4 py-2">
-                                                                            ₹{price.toLocaleString()}
-                                                                        </td>
-                                                                        <td className="border border-black text-center px-4 py-2">
-                                                                            ₹{total.toLocaleString("en-IN")}
-                                                                        </td>
-                                                                    </tr>
-                                                                );
-                                                            })}
-                                                            {/* After all entries, render the totals */}
-                                                            <tr className="font-bold">
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Gross Amount
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹{totalGrossAmount.toLocaleString("en-IN")}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Discount %
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    {data.data.discount}%
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Discount Amount
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹{discountAmount.toLocaleString()}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Freight Charges
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹{freightCharges.toLocaleString()}
-                                                                </td>
-                                                            </tr>
-                                                            <tr className="font-bold">
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Total
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹{totalAmount.toLocaleString("en-IN")}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Tax @ 18%
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹{taxAmount.toLocaleString()}
-                                                                </td>
-                                                            </tr>
-                                                            <tr className="font-bold">
-                                                                <td
-                                                                    colSpan={6}
-                                                                    className="px-4 py-2 text-right border border-black"
-                                                                >
-                                                                    Grand Total
-                                                                </td>
-                                                                <td className="border border-black px-4 py-2 text-center">
-                                                                    ₹{grandTotal.toLocaleString("en-IN")}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    {/*
-                                                        <div className="mt-20">
-                                                            <h1 className="text-2xl font-bold mb-2">
-                                                                Payment Terms
-                                                            </h1>
-                                                            {paymentTermsData.map(
-                                                                (data) => {
-                                                                    return (
-                                                                        <div
-                                                                            className="text-lg mb-2 list-decimal"
-                                                                            key={
-                                                                                data.id
-                                                                            }
-                                                                        >
-                                                                            <div className="flex items-start">
-                                                                                <span className="mr-2">
-                                                                                    {
-                                                                                        data.id
-                                                                                    }
-
-                                                                                    .
-                                                                                </span>
-                                                                                <p>
-                                                                                    {
-                                                                                        data.content
-                                                                                    }
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                }
-                                                            )}
-                                                        </div> */}
-                                                </div>
-                                            </div>
                                             <div
                                                 className="container mx-auto max-w-7xl py-10 px-5 absolute top-[-1000px] left-[-2000px]"
                                                 ref={invoiceRef}
@@ -997,7 +921,7 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {data.data.entries.map((entry, index) => {
+                                                            {entries.map((entry, index) => {
                                                                 const price =
                                                                     CMS_QUOTATION_OPTIONS[entry.design]?.[
                                                                     entry.finish
