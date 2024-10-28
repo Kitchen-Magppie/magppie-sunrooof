@@ -87,31 +87,7 @@ export function CustomerActionForm(props: TProps) {
         });
     }, []);
 
-    const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
-        const invoiceElement = invoiceRefPng.current;
-        setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
-        html2canvas(invoiceElement)
-            .then((canvas) => {
-                // FIXME: Maye be we remove the download feature from here;
-                const link = document.createElement("a");
-                const dataUrl = canvas.toDataURL("image/png");
-                link.href = dataUrl;
-                link.download = `invoice-${+new Date()}.png`;
-                const blob = _.dataURLtoBlob(dataUrl);
-                const file = new File([blob], link.download, { type: "image/png" });
-                StorageActions.upload({
-                    file,
-                    path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
-                    onSuccess(e) {
-                        setValue(`components.${i}.data.invoiceUrl`, e.link);
-                    },
-                });
-                link.click();
-            })
-            .finally(() => {
-                setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
-            });
-    }, []);
+
 
     const [corpus, setCorpus] = useState(INIT_CORPUS);
     const { mode, item } = props;
@@ -141,6 +117,32 @@ export function CustomerActionForm(props: TProps) {
 
     const values = watch();
 
+    const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
+        const invoiceElement = invoiceRefPng.current;
+        setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
+        html2canvas(invoiceElement)
+            .then((canvas) => {
+                // FIXME: Maye be we remove the download feature from here;
+                const link = document.createElement("a");
+                const dataUrl = canvas.toDataURL("image/png");
+                link.href = dataUrl;
+                link.download = `invoice-${+new Date()}.png`;
+                const blob = _.dataURLtoBlob(dataUrl);
+                const file = new File([blob], link.download, { type: "image/png" });
+                StorageActions.upload({
+                    file,
+                    path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
+                    onSuccess(e) {
+                        setValue(`components.${i}.data.invoiceUrl`, e.link);
+                    },
+                });
+                link.click();
+            })
+            .finally(() => {
+                setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
+            });
+    }, [StorageActions, setValue, values?.customerId]);
+
     // console.log(values)
     const totalGrossAmount = useMemo(() => {
         const quotation = (
@@ -154,7 +156,7 @@ export function CustomerActionForm(props: TProps) {
             }, 0);
         }
         return 0;
-    }, []);
+    }, [values?.components]);
 
     const renderErrorMessage = useCallback(
         (field: string) => {
