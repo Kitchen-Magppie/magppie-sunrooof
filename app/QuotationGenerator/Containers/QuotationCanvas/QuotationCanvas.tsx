@@ -30,7 +30,7 @@ import { _ } from '../../../../types'
 import MeasurementExample from '../MeasurementExample'
 import { KonvaActionButton } from '../../components'
 
-const spacing = 10
+// const spacing = 10
 
 
 function QuotationCanvas() {
@@ -48,15 +48,10 @@ function QuotationCanvas() {
     const transformerRef = useRef<Konva.Transformer>(null)
     const [image, setImage] = useImage(corpus.selection.image)
     const [patternImage, setPatternImage] = useState(null)
-    const [images, setImages] = useState<any[]>([])
+    const [images, setImages] = useState<TImageItem[]>([])
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
     const [history, setHistory] = useState([]);
 
-
-    console.log(measurement)
-
-    console.log(isDrawingStarted)
-    console.log(isDrawingStarted && measurement.unit?.length && measurement?.value)
     useEffect(() => {
         const img = new window.Image()
 
@@ -128,6 +123,7 @@ function QuotationCanvas() {
         setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
 
         setImages(newImages);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [rectProps, patternImage]);
 
 
@@ -166,7 +162,7 @@ function QuotationCanvas() {
     }
 
     // Handle image drag end
-    const handleImageDragEnd = (e: any, id: string) => {
+    const handleImageDragEnd = (e: Konva.KonvaEventObject<DragEvent>, id: string) => {
         const { x, y } = e.target.position()
 
         // Before updating images
@@ -180,7 +176,7 @@ function QuotationCanvas() {
     }
 
     // Handle image transform end
-    const handleImageTransformEnd = (e: any, id: string) => {
+    const handleImageTransformEnd = (e: Konva.KonvaEventObject<Event>, id: string) => {
         const node = e.target
         const scaleX = node.scaleX()
         const scaleY = node.scaleY()
@@ -202,7 +198,7 @@ function QuotationCanvas() {
         )
     }
 
-    const handleUndo = () => {
+    const handleUndo = useCallback(() => {
         if (history.length === 0) return;
 
         const lastState = history[history.length - 1];
@@ -213,7 +209,7 @@ function QuotationCanvas() {
 
         // Remove the last state from history
         setHistory((prevHistory) => prevHistory.slice(0, -1));
-    };
+    }, [history, images, rectProps])
 
 
     // Handle delete key to remove selected image
@@ -232,7 +228,7 @@ function QuotationCanvas() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
-    }, [selectedImageId])
+    }, [images, rectProps, selectedImageId])
 
     useEffect(() => {
         if (Presentation?.value?.file?.size) {
@@ -452,7 +448,7 @@ function QuotationCanvas() {
                 </div>
             </div>
         )
-    }, [handleDownload])
+    }, [handleDownload, handleUndo])
 
     // console.log(rectProps)
 
@@ -549,10 +545,10 @@ function QuotationCanvas() {
             )
         )
     }, [linePoints])
-    const imageSize = 40
-    const spacing = 10
+    // const imageSize = 40
+    // const spacing = 10
 
-    const imagesPerRow = Math.floor(rectProps.width / (imageSize + spacing))
+    // const imagesPerRow = Math.floor(rectProps.width / (imageSize + spacing))
 
     return (
         <form className="">
@@ -588,9 +584,7 @@ function QuotationCanvas() {
                                     <Layer>
                                         {Presentation?.value?.file?.size ? (
                                             <KonvaImage image={image} />
-                                        ) : (
-                                            ''
-                                        )}
+                                        ) : ''}
                                         {isDrawingStarted ? (
                                             <>
                                                 <Rect
@@ -613,18 +607,16 @@ function QuotationCanvas() {
                                                 {images.map((img) => (
                                                     <KonvaImage
                                                         key={img.id}
-                                                        image={img.image}
+                                                        image={img.image as CanvasImageSource}
                                                         x={img.x}
                                                         y={img.y}
                                                         width={img.width}
                                                         height={img.height}
                                                         rotation={img.rotation}
                                                         draggable
-                                                        onClick={() =>
-                                                            handleImageSelect(
-                                                                img.id
-                                                            )
-                                                        }
+                                                        onClick={() => handleImageSelect(
+                                                            img.id
+                                                        )}
                                                         onDragEnd={(e) =>
                                                             handleImageDragEnd(
                                                                 e,
@@ -713,3 +705,14 @@ export default QuotationCanvas
 const INIT_CORPUS = {
     selection: { sunrooofWindow: '', image: null },
 }
+type TImageItem = {
+    id: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rotation: number;
+    image: object;
+}
+
+
