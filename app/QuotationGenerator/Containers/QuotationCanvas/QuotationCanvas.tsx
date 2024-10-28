@@ -30,6 +30,8 @@ import { _ } from '../../../../types'
 import MeasurementExample from '../MeasurementExample'
 import { KonvaActionButton } from '../../components'
 
+const spacing = 10
+
 
 function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms)
@@ -46,6 +48,10 @@ function QuotationCanvas() {
     const transformerRef = useRef<Konva.Transformer>(null)
     const [image, setImage] = useImage(corpus.selection.image)
     const [patternImage, setPatternImage] = useState(null)
+    const [images, setImages] = useState<any[]>([])
+    const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
+    const [history, setHistory] = useState([]);
+
 
     console.log(measurement)
 
@@ -84,7 +90,149 @@ function QuotationCanvas() {
         if (!measurement.pixelLength || measurement.quantity === 0) return // Ensure units are valid
         const pixelsPerUnit = measurement.pixelLength / measurement.quantity
         setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
-    }, [measurement.quantity, measurement.pixelLength])
+    }, [measurement.quantity, measurement.pixelLength]);
+
+    // Function to update images inside the rectangle
+    const updateImagesInRect = useCallback(() => {
+        if (!rectProps || !patternImage) return;
+
+        const { x: rectX, y: rectY, width: rectWidth, height: rectHeight } = rectProps;
+
+        const imageWidth = 50; // Desired image width
+        const imageHeight = 50; // Desired image height
+        const spacing = 20; // Space between images
+
+        const columns = Math.floor(rectWidth / (imageWidth + spacing));
+        const rows = Math.floor(rectHeight / (imageHeight + spacing));
+
+        const newImages = [];
+
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < columns; col++) {
+                const imgX = rectX + col * (imageWidth + spacing);
+                const imgY = rectY + row * (imageHeight + spacing);
+
+                newImages.push({
+                    id: `${row}-${col}-${Date.now()}`,
+                    x: imgX,
+                    y: imgY,
+                    width: imageWidth,
+                    height: imageHeight,
+                    rotation: 0,
+                    image: patternImage,
+                });
+            }
+        }
+
+        // Before updating images
+        setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+
+        setImages(newImages);
+    }, [rectProps, patternImage]);
+
+
+    // Update images when rectangle or pattern image changes
+    useEffect(() => {
+        updateImagesInRect()
+    }, [rectProps, patternImage, updateImagesInRect])
+
+    // Handle rectangle transform
+    const handleRectTransform = useCallback(() => {
+        if (rectRef.current) {
+            const node = rectRef.current;
+            const newScaleX = node.scaleX();
+            const newScaleY = node.scaleY();
+
+            // Update the rectangle's dimensions and reset scale
+            setRectProps((prev) => ({
+                ...prev,
+                x: node.x(),
+                y: node.y(),
+                width: node.width() * newScaleX,
+                height: node.height() * newScaleY,
+            }));
+
+            node.scaleX(1);
+            node.scaleY(1);
+
+            updateImagesInRect(); // Update child images
+        }
+    }, [updateImagesInRect]);
+
+
+    // Handle image selection
+    const handleImageSelect = (id: string) => {
+        setSelectedImageId(id)
+    }
+
+    // Handle image drag end
+    const handleImageDragEnd = (e: any, id: string) => {
+        const { x, y } = e.target.position()
+
+        // Before updating images
+        setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+
+        setImages((prevImages) =>
+            prevImages.map((img) =>
+                img.id === id ? { ...img, x, y } : img
+            )
+        )
+    }
+
+    // Handle image transform end
+    const handleImageTransformEnd = (e: any, id: string) => {
+        const node = e.target
+        const scaleX = node.scaleX()
+        const scaleY = node.scaleY()
+
+        const width = node.width() * scaleX
+        const height = node.height() * scaleY
+        const rotation = node.rotation()
+
+        node.scaleX(1)
+        node.scaleY(1)
+
+        // Before updating images
+        setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+
+        setImages((prevImages) =>
+            prevImages.map((img) =>
+                img.id === id ? { ...img, width, height, rotation } : img
+            )
+        )
+    }
+
+    const handleUndo = () => {
+        if (history.length === 0) return;
+
+        const lastState = history[history.length - 1];
+        // Before updating images
+        setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+        setImages(lastState.images);
+        setRectProps(lastState.rectProps);
+
+        // Remove the last state from history
+        setHistory((prevHistory) => prevHistory.slice(0, -1));
+    };
+
+
+    // Handle delete key to remove selected image
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Delete' && selectedImageId) {
+                // Before updating images
+                setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+                setImages((prevImages) =>
+                    prevImages.filter((img) => img.id !== selectedImageId)
+                )
+                setSelectedImageId(null)
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [selectedImageId])
 
     useEffect(() => {
         if (Presentation?.value?.file?.size) {
@@ -279,9 +427,9 @@ function QuotationCanvas() {
                         />
 
                         <KonvaActionButton
-                            label='Remove MASK'
+                            label='UNDO'
                             icon={<RxMaskOn className="my-auto text-xl" />}
-                            onClick={() => { }}
+                            onClick={handleUndo}
                         />
                         <KonvaActionButton
                             variant='secondary'
@@ -373,26 +521,7 @@ function QuotationCanvas() {
             transformerRef.current.getLayer()?.batchDraw()
         }
     }, [])
-    // Handle changes in rectangle dimensions
-    const handleRectTransform = useCallback(() => {
-        if (rectRef.current) {
-            const node = rectRef.current
-            const newScaleX = node.scaleX()
-            const newScaleY = node.scaleY()
 
-            // Update the shape's dimensions and reset scale
-            setRectProps({
-                ...rectProps,
-                x: node.x(),
-                y: node.y(),
-                width: node.width() * newScaleX,
-                height: node.height() * newScaleY,
-            })
-
-            node.scaleX(1)
-            node.scaleY(1)
-        }
-    }, [rectProps])
     const renderUnitMeasurementComponent = useMemo(() => {
         return (
             linePoints.length > 0 && (
@@ -467,66 +596,75 @@ function QuotationCanvas() {
                                                 <Rect
                                                     {...rectProps}
                                                     ref={rectRef}
-                                                    onClick={handleRectSelect}
-                                                    fillPatternScale={{
-                                                        x: 1,
-                                                        y: 1,
-                                                    }}
-                                                    onTransformEnd={
-                                                        handleRectTransform
-                                                    }
-                                                    // fillPatternRepeat='repeat'
-                                                    // fillPatternImage={patternImage}
+                                                    draggable={true}
                                                     onDragEnd={(e) => {
-                                                        setRectProps({
-                                                            ...rectProps,
+                                                        setRectProps((prev) => ({
+                                                            ...prev,
                                                             x: e.target.x(),
                                                             y: e.target.y(),
-                                                        })
+                                                        }));
+                                                        updateImagesInRect();
                                                     }}
+                                                    onTransformEnd={handleRectTransform}
+                                                    onClick={handleRectSelect}
                                                 />
-                                                {[
-                                                    ...Array.from({
-                                                        length: 6,
-                                                    }),
-                                                ]?.map((_, i) => {
-                                                    const row = Math.floor(
-                                                        i / imagesPerRow
-                                                    )
-                                                    const col = i % imagesPerRow
-                                                    const x =
-                                                        50 +
-                                                        col *
-                                                        (imageSize +
-                                                            spacing)
-                                                    const y =
-                                                        50 +
-                                                        row *
-                                                        (imageSize +
-                                                            spacing)
-                                                    return (
-                                                        <KonvaImage
-                                                            key={i}
-                                                            x={x}
-                                                            y={y}
-                                                            height={rectProps.y}
-                                                            image={patternImage}
-                                                        />
-                                                    )
-                                                })}
 
-                                                {/* Transformer for resizing */}
+                                                {/* Images */}
+                                                {images.map((img) => (
+                                                    <KonvaImage
+                                                        key={img.id}
+                                                        image={img.image}
+                                                        x={img.x}
+                                                        y={img.y}
+                                                        width={img.width}
+                                                        height={img.height}
+                                                        rotation={img.rotation}
+                                                        draggable
+                                                        onClick={() =>
+                                                            handleImageSelect(
+                                                                img.id
+                                                            )
+                                                        }
+                                                        onDragEnd={(e) =>
+                                                            handleImageDragEnd(
+                                                                e,
+                                                                img.id
+                                                            )
+                                                        }
+                                                        onTransformEnd={(e) =>
+                                                            handleImageTransformEnd(
+                                                                e,
+                                                                img.id
+                                                            )
+                                                        }
+                                                        ref={(node) => {
+                                                            if (
+                                                                node &&
+                                                                selectedImageId ===
+                                                                img.id
+                                                            ) {
+                                                                transformerRef.current.nodes(
+                                                                    [node]
+                                                                )
+                                                                transformerRef.current
+                                                                    .getLayer()
+                                                                    .batchDraw()
+                                                            }
+                                                        }}
+                                                    />
+                                                ))}
+
+                                                {/* Transformer */}
                                                 <Transformer
                                                     ref={transformerRef}
-                                                    rotateEnabled={false}
+                                                    rotateEnabled={true}
                                                     boundBoxFunc={(
                                                         oldBox,
                                                         newBox
                                                     ) => {
-                                                        // Limit resizing to avoid negative width or height
                                                         if (
-                                                            newBox.width < 20 ||
-                                                            newBox.height < 20
+                                                            newBox.width < 5 ||
+                                                            newBox.height < 5
                                                         ) {
                                                             return oldBox
                                                         }
