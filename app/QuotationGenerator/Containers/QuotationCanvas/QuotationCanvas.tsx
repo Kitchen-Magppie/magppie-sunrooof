@@ -13,9 +13,9 @@ import {
     Circle,
 } from 'react-konva'
 import { TbFileOrientation } from 'react-icons/tb'
-import { IoIosMove } from 'react-icons/io'
-import { MdDraw } from 'react-icons/md'
-import { MdOutlineRotate90DegreesCcw } from 'react-icons/md'
+// import { IoIosMove } from 'react-icons/io'
+// import { MdDraw } from 'react-icons/md'
+// import { MdOutlineRotate90DegreesCcw } from 'react-icons/md'
 import { BsEraser } from 'react-icons/bs'
 import { RxMaskOn } from 'react-icons/rx'
 import { CiRuler } from 'react-icons/ci'
@@ -27,7 +27,7 @@ import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from '../../../cms/mocks'
 import { useAppSelector } from '../../../../redux'
 import { _ } from '../../../../types'
-import MeasurementExample from '../MeasurementExample'
+// import MeasurementExample from '../MeasurementExample'
 import { KonvaActionButton } from '../../components'
 
 // const spacing = 10
@@ -395,27 +395,27 @@ function QuotationCanvas() {
                 <div className="mt-20">
                     <div className="grid grid-flow-row grid-cols-2 gap-2">
 
-                        <KonvaActionButton
+                        {/* <KonvaActionButton
                             label='Draw SUNROOOF'
                             icon={<MdDraw className="my-auto text-xl" />}
                             onClick={() => { }}
-                        />
+                        /> */}
 
                         <KonvaActionButton
                             label='Orientation II'
                             icon={<TbFileOrientation className="my-auto text-xl" />}
                             onClick={() => { }}
                         />
-                        <KonvaActionButton
+                        {/* <KonvaActionButton
                             label='Move SUNROOOF'
                             icon={<IoIosMove className="my-auto text-xl" />}
                             onClick={() => { }}
-                        />
-                        <KonvaActionButton
+                        /> */}
+                        {/* <KonvaActionButton
                             label='Rotate SUNROOOF'
                             icon={<MdOutlineRotate90DegreesCcw className="my-auto text-xl" />}
                             onClick={() => { }}
-                        />
+                        /> */}
                         <KonvaActionButton
                             label='Remove SUNROOOF'
                             icon={<BsEraser className="my-auto text-xl" />}
@@ -545,139 +545,150 @@ function QuotationCanvas() {
             )
         )
     }, [linePoints])
-    // const imageSize = 40
-    // const spacing = 10
 
-    // const imagesPerRow = Math.floor(rectProps.width / (imageSize + spacing))
 
-    return (
-        <form className="">
-            <div
-                className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
-                style={{
-                    background: `url(${bgImg})`,
-                    backgroundSize: 'cover',
-                }}
-            >
-                <div className=" opacity-70 align-middle flex justify-center flex-col">
-                    SUNROOOF
-                </div>
+    useEffect(() => {
+        const handleResize = () => {
+            setStageWidth(window.innerWidth)
+            setStageHeight(window.innerHeight)
+        };
+
+        // Add event listener on component mount
+        window.addEventListener('resize', handleResize);
+
+        // Clean up event listener on component unmount
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+
+    }, [])
+    return (<form className="">
+        <div
+            className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
+            style={{
+                background: `url(${bgImg})`,
+                backgroundSize: 'cover',
+            }}
+        >
+            <div className=" opacity-70 align-middle flex justify-center flex-col">
+                SUNROOOF
             </div>
+        </div>
 
-            <div className="container mx-auto">
-                <div className="mt-10">
-                    <div className="grid grid-cols-2 gap-2">
-                        <div className="flex flex-col align-middle justify-center">
-                            {isDrawingStarted
-                                ? renderDrawingEditor
-                                : renderBeginning}
-                        </div>
-                        <div className="">
-                            {Presentation?.value?.file?.size ? (
-                                <Stage
-                                    width={stageWidth}
-                                    height={stageHeight}
-                                    ref={stageRef}
-                                    onClick={handleCanvasClick}
-                                    onMouseMove={handleMouseMove}
-                                >
-                                    <Layer>
-                                        {Presentation?.value?.file?.size ? (
-                                            <KonvaImage image={image} />
-                                        ) : ''}
-                                        {isDrawingStarted ? (
-                                            <>
-                                                <Rect
-                                                    {...rectProps}
-                                                    ref={rectRef}
-                                                    draggable={true}
-                                                    onDragEnd={(e) => {
-                                                        setRectProps((prev) => ({
-                                                            ...prev,
-                                                            x: e.target.x(),
-                                                            y: e.target.y(),
-                                                        }));
-                                                        updateImagesInRect();
-                                                    }}
-                                                    onTransformEnd={handleRectTransform}
-                                                    onClick={handleRectSelect}
-                                                />
-
-                                                {/* Images */}
-                                                {images.map((img) => (
-                                                    <KonvaImage
-                                                        key={img.id}
-                                                        image={img.image as CanvasImageSource}
-                                                        x={img.x}
-                                                        y={img.y}
-                                                        width={img.width}
-                                                        height={img.height}
-                                                        rotation={img.rotation}
-                                                        draggable
-                                                        onClick={() => handleImageSelect(
-                                                            img.id
-                                                        )}
-                                                        onDragEnd={(e) =>
-                                                            handleImageDragEnd(
-                                                                e,
-                                                                img.id
-                                                            )
-                                                        }
-                                                        onTransformEnd={(e) =>
-                                                            handleImageTransformEnd(
-                                                                e,
-                                                                img.id
-                                                            )
-                                                        }
-                                                        ref={(node) => {
-                                                            if (
-                                                                node &&
-                                                                selectedImageId ===
-                                                                img.id
-                                                            ) {
-                                                                transformerRef.current.nodes(
-                                                                    [node]
-                                                                )
-                                                                transformerRef.current
-                                                                    .getLayer()
-                                                                    .batchDraw()
-                                                            }
-                                                        }}
-                                                    />
-                                                ))}
-
-                                                {/* Transformer */}
-                                                <Transformer
-                                                    ref={transformerRef}
-                                                    rotateEnabled={true}
-                                                    boundBoxFunc={(
-                                                        oldBox,
-                                                        newBox
-                                                    ) => {
-                                                        if (
-                                                            newBox.width < 5 ||
-                                                            newBox.height < 5
-                                                        ) {
-                                                            return oldBox
-                                                        }
-                                                        return newBox
-                                                    }}
-                                                />
-                                            </>
-                                        ) : (
-                                            renderUnitMeasurementComponent
-                                        )}
-                                    </Layer>
-                                </Stage>
-                            ) : (
-                                ''
-                            )}
-                        </div>
-                        <MeasurementExample />
+        <div className="container mx-auto">
+            <div className="mt-10">
+                <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col align-middle justify-center">
+                        {isDrawingStarted
+                            ? renderDrawingEditor
+                            : renderBeginning}
                     </div>
+                    <div className=""
+                    >
+                        {Presentation?.value?.file?.size ? (
+                            <Stage
+                                width={stageWidth / 2}
+                                height={stageHeight}
+                                style={{ width: "100%" }}
+                                ref={stageRef}
+                                onClick={handleCanvasClick}
+                                onMouseMove={handleMouseMove}
+                            >
+                                <Layer>
+                                    {Presentation?.value?.file?.size ? (<KonvaImage image={image} />) : ''}
+                                    {isDrawingStarted ? (
+                                        <>
+                                            <Rect
+                                                {...rectProps}
+                                                ref={rectRef}
+                                                draggable={true}
+                                                onDragEnd={(e) => {
+                                                    setRectProps((prev) => ({
+                                                        ...prev,
+                                                        x: e.target.x(),
+                                                        y: e.target.y(),
+                                                    }));
+                                                    updateImagesInRect();
+                                                }}
+                                                onTransformEnd={handleRectTransform}
+                                                onClick={handleRectSelect}
+                                            />
+
+                                            {/* Images */}
+                                            {images.map((img) => (
+                                                <KonvaImage
+                                                    key={img.id}
+                                                    image={img.image as CanvasImageSource}
+                                                    x={img.x}
+                                                    y={img.y}
+                                                    width={img.width}
+                                                    height={img.height}
+                                                    rotation={img.rotation}
+                                                    draggable
+                                                    onClick={() => handleImageSelect(
+                                                        img.id
+                                                    )}
+                                                    onDragEnd={(e) =>
+                                                        handleImageDragEnd(
+                                                            e,
+                                                            img.id
+                                                        )
+                                                    }
+                                                    onTransformEnd={(e) =>
+                                                        handleImageTransformEnd(
+                                                            e,
+                                                            img.id
+                                                        )
+                                                    }
+                                                    ref={(node) => {
+                                                        if (
+                                                            node &&
+                                                            selectedImageId ===
+                                                            img.id
+                                                        ) {
+                                                            transformerRef.current.nodes(
+                                                                [node]
+                                                            )
+                                                            transformerRef.current
+                                                                .getLayer()
+                                                                .batchDraw()
+                                                        }
+                                                    }}
+                                                />
+                                            ))}
+
+                                            {/* Transformer */}
+                                            <Transformer
+                                                ref={transformerRef}
+                                                rotateEnabled={true}
+                                                boundBoxFunc={(
+                                                    oldBox,
+                                                    newBox
+                                                ) => {
+                                                    if (
+                                                        newBox.width < 5 ||
+                                                        newBox.height < 5
+                                                    ) {
+                                                        return oldBox
+                                                    }
+                                                    return newBox
+                                                }}
+                                            />
+                                        </>
+                                    ) : (
+                                        renderUnitMeasurementComponent
+                                    )}
+                                </Layer>
+                            </Stage>
+                        ) : (
+                            ''
+                        )}
+                    </div>
+                    {/* <MeasurementExample /> */}
                 </div>
             </div>
-        </form>
+        </div>
+    </form>
     )
 }
 
