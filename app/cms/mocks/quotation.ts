@@ -1,3 +1,5 @@
+import { TCustomerComponentQuotationEntryItem } from "../../../types";
+
 export const QUOTATION_SALUTATION_OPTIONS: string[] = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof."];
 
 export const QuotationMock = {
@@ -24,7 +26,9 @@ export const QuotationMock = {
             zone: 'South India',
             salutation: '',
             city: '',
-            invoiceUrl: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4'
+            discount: 0,
+            invoiceUrl: 'https://firebasestorage.googleapis.com/v0/b/magppie-sunrooof.appspot.com/o/customers%2F309e18c2-5350-4788-8234-0e3e3580229d%2Fquotations%2Fquotation.png?alt=media&token=f2a170c0-5fc8-4351-9111-cad7046c70e4',
+            entries: [] as TCustomerComponentQuotationEntryItem[]
         }
     },
     Design2D: {
@@ -59,3 +63,55 @@ export const QuotationMock = {
     }
 } as const
 
+
+
+export const CMS_QUOTATION_OPTIONS = {
+    Classical: {
+        White: 40250,
+        Wood: 37950,
+    },
+    Modern: {
+        Wood: 35650,
+        White: 37950,
+        Bronze: 39650,
+        Grey: 39650,
+    },
+    'Fluted Minimalist': {
+        Wooden: 35650,
+        White: 37950,
+        Grey: 39650,
+        Bronze: 39650,
+    },
+    'French Window': {
+        White: 55200,
+    },
+    'Louvered Window': {
+        White: 51750,
+        Wooden: 51750,
+    },
+    'Classical Atrium': {
+        White: 40250,
+        Wooden: 37950,
+    },
+    'Fluted Minimalist Atrium': {
+        Wooden: 37950,
+        Bronze: 41950,
+        Grey: 41950,
+    },
+    'Arch Window': {
+        White: 55200,
+    },
+    'Moorgan Premium Remote': {
+        Gold: 42000,
+        Black: 38500,
+        Chrome: 38500,
+    },
+}
+
+export const CMS_QUOTATION_FLOOR_OPTIONS = [
+    'BSMT',
+    'GF',
+    'FF',
+    'SF',
+    'TF',
+]

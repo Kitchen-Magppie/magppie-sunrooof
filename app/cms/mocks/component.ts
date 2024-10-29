@@ -8,6 +8,7 @@ import {
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
+    TCustomerComponentQuotationEntryItem,
     TCustomerItem,
     _
 } from "../../../types"
@@ -132,7 +133,9 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
             address: '',
             zone: '',
             city: '',
-            invoiceUrl: ''
+            discount: 0,
+            invoiceUrl: '',
+            entries: []
         }
     },
     {
@@ -247,3 +250,12 @@ export const COMPONENT_DESIGN2D_FINISH_OPTIONS = [
     'Regal Bronze',
     'Titanium Grey'
 ]
+
+export const INIT_COMPONENT_QUOTATION_ENTRY_ITEM: TCustomerComponentQuotationEntryItem = {
+    design: '',
+    finish: '',
+    area: '',
+    floor: '',
+    qty: 1,
+    // unitPrice: '',
+}

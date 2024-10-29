@@ -76,24 +76,24 @@ const Layout2dDesign = (props: TProps) => {
                                 className="flex items-center justify-center h-full !w-full"
                             >
                                 <div>
-                                    <h2 className="text-4xl text-center mb-4 font-medium capitalize">
+                                    <h2 className="text-4xl text-center mb-10 font-medium capitalize text-[#78746c]">
                                         {image.areaName}
                                     </h2>
                                     <div className="swiper-zoom-container flex flex-col mb-4">
-                                        <div>
+                                        <div className="flex flex-col mb-4">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={image.leftImage}
                                                 alt=""
                                                 className="block w-screen h-full object-contain"
                                             />
-                                            <h1 className="text-4xl my-4 font-[500]">
+                                            <h1 className="text-3xl mb-4 p-2 font-[400] w-full text-[#fff] text-left bg-gradient-to-t from-stone-800 via-stone-600 to-stone-400">
                                                 Customer Layout
                                             </h1>
                                         </div>
                                     </div>
                                     <div className="flex flex-col swiper-zoom-container">
-                                        <div>
+                                        <div className="flex flex-col mb-4">
                                             <LazyLoadImage
                                                 effect="blur"
                                                 src={image.rightImage}
@@ -101,7 +101,7 @@ const Layout2dDesign = (props: TProps) => {
                                                 className="block w-screen h-full object-contain"
                                             />
                                         </div>
-                                        <h1 className="text-4xl my-4 font-[500]">
+                                        <h1 className="text-3xl mb-4 p-2 font-[400] w-full text-[#fff] text-left bg-gradient-to-t from-stone-800 via-stone-600 to-stone-400">
                                             Proposed Layout
                                         </h1>
                                     </div>
@@ -137,12 +137,12 @@ const Layout2dDesign = (props: TProps) => {
                                         className="flex items-center justify-center h-full !w-full"
                                     >
                                         <div className="flex flex-col">
-                                            <h2 className="text-3xl font-medium capitalize text-center mb-5">
+                                            <h2 className="text-3xl font-medium capitalize text-center mb-10 text-[#78746c]">
                                                 {image.areaName}
                                             </h2>
                                             <div className="flex">
                                                 <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
-                                                    <h1 className="text-3xl mb-2 font-[500]">
+                                                    <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
                                                         Customer Layout
                                                     </h1>
                                                     <div>
@@ -157,7 +157,7 @@ const Layout2dDesign = (props: TProps) => {
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col  swiper-zoom-container">
-                                                    <h1 className="text-3xl mb-2 font-[500]">
+                                                    <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
                                                         Proposed Layout
                                                     </h1>
                                                     <div>
@@ -172,13 +172,17 @@ const Layout2dDesign = (props: TProps) => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex justify-end mb-5">
+                                            <div className="flex justify-end mb-5 text-[#78746c]">
                                                 <div className="mr-4 text-2xl lg:text-lg">
-                                                    <span className="font-semibold">Design :</span>{' '}
+                                                    <span className="font-semibold text-[#78746c]">
+                                                        Design :
+                                                    </span>{' '}
                                                     {image.design}
                                                 </div>
                                                 <div className="mr-4 text-2xl lg:text-lg">
-                                                    <span className="font-semibold">Finish :</span>{' '}
+                                                    <span className="font-semibold text-[#78746c]">
+                                                        Finish :
+                                                    </span>{' '}
                                                     {image.finish}
                                                 </div>
                                             </div>
@@ -264,7 +268,7 @@ const Layout2dDesign = (props: TProps) => {
             className="flex flex-col justify-center items-center py-20 bg-gray-100 min-h-screen"
             id="2d"
         >
-            <h1 className="text-6xl pb-10 w-full text-center uppercase text-[#78746c]">
+            <h1 className="text-6xl pb-6 w-full text-center uppercase text-[#78746c]">
                 2D Designs
             </h1>
             {isMobile ? (

@@ -13,7 +13,8 @@ interface TLodashMixin extends _.LoDashStatic {
     mapNums: (e: unknown[]) => number[],
     applyOrder: (e: string[]) => TApplyOrder,
     uuid: () => string,
-    download: (e: TDownload) => void
+    download: (e: TDownload) => void,
+    dataURLtoBlob: (e: string) => Blob
 }
 
 
@@ -50,7 +51,20 @@ function uuid(): string {
 function labelify(e: string[]): TLabelify[] {
     return e?.map((value) => ({ value, label: value }))
 }
+function dataURLtoBlob(dataUrl: string): Blob {
+    const arr = dataUrl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
 
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {
+        type: mime
+    });
+}
 function download(args: TDownload): void {
     const link = document.createElement('a');
     link.download = args.name;
@@ -68,6 +82,7 @@ _.mixin({
     isNumericString,
     mapNums,
     applyOrder,
-    uuid
+    uuid,
+    dataURLtoBlob
 })
 export default _ as TLodashMixin

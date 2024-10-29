@@ -20,6 +20,14 @@ export type TCustomerComponentClientItem = {
     data: { name: string; description: string }
 }
 
+export type TCustomerComponentQuotationEntryItem = {
+    design: string,
+    finish: string,
+    area: string,
+    floor: string,
+    qty: number,
+    // unitPrice: string,
+}
 export type TCustomerComponentQuotationItem = {
     value: CustomerComponentEnum.Quotation
     data: {
@@ -31,7 +39,9 @@ export type TCustomerComponentQuotationItem = {
         address: string
         zone: string
         city: string
-        invoiceUrl: string
+        discount: number
+        invoiceUrl: string,
+        entries: TCustomerComponentQuotationEntryItem[]
     }
 }
 
@@ -169,6 +179,7 @@ const customerComponentFeatureItemSchema = yup.object().shape({
     data: yup.string().required('Feature field is required'),
 })
 
+
 const customerComponentQuotationItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.Quotation]).required(),
     data: yup
@@ -181,7 +192,16 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             address: yup.string().nullable(),
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
+            discount: yup.string().nullable(),
             invoiceUrl: yup.string().required('Invoice URL field is required'),
+            entries: yup.array().of(yup.object().shape({
+                design: yup.string().required('Design field is Required'),
+                finish: yup.string().required('Finish field is Required'),
+                area: yup.string().required('Area Name field is Required'),
+                floor: yup.string().required('Floor field is Required'),
+                qty: yup.number().required('Quantity Name field is Required'),
+                // unitPrice: yup.string().required('Unit Price field is Required'),
+            })).min(1).required('Atleast 1 entry is required'),
         })
         .required(),
 })
