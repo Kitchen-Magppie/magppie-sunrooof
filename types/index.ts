@@ -8,4 +8,5 @@ export * from "./toast"
 export * from "./landing"
 export * from "./firebase"
 export * from "./consultation"
+export * from "./react-konva"
 export { _ }

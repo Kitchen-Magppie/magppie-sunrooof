@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Select from 'react-select'
-import { BsDash, BsPlus } from 'react-icons/bs'
 import Konva from 'konva'
 import {
     Stage,
@@ -12,36 +10,39 @@ import {
     Transformer,
     Circle,
 } from 'react-konva'
-import { TbFileOrientation } from 'react-icons/tb'
-import { BsEraser } from 'react-icons/bs'
-import { RxMaskOn } from 'react-icons/rx'
-import { CiRuler } from 'react-icons/ci'
-import { SiExcalidraw } from 'react-icons/si'
-import { PiDownloadSimpleFill } from 'react-icons/pi'
 import useImage from 'use-image'
 //====================================================================
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from '../../../cms/mocks'
 import { useAppSelector } from '../../../../redux'
-import { _ } from '../../../../types'
-import { KonvaActionButton } from '../../components'
+import {
+    _,
+    CANVAS_STAGE_HEIGHT,
+    INIT_CANVAS_KONVA_CORPUS,
+    INIT_CANVAS_MEASUREMENT,
+    INIT_CANVAS_RECT_PROPS,
+    TKonvaImageItem
+} from '../../../../types'
+import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasurementAction'
+import QuotationCanvasEditAction from './QuotationCanvasEditAction'
+
 
 function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms)
-    const [corpus, setCorpus] = useState(INIT_CORPUS)
+    const [corpus, setCorpus] = useState(INIT_CANVAS_KONVA_CORPUS)
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false)
     const [linePoints, setLinePoints] = useState<number[]>([])
     const stageContainerRef = useRef<HTMLDivElement>(null);
     const [stageWidth, setStageWidth] = useState<number>(800)
-    const [measurement, setMeasurement] = useState(INIT_MEASUREMENT)
-    const [rectProps, setRectProps] = useState(INIT_RECT_PROPS)
+    const [measurement, setMeasurement] = useState(INIT_CANVAS_MEASUREMENT)
+    const [rectProps, setRectProps] = useState(INIT_CANVAS_RECT_PROPS)
     const stageRef = useRef<Konva.Stage>(null)
     const rectRef = useRef<Konva.Rect>(null)
     const transformerRef = useRef<Konva.Transformer>(null)
     const [image, setImage] = useImage(corpus.selection.image)
     const [patternImage, setPatternImage] = useState(null)
-    const [images, setImages] = useState<TImageItem[]>([])
+    const [images, setImages] = useState<TKonvaImageItem[]>([])
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
     const [history, setHistory] = useState([]);
 
@@ -97,7 +98,6 @@ function QuotationCanvas() {
         const rows = Math.floor(rectHeight / (imageHeight + spacing));
 
         const newImages = [];
-        console.log(rows)
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < columns; col++) {
                 const imgX = rectX + col * (imageWidth + spacing);
@@ -274,44 +274,34 @@ function QuotationCanvas() {
         }
     }, [image])
 
-    // useEffect(() => {
-    //     if (image) {
-    //         const aspectRatio = image.width / image.height
-    //         setStageWidth(800)
-    //         setStageHeight(800 / aspectRatio)
-    //     }
-    // }, [image])
+    const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+        const stage = event.target.getStage()
+        const { x, y } = stage.getPointerPosition()!
 
-    const handleCanvasClick = useCallback(
-        (event: Konva.KonvaEventObject<MouseEvent>) => {
-            const stage = event.target.getStage()
-            const { x, y } = stage.getPointerPosition()!
-
-            if (!isDrawing) {
-                setLinePoints([x, y, x, y])
-                setIsDrawing(true)
-            } else {
-                setIsDrawing(false)
-            }
-        },
+        if (!isDrawing) {
+            setLinePoints([x, y, x, y])
+            setIsDrawing(true)
+        } else {
+            setIsDrawing(false)
+        }
+    },
         [isDrawing]
     )
 
-    const handleMouseMove = useCallback(
-        (event: Konva.KonvaEventObject<MouseEvent>) => {
-            if (!isDrawing) return
+    const handleMouseMove = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+        if (!isDrawing) return
 
-            const stage = event.target.getStage()
-            const { x, y } = stage.getPointerPosition()!
-            setLinePoints([linePoints[0], linePoints[1], x, y])
-            calculatePixelLength([
-                linePoints[0],
-                linePoints[1],
-                linePoints[2],
-                linePoints[3],
-            ])
-            calculatePixelsPerUnit()
-        },
+        const stage = event.target.getStage()
+        const { x, y } = stage.getPointerPosition()!
+        setLinePoints([linePoints[0], linePoints[1], x, y])
+        calculatePixelLength([
+            linePoints[0],
+            linePoints[1],
+            linePoints[2],
+            linePoints[3],
+        ])
+        calculatePixelsPerUnit()
+    },
         [calculatePixelLength, calculatePixelsPerUnit, isDrawing, linePoints]
     )
 
@@ -322,188 +312,6 @@ function QuotationCanvas() {
             navigate(`/quotation-generator`)
         }
     }, [Presentation?.value?.file?.size, navigate])
-
-    const renderQuantityContent = useMemo(() => {
-        return (
-            <div className="flex flex-col">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Choose quantity:
-                </label>
-                <div className="relative flex items-center max-w-[8rem]">
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setMeasurement((prev) => ({
-                                ...prev,
-                                quantity: prev.quantity - 1,
-                            }))
-                        }}
-                        className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                    >
-                        <BsDash />
-                    </button>
-
-                    <input
-                        className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        value={measurement.quantity}
-                        onChange={(e) => {
-
-                            setMeasurement((prev) => ({
-                                ...prev,
-                                quantity: Number(e.target.value),
-                            }))
-                        }}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setMeasurement((prev) => ({
-                                ...prev,
-                                quantity: prev.quantity + 1,
-                            }))
-                        }}
-                        className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                    >
-                        <BsPlus />
-                    </button>
-                </div>
-            </div>
-        )
-    }, [measurement.quantity])
-
-    const renderDrawingEditor = useMemo(() => {
-        return (<div>
-            <div className="flex  flex-col mb-3">
-                <Select
-                    options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
-                    onChange={(e) => {
-                        setCorpus((prev) => ({
-                            ...prev,
-                            selection: {
-                                ...prev.selection,
-                                sunrooofWindow: e.value,
-                            },
-                        }))
-                    }}
-                />
-            </div>
-            <div className="mt-20">
-                <div className="grid grid-flow-row grid-cols-2 gap-2">
-
-                    {/* <KonvaActionButton
-                            label='Draw SUNROOOF'
-                            icon={<MdDraw className="my-auto text-xl" />}
-                            onClick={() => { }}
-                        /> */}
-
-                    <KonvaActionButton
-                        label='Orientation II'
-                        icon={<TbFileOrientation className="my-auto text-xl" />}
-                        onClick={() => { }}
-                    />
-                    {/* <KonvaActionButton
-                            label='Move SUNROOOF'
-                            icon={<IoIosMove className="my-auto text-xl" />}
-                            onClick={() => { }}
-                        /> */}
-                    {/* <KonvaActionButton
-                            label='Rotate SUNROOOF'
-                            icon={<MdOutlineRotate90DegreesCcw className="my-auto text-xl" />}
-                            onClick={() => { }}
-                        /> */}
-                    <KonvaActionButton
-                        label='Remove SUNROOOF'
-                        icon={<BsEraser className="my-auto text-xl" />}
-                        onClick={() => { }}
-                    />
-
-                    <KonvaActionButton
-                        label='UNDO'
-                        icon={<RxMaskOn className="my-auto text-xl" />}
-                        onClick={handleUndo}
-                    />
-                    <KonvaActionButton
-                        variant='secondary'
-                        label='Scale for Measurement'
-                        icon={<CiRuler className="my-auto text-xl" />}
-                        onClick={() => { }}
-                    />
-
-                </div>
-            </div>
-            <div className="mt-20">
-                <button
-                    type="button"
-                    onClick={handleDownload}
-                    className="text-white bg-gradient-to-r bg-[#b5b496ff]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#b5b496ff] dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                >
-                    <PiDownloadSimpleFill className="my-auto text-xl" />
-                    Download Final Image
-                </button>
-            </div>
-        </div>
-        )
-    }, [handleDownload, handleUndo])
-
-    // console.log(rectProps)
-
-    const renderBeginning = useMemo(() => {
-        return (
-            <div>
-                <div className="flex flex-col">
-                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Enter the length of the line and click to draw:
-                    </label>
-                    <Select
-                        className="w-100"
-                        onChange={(e) => {
-                            setMeasurement((prev) => ({
-                                ...prev,
-                                unit: e.value,
-                            }))
-                        }}
-                        options={QUOTATION_UNIT_OPTIONS}
-                    />
-                </div>
-                <div className="flex gap-1 align-middle flex-row justify-between">
-                    {renderQuantityContent}
-                    <div className="">
-                        <div className="mt-7" />
-
-                        <KonvaActionButton
-                            label='Start Drawing'
-                            disabled={!(measurement?.unit?.length && measurement?.quantity)}
-                            icon={<SiExcalidraw className="my-auto text-xl" />}
-                            onClick={() => {
-                                setIsDrawingStarted(true)
-                            }}
-                        />
-
-                    </div>
-                </div>
-                <div className="">
-                    <p>
-                        Total pixels of the drawn line:{' '}
-                        {measurement.pixelLength.toLocaleString()} pixels
-                    </p>
-                    <p>
-                        1 unit equals{' '}
-                        {measurement.unit === 'mm'
-                            ? measurement.value.toLocaleString()
-                            : +measurement.value.toFixed(2) / 25.4}{' '}
-                        pixels
-                    </p>
-                    {/* {measurement.unit?.length ? `${measurement.value?.toLocaleString()} ${measurement.unit}` : ''} */}
-                </div>
-            </div>
-        )
-    }, [
-        renderQuantityContent,
-        measurement.unit,
-        measurement?.quantity,
-        measurement.pixelLength,
-        measurement.value
-    ])
 
     // Make the transformer active when the rectangle is selected
     const handleRectSelect = useCallback(() => {
@@ -589,8 +397,29 @@ function QuotationCanvas() {
                 <div className="grid grid-cols-2 gap-2">
                     <div className="flex flex-col align-middle justify-center">
                         {isDrawingStarted
-                            ? renderDrawingEditor
-                            : renderBeginning}
+                            ? <QuotationCanvasEditAction
+
+                                handleDownload={handleDownload}
+                                handleUndo={handleUndo}
+                                onChangeSunroofWindow={(sunrooofWindow) => {
+                                    setCorpus((prev) => ({
+                                        ...prev,
+                                        selection: {
+                                            ...prev.selection,
+                                            sunrooofWindow,
+                                        },
+                                    }))
+                                }}
+                            />
+                            : <QuotationCanvasUnitMeasurementAction
+
+                                measurement={measurement}
+                                setMeasurement={setMeasurement}
+
+                                onProceed={() => {
+                                    setIsDrawingStarted(true)
+                                }}
+                            />}
                     </div>
                     <div className=""
                         ref={stageContainerRef}
@@ -599,7 +428,7 @@ function QuotationCanvas() {
                         {Presentation?.value?.file?.size ? (
                             <Stage
                                 width={stageWidth}
-                                height={stageHeight}
+                                height={CANVAS_STAGE_HEIGHT}
                                 ref={stageRef}
                                 onClick={handleCanvasClick}
                                 onMouseMove={handleMouseMove}
@@ -703,38 +532,4 @@ function QuotationCanvas() {
 }
 
 
-const QUOTATION_UNIT_OPTIONS = [
-    { value: 'mm', label: 'mm' },
-    { value: 'inch', label: 'Feet & Inches' },
-]
-const INIT_RECT_PROPS = {
-    x: 500,
-    y: 500,
-    width: 300,
-    height: 100,
-    stroke: 'red',
-    strokeWidth: 2,
-    draggable: true,
-}
-const INIT_MEASUREMENT = {
-    unit: '',
-    value: 0,
-    quantity: 0,
-    pixelLength: 0,
-}
 export default QuotationCanvas
-const INIT_CORPUS = {
-    selection: { sunrooofWindow: '', image: null },
-}
-type TImageItem = {
-    id: string;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    rotation: number;
-    image: object;
-}
-
-const stageHeight = 600
-
