@@ -13,9 +13,6 @@ import {
     Circle,
 } from 'react-konva'
 import { TbFileOrientation } from 'react-icons/tb'
-// import { IoIosMove } from 'react-icons/io'
-// import { MdDraw } from 'react-icons/md'
-// import { MdOutlineRotate90DegreesCcw } from 'react-icons/md'
 import { BsEraser } from 'react-icons/bs'
 import { RxMaskOn } from 'react-icons/rx'
 import { CiRuler } from 'react-icons/ci'
@@ -27,11 +24,7 @@ import bgImg from '../../.././../assets/hero-bg.jpeg'
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from '../../../cms/mocks'
 import { useAppSelector } from '../../../../redux'
 import { _ } from '../../../../types'
-// import MeasurementExample from '../MeasurementExample'
 import { KonvaActionButton } from '../../components'
-
-// const spacing = 10
-
 
 function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms)
@@ -39,8 +32,8 @@ function QuotationCanvas() {
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false)
     const [linePoints, setLinePoints] = useState<number[]>([])
+    const stageContainerRef = useRef<HTMLDivElement>(null);
     const [stageWidth, setStageWidth] = useState<number>(800)
-    const [stageHeight, setStageHeight] = useState<number>(600)
     const [measurement, setMeasurement] = useState(INIT_MEASUREMENT)
     const [rectProps, setRectProps] = useState(INIT_RECT_PROPS)
     const stageRef = useRef<Konva.Stage>(null)
@@ -87,13 +80,16 @@ function QuotationCanvas() {
         setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
     }, [measurement.quantity, measurement.pixelLength]);
 
+    console.log(measurement)
     // Function to update images inside the rectangle
     const updateImagesInRect = useCallback(() => {
         if (!rectProps || !patternImage) return;
 
         const { x: rectX, y: rectY, width: rectWidth, height: rectHeight } = rectProps;
 
-        const imageWidth = 50; // Desired image width
+        const imageWidth = measurement.pixelLength / 2; // Desired image width
+
+        // const imageWidth = 50; // Desired image width
         const imageHeight = 50; // Desired image height
         const spacing = 20; // Space between images
 
@@ -101,7 +97,7 @@ function QuotationCanvas() {
         const rows = Math.floor(rectHeight / (imageHeight + spacing));
 
         const newImages = [];
-
+        console.log(rows)
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < columns; col++) {
                 const imgX = rectX + col * (imageWidth + spacing);
@@ -157,12 +153,12 @@ function QuotationCanvas() {
 
 
     // Handle image selection
-    const handleImageSelect = (id: string) => {
+    const handleImageSelect = useCallback((id: string) => {
         setSelectedImageId(id)
     }
-
+        , [])
     // Handle image drag end
-    const handleImageDragEnd = (e: Konva.KonvaEventObject<DragEvent>, id: string) => {
+    const handleImageDragEnd = useCallback((e: Konva.KonvaEventObject<DragEvent>, id: string) => {
         const { x, y } = e.target.position()
 
         // Before updating images
@@ -174,9 +170,9 @@ function QuotationCanvas() {
             )
         )
     }
-
+        , [images, rectProps])
     // Handle image transform end
-    const handleImageTransformEnd = (e: Konva.KonvaEventObject<Event>, id: string) => {
+    const handleImageTransformEnd = useCallback((e: Konva.KonvaEventObject<Event>, id: string) => {
         const node = e.target
         const scaleX = node.scaleX()
         const scaleY = node.scaleY()
@@ -196,7 +192,7 @@ function QuotationCanvas() {
                 img.id === id ? { ...img, width, height, rotation } : img
             )
         )
-    }
+    }, [images, rectProps])
 
     const handleUndo = useCallback(() => {
         if (history.length === 0) return;
@@ -278,13 +274,13 @@ function QuotationCanvas() {
         }
     }, [image])
 
-    useEffect(() => {
-        if (image) {
-            const aspectRatio = image.width / image.height
-            setStageWidth(800)
-            setStageHeight(800 / aspectRatio)
-        }
-    }, [image])
+    // useEffect(() => {
+    //     if (image) {
+    //         const aspectRatio = image.width / image.height
+    //         setStageWidth(800)
+    //         setStageHeight(800 / aspectRatio)
+    //     }
+    // }, [image])
 
     const handleCanvasClick = useCallback(
         (event: Konva.KonvaEventObject<MouseEvent>) => {
@@ -376,77 +372,76 @@ function QuotationCanvas() {
     }, [measurement.quantity])
 
     const renderDrawingEditor = useMemo(() => {
-        return (
-            <div>
-                <div className="flex  flex-col mb-3">
-                    <Select
-                        options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
-                        onChange={(e) => {
-                            setCorpus((prev) => ({
-                                ...prev,
-                                selection: {
-                                    ...prev.selection,
-                                    sunrooofWindow: e.value,
-                                },
-                            }))
-                        }}
-                    />
-                </div>
-                <div className="mt-20">
-                    <div className="grid grid-flow-row grid-cols-2 gap-2">
+        return (<div>
+            <div className="flex  flex-col mb-3">
+                <Select
+                    options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
+                    onChange={(e) => {
+                        setCorpus((prev) => ({
+                            ...prev,
+                            selection: {
+                                ...prev.selection,
+                                sunrooofWindow: e.value,
+                            },
+                        }))
+                    }}
+                />
+            </div>
+            <div className="mt-20">
+                <div className="grid grid-flow-row grid-cols-2 gap-2">
 
-                        {/* <KonvaActionButton
+                    {/* <KonvaActionButton
                             label='Draw SUNROOOF'
                             icon={<MdDraw className="my-auto text-xl" />}
                             onClick={() => { }}
                         /> */}
 
-                        <KonvaActionButton
-                            label='Orientation II'
-                            icon={<TbFileOrientation className="my-auto text-xl" />}
-                            onClick={() => { }}
-                        />
-                        {/* <KonvaActionButton
+                    <KonvaActionButton
+                        label='Orientation II'
+                        icon={<TbFileOrientation className="my-auto text-xl" />}
+                        onClick={() => { }}
+                    />
+                    {/* <KonvaActionButton
                             label='Move SUNROOOF'
                             icon={<IoIosMove className="my-auto text-xl" />}
                             onClick={() => { }}
                         /> */}
-                        {/* <KonvaActionButton
+                    {/* <KonvaActionButton
                             label='Rotate SUNROOOF'
                             icon={<MdOutlineRotate90DegreesCcw className="my-auto text-xl" />}
                             onClick={() => { }}
                         /> */}
-                        <KonvaActionButton
-                            label='Remove SUNROOOF'
-                            icon={<BsEraser className="my-auto text-xl" />}
-                            onClick={() => { }}
-                        />
+                    <KonvaActionButton
+                        label='Remove SUNROOOF'
+                        icon={<BsEraser className="my-auto text-xl" />}
+                        onClick={() => { }}
+                    />
 
-                        <KonvaActionButton
-                            label='UNDO'
-                            icon={<RxMaskOn className="my-auto text-xl" />}
-                            onClick={handleUndo}
-                        />
-                        <KonvaActionButton
-                            variant='secondary'
-                            label='Scale for Measurement'
-                            icon={<CiRuler className="my-auto text-xl" />}
-                            onClick={() => { }}
-                        />
+                    <KonvaActionButton
+                        label='UNDO'
+                        icon={<RxMaskOn className="my-auto text-xl" />}
+                        onClick={handleUndo}
+                    />
+                    <KonvaActionButton
+                        variant='secondary'
+                        label='Scale for Measurement'
+                        icon={<CiRuler className="my-auto text-xl" />}
+                        onClick={() => { }}
+                    />
 
-                    </div>
-                </div>
-                <div className="mt-20">
-                    <button
-                        type="button"
-                        onClick={handleDownload}
-                        className="text-white bg-gradient-to-r bg-[#b5b496ff]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#b5b496ff] dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
-                    >
-                        <PiDownloadSimpleFill className="my-auto text-xl" />
-                        Download Final Image
-                    </button>
                 </div>
             </div>
+            <div className="mt-20">
+                <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="text-white bg-gradient-to-r bg-[#b5b496ff]  hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#b5b496ff] dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 flex gap-2 align-middle justify-center"
+                >
+                    <PiDownloadSimpleFill className="my-auto text-xl" />
+                    Download Final Image
+                </button>
+            </div>
+        </div>
         )
     }, [handleDownload, handleUndo])
 
@@ -550,7 +545,7 @@ function QuotationCanvas() {
     useEffect(() => {
         const handleResize = () => {
             setStageWidth(window.innerWidth)
-            setStageHeight(window.innerHeight)
+            // setStageHeight(window.innerHeight)
         };
 
         // Add event listener on component mount
@@ -562,6 +557,20 @@ function QuotationCanvas() {
         };
 
     }, [])
+
+    // Update the stage width to match the container's width
+    const updateStageSize = () => {
+        if (stageContainerRef.current) {
+            setStageWidth(stageContainerRef.current.clientWidth);
+        }
+    };
+
+    useEffect(() => {
+        updateStageSize();
+        window.addEventListener('resize', updateStageSize);
+        return () => window.removeEventListener('resize', updateStageSize);
+    }, []);
+
     return (<form className="">
         <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
@@ -584,12 +593,13 @@ function QuotationCanvas() {
                             : renderBeginning}
                     </div>
                     <div className=""
+                        ref={stageContainerRef}
+                        style={{ width: "100%", overflow: "hidden" }}
                     >
                         {Presentation?.value?.file?.size ? (
                             <Stage
-                                width={stageWidth / 2}
+                                width={stageWidth}
                                 height={stageHeight}
-                                style={{ width: "100%" }}
                                 ref={stageRef}
                                 onClick={handleCanvasClick}
                                 onMouseMove={handleMouseMove}
@@ -726,4 +736,5 @@ type TImageItem = {
     image: object;
 }
 
+const stageHeight = 600
 
