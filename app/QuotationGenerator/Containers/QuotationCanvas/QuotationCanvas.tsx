@@ -25,6 +25,7 @@ import {
 } from '../../../../types'
 import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasurementAction'
 import QuotationCanvasEditAction from './QuotationCanvasEditAction'
+import { QuotationConvasAlert } from './QuotationCanvasAlert'
 
 
 function QuotationCanvas() {
@@ -395,7 +396,10 @@ function QuotationCanvas() {
         <div className="container mx-auto">
             <div className="mt-10">
                 <div className="grid grid-cols-2 gap-2">
-                    <div className="flex flex-col align-middle justify-center">
+                    <div className="flex flex-col align-middle ">
+                        <div className="mb-4">
+                            <QuotationConvasAlert />
+                        </div>
                         {isDrawingStarted
                             ? <QuotationCanvasEditAction
 
