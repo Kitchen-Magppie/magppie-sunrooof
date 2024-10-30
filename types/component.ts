@@ -90,7 +90,7 @@ export enum ComponentComparisonDataEnum {
 export type TComponentComparisonDataOption = {
     label: string
     value: ComponentComparisonDataEnum,
-    // image: { high: string, low: string }
+    image: { high: string, low: string }
 }
 
 export type TCustomerComponentDesign3DItem = {
