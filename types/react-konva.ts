@@ -35,3 +35,4 @@ export const INIT_CANVAS_MEASUREMENT: TCanvasMeasurement = {
     quantity: 0,
     pixelLength: 0,
 }
+
