@@ -5,7 +5,6 @@ import {
     ComponentComparisonDataEnum,
     ComponentFeatureEnum,
     CustomerComponentEnum,
-    TComponentComparisonDataOption,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
@@ -14,7 +13,6 @@ import {
     _
 } from "../../../types"
 import { QuotationMock } from ".";
-
 export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
     {
         value: ComponentFeatureEnum.Office,
@@ -99,14 +97,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 
-export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
-    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, },
-    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
-    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
-    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
-    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
-    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
-];
+
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
     // { label: "Design By", value: "designBy", field: 'text' },
