@@ -398,7 +398,10 @@ function QuotationCanvas() {
                 <div className="grid grid-cols-2 gap-2">
                     <div className="flex flex-col align-middle ">
                         <div className="mb-4">
-                            <QuotationConvasAlert />
+                            <QuotationConvasAlert
+                                label='Step 1'
+                                remark='Please select mm or inches then enter the numeric value. You can move cursor on canvas to measure the value in pixels. Then proceed to next step.'
+                            />
                         </div>
                         {isDrawingStarted
                             ? <QuotationCanvasEditAction
