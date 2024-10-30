@@ -13,11 +13,15 @@ import {
 import useImage from 'use-image'
 //====================================================================
 import bgImg from '../../.././../assets/hero-bg.jpeg'
-import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from '../../../cms/mocks'
+import {
+    CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
+    KonvaAlertMessage
+} from '../../../cms/mocks'
 import { useAppSelector } from '../../../../redux'
 import {
     _,
     CANVAS_STAGE_HEIGHT,
+    CanvasToolEnum,
     INIT_CANVAS_KONVA_CORPUS,
     INIT_CANVAS_MEASUREMENT,
     INIT_CANVAS_RECT_PROPS,
@@ -156,8 +160,7 @@ function QuotationCanvas() {
     // Handle image selection
     const handleImageSelect = useCallback((id: string) => {
         setSelectedImageId(id)
-    }
-        , [])
+    }, [])
     // Handle image drag end
     const handleImageDragEnd = useCallback((e: Konva.KonvaEventObject<DragEvent>, id: string) => {
         const { x, y } = e.target.position()
@@ -170,8 +173,7 @@ function QuotationCanvas() {
                 img.id === id ? { ...img, x, y } : img
             )
         )
-    }
-        , [images, rectProps])
+    }, [images, rectProps])
     // Handle image transform end
     const handleImageTransformEnd = useCallback((e: Konva.KonvaEventObject<Event>, id: string) => {
         const node = e.target
@@ -285,9 +287,7 @@ function QuotationCanvas() {
         } else {
             setIsDrawing(false)
         }
-    },
-        [isDrawing]
-    )
+    }, [isDrawing])
 
     const handleMouseMove = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
         if (!isDrawing) return
@@ -380,6 +380,38 @@ function QuotationCanvas() {
         return () => window.removeEventListener('resize', updateStageSize);
     }, []);
 
+    const renderGuideAlert = useMemo(() => {
+        if (isDrawingStarted) {
+
+            switch (corpus.selection.tool) {
+                case CanvasToolEnum.Remove:
+                    return <QuotationConvasAlert
+                        label={KonvaAlertMessage.RemoveTool.label}
+                        remark={KonvaAlertMessage.RemoveTool.remark}
+                    />
+                case CanvasToolEnum.ScaleMeasurement:
+                    return <QuotationConvasAlert
+                        label={KonvaAlertMessage.ScaleMeasurementTool.label}
+                        remark={KonvaAlertMessage.ScaleMeasurementTool.remark}
+                    />
+                case CanvasToolEnum.Undo:
+                    return <QuotationConvasAlert
+                        label={KonvaAlertMessage.UndoTool.label}
+                        remark={KonvaAlertMessage.UndoTool.remark}
+                    />
+                default:
+                    return <QuotationConvasAlert
+                        label={KonvaAlertMessage.Tool.label}
+                        remark={KonvaAlertMessage.Tool.remark}
+                    />
+            }
+        }
+        return <QuotationConvasAlert
+            label={KonvaAlertMessage.Measurement.label}
+            remark={KonvaAlertMessage.Measurement.remark}
+        />
+    }, [corpus.selection.tool, isDrawingStarted])
+
     return (<form className="">
         <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
@@ -398,14 +430,21 @@ function QuotationCanvas() {
                 <div className="grid grid-cols-2 gap-2">
                     <div className="flex flex-col align-middle ">
                         <div className="mb-4">
-                            <QuotationConvasAlert
-                                label='Step 1'
-                                remark='Please select mm or inches then enter the numeric value. You can move cursor on canvas to measure the value in pixels. Then proceed to next step.'
-                            />
+                            {renderGuideAlert}
+
                         </div>
                         {isDrawingStarted
                             ? <QuotationCanvasEditAction
-
+                                onToolToggle={(tool) => {
+                                    setCorpus((prev) => ({
+                                        ...prev,
+                                        selection: {
+                                            ...prev.selection,
+                                            tool: prev.selection.tool === tool ? CanvasToolEnum.None : tool
+                                        }
+                                    }))
+                                }}
+                                tool={corpus.selection.tool}
                                 handleDownload={handleDownload}
                                 handleUndo={handleUndo}
                                 onChangeSunroofWindow={(sunrooofWindow) => {
@@ -419,7 +458,6 @@ function QuotationCanvas() {
                                 }}
                             />
                             : <QuotationCanvasUnitMeasurementAction
-
                                 measurement={measurement}
                                 setMeasurement={setMeasurement}
 

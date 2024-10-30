@@ -1,21 +1,16 @@
-import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
 import Select from 'react-select'
-import { KonvaActionButton } from "../../components";
-import { TbFileOrientation } from "react-icons/tb";
 import { BsEraser } from "react-icons/bs";
 import { RxMaskOn } from "react-icons/rx";
 import { CiRuler } from "react-icons/ci";
 import { PiDownloadSimpleFill } from "react-icons/pi";
+//====================================================================
+import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
+import { KonvaActionButton } from "../../components";
+import { CanvasToolEnum } from '../../../../types';
 
-type TProps = {
-    onChangeSunroofWindow: (e: string) => void
-    handleUndo: VoidFunction,
-    handleDownload: VoidFunction
-
-}
 function QuotationCanvasEditAction(props: TProps) {
     return (<div>
-        <div className="flex  flex-col mb-3">
+        <div className="flex flex-col mb-3">
             <Select
                 options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                 onChange={(e) => {
@@ -32,26 +27,38 @@ function QuotationCanvasEditAction(props: TProps) {
         </div>
         <div className="mt-20">
             <div className="grid grid-flow-row grid-cols-2 gap-2">
-                <KonvaActionButton
+                {/* <KonvaActionButton
                     label='Orientation II'
                     icon={<TbFileOrientation className="my-auto text-xl" />}
                     onClick={() => { }}
-                />
+                /> */}
                 <KonvaActionButton
                     label='Remove SUNROOOF'
+                    variant={CanvasToolEnum.Remove === props?.tool ? 'primary' : 'secondary'}
+
                     icon={<BsEraser className="my-auto text-xl" />}
-                    onClick={() => { }}
+                    onClick={() => {
+                        props?.onToolToggle(CanvasToolEnum.Remove)
+                    }}
                 />
                 <KonvaActionButton
                     label='UNDO'
+                    variant={CanvasToolEnum.Undo === props?.tool ? 'primary' : 'secondary'}
                     icon={<RxMaskOn className="my-auto text-xl" />}
-                    onClick={props?.handleUndo}
+                    onClick={() => {
+                        props?.handleUndo()
+                        props?.onToolToggle(CanvasToolEnum.Undo)
+
+                    }}
                 />
                 <KonvaActionButton
-                    variant='secondary'
+                    variant={CanvasToolEnum.ScaleMeasurement === props?.tool ? 'primary' : 'secondary'}
+
                     label='Scale for Measurement'
                     icon={<CiRuler className="my-auto text-xl" />}
-                    onClick={() => { }}
+                    onClick={() => {
+                        props?.onToolToggle(CanvasToolEnum.ScaleMeasurement)
+                    }}
                 />
             </div>
         </div>
@@ -67,5 +74,11 @@ function QuotationCanvasEditAction(props: TProps) {
         </div>
     </div>);
 }
-
+type TProps = {
+    onChangeSunroofWindow: (e: string) => void
+    handleUndo: VoidFunction,
+    handleDownload: VoidFunction,
+    tool: CanvasToolEnum,
+    onToolToggle: (e: CanvasToolEnum) => void
+}
 export default QuotationCanvasEditAction;

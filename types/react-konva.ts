@@ -1,5 +1,17 @@
+
+export enum CanvasToolEnum {
+    Remove = 'remove',
+    Undo = 'undo',
+    ScaleMeasurement = 'scale-measurement',
+    None = ''
+}
+
 export const INIT_CANVAS_KONVA_CORPUS = {
-    selection: { sunrooofWindow: '', image: null },
+    selection: {
+        sunrooofWindow: '',
+        image: null,
+        tool: CanvasToolEnum.None
+    },
 }
 export type TKonvaImageItem = {
     id: string;
