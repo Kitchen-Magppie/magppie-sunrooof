@@ -5,6 +5,7 @@ import { RiUploadCloud2Line } from "react-icons/ri";
 import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationFile, useAppDispatch, useAppSelector } from "../../../../redux";
 import { _ } from "../../../../types";
+import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 
 function ProposedLayoutView() {
     // const action = useProposedLayoutAction();
@@ -16,20 +17,19 @@ function ProposedLayoutView() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const dispatch = useAppDispatch()
+    const presentation = useAppSelector((state) => state.Cms.Presentation.value)
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         if (e.target?.files[0]?.type?.startsWith('image/')) {
             dispatch(setPresentationFile(e.target.files[0]))
-
             console.log(_.first(e.target.files))
         } else {
             toast('*Please upload an image.')
         }
-
-
     }, [dispatch])
-    return (<div >
+    console.log(presentation)
+    return (<div>
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
-        <div
+        {presentation?.file ? <QuotationCanvas /> : <div
             className="p-4 bg-white  bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-52"
         >
             <div
@@ -58,6 +58,7 @@ function ProposedLayoutView() {
                 </div>
             </div>
         </div>
+        }
 
         {/* <Select options={proposedLayout?.map((item) => ({ value: item.label, label: item.label }))} /> */}
         {/* <button

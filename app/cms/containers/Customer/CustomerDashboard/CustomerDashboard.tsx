@@ -57,82 +57,80 @@ export default function CustomerDashboard() {
         data.values.modal.value,
     ])
 
-    return (
-        <div>
-            <div className="pt-4">
-                <div className="flex gap-2 justify-between">
-                    <div className="w-full">
-                        <CmsSearch
-                            placeholder="Search.."
-                            onChange={(e) => {
-                                action.onSearchItem(e)
-                            }}
-                        />
-                    </div>
-                    <div className="flex gap-2">
-                        <div className="">
-                            <button
-                                className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                onClick={() => {
-                                    action.onChangeModal({
-                                        action: ComponentModeEnum.Create,
-                                        value: true,
-                                        item: INIT_CUSTOMER_ITEM,
-                                    })
-                                }}
-                            >
-                                <MdAddchart className="text-lg" />
-                            </button>
-                        </div>
-                        <div className="">
-                            <Link
-                                to='/cms/proposed/layout'
-                                className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            >
-                                <MdOutlineDesignServices className="text-lg" />
-                            </Link>
-                        </div>
-                    </div>
+    return (<div >
+        <div className="pt-4">
+            <div className="flex gap-2 justify-between">
+                <div className="w-full">
+                    <CmsSearch
+                        placeholder="Search.."
+                        onChange={(e) => {
+                            action.onSearchItem(e)
+                        }}
+                    />
                 </div>
-                <div className="">
-                    <div className="text-4xl font-bold my-5">Quotations</div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {loading ? (
-                            Array.from({ length: 5 })?.map((_, i) => (
-                                <CardSkeleton key={i} />
-                            ))
-                        ) : data.values.components?.length ? (
-                            <>
-                                {data.values.components.map((item, i) => {
-                                    const isSecondaryRecord =
-                                        item.customerId !==
-                                        DEFAULT_CUSTOMER.customerId
-                                    const onClickModal = () => {
-                                        if (item && isSecondaryRecord) {
-                                            action.onChangeModal({
-                                                action: ComponentModeEnum.Edit,
-                                                value: true,
-                                                item,
-                                            })
-                                        }
-                                    }
-                                    return (<CmsCustomerCardItem
-                                        onClickModal={onClickModal}
-                                        item={item}
-                                        key={i}
-                                    />
-                                    )
-                                })}
-                            </>
-                        ) : (<div className="mt-40">
-                            <CmsNotFound />
-                        </div>)}
+                <div className="flex gap-2">
+                    <div className="">
+                        <button
+                            className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            onClick={() => {
+                                action.onChangeModal({
+                                    action: ComponentModeEnum.Create,
+                                    value: true,
+                                    item: INIT_CUSTOMER_ITEM,
+                                })
+                            }}
+                        >
+                            <MdAddchart className="text-lg" />
+                        </button>
+                    </div>
+                    <div className="">
+                        <Link
+                            to='/cms/proposed/layout'
+                            className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            <MdOutlineDesignServices className="text-lg" />
+                        </Link>
                     </div>
                 </div>
             </div>
-            {renderActionModal}
+            <div className="">
+                <div className="text-4xl font-bold my-5">Quotations</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {loading ? (
+                        Array.from({ length: 5 })?.map((_, i) => (
+                            <CardSkeleton key={i} />
+                        ))
+                    ) : data.values.components?.length ? (
+                        <>
+                            {data.values.components.map((item, i) => {
+                                const isSecondaryRecord =
+                                    item.customerId !==
+                                    DEFAULT_CUSTOMER.customerId
+                                const onClickModal = () => {
+                                    if (item && isSecondaryRecord) {
+                                        action.onChangeModal({
+                                            action: ComponentModeEnum.Edit,
+                                            value: true,
+                                            item,
+                                        })
+                                    }
+                                }
+                                return (<CmsCustomerCardItem
+                                    onClickModal={onClickModal}
+                                    item={item}
+                                    key={i}
+                                />
+                                )
+                            })}
+                        </>
+                    ) : (<div className="mt-40">
+                        <CmsNotFound />
+                    </div>)}
+                </div>
+            </div>
         </div>
-    )
+        {renderActionModal}
+    </div>)
 }
 
 function CardSkeleton() {

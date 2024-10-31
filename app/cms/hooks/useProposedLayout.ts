@@ -21,10 +21,9 @@ export function useProposedLayoutListener() {
             const data: IProposedLayoutItem[] = [];
             docs?.forEach((doc) => {
                 const row = doc.data();
-                data.push({
-                    ...row,
-                    id: doc.id
-                } as IProposedLayoutItem);
+                row.id = doc.id
+                row.at.created = row?.at?.created?.toDate()
+                data.push(row as IProposedLayoutItem);
             });
             dispatch(setProposedLayouts(data))
 
