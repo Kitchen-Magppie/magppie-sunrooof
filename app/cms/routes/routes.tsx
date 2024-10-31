@@ -1,16 +1,21 @@
+import { lazy, Suspense } from 'react'
 import { RouteObject } from 'react-router-dom'
 
 //====================================================================
 
 import {
-    Projects,
+    // Projects,
     SignIn,
     User,
 } from '../containers'
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
-import Customer from '../containers/Customer'
-// import { useAppService } from '../hooks'
+import { PageProgress } from '../../../components'
+
+// ======================================================================
+
+const CustomerView = lazy(() => import('../containers/Customer'))
+const ProposedLayoutView = lazy(() => import('../containers/ProposedLayoutView'))
 
 export default function CmsRoutes() {
     useFirebaseCmsAuthListener()
@@ -24,13 +29,22 @@ export default function CmsRoutes() {
                 path: 'sign-in',
                 element: <SignIn />,
             },
-            {
-                path: 'projects',
-                element: <Projects />,
-            },
+            // {
+            //     path: 'projects',
+            //     element: <Projects />,
+            // },
             {
                 path: '',
-                element: <Customer />,
+                element: (<Suspense fallback={<PageProgress />}>
+                    <CustomerView />
+                </ Suspense>)
+
+            },
+            {
+                path: 'proposed/layout',
+                element: (<Suspense fallback={<PageProgress />}>
+                    <ProposedLayoutView />
+                </Suspense>)
             },
             {
                 path: 'users',
