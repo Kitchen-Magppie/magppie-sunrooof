@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Konva from 'konva'
 import {
     Stage,
@@ -305,14 +304,6 @@ function QuotationCanvas() {
     },
         [calculatePixelLength, calculatePixelsPerUnit, isDrawing, linePoints]
     )
-
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!Presentation?.value?.file?.size) {
-            navigate(`/quotation-generator`)
-        }
-    }, [Presentation?.value?.file?.size, navigate])
 
     // Make the transformer active when the rectangle is selected
     const handleRectSelect = useCallback(() => {

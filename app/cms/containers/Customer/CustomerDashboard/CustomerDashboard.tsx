@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom';
 import { MdOutlineDesignServices } from "react-icons/md";
 import { MdAddchart } from "react-icons/md";
 //====================================================================
@@ -12,10 +13,12 @@ import { useFirebaseCmsCustomerListener } from '../../../utils/firebase'
 import { ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
+import { useProposedLayoutListener } from '../../../hooks';
 
 
 export default function CustomerDashboard() {
     useFirebaseCmsCustomerListener()
+    useProposedLayoutListener()
 
     const { loading, data, action } = useCustomerDashboard()
 
@@ -82,12 +85,12 @@ export default function CustomerDashboard() {
                             </button>
                         </div>
                         <div className="">
-                            <button
+                            <Link
+                                to='/cms/proposed/layout'
                                 className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                onClick={() => { }}
                             >
                                 <MdOutlineDesignServices className="text-lg" />
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
