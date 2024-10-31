@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import { FaPlus } from "react-icons/fa";
-
+import { MdOutlineDesignServices } from "react-icons/md";
+import { MdAddchart } from "react-icons/md";
 //====================================================================
 import {
     CmsSearch,
@@ -12,6 +12,7 @@ import { useFirebaseCmsCustomerListener } from '../../../utils/firebase'
 import { ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
+
 
 export default function CustomerDashboard() {
     useFirebaseCmsCustomerListener()
@@ -65,18 +66,30 @@ export default function CustomerDashboard() {
                             }}
                         />
                     </div>
-                    <button
-                        className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        onClick={() => {
-                            action.onChangeModal({
-                                action: ComponentModeEnum.Create,
-                                value: true,
-                                item: INIT_CUSTOMER_ITEM,
-                            })
-                        }}
-                    >
-                        <FaPlus className="text-lg" />
-                    </button>
+                    <div className="flex gap-2">
+                        <div className="">
+                            <button
+                                className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                onClick={() => {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Create,
+                                        value: true,
+                                        item: INIT_CUSTOMER_ITEM,
+                                    })
+                                }}
+                            >
+                                <MdAddchart className="text-lg" />
+                            </button>
+                        </div>
+                        <div className="">
+                            <button
+                                className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                onClick={() => { }}
+                            >
+                                <MdOutlineDesignServices className="text-lg" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div className="">
                     <div className="text-4xl font-bold my-5">Quotations</div>
