@@ -6,5 +6,6 @@ export enum FirebaseCollectionEnum {
     Component = `customer-site-components`,
     Customer = `customers`,
     Landing = 'landing',
-    User = 'users'
+    User = 'users',
+    ProposedLayout = 'proposed-layouts'
 }

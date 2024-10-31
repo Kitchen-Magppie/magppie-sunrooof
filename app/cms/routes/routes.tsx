@@ -6,7 +6,7 @@ import { RouteObject } from 'react-router-dom'
 import {
     // Projects,
     SignIn,
-    User,
+    // User,
 } from '../containers'
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
@@ -46,10 +46,10 @@ export default function CmsRoutes() {
                     <ProposedLayoutView />
                 </Suspense>)
             },
-            {
-                path: 'users',
-                element: <User />,
-            },
+            // {
+            //     path: 'users',
+            //     element: <User />,
+            // },
         ],
     } as RouteObject
 }
