@@ -3,17 +3,14 @@ import { Link } from 'react-router-dom';
 import { MdOutlineDesignServices } from "react-icons/md";
 import { MdAddchart } from "react-icons/md";
 //====================================================================
-import {
-    CmsSearch,
-    CmsCustomerCardItem,
-    CmsNotFound,
-} from '../../../components'
+import { CmsSearch, CmsCustomerCardItem, CmsNotFound } from '../../../components'
 import { CustomSimpleModal } from '../../../../../components'
 import { useFirebaseCmsCustomerListener } from '../../../utils/firebase'
 import { ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
 import { useProposedLayoutListener } from '../../../hooks';
+// import { useAppSelector } from '../../../../../redux';
 
 
 export default function CustomerDashboard() {
@@ -21,6 +18,8 @@ export default function CustomerDashboard() {
     useProposedLayoutListener()
 
     const { loading, data, action } = useCustomerDashboard()
+
+
 
     const renderActionModal = useMemo(() => {
         const isCreateAction =

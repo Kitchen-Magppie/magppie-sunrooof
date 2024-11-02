@@ -29,6 +29,7 @@ import {
 import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasurementAction'
 import QuotationCanvasEditAction from './QuotationCanvasEditAction'
 import { QuotationConvasAlert } from './QuotationCanvasAlert'
+import { useFirebaseStorageActions } from '../../../../hooks/firebase'
 
 
 function QuotationCanvas() {
@@ -85,7 +86,7 @@ function QuotationCanvas() {
         setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
     }, [measurement.quantity, measurement.pixelLength]);
 
-    console.log(measurement)
+    // console.log(measurement)
     // Function to update images inside the rectangle
     const updateImagesInRect = useCallback(() => {
         if (!rectProps || !patternImage) return;
@@ -246,6 +247,7 @@ function QuotationCanvas() {
         }
     }, [Presentation?.value?.file, setImage])
 
+    const StorageAction = useFirebaseStorageActions();
     const handleDownload = useCallback(() => {
         const canvas = document.createElement('canvas')
         canvas.width = image.width
@@ -256,6 +258,7 @@ function QuotationCanvas() {
         context.drawImage(image, 0, 0)
 
         const uniq = +new Date()
+
         // Convert the canvas to a Data URL
         const dataURL = canvas.toDataURL('image/png')
 
@@ -263,6 +266,18 @@ function QuotationCanvas() {
         const link = document.createElement('a')
         link.href = dataURL
         link.download = `client-layout-${uniq}.png`
+        // const blob = new Blob([dataURL], { type: 'image/png' });
+
+        // Create a File object
+        // const file = new File([blob], link.download, { type: 'image/png' });
+        StorageAction.upload({
+            file: Presentation.value.file,
+            path: 'proposed-layout',
+            onSuccess(e) {
+                console.log(e.link)
+            },
+        })
+
         document.body.appendChild(link)
         link.click()
         document.body.removeChild(link)
@@ -272,9 +287,27 @@ function QuotationCanvas() {
             const uri = stageRef.current.toDataURL()
             transformerRef.current.nodes([rectRef.current])
             transformerRef.current.getLayer()?.batchDraw()
+
+            const blobStage = new Blob([uri], { type: 'image/png' });
+
+            // Create a File object
+            const fileStage = new File([blobStage], 'my-stage-image.png', { type: 'image/png' });
+            console.log(fileStage)
+            // const blob = new Blob([uri], { type: 'image/png' });
+
+            // Create a File object
+            // const file = new File([blob], `proposed-layout-${uniq}`, { type: 'image/png' });
+            // StorageAction.upload({
+            //     file: fileStage,
+            //     path: 'proposed-layout',
+            //     onSuccess(e) {
+            //         console.log(e.link)
+            //     },
+            // })
+
             _.download({ url: uri, name: `proposed-layout-${uniq}` })
         }
-    }, [image])
+    }, [Presentation.value.file, StorageAction, image])
 
     const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = event.target.getStage()

@@ -4,16 +4,16 @@ import { RiUploadCloud2Line } from "react-icons/ri";
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationFile, useAppDispatch, useAppSelector } from "../../../../redux";
-import { _ } from "../../../../types";
+// import { _ } from "../../../../types";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 
 function ProposedLayoutView() {
     // const action = useProposedLayoutAction();
 
     useProposedLayoutListener()
-    const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value)
-    console.log(proposedLayout)
-    console.log("Re-render")
+    // const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value)
+    // console.log(proposedLayout)
+    // console.log("Re-render")
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const dispatch = useAppDispatch()
@@ -21,12 +21,12 @@ function ProposedLayoutView() {
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         if (e.target?.files[0]?.type?.startsWith('image/')) {
             dispatch(setPresentationFile(e.target.files[0]))
-            console.log(_.first(e.target.files))
+            // console.log(_.first(e.target.files))
         } else {
             toast('*Please upload an image.')
         }
     }, [dispatch])
-    console.log(presentation)
+    // console.log(presentation)
     return (<div>
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
         {presentation?.file ? <QuotationCanvas /> : <div
