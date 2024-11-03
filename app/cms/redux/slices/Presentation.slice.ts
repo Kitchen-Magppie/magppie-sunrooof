@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 type TPresentation = {
     file?: File,
+    title: string
 }
 
 interface IPresentationSlice {
@@ -29,9 +30,17 @@ const PresentationSlice = createSlice({
                 state.value = { ...state.value, file: action.payload }
             }
         },
+        setPresentationTitle: (state, action?: PayloadAction<string>) => {
+            state.status = action.payload ? 'loading' : 'success';
+            if (state.value && 'file' in state.value) {
+                state.value.title = action.payload
+            } else {
+                state.value = { ...state.value, title: action.payload }
+            }
+        },
     },
 });
 
-export const { setPresentationFile } = PresentationSlice.actions;
+export const { setPresentationFile, setPresentationTitle } = PresentationSlice.actions;
 
 export const PresentationReducer = PresentationSlice.reducer

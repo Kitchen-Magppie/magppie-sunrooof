@@ -10,7 +10,6 @@ import { ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
 import { useProposedLayoutListener } from '../../../hooks';
-// import { useAppSelector } from '../../../../../redux';
 
 
 export default function CustomerDashboard() {
@@ -18,8 +17,6 @@ export default function CustomerDashboard() {
     useProposedLayoutListener()
 
     const { loading, data, action } = useCustomerDashboard()
-
-
 
     const renderActionModal = useMemo(() => {
         const isCreateAction =

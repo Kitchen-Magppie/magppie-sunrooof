@@ -30,6 +30,7 @@ import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasureme
 import QuotationCanvasEditAction from './QuotationCanvasEditAction'
 import { QuotationConvasAlert } from './QuotationCanvasAlert'
 import { useFirebaseStorageActions } from '../../../../hooks/firebase'
+import { useProposedLayoutAction } from '../../../cms/hooks'
 
 
 function QuotationCanvas() {
@@ -51,6 +52,8 @@ function QuotationCanvas() {
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
     const [history, setHistory] = useState([]);
 
+    const ProposedLayoutDataAction = useProposedLayoutAction()
+
     useEffect(() => {
         const img = new window.Image()
 
@@ -65,18 +68,17 @@ function QuotationCanvas() {
         }
     }, [corpus.selection.sunrooofWindow])
 
-    const calculatePixelLength = useCallback(
-        (line: number[]) => {
-            if (!line || linePoints.length < 4) return
-            const x1 = linePoints[0]
-            const y1 = linePoints[1]
-            const x2 = linePoints[2]
-            const y2 = linePoints[3]
-            const length = Math.sqrt(
-                Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
-            ) // Pythagorean theorem to calculate pixel distance
-            setMeasurement((prev) => ({ ...prev, pixelLength: length })) // Update pixel length
-        },
+    const calculatePixelLength = useCallback((line: number[]) => {
+        if (!line || linePoints.length < 4) return
+        const x1 = linePoints[0]
+        const y1 = linePoints[1]
+        const x2 = linePoints[2]
+        const y2 = linePoints[3]
+        const length = Math.sqrt(
+            Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
+        ) // Pythagorean theorem to calculate pixel distance
+        setMeasurement((prev) => ({ ...prev, pixelLength: length })) // Update pixel length
+    },
         [linePoints]
     )
 
@@ -248,6 +250,7 @@ function QuotationCanvas() {
     }, [Presentation?.value?.file, setImage])
 
     const StorageAction = useFirebaseStorageActions();
+
     const handleDownload = useCallback(() => {
         const canvas = document.createElement('canvas')
         canvas.width = image.width
@@ -270,13 +273,6 @@ function QuotationCanvas() {
 
         // Create a File object
         // const file = new File([blob], link.download, { type: 'image/png' });
-        StorageAction.upload({
-            file: Presentation.value.file,
-            path: 'proposed-layout',
-            onSuccess(e) {
-                console.log(e.link)
-            },
-        })
 
         document.body.appendChild(link)
         link.click()
@@ -288,26 +284,36 @@ function QuotationCanvas() {
             transformerRef.current.nodes([rectRef.current])
             transformerRef.current.getLayer()?.batchDraw()
 
-            const blobStage = new Blob([uri], { type: 'image/png' });
-
-            // Create a File object
-            const fileStage = new File([blobStage], 'my-stage-image.png', { type: 'image/png' });
-            console.log(fileStage)
-            // const blob = new Blob([uri], { type: 'image/png' });
-
-            // Create a File object
-            // const file = new File([blob], `proposed-layout-${uniq}`, { type: 'image/png' });
-            // StorageAction.upload({
-            //     file: fileStage,
-            //     path: 'proposed-layout',
-            //     onSuccess(e) {
-            //         console.log(e.link)
-            //     },
-            // })
-
             _.download({ url: uri, name: `proposed-layout-${uniq}` })
+
+
+
+            StorageAction.batch.upload({
+                files: [Presentation.value.file,
+                Base64ToFile(uri, Presentation.value.file.name)
+                ],
+                path: 'proposed-layout',
+                onSuccess: (e) => {
+                    ProposedLayoutDataAction.add({
+                        label: Presentation.value.title,
+                        url: {
+                            customer: e[0],
+                            proposed: e[1],
+                        },
+                    })
+                }
+            })
+
+
+            // _.download({ url: uri, name: `proposed-layout-${uniq}` })
         }
-    }, [Presentation.value.file, StorageAction, image])
+    }, [
+        Presentation.value.file,
+        Presentation.value.title,
+        ProposedLayoutDataAction,
+        StorageAction,
+        image
+    ])
 
     const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = event.target.getStage()
@@ -600,5 +606,16 @@ function QuotationCanvas() {
     )
 }
 
+function Base64ToFile(base64: string, filename: string): File {
+    const arr = typeof base64 === 'string' ? base64.split(',') : [];
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+}
 
 export default QuotationCanvas

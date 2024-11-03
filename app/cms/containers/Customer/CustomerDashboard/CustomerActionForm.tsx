@@ -1113,152 +1113,152 @@ export function CustomerActionForm(props: TProps) {
                         }
                         case CustomerComponentEnum.TwoDDesign: {
                             const prev = component as TCustomerComponentDesign2DItem;
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="">
-                                            <FieldCautation
-                                                onClickAdd={() => {
-                                                    setValue(`components.${i}.data`, [
-                                                        ...prev.data,
-                                                        INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                                                    ]);
-                                                }}
-                                            />
-                                            {prev.data?.map((data, k) => {
-                                                const hasMoreThenOne = prev.data?.length > 1;
-                                                return (
-                                                    <div
-                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
-                                                        className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
-                                                    >
-                                                        <div className="text-gray-400 italic text-lg flex justify-between">
-                                                            #{k + 1}
-                                                            <div className="py-1">
-                                                                <IoIosRemoveCircleOutline
-                                                                    className={
-                                                                        hasMoreThenOne
-                                                                            ? "text-red-500 cursor-pointer hover:text-red-800"
-                                                                            : ""
-                                                                    }
-                                                                    onClick={() => {
-                                                                        if (hasMoreThenOne)
-                                                                            setValue(
-                                                                                `components.${i}.data`,
-                                                                                prev.data.filter((_, m) => m !== k)
-                                                                            );
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2 ">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) => field === "select"
-                                                            )?.map((item, j) => {
-                                                                const options = DESIGN_2D_SELECT_OPTION(
-                                                                    item.value,
-                                                                    proposedLayout
-                                                                );
-
-                                                                return (
-                                                                    <div
-                                                                        className="bg-white"
-                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                    >
-                                                                        <Select
-                                                                            theme={(theme) => ({
-                                                                                ...theme,
-                                                                                borderRadius: 6,
-                                                                                colors: {
-                                                                                    ...theme.colors,
-                                                                                    text: "white",
-                                                                                    primary25: "#3F51B5",
-                                                                                    primary: "#3F51B5",
-                                                                                },
-                                                                            })}
-                                                                            classNames={{
-                                                                                control: () => AUTOCOMPLETE_STYLE,
-                                                                            }}
-                                                                            placeholder={item.label}
-                                                                            defaultValue={options?.find(
-                                                                                (option) =>
-                                                                                    option.value === data[item.value]
-                                                                            )}
-                                                                            onChange={(e) => {
-                                                                                setValue(
-                                                                                    `components.${i}.data.${k}.${item.value}`,
-                                                                                    e?.value?.length ? e.value : ""
-                                                                                );
-                                                                            }}
-                                                                            options={options}
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) => field === "text"
-                                                            )?.map((item, j) => {
-                                                                return (
-                                                                    <div
-                                                                        className="bg-white"
-                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                    >
-                                                                        <label className="block text-sm font-medium text-gray-700">
-                                                                            {item.label}
-                                                                        </label>
-                                                                        <input
-                                                                            type="text"
-                                                                            {...register(
-                                                                                `components.${i}.data.${k}.${item.value}`
-                                                                            )}
-                                                                            placeholder={item.placeholder}
-                                                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                (item) => item.field === "image"
-                                                            )?.map((item, j) => {
-                                                                const value = data[item.value];
-                                                                const items = value?.length ? [value] : [];
-                                                                return (
-                                                                    <div key={j}>
-                                                                        <ImageInput
-                                                                            label={item.label}
-                                                                            key={j}
-                                                                            path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                            values={items}
-                                                                            onSuccess={(e) => {
-                                                                                setValue(
-                                                                                    `components.${i}.data.${k}.${item.value}`,
-                                                                                    e[0]
-                                                                                );
-                                                                            }}
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
+                            return (<div key={i}>
+                                <MinimalAccordion isExpanded title={title}>
+                                    <div className="">
+                                        <FieldCautation
+                                            onClickAdd={() => {
+                                                setValue(`components.${i}.data`, [
+                                                    ...prev.data,
+                                                    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+                                                ]);
+                                            }}
+                                        />
+                                        {prev.data?.map((data, k) => {
+                                            const hasMoreThenOne = prev.data?.length > 1;
+                                            return (
+                                                <div
+                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
+                                                    className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
+                                                >
+                                                    <div className="text-gray-400 italic text-lg flex justify-between">
+                                                        #{k + 1}
+                                                        <div className="py-1">
+                                                            <IoIosRemoveCircleOutline
+                                                                className={
+                                                                    hasMoreThenOne
+                                                                        ? "text-red-500 cursor-pointer hover:text-red-800"
+                                                                        : ""
+                                                                }
+                                                                onClick={() => {
+                                                                    if (hasMoreThenOne)
+                                                                        setValue(
+                                                                            `components.${i}.data`,
+                                                                            prev.data.filter((_, m) => m !== k)
+                                                                        );
+                                                                }}
+                                                            />
                                                         </div>
                                                     </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </MinimalAccordion>
-                                </div>
+                                                    <div className="grid grid-cols-2 gap-2 ">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            ({ field }) => field === "select"
+                                                        )?.map((item, j) => {
+                                                            const options = DESIGN_2D_SELECT_OPTION(
+                                                                item.value,
+                                                                proposedLayout
+                                                            );
+
+                                                            return (
+                                                                <div
+                                                                    className="bg-white"
+                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                >
+                                                                    <Select
+                                                                        theme={(theme) => ({
+                                                                            ...theme,
+                                                                            borderRadius: 6,
+                                                                            colors: {
+                                                                                ...theme.colors,
+                                                                                text: "white",
+                                                                                primary25: "#3F51B5",
+                                                                                primary: "#3F51B5",
+                                                                            },
+                                                                        })}
+                                                                        classNames={{
+                                                                            control: () => AUTOCOMPLETE_STYLE,
+                                                                        }}
+                                                                        placeholder={item.label}
+                                                                        defaultValue={options?.find(
+                                                                            (option) =>
+                                                                                option.value === data[item.value]
+                                                                        )}
+                                                                        onChange={(e) => {
+                                                                            // console.log(e)
+                                                                            setValue(
+                                                                                `components.${i}.data.${k}.${item.value}`,
+                                                                                e?.value?.length ? e.value : ""
+                                                                            );
+                                                                        }}
+                                                                        options={options}
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            ({ field }) => field === "text"
+                                                        )?.map((item, j) => {
+                                                            return (
+                                                                <div
+                                                                    className="bg-white"
+                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                >
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        {item.label}
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        {...register(
+                                                                            `components.${i}.data.${k}.${item.value}`
+                                                                        )}
+                                                                        placeholder={item.placeholder}
+                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            (item) => item.field === "image"
+                                                        )?.map((item, j) => {
+                                                            const value = data[item.value];
+                                                            const items = value?.length ? [value] : [];
+                                                            return (
+                                                                <div key={j}>
+                                                                    <ImageInput
+                                                                        label={item.label}
+                                                                        key={j}
+                                                                        path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                                        values={items}
+                                                                        onSuccess={(e) => {
+                                                                            setValue(
+                                                                                `components.${i}.data.${k}.${item.value}`,
+                                                                                e[0]
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </MinimalAccordion>
+                            </div>
                             );
                         }
                         default:
@@ -1297,10 +1297,7 @@ type TProps = {
 
 const AUTOCOMPLETE_STYLE =
     "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
-function DESIGN_2D_SELECT_OPTION(
-    e: string,
-    proposedLayout: IProposedLayoutItem[]
-) {
+function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayoutItem[]) {
     switch (e) {
         case "design":
             return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS);

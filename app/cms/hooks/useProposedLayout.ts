@@ -7,8 +7,11 @@ import { setProposedLayouts, useAppDispatch } from "../../../redux"
 
 export function useProposedLayoutAction() {
     return ({
-        add: (row: Omit<IProposedLayoutItem, 'id'>) => {
-            addDoc(collection(db, COLLECTION), _.omit(row, ['id']))
+        add: (row: Omit<IProposedLayoutItem, 'id' | 'at'>) => {
+            addDoc(collection(db, COLLECTION), _.omit({
+                ...row,
+                at: { created: new Date() }
+            }, ['id']))
         },
     })
 }
