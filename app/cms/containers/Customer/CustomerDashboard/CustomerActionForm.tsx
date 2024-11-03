@@ -1112,7 +1112,6 @@ export function CustomerActionForm(props: TProps) {
                         }
                         case CustomerComponentEnum.TwoDDesign: {
                             const prev = component as TCustomerComponentDesign2DItem;
-                            console.log(prev)
                             return (<div key={i}>
                                 <MinimalAccordion isExpanded title={title}>
                                     <div >
