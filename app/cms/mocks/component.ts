@@ -107,6 +107,8 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
     // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
     // { label: "After Installation", value: 'afterInstallation', field: 'text' },
     { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
+    { label: "Proposed Layout", value: 'rightImage', field: 'select', placeholder: '' },
+
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },
     { label: "Proposed Image", value: 'rightImage', field: 'image', placeholder: '' },

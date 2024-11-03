@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Konva from 'konva'
 import {
     Stage,
@@ -30,6 +29,10 @@ import {
 import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasurementAction'
 import QuotationCanvasEditAction from './QuotationCanvasEditAction'
 import { QuotationConvasAlert } from './QuotationCanvasAlert'
+import { useFirebaseStorageActions } from '../../../../hooks/firebase'
+import { useProposedLayoutAction } from '../../../cms/hooks'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 
 function QuotationCanvas() {
@@ -49,11 +52,12 @@ function QuotationCanvas() {
     const [patternImage, setPatternImage] = useState(null)
     const [images, setImages] = useState<TKonvaImageItem[]>([])
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
-    const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
+    const navigate = useNavigate()
     const [history, setHistory] = useState([]);
+    const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
 
     const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
-
+    const ProposedLayoutDataAction = useProposedLayoutAction()
     useEffect(() => {
         const img = new window.Image()
 
@@ -68,18 +72,17 @@ function QuotationCanvas() {
         }
     }, [corpus.selection.sunrooofWindow])
 
-    const calculatePixelLength = useCallback(
-        (line: number[]) => {
-            if (!line || linePoints.length < 4) return
-            const x1 = linePoints[0]
-            const y1 = linePoints[1]
-            const x2 = linePoints[2]
-            const y2 = linePoints[3]
-            const length = Math.sqrt(
-                Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
-            ) // Pythagorean theorem to calculate pixel distance
-            setMeasurement((prev) => ({ ...prev, pixelLength: length })) // Update pixel length
-        },
+    const calculatePixelLength = useCallback((line: number[]) => {
+        if (!line || linePoints.length < 4) return
+        const x1 = linePoints[0]
+        const y1 = linePoints[1]
+        const x2 = linePoints[2]
+        const y2 = linePoints[3]
+        const length = Math.sqrt(
+            Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)
+        ) // Pythagorean theorem to calculate pixel distance
+        setMeasurement((prev) => ({ ...prev, pixelLength: length })) // Update pixel length
+    },
         [linePoints]
     )
 
@@ -89,7 +92,7 @@ function QuotationCanvas() {
         setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
     }, [measurement.quantity, measurement.pixelLength]);
 
-    console.log(measurement)
+    // console.log(measurement)
     // Function to update images inside the rectangle
     const updateImagesInRect = useCallback(() => {
         if (!rectProps || !patternImage) return;
@@ -161,9 +164,9 @@ function QuotationCanvas() {
 
 
     // Handle image selection
-    const handleImageSelect = useCallback((e: any, id: string) => {
+    const handleImageSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
         e.cancelBubble = true; // Prevent event from reaching the parent or stage
-        const selectedNode = imageRefs.current[id];
+        // const selectedNode = imageRefs.current[id];
         setSelectedObjectId(id);
         setSelectedImageId(id)
     }, [])
@@ -221,10 +224,10 @@ function QuotationCanvas() {
             transformerRef.current.nodes([rectRef.current]);
         } else if (selectedObjectId && imageRefs.current[selectedObjectId]) {
             transformerRef.current.nodes([imageRefs.current[selectedObjectId]]);
-        } else if (!!transformerRef?.current?.nodes) {
+        } else if (transformerRef?.current?.nodes) {
             transformerRef.current.nodes([]);
         }
-        if (!!transformerRef?.current?.getLayer) {
+        if (transformerRef?.current?.getLayer) {
             transformerRef.current.getLayer()?.batchDraw();
         }
     }, [selectedObjectId]);
@@ -266,6 +269,8 @@ function QuotationCanvas() {
         }
     }, [Presentation?.value?.file, setImage])
 
+    const StorageAction = useFirebaseStorageActions();
+
     const handleDownload = useCallback(() => {
         const canvas = document.createElement('canvas')
         canvas.width = image.width
@@ -276,6 +281,7 @@ function QuotationCanvas() {
         context.drawImage(image, 0, 0)
 
         const uniq = +new Date()
+
         // Convert the canvas to a Data URL
         const dataURL = canvas.toDataURL('image/png')
 
@@ -283,18 +289,52 @@ function QuotationCanvas() {
         const link = document.createElement('a')
         link.href = dataURL
         link.download = `client-layout-${uniq}.png`
+        // const blob = new Blob([dataURL], { type: 'image/png' });
+
+        // Create a File object
+        // const file = new File([blob], link.download, { type: 'image/png' });
+
         document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+
         if (stageRef.current && transformerRef.current) {
             transformerRef.current.nodes([])
             transformerRef.current.getLayer()?.batchDraw()
             const uri = stageRef.current.toDataURL()
             transformerRef.current.nodes([rectRef.current])
             transformerRef.current.getLayer()?.batchDraw()
-            _.download({ url: uri, name: `proposed-layout-${uniq}` })
+
+
+            StorageAction.batch.upload({
+                files: [Presentation.value.file,
+                Base64ToFile(uri, Presentation.value.file.name)
+                ],
+                path: 'proposed-layout',
+                onSuccess: (e) => {
+                    ProposedLayoutDataAction.add({
+                        label: Presentation.value.title,
+                        url: {
+                            customer: e[0],
+                            proposed: e[1],
+                        },
+                    })
+                    toast('Proposed image has been saved!')
+                    navigate('/cms')
+                    link.click()
+                    document.body.removeChild(link)
+                    _.download({ url: uri, name: `proposed-layout-${uniq}` })
+                }
+            })
+
+
         }
-    }, [image])
+    }, [
+        navigate,
+        Presentation.value.file,
+        Presentation.value.title,
+        ProposedLayoutDataAction,
+        StorageAction,
+        image
+    ])
 
     const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
         const stage = event.target.getStage()
@@ -336,16 +376,8 @@ function QuotationCanvas() {
         [calculatePixelLength, calculatePixelsPerUnit, isDrawing, linePoints]
     )
 
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!Presentation?.value?.file?.size) {
-            navigate(`/quotation-generator`)
-        }
-    }, [Presentation?.value?.file?.size, navigate])
-
     // Make the transformer active when the rectangle is selected
-    const handleRectSelect = useCallback((e: any) => {
+    const handleRectSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
         if (transformerRef.current && rectRef.current) {
             e.cancelBubble = true; // Prevent event from reaching the stage
             setSelectedObjectId('parent');
@@ -520,7 +552,7 @@ function QuotationCanvas() {
                             >
                                 <Layer>
                                     {Presentation?.value?.file?.size ? (<KonvaImage image={image} listening width={1200} height={1200} draggable onClick={(e) => {
-                                        if (!!selectedObjectId) {
+                                        if (selectedObjectId) {
                                             e.cancelBubble = true; // Prevent event from reaching the stage
                                             setSelectedObjectId(null); // Clear selection
                                             transformerRef.current.detach();
@@ -546,7 +578,8 @@ function QuotationCanvas() {
                                                 }}
                                                 onTransformEnd={handleRectTransform}
                                                 onClick={handleRectSelect}
-                                                onMouseDown={(e) => {
+                                                onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                    console.log(e)
                                                     if (isDrawing) return;
                                                     setSelectedObjectId('parent');
                                                 }}
@@ -584,7 +617,8 @@ function QuotationCanvas() {
                                                             img.id
                                                         )
                                                     }
-                                                    onMouseDown={(e) => {
+                                                    onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                        console.log(e)
                                                         if (isDrawing) return;
                                                         setSelectedObjectId(img.id);
                                                     }}
@@ -642,5 +676,16 @@ function QuotationCanvas() {
     )
 }
 
+function Base64ToFile(base64: string, filename: string): File {
+    const arr = typeof base64 === 'string' ? base64.split(',') : [];
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+}
 
 export default QuotationCanvas

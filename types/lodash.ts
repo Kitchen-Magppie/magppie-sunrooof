@@ -5,6 +5,7 @@ type TApplyOrder = { original: string[], prev: string[], prefer: string }
 type TLabelify = { value: string, label: string }
 type TDownload = { url: string, name: string }
 
+type TFromCanvasElementToFile = { element: HTMLCanvasElement, name: string, type: string }
 interface TLodashMixin extends _.LoDashStatic {
     labelify: (e: string[]) => TLabelify[]
     titleCase: (e: string) => string,
@@ -14,7 +15,8 @@ interface TLodashMixin extends _.LoDashStatic {
     applyOrder: (e: string[]) => TApplyOrder,
     uuid: () => string,
     download: (e: TDownload) => void,
-    dataURLtoBlob: (e: string) => Blob
+    dataURLtoBlob: (e: string) => Blob,
+    fromCanvasElementToFile: (e: TFromCanvasElementToFile) => File
 }
 
 
@@ -74,6 +76,18 @@ function download(args: TDownload): void {
     document.body.removeChild(link);
 }
 
+
+function fromCanvasElementToFile(e: TFromCanvasElementToFile) {
+    const dataURL = e.element.toDataURL(e.type);
+
+    // Create a Blob object
+    const blob = new Blob([dataURL], { type: e.type });
+
+    // Create a File object
+    const file = new File([blob], e.name, { type: e.type });
+    return file
+}
+
 _.mixin({
     download,
     labelify,
@@ -83,6 +97,7 @@ _.mixin({
     mapNums,
     applyOrder,
     uuid,
-    dataURLtoBlob
+    dataURLtoBlob,
+    fromCanvasElementToFile
 })
 export default _ as TLodashMixin

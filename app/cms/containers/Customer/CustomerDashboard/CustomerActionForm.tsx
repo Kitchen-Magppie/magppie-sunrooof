@@ -24,6 +24,7 @@ import {
     _,
     ComponentModeEnum,
     CustomerComponentEnum,
+    IProposedLayoutItem,
     // TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DItem,
     TCustomerComponentFeatureItem,
@@ -53,11 +54,20 @@ import {
 import { ImageInput } from "../../../../../components";
 import { useFirebaseCustomerAction } from "../../../utils/firebase/customer";
 import { useFirebaseStorageActions } from "../../../../../hooks/firebase";
+import { useAppSelector } from "../../../../../redux";
 
 export function CustomerActionForm(props: TProps) {
     const invoiceRef = useRef(null);
     const invoiceRefPng = useRef(null);
     const StorageActions = useFirebaseStorageActions();
+    const [corpus, setCorpus] = useState(INIT_CORPUS);
+    const { mode, item } = props;
+
+    const isCreateAction = mode === ComponentModeEnum.Create;
+
+    const location = useLocation();
+    const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
+    // console.log(proposedLayout)
 
     const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current;
@@ -90,13 +100,6 @@ export function CustomerActionForm(props: TProps) {
 
 
 
-    const [corpus, setCorpus] = useState(INIT_CORPUS);
-    const { mode, item } = props;
-
-    const isCreateAction = mode === ComponentModeEnum.Create;
-
-    const location = useLocation();
-
     const publishedUrl = useMemo(() => {
         if (item.id?.length)
             return [location.origin, "quotation", item.id].join("/");
@@ -118,31 +121,34 @@ export function CustomerActionForm(props: TProps) {
 
     const values = watch();
 
-    const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
-        const invoiceElement = invoiceRefPng.current;
-        setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
-        html2canvas(invoiceElement)
-            .then((canvas) => {
-                // FIXME: Maye be we remove the download feature from here;
-                const link = document.createElement("a");
-                const dataUrl = canvas.toDataURL("image/png");
-                link.href = dataUrl;
-                link.download = `invoice-${+new Date()}.png`;
-                const blob = _.dataURLtoBlob(dataUrl);
-                const file = new File([blob], link.download, { type: "image/png" });
-                StorageActions.upload({
-                    file,
-                    path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
-                    onSuccess(e) {
-                        setValue(`components.${i}.data.invoiceUrl`, e.link);
-                    },
+    const onClickGenerateSaveInvoiceImage = useCallback(
+        (i: number) => {
+            const invoiceElement = invoiceRefPng.current;
+            setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
+            html2canvas(invoiceElement)
+                .then((canvas) => {
+                    // FIXME: Maye be we remove the download feature from here;
+                    const link = document.createElement("a");
+                    const dataUrl = canvas.toDataURL("image/png");
+                    link.href = dataUrl;
+                    link.download = `invoice-${+new Date()}.png`;
+                    const blob = _.dataURLtoBlob(dataUrl);
+                    const file = new File([blob], link.download, { type: "image/png" });
+                    StorageActions.upload({
+                        file,
+                        path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
+                        onSuccess(e) {
+                            setValue(`components.${i}.data.invoiceUrl`, e.link);
+                        },
+                    });
+                    link.click();
+                })
+                .finally(() => {
+                    setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
                 });
-                link.click();
-            })
-            .finally(() => {
-                setCorpus((prev) => ({ ...prev, isQuotationImageDownload: false }));
-            });
-    }, [StorageActions, setValue, values?.customerId]);
+        },
+        [StorageActions, setValue, values?.customerId]
+    );
 
     // console.log(values)
     const totalGrossAmount = useMemo(() => {
@@ -158,6 +164,8 @@ export function CustomerActionForm(props: TProps) {
         }
         return 0;
     }, [values?.components]);
+
+    // console.log(values?.components?.find((item) => item.value === '2d-design'))
 
     const renderErrorMessage = useCallback(
         (field: string) => {
@@ -331,7 +339,9 @@ export function CustomerActionForm(props: TProps) {
                                 totalGrossAmount - discountAmount + freightCharges;
                             const taxAmount = totalAmount * (18 / 100);
                             const grandTotal = totalAmount + taxAmount;
-                            const entries = data?.data?.entries?.length ? data?.data?.entries : []
+                            const entries = data?.data?.entries?.length
+                                ? data?.data?.entries
+                                : [];
                             const hasMoreThenOne = entries?.length > 1;
 
                             return (
@@ -480,7 +490,6 @@ export function CustomerActionForm(props: TProps) {
                                                     />
                                                     {renderErrorMessage(`components.${i}.data.discount`)}
                                                 </div>
-
                                             </div>
 
                                             <div className="border rounded-lg p-3">
@@ -492,164 +501,161 @@ export function CustomerActionForm(props: TProps) {
                                                             INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
                                                         ]);
                                                     }}
-
                                                 />
                                                 {renderErrorMessage(`components.${i}.data.entries`)}
                                                 <div id="entries" className="w-full">
                                                     {entries?.map((entry, index) => {
-
-                                                        return (<div key={i}>
-                                                            <div className="text-gray-400 italic text-lg flex justify-between">
-                                                                #{index + 1}
-                                                                <div className="py-1">
-                                                                    <IoIosRemoveCircleOutline
-                                                                        className={
-                                                                            hasMoreThenOne
-                                                                                ? "text-red-500 cursor-pointer hover:text-red-800"
-                                                                                : ""
-                                                                        }
-                                                                        onClick={() => {
-                                                                            setValue(
-                                                                                `components.${i}.data.entries`,
-                                                                                data.data?.entries?.filter(
-                                                                                    (_, entryIndex) =>
-                                                                                        entryIndex !== index
-                                                                                )
-                                                                            );
-                                                                        }}
-
-                                                                    />
+                                                        return (
+                                                            <div key={i}>
+                                                                <div className="text-gray-400 italic text-lg flex justify-between">
+                                                                    #{index + 1}
+                                                                    <div className="py-1">
+                                                                        <IoIosRemoveCircleOutline
+                                                                            className={
+                                                                                hasMoreThenOne
+                                                                                    ? "text-red-500 cursor-pointer hover:text-red-800"
+                                                                                    : ""
+                                                                            }
+                                                                            onClick={() => {
+                                                                                setValue(
+                                                                                    `components.${i}.data.entries`,
+                                                                                    data.data?.entries?.filter(
+                                                                                        (_, entryIndex) =>
+                                                                                            entryIndex !== index
+                                                                                    )
+                                                                                );
+                                                                            }}
+                                                                        />
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="grid grid-cols-2 gap-2 ">
-                                                                <div className="bg-white ">
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        Design
-                                                                    </label>
-                                                                    <select
-                                                                        value={entry.design}
-                                                                        {...register(
+                                                                <div className="grid grid-cols-2 gap-2 ">
+                                                                    <div className="bg-white ">
+                                                                        <label className="block text-sm font-medium text-gray-700">
+                                                                            Design
+                                                                        </label>
+                                                                        <select
+                                                                            value={entry.design}
+                                                                            {...register(
+                                                                                `components.${i}.data.entries.${index}.design`
+                                                                            )}
+                                                                            // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
+                                                                            className="bg-gray-50 border w-full mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
+                                                                        >
+                                                                            <option value="">Select Design</option>
+                                                                            {Object.keys(CMS_QUOTATION_OPTIONS).map(
+                                                                                (value, i) => (
+                                                                                    <option key={i} value={value}>
+                                                                                        {value}
+                                                                                    </option>
+                                                                                )
+                                                                            )}
+                                                                        </select>
+
+                                                                        {renderErrorMessage(
                                                                             `components.${i}.data.entries.${index}.design`
                                                                         )}
-                                                                        // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
-                                                                        className="bg-gray-50 border w-full mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
-                                                                    >
-                                                                        <option value="">Select Design</option>
-                                                                        {Object.keys(CMS_QUOTATION_OPTIONS).map(
-                                                                            (value, i) => (
-                                                                                <option key={i} value={value}>
-                                                                                    {value}
-                                                                                </option>
-                                                                            )
-                                                                        )}
-                                                                    </select>
+                                                                    </div>
+                                                                    <div className="bg-white">
+                                                                        <label className="block text-sm font-medium text-gray-700">
+                                                                            Finish
+                                                                        </label>
 
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.entries.${index}.design`
-                                                                    )}
-                                                                </div>
-                                                                <div className="bg-white">
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        Finish
-                                                                    </label>
-
-                                                                    <select
-                                                                        value={entry.finish}
-                                                                        {...register(
+                                                                        <select
+                                                                            value={entry.finish}
+                                                                            {...register(
+                                                                                `components.${i}.data.entries.${index}.finish`
+                                                                            )}
+                                                                            // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
+                                                                            className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
+                                                                        >
+                                                                            <option value="">Select Finish</option>
+                                                                            {entry.design &&
+                                                                                Object.keys(
+                                                                                    CMS_QUOTATION_OPTIONS[entry.design] ||
+                                                                                    {}
+                                                                                ).map((finishOption) => (
+                                                                                    <option
+                                                                                        key={finishOption}
+                                                                                        value={finishOption}
+                                                                                    >
+                                                                                        {finishOption}
+                                                                                    </option>
+                                                                                ))}
+                                                                        </select>
+                                                                        {renderErrorMessage(
                                                                             `components.${i}.data.entries.${index}.finish`
                                                                         )}
-                                                                        // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
-                                                                    >
-                                                                        <option value="">Select Finish</option>
-                                                                        {entry.design &&
-                                                                            Object.keys(
-                                                                                CMS_QUOTATION_OPTIONS[entry.design] ||
-                                                                                {}
-                                                                            ).map((finishOption) => (
-                                                                                <option
-                                                                                    key={finishOption}
-                                                                                    value={finishOption}
-                                                                                >
-                                                                                    {finishOption}
-                                                                                </option>
-                                                                            ))}
-                                                                    </select>
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.entries.${index}.finish`
-                                                                    )}
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div className="grid grid-cols-2 gap-2 ">
-                                                                <div className="bg-white ">
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        Area
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        placeholder="Enter Area"
-                                                                        value={entry.area}
-                                                                        {...register(`components.${i}.data.entries.${index}.area`)}
-                                                                        // onChange={(e) => handleChangeEntry(index, 'area', e.target.value)}
-                                                                        className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
-                                                                    />
-                                                                    {renderErrorMessage(`components.${i}.data.entries.${index}.area`)}
-                                                                </div>
-                                                                <div className="bg-white">
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        Floor
-                                                                    </label>
-                                                                    <select
-                                                                        value={entry.floor}
-                                                                        // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
-                                                                        {...register(
+                                                                <div className="grid grid-cols-2 gap-2 ">
+                                                                    <div className="bg-white ">
+                                                                        <label className="block text-sm font-medium text-gray-700">
+                                                                            Area
+                                                                        </label>
+                                                                        <input
+                                                                            type="text"
+                                                                            placeholder="Enter Area"
+                                                                            value={entry.area}
+                                                                            {...register(
+                                                                                `components.${i}.data.entries.${index}.area`
+                                                                            )}
+                                                                            // onChange={(e) => handleChangeEntry(index, 'area', e.target.value)}
+                                                                            className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
+                                                                        />
+                                                                        {renderErrorMessage(
+                                                                            `components.${i}.data.entries.${index}.area`
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="bg-white">
+                                                                        <label className="block text-sm font-medium text-gray-700">
+                                                                            Floor
+                                                                        </label>
+                                                                        <select
+                                                                            value={entry.floor}
+                                                                            // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
+                                                                            {...register(
+                                                                                `components.${i}.data.entries.${index}.floor`
+                                                                            )}
+                                                                            className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
+                                                                        >
+                                                                            <option value="">Select Floor</option>
+                                                                            {CMS_QUOTATION_FLOOR_OPTIONS.map(
+                                                                                (floor) => (
+                                                                                    <option key={floor} value={floor}>
+                                                                                        {floor}
+                                                                                    </option>
+                                                                                )
+                                                                            )}
+                                                                        </select>
+                                                                        {renderErrorMessage(
                                                                             `components.${i}.data.entries.${index}.floor`
                                                                         )}
-                                                                        className="bg-gray-50 border mr-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
-                                                                    >
-                                                                        <option value="">Select Floor</option>
-                                                                        {CMS_QUOTATION_FLOOR_OPTIONS.map(
-                                                                            (floor) => (
-                                                                                <option key={floor} value={floor}>
-                                                                                    {floor}
-                                                                                </option>
-                                                                            )
-                                                                        )}
-                                                                    </select>
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.entries.${index}.floor`
-                                                                    )}
-
+                                                                    </div>
                                                                 </div>
-                                                            </div>
 
-
-                                                            <div className="grid grid-cols-2 gap-2 ">
-                                                                <div className="bg-white ">
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        Quantity
-                                                                    </label>
-                                                                    <input
-                                                                        type="number"
-                                                                        placeholder="Quantity"
-                                                                        value={entry.qty}
-                                                                        {...register(
+                                                                <div className="grid grid-cols-2 gap-2 ">
+                                                                    <div className="bg-white ">
+                                                                        <label className="block text-sm font-medium text-gray-700">
+                                                                            Quantity
+                                                                        </label>
+                                                                        <input
+                                                                            type="number"
+                                                                            placeholder="Quantity"
+                                                                            value={entry.qty}
+                                                                            {...register(
+                                                                                `components.${i}.data.entries.${index}.qty`
+                                                                            )}
+                                                                            // onChange={(e) => handleChangeEntry(index, 'qty', e.target.value)}
+                                                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
+                                                                        />
+                                                                        {renderErrorMessage(
                                                                             `components.${i}.data.entries.${index}.qty`
                                                                         )}
-                                                                        // onChange={(e) => handleChangeEntry(index, 'qty', e.target.value)}
-                                                                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
-                                                                    />
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.entries.${index}.qty`
-                                                                    )}
+                                                                    </div>
+                                                                    <div />
                                                                 </div>
-                                                                <div />
-
-
                                                             </div>
-                                                        </div>
-
                                                         );
                                                     })}
                                                 </div>
@@ -664,7 +670,9 @@ export function CustomerActionForm(props: TProps) {
                                                         Generate Design
                                                         {corpus.isQuotationImageDownload ? (
                                                             <AiOutlineLoading3Quarters className="text-xl animate-spin" />
-                                                        ) : ''}
+                                                        ) : (
+                                                            ""
+                                                        )}
                                                     </button>
                                                     <button
                                                         type="button"
@@ -686,10 +694,8 @@ export function CustomerActionForm(props: TProps) {
                                                     ref={invoiceRefPng}
                                                 >
                                                     <div className="w-full">
-                                                        <table
-                                                            style={{ width: "100%" }}
-                                                        >
-                                                            <thead className="bg-[darkorange]" >
+                                                        <table style={{ width: "100%" }}>
+                                                            <thead className="bg-[darkorange]">
                                                                 <tr className="">
                                                                     <th className="border border-black py-2 px-4">
                                                                         S.No
@@ -834,7 +840,6 @@ export function CustomerActionForm(props: TProps) {
                                                     </div>
                                                 </div>
                                             </div>
-
 
                                             <div
                                                 className="container mx-auto max-w-7xl py-10 px-5 absolute top-[-1000px] left-[-2000px]"
@@ -1108,151 +1113,152 @@ export function CustomerActionForm(props: TProps) {
                         }
                         case CustomerComponentEnum.TwoDDesign: {
                             const prev = component as TCustomerComponentDesign2DItem;
-
-                            return (
-                                <div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div className="">
-                                            <FieldCautation
-                                                onClickAdd={() => {
-                                                    setValue(`components.${i}.data`, [
-                                                        ...prev.data,
-                                                        INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                                                    ]);
-                                                }}
-                                            />
-                                            {prev.data?.map((data, k) => {
-                                                const hasMoreThenOne = prev.data?.length > 1;
-                                                return (
-                                                    <div
-                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
-                                                        className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
-                                                    >
-                                                        <div className="text-gray-400 italic text-lg flex justify-between">
-                                                            #{k + 1}
-                                                            <div className="py-1">
-                                                                <IoIosRemoveCircleOutline
-                                                                    className={
-                                                                        hasMoreThenOne
-                                                                            ? "text-red-500 cursor-pointer hover:text-red-800"
-                                                                            : ""
-                                                                    }
-                                                                    onClick={() => {
-                                                                        if (hasMoreThenOne)
-                                                                            setValue(
-                                                                                `components.${i}.data`,
-                                                                                prev.data.filter((_, m) => m !== k)
-                                                                            );
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) => field === "select"
-                                                            )?.map((item, j) => {
-                                                                const options = DESIGN_2D_SELECT_OPTION(
-                                                                    item.value
-                                                                );
-                                                                return (
-                                                                    <div
-                                                                        className="bg-white"
-                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                    >
-                                                                        <Select
-                                                                            theme={(theme) => ({
-                                                                                ...theme,
-                                                                                borderRadius: 6,
-                                                                                colors: {
-                                                                                    ...theme.colors,
-                                                                                    text: "white",
-                                                                                    primary25: "#3F51B5",
-                                                                                    primary: "#3F51B5",
-                                                                                },
-                                                                            })}
-                                                                            classNames={{
-                                                                                control: () => AUTOCOMPLETE_STYLE,
-                                                                            }}
-                                                                            placeholder={item.label}
-                                                                            defaultValue={options?.find(
-                                                                                (option) =>
-                                                                                    option.value === data[item.value]
-                                                                            )}
-                                                                            onChange={(e) => {
-                                                                                setValue(
-                                                                                    `components.${i}.data.${k}.${item.value}`,
-                                                                                    e?.value?.length ? e.value : ""
-                                                                                );
-                                                                            }}
-                                                                            options={options}
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) => field === "text"
-                                                            )?.map((item, j) => {
-                                                                return (
-                                                                    <div
-                                                                        className="bg-white"
-                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                    >
-                                                                        <label className="block text-sm font-medium text-gray-700">
-                                                                            {item.label}
-                                                                        </label>
-                                                                        <input
-                                                                            type="text"
-                                                                            {...register(
-                                                                                `components.${i}.data.${k}.${item.value}`
-                                                                            )}
-                                                                            placeholder={item.placeholder}
-                                                                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                (item) => item.field === "image"
-                                                            )?.map((item, j) => {
-                                                                const value = data[item.value];
-                                                                const items = value?.length ? [value] : [];
-                                                                return (
-                                                                    <div key={j}>
-                                                                        <ImageInput
-                                                                            label={item.label}
-                                                                            key={j}
-                                                                            path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                            values={items}
-                                                                            onSuccess={(e) => {
-                                                                                setValue(
-                                                                                    `components.${i}.data.${k}.${item.value}`,
-                                                                                    e[0]
-                                                                                );
-                                                                            }}
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
+                            return (<div key={i}>
+                                <MinimalAccordion isExpanded title={title}>
+                                    <div className="">
+                                        <FieldCautation
+                                            onClickAdd={() => {
+                                                setValue(`components.${i}.data`, [
+                                                    ...prev.data,
+                                                    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+                                                ]);
+                                            }}
+                                        />
+                                        {prev.data?.map((data, k) => {
+                                            const hasMoreThenOne = prev.data?.length > 1;
+                                            return (
+                                                <div
+                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
+                                                    className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
+                                                >
+                                                    <div className="text-gray-400 italic text-lg flex justify-between">
+                                                        #{k + 1}
+                                                        <div className="py-1">
+                                                            <IoIosRemoveCircleOutline
+                                                                className={
+                                                                    hasMoreThenOne
+                                                                        ? "text-red-500 cursor-pointer hover:text-red-800"
+                                                                        : ""
+                                                                }
+                                                                onClick={() => {
+                                                                    if (hasMoreThenOne)
+                                                                        setValue(
+                                                                            `components.${i}.data`,
+                                                                            prev.data.filter((_, m) => m !== k)
+                                                                        );
+                                                                }}
+                                                            />
                                                         </div>
                                                     </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </MinimalAccordion>
-                                </div>
+                                                    <div className="grid grid-cols-2 gap-2 ">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            ({ field }) => field === "select"
+                                                        )?.map((item, j) => {
+                                                            const options = DESIGN_2D_SELECT_OPTION(
+                                                                item.value,
+                                                                proposedLayout
+                                                            );
+
+                                                            return (
+                                                                <div
+                                                                    className="bg-white"
+                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                >
+                                                                    <Select
+                                                                        theme={(theme) => ({
+                                                                            ...theme,
+                                                                            borderRadius: 6,
+                                                                            colors: {
+                                                                                ...theme.colors,
+                                                                                text: "white",
+                                                                                primary25: "#3F51B5",
+                                                                                primary: "#3F51B5",
+                                                                            },
+                                                                        })}
+                                                                        classNames={{
+                                                                            control: () => AUTOCOMPLETE_STYLE,
+                                                                        }}
+                                                                        placeholder={item.label}
+                                                                        defaultValue={options?.find(
+                                                                            (option) =>
+                                                                                option.value === data[item.value]
+                                                                        )}
+                                                                        onChange={(e) => {
+                                                                            // console.log(e)
+                                                                            setValue(
+                                                                                `components.${i}.data.${k}.${item.value}`,
+                                                                                e?.value?.length ? e.value : ""
+                                                                            );
+                                                                        }}
+                                                                        options={options}
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            ({ field }) => field === "text"
+                                                        )?.map((item, j) => {
+                                                            return (
+                                                                <div
+                                                                    className="bg-white"
+                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                >
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        {item.label}
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        {...register(
+                                                                            `components.${i}.data.${k}.${item.value}`
+                                                                        )}
+                                                                        placeholder={item.placeholder}
+                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            (item) => item.field === "image"
+                                                        )?.map((item, j) => {
+                                                            const value = data[item.value];
+                                                            const items = value?.length ? [value] : [];
+                                                            return (
+                                                                <div key={j}>
+                                                                    <ImageInput
+                                                                        label={item.label}
+                                                                        key={j}
+                                                                        path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                                                        values={items}
+                                                                        onSuccess={(e) => {
+                                                                            setValue(
+                                                                                `components.${i}.data.${k}.${item.value}`,
+                                                                                e[0]
+                                                                            );
+                                                                        }}
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </MinimalAccordion>
+                            </div>
                             );
                         }
                         default:
@@ -1291,12 +1297,17 @@ type TProps = {
 
 const AUTOCOMPLETE_STYLE =
     "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
-function DESIGN_2D_SELECT_OPTION(e: string) {
+function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayoutItem[]) {
     switch (e) {
         case "design":
             return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS);
         case "finish":
             return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS);
+        case "rightImage":
+            return proposedLayout?.map((item) => ({
+                label: item.label,
+                value: item.url.proposed,
+            }));
         default:
             return [];
     }
