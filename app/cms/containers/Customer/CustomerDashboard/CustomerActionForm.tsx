@@ -98,13 +98,12 @@ export function CustomerActionForm(props: TProps) {
         });
     }, []);
 
-
-
     const publishedUrl = useMemo(() => {
         if (item.id?.length)
             return [location.origin, "quotation", item.id].join("/");
         return "";
     }, [item.id, location.origin]);
+
     const {
         watch,
         register,
@@ -1115,7 +1114,7 @@ export function CustomerActionForm(props: TProps) {
                             const prev = component as TCustomerComponentDesign2DItem;
                             return (<div key={i}>
                                 <MinimalAccordion isExpanded title={title}>
-                                    <div className="">
+                                    <div >
                                         <FieldCautation
                                             onClickAdd={() => {
                                                 setValue(`components.${i}.data`, [

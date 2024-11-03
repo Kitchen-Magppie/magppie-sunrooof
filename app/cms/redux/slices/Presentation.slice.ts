@@ -22,6 +22,10 @@ const PresentationSlice = createSlice({
     name: 'Presentation',
     initialState,
     reducers: {
+        setPresentationData: (state, action?: PayloadAction<TPresentation>) => {
+            state.status = action.payload ? 'loading' : 'success';
+            state.value = action.payload
+        },
         setPresentationFile: (state, action?: PayloadAction<File | undefined>) => {
             state.status = action.payload ? 'loading' : 'success';
             if (state.value && 'file' in state.value) {
@@ -41,6 +45,6 @@ const PresentationSlice = createSlice({
     },
 });
 
-export const { setPresentationFile, setPresentationTitle } = PresentationSlice.actions;
+export const { setPresentationData } = PresentationSlice.actions;
 
 export const PresentationReducer = PresentationSlice.reducer
