@@ -31,6 +31,8 @@ import QuotationCanvasEditAction from './QuotationCanvasEditAction'
 import { QuotationConvasAlert } from './QuotationCanvasAlert'
 import { useFirebaseStorageActions } from '../../../../hooks/firebase'
 import { useProposedLayoutAction } from '../../../cms/hooks'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 
 function QuotationCanvas() {
@@ -50,10 +52,10 @@ function QuotationCanvas() {
     const [patternImage, setPatternImage] = useState(null)
     const [images, setImages] = useState<TKonvaImageItem[]>([])
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
+    const navigate = useNavigate()
     const [history, setHistory] = useState([]);
 
     const ProposedLayoutDataAction = useProposedLayoutAction()
-
     useEffect(() => {
         const img = new window.Image()
 
@@ -275,17 +277,13 @@ function QuotationCanvas() {
         // const file = new File([blob], link.download, { type: 'image/png' });
 
         document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
+
         if (stageRef.current && transformerRef.current) {
             transformerRef.current.nodes([])
             transformerRef.current.getLayer()?.batchDraw()
             const uri = stageRef.current.toDataURL()
             transformerRef.current.nodes([rectRef.current])
             transformerRef.current.getLayer()?.batchDraw()
-
-            _.download({ url: uri, name: `proposed-layout-${uniq}` })
-
 
 
             StorageAction.batch.upload({
@@ -301,13 +299,18 @@ function QuotationCanvas() {
                             proposed: e[1],
                         },
                     })
+                    toast('Proposed image has been saved!')
+                    navigate('/cms')
+                    link.click()
+                    document.body.removeChild(link)
+                    _.download({ url: uri, name: `proposed-layout-${uniq}` })
                 }
             })
 
 
-            // _.download({ url: uri, name: `proposed-layout-${uniq}` })
         }
     }, [
+        navigate,
         Presentation.value.file,
         Presentation.value.title,
         ProposedLayoutDataAction,
