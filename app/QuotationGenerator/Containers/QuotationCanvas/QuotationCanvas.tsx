@@ -54,7 +54,9 @@ function QuotationCanvas() {
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
     const navigate = useNavigate()
     const [history, setHistory] = useState([]);
+    const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
 
+    const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
     const ProposedLayoutDataAction = useProposedLayoutAction()
     useEffect(() => {
         const img = new window.Image()
@@ -100,7 +102,7 @@ function QuotationCanvas() {
         const imageWidth = measurement.pixelLength / 2; // Desired image width
 
         // const imageWidth = 50; // Desired image width
-        const imageHeight = 50; // Desired image height
+        const imageHeight = measurement.pixelLength / 2; // Desired image height
         const spacing = 20; // Space between images
 
         const columns = Math.floor(rectWidth / (imageWidth + spacing));
@@ -162,7 +164,10 @@ function QuotationCanvas() {
 
 
     // Handle image selection
-    const handleImageSelect = useCallback((id: string) => {
+    const handleImageSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
+        e.cancelBubble = true; // Prevent event from reaching the parent or stage
+        // const selectedNode = imageRefs.current[id];
+        setSelectedObjectId(id);
         setSelectedImageId(id)
     }, [])
     // Handle image drag end
@@ -213,6 +218,19 @@ function QuotationCanvas() {
         // Remove the last state from history
         setHistory((prevHistory) => prevHistory.slice(0, -1));
     }, [history, images, rectProps])
+
+    useEffect(() => {
+        if (selectedObjectId === 'parent' && rectRef.current) {
+            transformerRef.current.nodes([rectRef.current]);
+        } else if (selectedObjectId && imageRefs.current[selectedObjectId]) {
+            transformerRef.current.nodes([imageRefs.current[selectedObjectId]]);
+        } else if (transformerRef?.current?.nodes) {
+            transformerRef.current.nodes([]);
+        }
+        if (transformerRef?.current?.getLayer) {
+            transformerRef.current.getLayer()?.batchDraw();
+        }
+    }, [selectedObjectId]);
 
 
     // Handle delete key to remove selected image
@@ -322,6 +340,17 @@ function QuotationCanvas() {
         const stage = event.target.getStage()
         const { x, y } = stage.getPointerPosition()!
 
+        console.log('Target is/////', event.target);
+        console.log('Target is/////2', stageRef.current);
+
+        // If the clicked target is the stage (background), clear selection
+        if (event.target === stageRef.current || event.target === stageRef.current.getStage()) {
+            setSelectedObjectId(null);
+            transformerRef.current.detach();
+            transformerRef.current.nodes([]);
+            transformerRef.current.getLayer()?.batchDraw();
+        }
+
         if (!isDrawing) {
             setLinePoints([x, y, x, y])
             setIsDrawing(true)
@@ -348,8 +377,10 @@ function QuotationCanvas() {
     )
 
     // Make the transformer active when the rectangle is selected
-    const handleRectSelect = useCallback(() => {
+    const handleRectSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
         if (transformerRef.current && rectRef.current) {
+            e.cancelBubble = true; // Prevent event from reaching the stage
+            setSelectedObjectId('parent');
             transformerRef.current.nodes([rectRef.current])
             transformerRef.current.getLayer()?.batchDraw()
         }
@@ -456,12 +487,12 @@ function QuotationCanvas() {
             <div className=" opacity-70 align-middle flex justify-center flex-col">
                 SUNROOOF
             </div>
-        </div>
+        </div>s
 
         <div className="container mx-auto">
-            <div className="mt-10">
-                <div className="grid grid-cols-2 gap-2">
-                    <div className="flex flex-col align-middle ">
+            <div className="flex mt-10">
+                <div className="flex justify-center align-center gap-2">
+                    <div className="flex flex-col align-middle flex-[50%]">
                         <div className="mb-4">
                             {renderGuideAlert}
 
@@ -499,7 +530,7 @@ function QuotationCanvas() {
                                 }}
                             />}
                     </div>
-                    <div className=""
+                    <div className="flex flex-auto"
                         ref={stageContainerRef}
                         style={{ width: "100%", overflow: "hidden" }}
                     >
@@ -510,15 +541,33 @@ function QuotationCanvas() {
                                 ref={stageRef}
                                 onClick={handleCanvasClick}
                                 onMouseMove={handleMouseMove}
+                                onMouseDown={(e) => {
+                                    if (isDrawing) return;
+                                    // If the clicked target is the stage, clear selection
+                                    if (e.target === stageRef.current) {
+                                        transformerRef.current.detach();
+                                        setSelectedObjectId(null);
+                                    }
+                                }}
                             >
                                 <Layer>
-                                    {Presentation?.value?.file?.size ? (<KonvaImage image={image} />) : ''}
+                                    {Presentation?.value?.file?.size ? (<KonvaImage image={image} listening width={1200} height={1200} draggable onClick={(e) => {
+                                        if (selectedObjectId) {
+                                            e.cancelBubble = true; // Prevent event from reaching the stage
+                                            setSelectedObjectId(null); // Clear selection
+                                            transformerRef.current.detach();
+                                            transformerRef.current.getLayer().batchDraw();
+                                        }
+
+                                    }} />) : ''}
                                     {isDrawingStarted ? (
                                         <>
                                             <Rect
                                                 {...rectProps}
                                                 ref={rectRef}
                                                 draggable={true}
+                                                listening={true}
+                                                hitStrokeWidth={10} // Adjust as needed
                                                 onDragEnd={(e) => {
                                                     setRectProps((prev) => ({
                                                         ...prev,
@@ -529,6 +578,11 @@ function QuotationCanvas() {
                                                 }}
                                                 onTransformEnd={handleRectTransform}
                                                 onClick={handleRectSelect}
+                                                onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                    console.log(e)
+                                                    if (isDrawing) return;
+                                                    setSelectedObjectId('parent');
+                                                }}
                                             />
 
                                             {/* Images */}
@@ -541,8 +595,14 @@ function QuotationCanvas() {
                                                     width={img.width}
                                                     height={img.height}
                                                     rotation={img.rotation}
+                                                    fill="red"
+                                                    filters={[Konva.Filters.RGBA]}
+                                                    // red={92}
+                                                    // green={64}
+                                                    // blue={51}
+                                                    //alpha={100 / 255} // Convert alpha to a value between 0 and 1
                                                     draggable
-                                                    onClick={() => handleImageSelect(
+                                                    onClick={(e) => handleImageSelect(e,
                                                         img.id
                                                     )}
                                                     onDragEnd={(e) =>
@@ -557,7 +617,13 @@ function QuotationCanvas() {
                                                             img.id
                                                         )
                                                     }
+                                                    onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                        console.log(e)
+                                                        if (isDrawing) return;
+                                                        setSelectedObjectId(img.id);
+                                                    }}
                                                     ref={(node) => {
+                                                        imageRefs.current[img.id] = node;
                                                         if (
                                                             node &&
                                                             selectedImageId ===
@@ -577,19 +643,20 @@ function QuotationCanvas() {
                                             {/* Transformer */}
                                             <Transformer
                                                 ref={transformerRef}
-                                                rotateEnabled={true}
-                                                boundBoxFunc={(
-                                                    oldBox,
-                                                    newBox
-                                                ) => {
-                                                    if (
-                                                        newBox.width < 5 ||
-                                                        newBox.height < 5
-                                                    ) {
-                                                        return oldBox
-                                                    }
-                                                    return newBox
-                                                }}
+                                            // nodes={
+                                            //     selectedObjectId === 'parent'
+                                            //         ? [rectRef.current]
+                                            //         : images
+                                            //             .filter((img) => img.id === selectedObjectId)
+                                            //             .map((img) => imageRefs.current[img.id])
+                                            // }
+                                            // rotateEnabled={true}
+                                            // boundBoxFunc={(oldBox, newBox) => {
+                                            //     if (newBox.width < 5 || newBox.height < 5) {
+                                            //         return oldBox;
+                                            //     }
+                                            //     return newBox;
+                                            // }}
                                             />
                                         </>
                                     ) : (

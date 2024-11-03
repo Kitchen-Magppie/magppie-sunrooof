@@ -81,7 +81,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
 
                 <KonvaActionButton
                     label='Start Drawing'
-                    disabled={!(props?.measurement?.unit?.length && props?.measurement?.quantity)}
+                    disabled={!(props?.measurement?.unit?.length && props?.measurement?.quantity && !!props?.measurement.value)}
                     icon={<SiExcalidraw className="my-auto text-xl" />}
                     onClick={() => {
                         props?.onProceed()

@@ -23,7 +23,7 @@ export type TKonvaImageItem = {
     image: object;
 }
 
-export const CANVAS_STAGE_HEIGHT = 600
+export const CANVAS_STAGE_HEIGHT = 1200
 
 
 export const CANVAS_QUOTATION_UNIT_OPTIONS = [
