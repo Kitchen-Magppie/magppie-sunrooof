@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react"
+import { ChangeEvent, useCallback, useEffect, useState } from "react"
 import { IoMdClose } from "react-icons/io"
 import { useFirebaseStorageActions } from "../../hooks/firebase"
 
@@ -10,10 +10,11 @@ import { LazyLoadImage } from "react-lazy-load-image-component"
 
 export default function ImageInput(props: TImageActionProps) {
 
-    const [corpus, setCorpus] = useState<TCorpus>({
-        ...INIT_CORPUS,
-        values: props.values || []
-    })
+    const [corpus, setCorpus] = useState(INIT_CORPUS)
+
+    useEffect(() => {
+        setCorpus((prev) => ({ ...prev, values: props?.values }))
+    }, [props?.values])
 
     const StorageActions = useFirebaseStorageActions()
 
