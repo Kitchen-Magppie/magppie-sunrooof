@@ -22,9 +22,10 @@ function ProposedLayoutView() {
     const [toggle, setToggle] = useState(INIT_TOGGLE)
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch()
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    const { watch, register, handleSubmit, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(proposedLayoutSchema),
     });
+    const values = watch() as TProposedLayoutItem
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         if (e.target?.files[0]?.type?.startsWith('image/')) {
             setValue('image', e.target.files[0])
@@ -49,7 +50,6 @@ function ProposedLayoutView() {
             }
         }, 2000)
     })
-
     return (<div>
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
 
@@ -100,7 +100,9 @@ function ProposedLayoutView() {
                                 Select
                             </div>
                         </label>
-
+                        {values?.image?.name?.length ? (<div className="text-gray-500 text-[12px] italic">
+                            {values?.image?.name} (~{(values?.image?.size / (1024 * 1024))?.toFixed(2)} MB)
+                        </div>) : ''}
                         {errors?.image?.message ? (<div className=" text-red-500 text-sm flex gap-1 align-middle justify-center">
                             <IoIosHelpCircleOutline className="text-sm my-1" />
                             {errors?.image?.message}
@@ -133,6 +135,7 @@ function ProposedLayoutView() {
 }
 
 const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
+type TProposedLayoutItem = { title: string, image?: File }
 const proposedLayoutSchema = yup.object().shape({
     title: yup.string().required('Title is required'),
     image: yup.mixed().required('Image is required'),
