@@ -487,7 +487,7 @@ function QuotationCanvas() {
             <div className=" opacity-70 align-middle flex justify-center flex-col">
                 SUNROOOF
             </div>
-        </div>s
+        </div>
 
         <div className="container mx-auto">
             <div className="flex mt-10">
@@ -532,7 +532,7 @@ function QuotationCanvas() {
                     </div>
                     <div className="flex flex-auto"
                         ref={stageContainerRef}
-                        style={{ width: "100%", overflow: "hidden" }}
+                    // style={{ width: "100%", overflow: "hidden" }}
                     >
                         {Presentation?.value?.file?.size ? (
                             <Stage

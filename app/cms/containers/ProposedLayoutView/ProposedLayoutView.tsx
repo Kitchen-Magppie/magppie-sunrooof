@@ -92,7 +92,7 @@ function ProposedLayoutView() {
                             <input
                                 onChange={onFileChange}
                                 ref={fileInputRef}
-                                accept='image/*'
+                                accept="image/*,application/pdf"
                                 className="text-sm cursor-pointer w-36 hidden"
                                 type="file"
                             />
