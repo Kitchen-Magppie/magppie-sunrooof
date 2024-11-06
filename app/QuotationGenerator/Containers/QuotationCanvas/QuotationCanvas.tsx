@@ -551,15 +551,21 @@ function QuotationCanvas() {
                                 }}
                             >
                                 <Layer>
-                                    {Presentation?.value?.file?.size ? (<KonvaImage image={image} listening width={1200} height={1200} draggable onClick={(e) => {
-                                        if (selectedObjectId) {
-                                            e.cancelBubble = true; // Prevent event from reaching the stage
-                                            setSelectedObjectId(null); // Clear selection
-                                            transformerRef.current.detach();
-                                            transformerRef.current.getLayer().batchDraw();
-                                        }
+                                    {Presentation?.value?.file?.size ? (<KonvaImage
+                                        image={image}
+                                        listening
+                                        width={1200}
+                                        height={1200}
+                                        // draggable
+                                        onClick={(e) => {
+                                            if (selectedObjectId) {
+                                                e.cancelBubble = true; // Prevent event from reaching the stage
+                                                setSelectedObjectId(null); // Clear selection
+                                                transformerRef.current.detach();
+                                                transformerRef.current.getLayer().batchDraw();
+                                            }
 
-                                    }} />) : ''}
+                                        }} />) : ''}
                                     {isDrawingStarted ? (
                                         <>
                                             <Rect
