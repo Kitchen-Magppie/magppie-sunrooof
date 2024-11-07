@@ -20,6 +20,7 @@ import { useAppSelector } from '../../../../redux'
 import {
     _,
     CANVAS_STAGE_HEIGHT,
+    // CANVAS_STAGE_HEIGHT,
     CanvasToolEnum,
     INIT_CANVAS_KONVA_CORPUS,
     INIT_CANVAS_MEASUREMENT,
@@ -232,7 +233,7 @@ function QuotationCanvas() {
         }
     }, [selectedObjectId]);
 
-
+    console.log(history)
     // Handle delete key to remove selected image
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -475,6 +476,33 @@ function QuotationCanvas() {
             remark={KonvaAlertMessage.Measurement.remark}
         />
     }, [corpus.selection.tool, isDrawingStarted])
+    const [imageProps, setImageProps] = useState({
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+    });
+    useEffect(() => {
+        if (image) {
+            const aspectRatio = image.width / image.height;
+            let width, height;
+
+            // Calculate width and height to fit the image within the box
+            if (aspectRatio > boxWidth / boxHeight) {
+                width = boxWidth;
+                height = boxWidth / aspectRatio;
+            } else {
+                width = boxHeight * aspectRatio;
+                height = boxHeight;
+            }
+
+            // Center the image in the box
+            const x = (boxWidth - width) / 2;
+            const y = (boxHeight - height) / 2;
+
+            setImageProps({ width, height, x, y });
+        }
+    }, [image]);
 
     return (<form className="">
         <div
@@ -536,7 +564,12 @@ function QuotationCanvas() {
                     >
                         {Presentation?.value?.file?.size ? (
                             <Stage
+                                // width={imageProps.x}
+                                // height={imageProps.y}
+                                // width={imageProps.width}
+                                // height={imageProps.height}
                                 width={stageWidth}
+                                style={{ background: "1px solid red" }}
                                 height={CANVAS_STAGE_HEIGHT}
                                 ref={stageRef}
                                 onClick={handleCanvasClick}
@@ -554,8 +587,16 @@ function QuotationCanvas() {
                                     {Presentation?.value?.file?.size ? (<KonvaImage
                                         image={image}
                                         listening
-                                        width={1200}
-                                        height={1200}
+                                        x={imageProps.x}
+                                        y={imageProps.y}
+                                        width={imageProps.width}
+                                        height={imageProps.height}
+                                        // crop={{ x: 100, y: 100, width: 100, height: 100 }}
+                                        // scaleX={100}
+                                        // scaleY={100}
+
+                                        // width={1200}
+                                        // height={1200}
                                         // draggable
                                         onClick={(e) => {
                                             if (selectedObjectId) {
@@ -695,3 +736,5 @@ function Base64ToFile(base64: string, filename: string): File {
 }
 
 export default QuotationCanvas
+const boxHeight = 800
+const boxWidth = 1000
