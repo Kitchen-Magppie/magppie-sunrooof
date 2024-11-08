@@ -10,6 +10,9 @@ import {
     Circle,
 } from 'react-konva'
 import useImage from 'use-image'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
 //====================================================================
 import bgImg from '../../.././../assets/hero-bg.jpeg'
 import {
@@ -32,8 +35,6 @@ import QuotationCanvasEditAction from './QuotationCanvasEditAction'
 import { QuotationConvasAlert } from './QuotationCanvasAlert'
 import { useFirebaseStorageActions } from '../../../../hooks/firebase'
 import { useProposedLayoutAction } from '../../../cms/hooks'
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 
 
 function QuotationCanvas() {
@@ -165,7 +166,7 @@ function QuotationCanvas() {
 
 
     // Handle image selection
-    const handleImageSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
+    const handleImageSelect = useCallback((e: TKonvaMouseEvent, id: string) => {
         e.cancelBubble = true; // Prevent event from reaching the parent or stage
         // const selectedNode = imageRefs.current[id];
         setSelectedObjectId(id);
@@ -337,7 +338,7 @@ function QuotationCanvas() {
         image
     ])
 
-    const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleCanvasClick = useCallback((event: TKonvaMouseEvent) => {
         const stage = event.target.getStage()
         const { x, y } = stage.getPointerPosition()!
 
@@ -360,7 +361,7 @@ function QuotationCanvas() {
         }
     }, [isDrawing])
 
-    const handleMouseMove = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleMouseMove = useCallback((event: TKonvaMouseEvent) => {
         if (!isDrawing) return
 
         const stage = event.target.getStage()
@@ -378,7 +379,7 @@ function QuotationCanvas() {
     )
 
     // Make the transformer active when the rectangle is selected
-    const handleRectSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleRectSelect = useCallback((e: TKonvaMouseEvent) => {
         if (transformerRef.current && rectRef.current) {
             e.cancelBubble = true; // Prevent event from reaching the stage
             setSelectedObjectId('parent');
@@ -625,7 +626,7 @@ function QuotationCanvas() {
                                                 }}
                                                 onTransformEnd={handleRectTransform}
                                                 onClick={handleRectSelect}
-                                                onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                onMouseDown={(e: TKonvaMouseEvent) => {
                                                     console.log(e)
                                                     if (isDrawing) return;
                                                     setSelectedObjectId('parent');
@@ -664,7 +665,7 @@ function QuotationCanvas() {
                                                             img.id
                                                         )
                                                     }
-                                                    onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                    onMouseDown={(e: TKonvaMouseEvent) => {
                                                         console.log(e)
                                                         if (isDrawing) return;
                                                         setSelectedObjectId(img.id);
@@ -723,6 +724,7 @@ function QuotationCanvas() {
     )
 }
 
+type TKonvaMouseEvent = Konva.KonvaEventObject<MouseEvent>
 function Base64ToFile(base64: string, filename: string): File {
     const arr = typeof base64 === 'string' ? base64.split(',') : [];
     const mime = arr[0].match(/:(.*?);/)[1];
