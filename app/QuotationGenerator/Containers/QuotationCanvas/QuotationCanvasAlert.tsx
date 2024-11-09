@@ -2,7 +2,7 @@
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { CiCircleAlert } from "react-icons/ci";
 
-export function QuotationConvasAlert(props: TProps) {
+export function QuotationCanvasAlert(props: TProps) {
     return <div
         className="p-4 border border-gray-300  bg-gray-50 dark:border-gray-600 dark:bg-gray-800"
     >

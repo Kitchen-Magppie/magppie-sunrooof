@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
+// import * as pdfjsLib from 'pdfjs-dist';
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
 import {
@@ -20,17 +21,52 @@ function ProposedLayoutView() {
     useProposedLayoutListener()
 
     const [toggle, setToggle] = useState(INIT_TOGGLE)
+    // const [pdfFile, setPdfFile] = useState<File>()
+    // const [imageSrc, setImageSrc] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch()
     const { watch, register, handleSubmit, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(proposedLayoutSchema),
     });
+
     const values = watch() as TProposedLayoutItem
+    // const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    // useEffect(() => {
+    //     const loadPdf = async () => {
+    //         const pdfDoc = await pdfjsLib.getDocument(pdfFile).promise;
+    //         const page = await pdfDoc.getPage(1); // You can adjust the page number as needed
+
+    //         const viewport = page.getViewport({ scale: 1.5 }); // Adjust the scale as needed
+    //         const canvas = canvasRef.current!;
+    //         const context = canvas.getContext('2d')!;
+
+    //         canvas.height = viewport.height;
+    //         canvas.width = viewport.width;
+
+
+    //         const renderContext = {
+    //             canvasContext: context,
+    //             viewport: viewport
+    //         };
+
+    //         await page.render(renderContext).promise;
+
+
+    //         const imageDataUrl = canvas.toDataURL('image/png');
+    //         setImageSrc(imageDataUrl);
+    //     };
+
+    //     loadPdf();
+    // }, [pdfFile])
+    // console.log(imageSrc)
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target?.files[0]?.type?.startsWith('image/')) {
-            setValue('image', e.target.files[0])
+        const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
+        // setPdfFile(content.file)
+        if (content?.isValid && content?.accessor !== 'pdf') {
+            setValue('image', content.file)
         } else {
-            toast('*Please upload an image.')
+            toast('*Please upload an image or pdf file.')
         }
     }, [setValue])
 
@@ -92,7 +128,7 @@ function ProposedLayoutView() {
                             <input
                                 onChange={onFileChange}
                                 ref={fileInputRef}
-                                accept='image/*'
+                                accept="image/*,application/pdf"
                                 className="text-sm cursor-pointer w-36 hidden"
                                 type="file"
                             />
@@ -134,7 +170,22 @@ function ProposedLayoutView() {
     </div >);
 }
 
+const FROM_FILE_TO_ACCESSOR = (file: File) => {
+    let accessor
+    const docType = file.type?.toLowerCase()
+    if (docType?.startsWith('application/pdf')) {
+        accessor = 'pdf'
+    }
+    accessor = 'image'
+    return ({
+        accessor,
+        isValid: docType?.startsWith('application/pdf') || docType?.startsWith('image/'),
+        file
+    })
+}
+
 const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
+
 type TProposedLayoutItem = { title: string, image?: File }
 const proposedLayoutSchema = yup.object().shape({
     title: yup.string().required('Title is required'),
