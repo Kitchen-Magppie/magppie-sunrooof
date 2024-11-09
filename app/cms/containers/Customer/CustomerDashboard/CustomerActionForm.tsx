@@ -1149,7 +1149,7 @@ export function CustomerActionForm(props: TProps) {
                                                             />
                                                         </div>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-2 ">
+                                                    <div className="grid grid-cols-2 gap-2 mb-2">
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             ({ field }) => field === "select"
                                                         )?.map((item, j) => {
@@ -1198,7 +1198,34 @@ export function CustomerActionForm(props: TProps) {
                                                             );
                                                         })}
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-2">
+                                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
+                                                            ({ field }) => field === "text"
+                                                        )?.map((item, j) => {
+                                                            return (
+                                                                <div
+                                                                    className="bg-white"
+                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
+                                                                >
+                                                                    <label className="block text-sm font-medium text-gray-700">
+                                                                        {item.label}
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        {...register(
+                                                                            `components.${i}.data.${k}.${item.value}`
+                                                                        )}
+                                                                        placeholder={item.placeholder}
+                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                    />
+                                                                    {renderErrorMessage(
+                                                                        `components.${i}.data.${k}.${item.value}`
+                                                                    )}
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2 mb-2">
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             ({ field }) => field === "text"
                                                         )?.map((item, j) => {

@@ -11,7 +11,7 @@ import {
 } from 'react-konva'
 import useImage from 'use-image'
 //====================================================================
-import bgImg from '../../.././../assets/hero-bg.jpeg'
+// import bgImg from '../../.././../assets/hero-bg.jpeg'
 import {
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
     KonvaAlertMessage
@@ -477,7 +477,7 @@ function QuotationCanvas() {
     }, [corpus.selection.tool, isDrawingStarted])
 
     return (<form className="">
-        <div
+        {/* <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
                 background: `url(${bgImg})`,
@@ -487,7 +487,7 @@ function QuotationCanvas() {
             <div className=" opacity-70 align-middle flex justify-center flex-col">
                 SUNROOOF
             </div>
-        </div>s
+        </div>s */}
 
         <div className="container mx-auto">
             <div className="flex mt-10">

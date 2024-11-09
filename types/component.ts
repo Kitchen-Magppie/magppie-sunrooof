@@ -49,12 +49,14 @@ export type TCustomerComponent2DDesignOptionItem = {
     label: string
     value: keyof TCustomerComponentDesign2DDataItem
     field: 'text' | 'image' | 'select'
-    placeholder: string
+    placeholder?: string
 }
 export type TCustomerComponentDesign2DDataItem = {
     design: string
     finish: string
     areaName: string
+    floor: string
+    quantity: number
     // invoiceUrl: string,
     leftImage: string
     rightImage: string
