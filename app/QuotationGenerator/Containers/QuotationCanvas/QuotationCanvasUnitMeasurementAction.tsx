@@ -1,9 +1,10 @@
-import Select from 'react-select'
-import { CANVAS_QUOTATION_UNIT_OPTIONS, TCanvasMeasurement } from '../../../../types';
-import { KonvaActionButton } from '../../components';
 import { Dispatch, SetStateAction, useMemo } from 'react';
+import Select from 'react-select'
 import { BsDash, BsPlus } from 'react-icons/bs'
 import { SiExcalidraw } from 'react-icons/si'
+//====================================================================
+import { CANVAS_QUOTATION_UNIT_OPTIONS, TCanvasMeasurement } from '../../../../types';
+import { KonvaActionButton } from '../../components';
 
 type TProps = {
     measurement: TCanvasMeasurement,
@@ -65,10 +66,10 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
             </label>
             <Select
                 className="w-100"
-                onChange={(e) => {
+                onChange={({ value: unit }) => {
                     props?.setMeasurement((prev) => ({
                         ...prev,
-                        unit: e.value,
+                        unit,
                     }))
                 }}
                 options={CANVAS_QUOTATION_UNIT_OPTIONS}

@@ -2795,16 +2795,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"coffee-script@npm:latest":
-  version: 1.12.7
-  resolution: "coffee-script@npm:1.12.7"
-  bin:
-    cake: ./bin/cake
-    coffee: ./bin/coffee
-  checksum: 10c0/e672cc9a269e52a4a96177ffe9b251f41289d33cb1ece920567120991d68b2f6dbff41674812c9329a3bf472225983c3e253f1ee3789e831020c6a5b9de0bf41
-  languageName: node
-  linkType: hard
-
 "color-convert@npm:^1.9.0":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
@@ -4250,7 +4240,6 @@ __metadata:
     konva: "npm:^9.3.15"
     lodash: "npm:^4.17.21"
     lucide-react: "npm:^0.440.0"
-    pdf.js: "npm:^0.1.0"
     postcss: "npm:^8.4.38"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -4863,15 +4852,6 @@ __metadata:
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
   checksum: 10c0/666f6973f332f27581371efaf303fd6c272cc43c2057b37aa99e3643158c7e4b2626549555d88626e99ea9e046f82f32e41bbde5f1508547e9a11b149b52387c
-  languageName: node
-  linkType: hard
-
-"pdf.js@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "pdf.js@npm:0.1.0"
-  dependencies:
-    coffee-script: "npm:latest"
-  checksum: 10c0/b73104738fb8ae287fae884b22212d8478d2f834d850b470aa24f23fd85596471e7f53f221939a35817653b4704f16e1a62046e60e3028caf4b1b1bb6f79948c
   languageName: node
   linkType: hard
 

@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 //====================================================================
-import bgImg from '../../.././../assets/hero-bg.jpeg'
+import ConverImage from '../../.././../assets/hero-bg.jpeg'
 import {
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
     KonvaAlertMessage
@@ -23,16 +23,17 @@ import { useAppSelector } from '../../../../redux'
 import {
     _,
     CANVAS_STAGE_HEIGHT,
-    // CANVAS_STAGE_HEIGHT,
     CanvasToolEnum,
     INIT_CANVAS_KONVA_CORPUS,
     INIT_CANVAS_MEASUREMENT,
     INIT_CANVAS_RECT_PROPS,
     TKonvaImageItem
 } from '../../../../types'
-import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasurementAction'
-import QuotationCanvasEditAction from './QuotationCanvasEditAction'
-import { QuotationConvasAlert } from './QuotationCanvasAlert'
+import {
+    QuotationCanvasAlert,
+    QuotationCanvasEditAction,
+    QuotationCanvasUnitMeasurementAction
+} from '.'
 import { useFirebaseStorageActions } from '../../../../hooks/firebase'
 import { useProposedLayoutAction } from '../../../cms/hooks'
 
@@ -57,12 +58,19 @@ function QuotationCanvas() {
     const navigate = useNavigate()
     const [history, setHistory] = useState([]);
     const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
-
     const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
     const ProposedLayoutDataAction = useProposedLayoutAction()
+    const [imageProps, setImageProps] = useState({
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+    });
+
+
+    console.log(corpus.selection.image)
     useEffect(() => {
         const img = new window.Image()
-
         const currentItem = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
             (item) => item.value === corpus.selection.sunrooofWindow
         )
@@ -451,42 +459,36 @@ function QuotationCanvas() {
 
             switch (corpus.selection.tool) {
                 case CanvasToolEnum.Remove:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.RemoveTool.label}
                         remark={KonvaAlertMessage.RemoveTool.remark}
                     />
                 case CanvasToolEnum.ScaleMeasurement:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.ScaleMeasurementTool.label}
                         remark={KonvaAlertMessage.ScaleMeasurementTool.remark}
                     />
                 case CanvasToolEnum.Undo:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.UndoTool.label}
                         remark={KonvaAlertMessage.UndoTool.remark}
                     />
                 default:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.Tool.label}
                         remark={KonvaAlertMessage.Tool.remark}
                     />
             }
         }
-        return <QuotationConvasAlert
+        return <QuotationCanvasAlert
             label={KonvaAlertMessage.Measurement.label}
             remark={KonvaAlertMessage.Measurement.remark}
         />
     }, [corpus.selection.tool, isDrawingStarted])
-    const [imageProps, setImageProps] = useState({
-        width: 0,
-        height: 0,
-        x: 0,
-        y: 0,
-    });
     useEffect(() => {
         if (image) {
             const aspectRatio = image.width / image.height;
-            let width, height;
+            let width: number, height: number;
 
             // Calculate width and height to fit the image within the box
             if (aspectRatio > boxWidth / boxHeight) {
@@ -509,7 +511,7 @@ function QuotationCanvas() {
         <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
-                background: `url(${bgImg})`,
+                background: `url(${ConverImage})`,
                 backgroundSize: 'cover',
             }}
         >
@@ -570,7 +572,7 @@ function QuotationCanvas() {
                                 // width={imageProps.width}
                                 // height={imageProps.height}
                                 width={stageWidth}
-                                style={{ background: "1px solid red" }}
+                                // style={{ background: "1px solid red" }}
                                 height={CANVAS_STAGE_HEIGHT}
                                 ref={stageRef}
                                 onClick={handleCanvasClick}
