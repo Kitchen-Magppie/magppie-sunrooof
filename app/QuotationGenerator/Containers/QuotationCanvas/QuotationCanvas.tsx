@@ -10,6 +10,9 @@ import {
     Circle,
 } from 'react-konva'
 import useImage from 'use-image'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
 //====================================================================
 // import bgImg from '../../.././../assets/hero-bg.jpeg'
 import {
@@ -26,13 +29,13 @@ import {
     INIT_CANVAS_RECT_PROPS,
     TKonvaImageItem
 } from '../../../../types'
-import QuotationCanvasUnitMeasurementAction from './QuotationCanvasUnitMeasurementAction'
-import QuotationCanvasEditAction from './QuotationCanvasEditAction'
-import { QuotationConvasAlert } from './QuotationCanvasAlert'
+import {
+    QuotationCanvasAlert,
+    QuotationCanvasEditAction,
+    QuotationCanvasUnitMeasurementAction
+} from '.'
 import { useFirebaseStorageActions } from '../../../../hooks/firebase'
 import { useProposedLayoutAction } from '../../../cms/hooks'
-import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 
 
 function QuotationCanvas() {
@@ -55,12 +58,19 @@ function QuotationCanvas() {
     const navigate = useNavigate()
     const [history, setHistory] = useState([]);
     const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
-
     const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
     const ProposedLayoutDataAction = useProposedLayoutAction()
+    const [imageProps, setImageProps] = useState({
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+    });
+
+
+    console.log(corpus.selection.image)
     useEffect(() => {
         const img = new window.Image()
-
         const currentItem = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
             (item) => item.value === corpus.selection.sunrooofWindow
         )
@@ -164,7 +174,7 @@ function QuotationCanvas() {
 
 
     // Handle image selection
-    const handleImageSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>, id: string) => {
+    const handleImageSelect = useCallback((e: TKonvaMouseEvent, id: string) => {
         e.cancelBubble = true; // Prevent event from reaching the parent or stage
         // const selectedNode = imageRefs.current[id];
         setSelectedObjectId(id);
@@ -232,7 +242,7 @@ function QuotationCanvas() {
         }
     }, [selectedObjectId]);
 
-
+    console.log(history)
     // Handle delete key to remove selected image
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -336,7 +346,7 @@ function QuotationCanvas() {
         image
     ])
 
-    const handleCanvasClick = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleCanvasClick = useCallback((event: TKonvaMouseEvent) => {
         const stage = event.target.getStage()
         const { x, y } = stage.getPointerPosition()!
 
@@ -359,7 +369,7 @@ function QuotationCanvas() {
         }
     }, [isDrawing])
 
-    const handleMouseMove = useCallback((event: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleMouseMove = useCallback((event: TKonvaMouseEvent) => {
         if (!isDrawing) return
 
         const stage = event.target.getStage()
@@ -377,7 +387,7 @@ function QuotationCanvas() {
     )
 
     // Make the transformer active when the rectangle is selected
-    const handleRectSelect = useCallback((e: Konva.KonvaEventObject<MouseEvent>) => {
+    const handleRectSelect = useCallback((e: TKonvaMouseEvent) => {
         if (transformerRef.current && rectRef.current) {
             e.cancelBubble = true; // Prevent event from reaching the stage
             setSelectedObjectId('parent');
@@ -449,45 +459,66 @@ function QuotationCanvas() {
 
             switch (corpus.selection.tool) {
                 case CanvasToolEnum.Remove:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.RemoveTool.label}
                         remark={KonvaAlertMessage.RemoveTool.remark}
                     />
                 case CanvasToolEnum.ScaleMeasurement:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.ScaleMeasurementTool.label}
                         remark={KonvaAlertMessage.ScaleMeasurementTool.remark}
                     />
                 case CanvasToolEnum.Undo:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.UndoTool.label}
                         remark={KonvaAlertMessage.UndoTool.remark}
                     />
                 default:
-                    return <QuotationConvasAlert
+                    return <QuotationCanvasAlert
                         label={KonvaAlertMessage.Tool.label}
                         remark={KonvaAlertMessage.Tool.remark}
                     />
             }
         }
-        return <QuotationConvasAlert
+        return <QuotationCanvasAlert
             label={KonvaAlertMessage.Measurement.label}
             remark={KonvaAlertMessage.Measurement.remark}
         />
     }, [corpus.selection.tool, isDrawingStarted])
+    useEffect(() => {
+        if (image) {
+            const aspectRatio = image.width / image.height;
+            let width: number, height: number;
+
+            // Calculate width and height to fit the image within the box
+            if (aspectRatio > boxWidth / boxHeight) {
+                width = boxWidth;
+                height = boxWidth / aspectRatio;
+            } else {
+                width = boxHeight * aspectRatio;
+                height = boxHeight;
+            }
+
+            // Center the image in the box
+            const x = (boxWidth - width) / 2;
+            const y = (boxHeight - height) / 2;
+
+            setImageProps({ width, height, x, y });
+        }
+    }, [image]);
 
     return (<form className="">
         {/* <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
-                background: `url(${bgImg})`,
+                background: `url(${ConverImage})`,
                 backgroundSize: 'cover',
             }}
         >
             <div className=" opacity-70 align-middle flex justify-center flex-col">
                 SUNROOOF
             </div>
-        </div>s */}
+        </div>s
 
         <div className="container mx-auto">
             <div className="flex mt-10">
@@ -532,11 +563,16 @@ function QuotationCanvas() {
                     </div>
                     <div className="flex flex-auto"
                         ref={stageContainerRef}
-                        style={{ width: "100%", overflow: "hidden" }}
+                    // style={{ width: "100%", overflow: "hidden" }}
                     >
                         {Presentation?.value?.file?.size ? (
                             <Stage
+                                // width={imageProps.x}
+                                // height={imageProps.y}
+                                // width={imageProps.width}
+                                // height={imageProps.height}
                                 width={stageWidth}
+                                // style={{ background: "1px solid red" }}
                                 height={CANVAS_STAGE_HEIGHT}
                                 ref={stageRef}
                                 onClick={handleCanvasClick}
@@ -551,15 +587,29 @@ function QuotationCanvas() {
                                 }}
                             >
                                 <Layer>
-                                    {Presentation?.value?.file?.size ? (<KonvaImage image={image} listening width={1200} height={1200} draggable onClick={(e) => {
-                                        if (selectedObjectId) {
-                                            e.cancelBubble = true; // Prevent event from reaching the stage
-                                            setSelectedObjectId(null); // Clear selection
-                                            transformerRef.current.detach();
-                                            transformerRef.current.getLayer().batchDraw();
-                                        }
+                                    {Presentation?.value?.file?.size ? (<KonvaImage
+                                        image={image}
+                                        listening
+                                        x={imageProps.x}
+                                        y={imageProps.y}
+                                        width={imageProps.width}
+                                        height={imageProps.height}
+                                        // crop={{ x: 100, y: 100, width: 100, height: 100 }}
+                                        // scaleX={100}
+                                        // scaleY={100}
 
-                                    }} />) : ''}
+                                        // width={1200}
+                                        // height={1200}
+                                        // draggable
+                                        onClick={(e) => {
+                                            if (selectedObjectId) {
+                                                e.cancelBubble = true; // Prevent event from reaching the stage
+                                                setSelectedObjectId(null); // Clear selection
+                                                transformerRef.current.detach();
+                                                transformerRef.current.getLayer().batchDraw();
+                                            }
+
+                                        }} />) : ''}
                                     {isDrawingStarted ? (
                                         <>
                                             <Rect
@@ -578,7 +628,7 @@ function QuotationCanvas() {
                                                 }}
                                                 onTransformEnd={handleRectTransform}
                                                 onClick={handleRectSelect}
-                                                onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                onMouseDown={(e: TKonvaMouseEvent) => {
                                                     console.log(e)
                                                     if (isDrawing) return;
                                                     setSelectedObjectId('parent');
@@ -617,7 +667,7 @@ function QuotationCanvas() {
                                                             img.id
                                                         )
                                                     }
-                                                    onMouseDown={(e: Konva.KonvaEventObject<MouseEvent>) => {
+                                                    onMouseDown={(e: TKonvaMouseEvent) => {
                                                         console.log(e)
                                                         if (isDrawing) return;
                                                         setSelectedObjectId(img.id);
@@ -676,6 +726,7 @@ function QuotationCanvas() {
     )
 }
 
+type TKonvaMouseEvent = Konva.KonvaEventObject<MouseEvent>
 function Base64ToFile(base64: string, filename: string): File {
     const arr = typeof base64 === 'string' ? base64.split(',') : [];
     const mime = arr[0].match(/:(.*?);/)[1];
@@ -689,3 +740,5 @@ function Base64ToFile(base64: string, filename: string): File {
 }
 
 export default QuotationCanvas
+const boxHeight = 800
+const boxWidth = 1000

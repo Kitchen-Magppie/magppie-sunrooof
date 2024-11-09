@@ -1354,3 +1354,4 @@ const INIT_CORPUS = {
     isSubmitting: false,
     isQuotationImageDownload: false,
 };
+//1330
