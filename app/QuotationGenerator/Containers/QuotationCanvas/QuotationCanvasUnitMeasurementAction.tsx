@@ -19,26 +19,27 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
 
     const handleFeetChange = useCallback((e) => {
         const newFeet = Number(e.target.value);
-        setFeet(newFeet);
-
-        // Update total inches in the parent component
-        props.setMeasurement((prev) => ({
-            ...prev,
-            quantity: newFeet * 12 + inches,
-        }));
-    }, [inches, props])
+        if (newFeet >= 0) {
+            setFeet(newFeet);
+            // Update total inches in the parent component
+            props.setMeasurement((prev) => ({
+                ...prev,
+                quantity: newFeet * 12 + inches,
+            }));
+        }
+    }, [inches, props]);
 
     const handleInchesChange = useCallback((e) => {
         const newInches = Number(e.target.value);
-        setInches(newInches);
-
-        // Update total inches in the parent component
-        props.setMeasurement((prev) => ({
-            ...prev,
-            quantity: feet * 12 + newInches,
-        }));
-    }, [feet, props])
-
+        if (newInches >= 0 && newInches <= 11) {  // Ensure inches are between 0 and 11
+            setInches(newInches);
+            // Update total inches in the parent component
+            props.setMeasurement((prev) => ({
+                ...prev,
+                quantity: feet * 12 + newInches,
+            }));
+        }
+    }, [feet, props]);
 
     const renderQuantityContent = useMemo(() => {
         if (props.measurement.unit === 'inch') {
@@ -56,6 +57,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                             onChange={handleFeetChange}
                             className="bg-gray-50 border border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Feet"
+                            min="0"
                         />
                         <span className="text-gray-900 dark:text-white">ft</span>
 
@@ -85,10 +87,12 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                     <button
                         type="button"
                         onClick={() => {
-                            props.setMeasurement((prev) => ({
-                                ...prev,
-                                quantity: prev.quantity - 1,
-                            }));
+                            if (props.measurement.quantity > 1) {
+                                props.setMeasurement((prev) => ({
+                                    ...prev,
+                                    quantity: prev.quantity - 1,
+                                }));
+                            }
                         }}
                         className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                     >
@@ -99,19 +103,24 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                         className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={props.measurement.quantity}
                         onChange={(e) => {
-                            props.setMeasurement((prev) => ({
-                                ...prev,
-                                quantity: Number(e.target.value),
-                            }));
+                            const newQuantity = Number(e.target.value);
+                            if (newQuantity >= 1) {
+                                props.setMeasurement((prev) => ({
+                                    ...prev,
+                                    quantity: newQuantity,
+                                }));
+                            }
                         }}
                     />
                     <button
                         type="button"
                         onClick={() => {
-                            props.setMeasurement((prev) => ({
-                                ...prev,
-                                quantity: prev.quantity + 1,
-                            }));
+                            if (props.measurement.quantity < 1000) {  // Max quantity to avoid overflow
+                                props.setMeasurement((prev) => ({
+                                    ...prev,
+                                    quantity: prev.quantity + 1,
+                                }));
+                            }
                         }}
                         className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
                     >
@@ -121,6 +130,9 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
             </div>
         );
     }, [props, feet, handleFeetChange, inches, handleInchesChange]);
+
+    // Validate if unit and quantity are set correctly
+    const isValid = props.measurement.unit && props.measurement.quantity > 0;
 
     return (
         <div>
@@ -147,7 +159,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                     <KonvaActionButton
                         label='Start Drawing'
                         variant={props.measurement.isStartDrawing ? 'primary' : 'secondary'}
-                        // disabled={!(props.measurement.unit && props.measurement.quantity && !!props.measurement.value)}
+                        disabled={!isValid}
                         icon={<SiExcalidraw className="my-auto text-xl" />}
                         onClick={() => {
                             props.setMeasurement((prev) => ({ ...prev, isStartDrawing: true }))
@@ -155,7 +167,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                     />
                     <KonvaActionButton
                         label='Finalize Unit Value'
-                        // disabled={!(props.measurement.unit && props.measurement.quantity && !!props.measurement.value)}
+                        disabled={!isValid}
                         icon={<SiExcalidraw className="my-auto text-xl" />}
                         onClick={() => {
                             props.onProceed();
