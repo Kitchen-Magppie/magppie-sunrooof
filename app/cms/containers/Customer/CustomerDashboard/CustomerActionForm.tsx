@@ -164,8 +164,6 @@ export function CustomerActionForm(props: TProps) {
         return 0;
     }, [values?.components]);
 
-    // console.log(values?.components?.find((item) => item.value === '2d-design'))
-
     const renderErrorMessage = useCallback(
         (field: string) => {
             if (_.get(errors, field)) {
@@ -1183,11 +1181,36 @@ export function CustomerActionForm(props: TProps) {
                                                                                 option.value === data[item.value]
                                                                         )}
                                                                         onChange={(e) => {
-                                                                            // console.log(e)
-                                                                            setValue(
-                                                                                `components.${i}.data.${k}.${item.value}`,
-                                                                                e?.value?.length ? e.value : ""
-                                                                            );
+                                                                            if (item.value === 'rightImage') {
+
+                                                                                const currentProposedLayout = proposedLayout?.find((currentItem) => currentItem.label === e.label)
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.rightImage`,
+                                                                                    currentProposedLayout.url.proposed
+                                                                                );
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.leftImage`,
+                                                                                    currentProposedLayout.url.customer
+                                                                                );
+
+                                                                                // setValue(
+                                                                                //     `components.${i}.data.${k}.sunrooofCount`,
+                                                                                //     currentProposedLayout.sunrooofCount
+                                                                                // );
+                                                                                setValue(
+                                                                                    `name`,
+                                                                                    currentProposedLayout.name
+                                                                                );
+
+                                                                            }
+                                                                            else {
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.${item.value}`,
+                                                                                    e?.value?.length ? e.value : ""
+                                                                                );
+
+                                                                            }
+
                                                                         }}
                                                                         options={options}
                                                                     />
