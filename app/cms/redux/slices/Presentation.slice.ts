@@ -3,7 +3,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 type TPresentation = {
     file?: File,
     title: string,
-    name: string
+    name: string,
+    // sunrooofCount: number,
 }
 
 interface IPresentationSlice {

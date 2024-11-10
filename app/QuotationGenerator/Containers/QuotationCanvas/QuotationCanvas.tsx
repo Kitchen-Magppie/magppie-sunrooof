@@ -314,6 +314,7 @@ function QuotationCanvas() {
                     ProposedLayoutDataAction.add({
                         label: Presentation.value.title,
                         name: Presentation.value.name,
+                        sunrooofCount: images?.length,
                         url: {
                             customer: e[0],
                             proposed: e[1],
@@ -330,13 +331,14 @@ function QuotationCanvas() {
 
         }
     }, [
-        navigate,
+        image,
+        StorageAction.batch,
         Presentation.value.file,
         Presentation.value.title,
         Presentation.value.name,
         ProposedLayoutDataAction,
-        StorageAction,
-        image
+        images?.length,
+        navigate
     ])
 
     const handleCanvasClick = useCallback((event: TKonvaMouseEvent) => {
@@ -497,6 +499,7 @@ function QuotationCanvas() {
         }
     }, [image]);
 
+    console.log(images)
     return (<form className="">
         <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
