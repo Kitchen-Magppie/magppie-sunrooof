@@ -86,6 +86,8 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
     areaName: '',
     leftImage: '',
     rightImage: '',
+    floor: '',
+    quantity: 0
     // invoiceUrl: '',
     // designBy: '',
     // approvedBy: '',
@@ -107,6 +109,8 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
     // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
     // { label: "After Installation", value: 'afterInstallation', field: 'text' },
     { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
+    { label: "Floor", value: 'floor', field: 'text', placeholder: '' },
+    { label: "Quantity", value: 'quantity', field: 'text', placeholder: '' },
     { label: "Proposed Layout", value: 'rightImage', field: 'select', placeholder: '' },
 
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },

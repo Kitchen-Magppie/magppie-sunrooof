@@ -49,12 +49,14 @@ export type TCustomerComponent2DDesignOptionItem = {
     label: string
     value: keyof TCustomerComponentDesign2DDataItem
     field: 'text' | 'image' | 'select'
-    placeholder: string
+    placeholder?: string
 }
 export type TCustomerComponentDesign2DDataItem = {
     design: string
     finish: string
     areaName: string
+    floor: string
+    quantity: number
     // invoiceUrl: string,
     leftImage: string
     rightImage: string
@@ -221,6 +223,8 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
                 // cityName: yup.string().required(),
                 // yourPlan: yup.string().required(),
                 areaName: yup.string().required('Area Name field is Required'),
+                floor: yup.string().required('Floor field is Required'),
+                quantity: yup.number().required('Quantity field is Required'),
                 // invoiceUrl: yup.string().required(),
 
                 leftImage: yup
