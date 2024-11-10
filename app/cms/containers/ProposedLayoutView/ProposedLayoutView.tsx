@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RiLoader4Line, RiUploadCloud2Line } from "react-icons/ri";
 import { useForm } from 'react-hook-form';
@@ -23,6 +23,9 @@ function ProposedLayoutView() {
 
     useProposedLayoutListener()
 
+    useEffect(() => {
+        document.title = 'Proposed Layout | CMS'
+    }, [])
     const [toggle, setToggle] = useState(INIT_TOGGLE)
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,7 +37,7 @@ function ProposedLayoutView() {
 
     const values = watch() as TProposedLayoutItem
     const customers = useAppSelector((state) => state.Cms.Customer.value)
-    console.log(values)
+
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
         if (content?.isValid && content?.accessor !== 'pdf') {
@@ -67,7 +70,9 @@ function ProposedLayoutView() {
     return (<div>
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
 
-        {toggle?.isOpenEditorPage ? <QuotationCanvas /> : <form
+        {toggle?.isOpenEditorPage ? <QuotationCanvas onToggleEditorPage={(isOpenEditorPage) => {
+            setToggle((prev) => ({ ...prev, isOpenEditorPage }))
+        }} /> : <form
             onSubmit={onSubmit}
             className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
         >
