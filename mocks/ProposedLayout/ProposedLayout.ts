@@ -5,6 +5,9 @@ export const INIT_PROPOSED_LAYOUT_ITEM: IProposedLayoutItem = {
     sunrooofCount: 0,
     name: '',
     url: { proposed: '', customer: '' },
+    design: '',
+    finish: '',
+    customerId: '',
     at: {
         created: new Date()
     }

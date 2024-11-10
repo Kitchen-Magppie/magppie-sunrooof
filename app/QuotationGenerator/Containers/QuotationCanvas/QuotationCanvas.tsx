@@ -14,9 +14,9 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 //====================================================================
-// import ConverImage from '../../.././../assets/hero-bg.jpeg'
 import {
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
+    INIT_CUSTOMER_ITEM,
     KonvaAlertMessage
 } from '../../../cms/mocks'
 import { useAppSelector } from '../../../../redux'
@@ -24,6 +24,7 @@ import {
     _,
     CANVAS_STAGE_HEIGHT,
     CanvasToolEnum,
+    CustomerComponentEnum,
     INIT_CANVAS_KONVA_CORPUS,
     INIT_CANVAS_MEASUREMENT,
     INIT_CANVAS_RECT_PROPS,
@@ -34,9 +35,9 @@ import {
     QuotationCanvasEditAction,
     QuotationCanvasUnitMeasurementAction
 } from '.'
-import { useFirebaseStorageActions } from '../../../../hooks/firebase'
+import { useFirebaseStorageActions } from '../../../../hooks'
 import { useProposedLayoutAction } from '../../../cms/hooks'
-
+import { useFirebaseCustomerAction } from '../../../cms/utils/firebase/customer'
 
 function QuotationCanvas() {
     const { Presentation } = useAppSelector((state) => state.Cms)
@@ -272,7 +273,8 @@ function QuotationCanvas() {
     }, [Presentation?.value?.file, setImage])
 
     const StorageAction = useFirebaseStorageActions();
-
+    const action = useFirebaseCustomerAction();
+    const customers = useAppSelector((state) => state.Cms.Customer.value);
     const handleDownload = useCallback(() => {
         const canvas = document.createElement('canvas')
         canvas.width = image.width
@@ -312,15 +314,60 @@ function QuotationCanvas() {
                 ],
                 path: 'proposed-layout',
                 onSuccess: (e) => {
-                    ProposedLayoutDataAction.add({
-                        label: Presentation.value.title,
-                        name: Presentation.value.name,
+                    const args = {
+                        label: Presentation?.value?.title,
+                        name: Presentation?.value?.name,
+                        design: Presentation?.value?.design,
                         sunrooofCount: images?.length,
-                        url: {
-                            customer: e[0],
-                            proposed: e[1],
-                        },
-                    })
+                        finish: Presentation?.value?.finish,
+                        customerId: Presentation?.value?.customerId || _.uuid(),
+                        url: { customer: e[0], proposed: e[1], },
+                    }
+                    ProposedLayoutDataAction.add(args)
+
+                    const currentCustomer = customers?.find((customer) => customer.customerId === Presentation?.value?.customerId)
+                    if (currentCustomer) {
+                        action.edit({
+                            ...currentCustomer,
+                            components: currentCustomer.components?.map((item) => {
+                                if (item.value === CustomerComponentEnum.TwoDDesign) {
+                                    item.data[0].finish = args.finish
+                                    item.data[0].design = args.design
+                                    item.data[0].quantity = args.sunrooofCount
+                                    item.data[0].leftImage = args.url.customer
+                                    item.data[0].rightImage = args.url.proposed
+                                    return item;
+                                }
+                                return item;
+                            }),
+                            at: {
+                                created: currentCustomer.at.created,
+                                updated: new Date()
+                            }
+                        })
+                    }
+                    else {
+
+                        action.add({
+                            name: args.name,
+                            customerId: args.customerId,
+                            components: INIT_CUSTOMER_ITEM.components?.map((item) => {
+                                if (item.value === CustomerComponentEnum.TwoDDesign) {
+                                    item.data[0].finish = args.finish
+                                    item.data[0].design = args.design
+                                    item.data[0].quantity = args.sunrooofCount
+                                    item.data[0].leftImage = args.url.customer
+                                    item.data[0].rightImage = args.url.proposed
+                                    return item;
+                                }
+                                return item;
+                            }),
+                            at: {
+                                created: new Date(),
+                            }
+                        })
+                    }
+
                     toast('Proposed image has been saved!')
                     navigate('/cms')
                     link.click()
@@ -328,18 +375,21 @@ function QuotationCanvas() {
                     _.download({ url: uri, name: `proposed-layout-${uniq}` })
                 }
             })
-
-
         }
     }, [
         image,
         StorageAction.batch,
         Presentation.value.file,
-        Presentation.value.title,
-        Presentation.value.name,
-        ProposedLayoutDataAction,
+        Presentation.value?.title,
+        Presentation.value?.name,
+        Presentation.value?.design,
+        Presentation.value?.finish,
+        Presentation.value?.customerId,
         images?.length,
-        navigate
+        ProposedLayoutDataAction,
+        customers,
+        navigate,
+        action
     ])
 
     const handleCanvasClick = useCallback((event: TKonvaMouseEvent) => {

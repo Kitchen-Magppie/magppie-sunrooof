@@ -6,12 +6,17 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
-// import Select from "react-select";
-
+import Select from "react-select/creatable"
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
+import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
+import {
+    COMPONENT_DESIGN2D_DESIGN_OPTIONS,
+    COMPONENT_DESIGN2D_FINISH_OPTIONS
+} from "../../mocks";
+import { _, TProposedLayoutItem } from "../../../../types";
 
 
 function ProposedLayoutView() {
@@ -25,15 +30,15 @@ function ProposedLayoutView() {
     const { watch, register, handleSubmit, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(proposedLayoutSchema),
     });
+    useFirebaseCmsCustomerListener()
 
     const values = watch() as TProposedLayoutItem
     const customers = useAppSelector((state) => state.Cms.Customer.value)
-    console.log(customers?.map((customer) => ({ value: customer.id, label: customer.name })))
-
+    console.log(values)
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
         if (content?.isValid && content?.accessor !== 'pdf') {
-            setValue('image', content.file)
+            setValue('file', content.file)
         } else {
             toast('*Please upload an image or pdf file.')
         }
@@ -42,11 +47,14 @@ function ProposedLayoutView() {
     const onSubmit = handleSubmit((e) => {
         setToggle((prev) => ({ ...prev, isLoading: true }))
         setTimeout(() => {
-            if (e?.image) {
+            if (e?.file) {
                 dispatch(setPresentationData({
-                    file: e?.image as File,
+                    file: e?.file as File,
                     title: e?.title,
-                    name: e.name
+                    name: e.name,
+                    design: e.design,
+                    finish: e.finish,
+                    customerId: customers?.find((item) => item.name === e.name)?.customerId || ''
                 }))
                 setToggle((prev) => ({
                     ...prev,
@@ -59,108 +67,99 @@ function ProposedLayoutView() {
     return (<div>
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
 
-        {toggle?.isOpenEditorPage ? <QuotationCanvas /> : <>
-
-            <form
-                onSubmit={onSubmit}
-                className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
-            >
-                {/* <Select
-                    theme={(theme) => ({
-                        ...theme,
-                        borderRadius: 6,
-                        colors: {
-                            ...theme.colors,
-                            text: "white",
-                            primary25: "#3F51B5",
-                            primary: "#3F51B5",
-                        },
-                    })}
-                    classNames={{
-                        control: () => AUTOCOMPLETE_STYLE,
-                    }}
+        {toggle?.isOpenEditorPage ? <QuotationCanvas /> : <form
+            onSubmit={onSubmit}
+            className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
+        >
+            <div className="mb-1">
+                <Select
+                    options={_.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS)}
+                    onChange={({ value }) => { setValue('design', value) }}
+                    placeholder="Design"
+                />
+                {errors?.design?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                    <IoIosHelpCircleOutline className="text-sm my-1" />
+                    {errors?.design?.message}</span>}
+            </div>
+            <div className="mb-1">
+                <Select
+                    options={_.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS)}
+                    onChange={({ value }) => { setValue('finish', value) }}
+                    placeholder="Finish"
+                />
+                {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                    <IoIosHelpCircleOutline className="text-sm my-1" />
+                    {errors?.title?.message}</span>}
+            </div>
+            <div className="mb-1">
+                <Select
+                    options={customers?.map((customer) => ({
+                        value: customer.id,
+                        label: customer.name
+                    }))}
                     onChange={(e) => {
-                        setValue(`components.${i}.data`, e.value);
+                        setValue('name', e.label)
                     }}
-                    defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
-                        ({ value }) => value === data.data
-                    )}
-                    options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
-                /> */}
-                <div className="mb-1">
-                    <label
-                        htmlFor="large-input"
-                        className="block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                        Customer Name
+                    placeholder="Customer Name"
+                />
+                {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                    <IoIosHelpCircleOutline className="text-sm my-1" />
+                    {errors?.title?.message}</span>}
+            </div>
+
+
+            <div className="mb-3">
+
+                <input
+                    placeholder="Title"
+                    type="text"
+                    {...register('title')}
+                    id="large-input"
+                    className={`block w-full rounded-sm py-1.5 bg-white text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
+                />
+                {errors.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                    <IoIosHelpCircleOutline className="text-sm my-1" />
+                    {errors.title.message}</span>}
+            </div>
+            <div
+                className={` p-5 relative border-4 border-dotted ${errors?.file ? "border-red-300" : 'border-gray-300'} rounded-lg`}
+                style={{ width: 450 }}
+            >
+                <div className="flex align-middle justify-center">
+                    <RiUploadCloud2Line className={`text-[8rem] ${errors.file ? "text-red-500" : "text-indigo-600"} `} />
+                </div>
+                <div className=" flex flex-col mx-auto w-1/2 text-center">
+                    <label>
+                        <input
+                            onChange={onFileChange}
+                            ref={fileInputRef}
+                            accept="image/*,application/pdf"
+                            className="text-sm cursor-pointer w-36 hidden"
+                            type="file"
+                        />
+                        <div className={`w-full text  text-white border border-gray-300 rounded-xl font-semibold cursor-pointer py-3 px-3 ${errors?.file ? 'hover:bg-red-500 bg-red-600' : 'hover:bg-indigo-500 bg-indigo-600'}`}>
+                            Select
+                        </div>
                     </label>
-                    <input
-                        type="text"
-                        {...register('name')}
-                        id="large-input"
-                        className={`block w-full rounded-lg bg-gray-50 text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
-                    />
-                    {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                    {values?.file?.name?.length ? (<div className="text-gray-500 text-[12px] italic">
+                        {values?.file?.name} (~{(values?.file?.size / (1024 * 1024))?.toFixed(2)} MB)
+                    </div>) : ''}
+                    {errors?.file?.message ? (<div className=" text-red-500 text-sm flex gap-1 align-middle justify-center">
                         <IoIosHelpCircleOutline className="text-sm my-1" />
-                        {errors?.title?.message}</span>}
+                        {errors?.file?.message}
+                    </div>) : ''}
                 </div>
 
-                <div className="mb-3">
-                    <label
-                        htmlFor="large-input"
-                        className="block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                        Label
-                    </label>
-                    <input
-                        type="text"
-                        {...register('title')}
-                        id="large-input"
-                        className={`block w-full rounded-lg bg-gray-50 text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
-                    />
-                    {errors.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
-                        <IoIosHelpCircleOutline className="text-sm my-1" />
-                        {errors.title.message}</span>}
-                </div>
-                <div
-                    className={` p-5 relative border-4 border-dotted ${errors?.image ? "border-red-300" : 'border-gray-300'} rounded-lg`}
-                    style={{ width: 450 }}
-                >
-                    <div className="flex align-middle justify-center">
-                        <RiUploadCloud2Line className={`text-[8rem] ${errors.image ? "text-red-500" : "text-indigo-600"} `} />
-                    </div>
-                    <div className=" flex flex-col mx-auto w-1/2 text-center">
-                        <label>
-                            <input
-                                onChange={onFileChange}
-                                ref={fileInputRef}
-                                accept="image/*,application/pdf"
-                                className="text-sm cursor-pointer w-36 hidden"
-                                type="file"
-                            />
-                            <div className={`w-full text  text-white border border-gray-300 rounded-xl font-semibold cursor-pointer py-3 px-3 ${errors?.image ? 'hover:bg-red-500 bg-red-600' : 'hover:bg-indigo-500 bg-indigo-600'}`}>
-                                Select
-                            </div>
-                        </label>
-                        {values?.image?.name?.length ? (<div className="text-gray-500 text-[12px] italic">
-                            {values?.image?.name} (~{(values?.image?.size / (1024 * 1024))?.toFixed(2)} MB)
-                        </div>) : ''}
-                        {errors?.image?.message ? (<div className=" text-red-500 text-sm flex gap-1 align-middle justify-center">
-                            <IoIosHelpCircleOutline className="text-sm my-1" />
-                            {errors?.image?.message}
-                        </div>) : ''}
-                    </div>
-
-                </div>
-                <button
-                    type="submit"
-                    className={`flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent font-medium text-lg rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 ${errors?.image || errors?.title ? 'focus:ring-red-500 bg-red-600 hover:bg-red-700' : 'focus:ring-indigo-500 bg-indigo-600 hover:bg-indigo-700'} mt-5`}
-                >
-                    Proceed
-                    {toggle.isLoading ? (<RiLoader4Line className="my-1 animate-spin " />) : (<FaArrowRight className="my-1" />)}
-                </button>
-            </form>
-        </>}
+            </div>
+            <button
+                type="submit"
+                className={`flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent font-medium text-lg rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 ${errors?.file || errors?.title ? 'focus:ring-red-500 bg-red-600 hover:bg-red-700' : 'focus:ring-indigo-500 bg-indigo-600 hover:bg-indigo-700'} mt-5`}
+            >
+                Proceed
+                {toggle.isLoading ? (<RiLoader4Line className="my-1 animate-spin " />) : (<FaArrowRight className="my-1" />)}
+            </button>
+        </form>
+        }
 
     </div >);
 }
@@ -180,12 +179,15 @@ const FROM_FILE_TO_ACCESSOR = (file: File) => {
 }
 
 const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
+// const AUTOCOMPLETE_STYLE =
+//     "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
-type TProposedLayoutItem = { title: string, image?: File }
 const proposedLayoutSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     title: yup.string().required('Title is required'),
-    image: yup.mixed().required('Image is required'),
+    finish: yup.string().required('Finish is required'),
+    design: yup.string().required('Design is required'),
+    file: yup.mixed().required('File is required'),
 });
 
 export default ProposedLayoutView;
