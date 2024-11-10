@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import Select from 'react-select';
 import { BsDash, BsPlus } from 'react-icons/bs';
 import { SiExcalidraw } from 'react-icons/si';
@@ -17,7 +17,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
     const [feet, setFeet] = useState(Math.floor(props.measurement.quantity / 12));
     const [inches, setInches] = useState(props.measurement.quantity % 12);
 
-    const handleFeetChange = (e) => {
+    const handleFeetChange = useCallback((e) => {
         const newFeet = Number(e.target.value);
         setFeet(newFeet);
 
@@ -26,9 +26,9 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
             ...prev,
             quantity: newFeet * 12 + inches,
         }));
-    };
+    }, [inches, props])
 
-    const handleInchesChange = (e) => {
+    const handleInchesChange = useCallback((e) => {
         const newInches = Number(e.target.value);
         setInches(newInches);
 
@@ -37,7 +37,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
             ...prev,
             quantity: feet * 12 + newInches,
         }));
-    };
+    }, [feet, props])
 
     const renderQuantityContent = useMemo(() => {
         if (props.measurement.unit === 'inch') {
