@@ -1192,12 +1192,12 @@ export function CustomerActionForm(props: TProps) {
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.quantity`,
                                                                                     currentProposedLayout.sunrooofCount);
-                                                                                // setValue(
-                                                                                //     `components.${i}.data.${k}.design`,
-                                                                                //     currentProposedLayout.design);
-                                                                                // setValue(
-                                                                                //     `components.${i}.data.${k}.floor`,
-                                                                                //     currentProposedLayout.floor);
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.design`,
+                                                                                    currentProposedLayout.design);
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.finish`,
+                                                                                    currentProposedLayout.finish);
 
                                                                                 setValue(
                                                                                     `name`,
