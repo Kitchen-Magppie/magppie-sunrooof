@@ -99,7 +99,7 @@ export function useFirebaseCmsCustomerListener() {
                     id: doc.id,
                     at: {
                         created: (row.at.created as Timestamp).toDate(),
-                        updated: (row.at.updated as Timestamp).toDate(),
+                        updated: row.at.updated ? (row.at.updated as Timestamp).toDate() : undefined,
                     }
                 } as TCustomerItem);
             });

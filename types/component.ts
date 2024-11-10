@@ -113,7 +113,7 @@ export type TCustomerItem = {
     components: TCustomerComponentItem[]
     id: string
     customerId: string
-    at: { created: Date; updated: Date }
+    at: { created: Date; updated?: Date }
 }
 
 export enum ComponentModeEnum {
@@ -276,3 +276,13 @@ export const validateCustomerItemSchema = yup.object().shape({
         })
         .required(),
 })
+
+
+export type TProposedLayoutItem = {
+    title: string,
+    file?: File,
+    name: string,
+    finish: string,
+    design: string,
+    customerId: string,
+}

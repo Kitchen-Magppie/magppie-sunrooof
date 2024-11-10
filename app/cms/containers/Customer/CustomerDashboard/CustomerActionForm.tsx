@@ -164,17 +164,14 @@ export function CustomerActionForm(props: TProps) {
         return 0;
     }, [values?.components]);
 
-    const renderErrorMessage = useCallback(
-        (field: string) => {
-            if (_.get(errors, field)) {
-                return (
-                    <p className="text-red-500 text-xs mt-1">
-                        {_.get(errors, `${field}.message`)}
-                    </p>
-                );
-            }
-            return "";
-        },
+    const renderErrorMessage = useCallback((field: string) => {
+        if (_.get(errors, field)) {
+            return (<p className="text-red-500 text-xs mt-1">
+                {_.get(errors, `${field}.message`)}
+            </p>);
+        }
+        return <></>;
+    },
         [errors]
     );
 
@@ -1195,12 +1192,12 @@ export function CustomerActionForm(props: TProps) {
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.quantity`,
                                                                                     currentProposedLayout.sunrooofCount);
-                                                                                // setValue(
-                                                                                //     `components.${i}.data.${k}.design`,
-                                                                                //     currentProposedLayout.design);
-                                                                                // setValue(
-                                                                                //     `components.${i}.data.${k}.floor`,
-                                                                                //     currentProposedLayout.floor);
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.design`,
+                                                                                    currentProposedLayout.design);
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.finish`,
+                                                                                    currentProposedLayout.finish);
 
                                                                                 setValue(
                                                                                     `name`,
@@ -1286,9 +1283,9 @@ export function CustomerActionForm(props: TProps) {
                                                         )?.map((item, j) => {
                                                             const value = data[item.value];
                                                             const items = (value as string)?.length ? [value] : [];
-                                                            console.log(items);
-                                                            console.log(item);
-                                                            console.log(value);
+                                                            // console.log(items);
+                                                            // console.log(item);
+                                                            // console.log(value);
 
                                                             return (
                                                                 <div key={j}>
