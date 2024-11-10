@@ -6,9 +6,11 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
+// import Select from "react-select";
+
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
-import { setPresentationData, useAppDispatch } from "../../../../redux";
+import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 
 
@@ -25,6 +27,8 @@ function ProposedLayoutView() {
     });
 
     const values = watch() as TProposedLayoutItem
+    const customers = useAppSelector((state) => state.Cms.Customer.value)
+    console.log(customers?.map((customer) => ({ value: customer.id, label: customer.name })))
 
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
@@ -61,6 +65,28 @@ function ProposedLayoutView() {
                 onSubmit={onSubmit}
                 className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
             >
+                {/* <Select
+                    theme={(theme) => ({
+                        ...theme,
+                        borderRadius: 6,
+                        colors: {
+                            ...theme.colors,
+                            text: "white",
+                            primary25: "#3F51B5",
+                            primary: "#3F51B5",
+                        },
+                    })}
+                    classNames={{
+                        control: () => AUTOCOMPLETE_STYLE,
+                    }}
+                    onChange={(e) => {
+                        setValue(`components.${i}.data`, e.value);
+                    }}
+                    defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
+                        ({ value }) => value === data.data
+                    )}
+                    options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
+                /> */}
                 <div className="mb-1">
                     <label
                         htmlFor="large-input"
