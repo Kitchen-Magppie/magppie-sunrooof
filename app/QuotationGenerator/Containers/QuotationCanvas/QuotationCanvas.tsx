@@ -60,15 +60,8 @@ function QuotationCanvas() {
     const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null);
     const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
     const ProposedLayoutDataAction = useProposedLayoutAction()
-    const [imageProps, setImageProps] = useState({
-        width: 0,
-        height: 0,
-        x: 0,
-        y: 0,
-    });
+    const [imageProps, setImageProps] = useState(INIT_IMAGE_PROPS);
 
-
-    console.log(corpus.selection.image)
     useEffect(() => {
         const img = new window.Image()
         const currentItem = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
@@ -102,7 +95,6 @@ function QuotationCanvas() {
         setMeasurement((prev) => ({ ...prev, value: pixelsPerUnit }))
     }, [measurement.quantity, measurement.pixelLength]);
 
-    // console.log(measurement)
     // Function to update images inside the rectangle
     const updateImagesInRect = useCallback(() => {
         if (!rectProps || !patternImage) return;
@@ -242,7 +234,6 @@ function QuotationCanvas() {
         }
     }, [selectedObjectId]);
 
-    console.log(history)
     // Handle delete key to remove selected image
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -322,6 +313,8 @@ function QuotationCanvas() {
                 onSuccess: (e) => {
                     ProposedLayoutDataAction.add({
                         label: Presentation.value.title,
+                        name: Presentation.value.name,
+                        sunrooofCount: images?.length,
                         url: {
                             customer: e[0],
                             proposed: e[1],
@@ -338,20 +331,19 @@ function QuotationCanvas() {
 
         }
     }, [
-        navigate,
+        image,
+        StorageAction.batch,
         Presentation.value.file,
         Presentation.value.title,
+        Presentation.value.name,
         ProposedLayoutDataAction,
-        StorageAction,
-        image
+        images?.length,
+        navigate
     ])
 
     const handleCanvasClick = useCallback((event: TKonvaMouseEvent) => {
         const stage = event.target.getStage()
         const { x, y } = stage.getPointerPosition()!
-
-        console.log('Target is/////', event.target);
-        console.log('Target is/////2', stageRef.current);
 
         // If the clicked target is the stage (background), clear selection
         if (event.target === stageRef.current || event.target === stageRef.current.getStage()) {
@@ -739,6 +731,12 @@ function Base64ToFile(base64: string, filename: string): File {
     return new File([u8arr], filename, { type: mime });
 }
 
+const INIT_IMAGE_PROPS = {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+}
 export default QuotationCanvas
 const boxHeight = 800
 const boxWidth = 1000

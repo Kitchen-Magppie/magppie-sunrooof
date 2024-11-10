@@ -6,13 +6,9 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
-// import * as pdfjsLib from 'pdfjs-dist';
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
-import {
-    setPresentationData,
-    useAppDispatch,
-} from "../../../../redux";
+import { setPresentationData, useAppDispatch } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 
 
@@ -21,8 +17,7 @@ function ProposedLayoutView() {
     useProposedLayoutListener()
 
     const [toggle, setToggle] = useState(INIT_TOGGLE)
-    // const [pdfFile, setPdfFile] = useState<File>()
-    // const [imageSrc, setImageSrc] = useState<string | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch()
     const { watch, register, handleSubmit, formState: { errors }, setValue } = useForm({
@@ -30,39 +25,9 @@ function ProposedLayoutView() {
     });
 
     const values = watch() as TProposedLayoutItem
-    // const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    // useEffect(() => {
-    //     const loadPdf = async () => {
-    //         const pdfDoc = await pdfjsLib.getDocument(pdfFile).promise;
-    //         const page = await pdfDoc.getPage(1); // You can adjust the page number as needed
-
-    //         const viewport = page.getViewport({ scale: 1.5 }); // Adjust the scale as needed
-    //         const canvas = canvasRef.current!;
-    //         const context = canvas.getContext('2d')!;
-
-    //         canvas.height = viewport.height;
-    //         canvas.width = viewport.width;
-
-
-    //         const renderContext = {
-    //             canvasContext: context,
-    //             viewport: viewport
-    //         };
-
-    //         await page.render(renderContext).promise;
-
-
-    //         const imageDataUrl = canvas.toDataURL('image/png');
-    //         setImageSrc(imageDataUrl);
-    //     };
-
-    //     loadPdf();
-    // }, [pdfFile])
-    // console.log(imageSrc)
     const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
-        // setPdfFile(content.file)
         if (content?.isValid && content?.accessor !== 'pdf') {
             setValue('image', content.file)
         } else {
@@ -76,7 +41,8 @@ function ProposedLayoutView() {
             if (e?.image) {
                 dispatch(setPresentationData({
                     file: e?.image as File,
-                    title: e?.title
+                    title: e?.title,
+                    name: e.name
                 }))
                 setToggle((prev) => ({
                     ...prev,
@@ -95,27 +61,41 @@ function ProposedLayoutView() {
                 onSubmit={onSubmit}
                 className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
             >
-                <div className="mb-6">
+                <div className="mb-1">
                     <label
                         htmlFor="large-input"
-                        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                        className="block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                        Title
+                        Customer Name
+                    </label>
+                    <input
+                        type="text"
+                        {...register('name')}
+                        id="large-input"
+                        className={`block w-full rounded-lg bg-gray-50 text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
+                    />
+                    {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                        <IoIosHelpCircleOutline className="text-sm my-1" />
+                        {errors?.title?.message}</span>}
+                </div>
+
+                <div className="mb-3">
+                    <label
+                        htmlFor="large-input"
+                        className="block text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                        Label
                     </label>
                     <input
                         type="text"
                         {...register('title')}
                         id="large-input"
-                        placeholder="ie. - Minimal Proposed Layout"
-                        className={`block w-full p-4  rounded-lg bg-gray-50 text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
+                        className={`block w-full rounded-lg bg-gray-50 text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
                     />
                     {errors.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
                         <IoIosHelpCircleOutline className="text-sm my-1" />
                         {errors.title.message}</span>}
-
                 </div>
-
-
                 <div
                     className={` p-5 relative border-4 border-dotted ${errors?.image ? "border-red-300" : 'border-gray-300'} rounded-lg`}
                     style={{ width: 450 }}
@@ -154,19 +134,8 @@ function ProposedLayoutView() {
                     {toggle.isLoading ? (<RiLoader4Line className="my-1 animate-spin " />) : (<FaArrowRight className="my-1" />)}
                 </button>
             </form>
-        </>
-        }
-        {/* {corpus.toggle.isImageLoading ? (<RiLoader4Line className="text-xl animate-spin " />) : (<FaUpload className="h-5 w-5" />)} */}
+        </>}
 
-        {/* <Select options={proposedLayout?.map((item) => ({ value: item.label, label: item.label }))} /> */}
-        {/* <button
-            className="border p-1 shadow-lg rounded-2xl bg-indigo-700 text-white px-3 hover:bg-indigo-900"
-            onClick={() => {
-                action.add(INIT_PROPOSED_LAYOUT_ITEM)
-            }}>
-            Click here, DB Call
-        </button> */}
-        {/* <QuotationCanvas /> */}
     </div >);
 }
 
@@ -188,6 +157,7 @@ const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
 
 type TProposedLayoutItem = { title: string, image?: File }
 const proposedLayoutSchema = yup.object().shape({
+    name: yup.string().required('Name is required'),
     title: yup.string().required('Title is required'),
     image: yup.mixed().required('Image is required'),
 });
