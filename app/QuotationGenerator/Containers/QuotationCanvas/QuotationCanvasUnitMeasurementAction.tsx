@@ -39,6 +39,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
         }));
     }, [feet, props])
 
+
     const renderQuantityContent = useMemo(() => {
         if (props.measurement.unit === 'inch') {
             // Render feet and inches input for "inch" unit
@@ -144,8 +145,17 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                     <div className="mt-7" />
 
                     <KonvaActionButton
+                        label='Start Drawing'
+                        variant={props.measurement.isStartDrawing ? 'primary' : 'secondary'}
+                        // disabled={!(props.measurement.unit && props.measurement.quantity && !!props.measurement.value)}
+                        icon={<SiExcalidraw className="my-auto text-xl" />}
+                        onClick={() => {
+                            props.setMeasurement((prev) => ({ ...prev, isStartDrawing: true }))
+                        }}
+                    />
+                    <KonvaActionButton
                         label='Finalize Unit Value'
-                        disabled={!(props.measurement.unit && props.measurement.quantity && !!props.measurement.value)}
+                        // disabled={!(props.measurement.unit && props.measurement.quantity && !!props.measurement.value)}
                         icon={<SiExcalidraw className="my-auto text-xl" />}
                         onClick={() => {
                             props.onProceed();
