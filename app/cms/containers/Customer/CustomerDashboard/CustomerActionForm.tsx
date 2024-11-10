@@ -1192,6 +1192,9 @@ export function CustomerActionForm(props: TProps) {
                                                                                     `components.${i}.data.${k}.leftImage`,
                                                                                     currentProposedLayout.url.customer
                                                                                 );
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.quantity`,
+                                                                                    currentProposedLayout.sunrooofCount);
 
                                                                                 // setValue(
                                                                                 //     `components.${i}.data.${k}.sunrooofCount`,
@@ -1283,8 +1286,8 @@ export function CustomerActionForm(props: TProps) {
                                                             const items = (value as string)?.length ? [value] : [];
                                                             console.log(items);
                                                             console.log(item);
-                                                        console.log(value);
-                                                        
+                                                            console.log(value);
+
                                                             return (
                                                                 <div key={j}>
                                                                     <ImageInput
