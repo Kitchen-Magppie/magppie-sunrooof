@@ -1225,7 +1225,7 @@ export function CustomerActionForm(props: TProps) {
                                                             );
                                                         })}
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-2 mb-2">
+                                                    {/* <div className="grid grid-cols-2 gap-2 mb-2">
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             ({ field }) => field === "text"
                                                         )?.map((item, j) => {
@@ -1251,20 +1251,24 @@ export function CustomerActionForm(props: TProps) {
                                                                 </div>
                                                             );
                                                         })}
-                                                    </div>
+                                                    </div> */}
                                                     <div className="grid grid-cols-2 gap-2">
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
                                                             const value = data[item.value];
-                                                            const items = value?.length ? [value] : [];
+                                                            const items = (value as string)?.length ? [value] : [];
+                                                            console.log(items);
+                                                            console.log(item);
+                                                        console.log(value);
+                                                        
                                                             return (
                                                                 <div key={j}>
                                                                     <ImageInput
                                                                         label={item.label}
                                                                         key={j}
                                                                         path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                        values={items}
+                                                                        values={items as string[]}
                                                                         onSuccess={(e) => {
                                                                             setValue(
                                                                                 `components.${i}.data.${k}.${item.value}`,

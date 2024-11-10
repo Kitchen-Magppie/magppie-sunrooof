@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 //====================================================================
-// import bgImg from '../../.././../assets/hero-bg.jpeg'
+// import ConverImage from '../../.././../assets/hero-bg.jpeg'
 import {
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
     KonvaAlertMessage
@@ -518,7 +518,7 @@ function QuotationCanvas() {
             <div className=" opacity-70 align-middle flex justify-center flex-col">
                 SUNROOOF
             </div>
-        </div>s
+        </div> */}
 
         <div className="container mx-auto">
             <div className="flex mt-10">

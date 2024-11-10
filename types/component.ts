@@ -223,6 +223,8 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
                 // cityName: yup.string().required(),
                 // yourPlan: yup.string().required(),
                 areaName: yup.string().required('Area Name field is Required'),
+                floor: yup.string().required('Floor field is Required'),
+                quantity: yup.number().required('Quantity field is Required'),
                 // invoiceUrl: yup.string().required(),
 
                 leftImage: yup
