@@ -119,7 +119,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                 </div>
             </div>
         );
-    }, [props, feet, inches]);
+    }, [props, feet, handleFeetChange, inches, handleInchesChange]);
 
     return (
         <div>
