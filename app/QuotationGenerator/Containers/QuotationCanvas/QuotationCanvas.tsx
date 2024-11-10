@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 //====================================================================
-import ConverImage from '../../.././../assets/hero-bg.jpeg'
+// import ConverImage from '../../.././../assets/hero-bg.jpeg'
 import {
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
     KonvaAlertMessage
@@ -500,7 +500,7 @@ function QuotationCanvas() {
     }, [image]);
 
     return (<form className="">
-        <div
+        {/* <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
             style={{
                 background: `url(${ConverImage})`,
@@ -510,7 +510,7 @@ function QuotationCanvas() {
             <div className=" opacity-70 align-middle flex justify-center flex-col">
                 SUNROOOF
             </div>
-        </div>
+        </div> */}
 
         <div className="container mx-auto">
             <div className="flex mt-10">
