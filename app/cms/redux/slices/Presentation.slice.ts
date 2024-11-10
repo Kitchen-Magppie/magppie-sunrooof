@@ -1,14 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type TPresentation = {
-    file?: File,
-    title: string,
-    name: string,
-    // sunrooofCount: number,
-}
+import { TProposedLayoutItem } from '../../../../types';
 
 interface IPresentationSlice {
-    value?: TPresentation;
+    value?: TProposedLayoutItem;
     status: 'loading' | 'success' | 'failed';
     loading: boolean,
     error: null | string | undefined;
@@ -24,7 +18,7 @@ const PresentationSlice = createSlice({
     name: 'Presentation',
     initialState,
     reducers: {
-        setPresentationData: (state, action?: PayloadAction<TPresentation>) => {
+        setPresentationData: (state, action?: PayloadAction<TProposedLayoutItem>) => {
             state.status = action.payload ? 'loading' : 'success';
             state.value = action.payload
         },
