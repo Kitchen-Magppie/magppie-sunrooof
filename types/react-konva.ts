@@ -40,11 +40,22 @@ export const INIT_CANVAS_RECT_PROPS = {
     draggable: true,
 }
 
-export type TCanvasMeasurement = { unit: string, value: number, quantity: number, pixelLength: number }
+export type TCanvasMeasurement = {
+    unit: string,
+    value: number,
+    quantity: number,
+    pixelLength: number,
+    feet: number, inches: number,
+    isStartDrawing: boolean
+}
 export const INIT_CANVAS_MEASUREMENT: TCanvasMeasurement = {
     unit: '',
     value: 0,
     quantity: 0,
     pixelLength: 0,
+    feet: 0,
+    inches: 0,
+    isStartDrawing: false
+
 }
 
