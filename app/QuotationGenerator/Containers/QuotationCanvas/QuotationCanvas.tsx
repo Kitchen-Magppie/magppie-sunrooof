@@ -39,8 +39,8 @@ import { useFirebaseStorageActions } from '../../../../hooks'
 import { useProposedLayoutAction } from '../../../cms/hooks'
 import { useFirebaseCustomerAction } from '../../../cms/utils/firebase/customer'
 
-function QuotationCanvas() {
-    const { Presentation } = useAppSelector((state) => state.Cms)
+function QuotationCanvas(props: TProps) {
+    const { Presentation } = useAppSelector(({ Cms }) => Cms)
     const [corpus, setCorpus] = useState(INIT_CANVAS_KONVA_CORPUS)
     const [isDrawingStarted, setIsDrawingStarted] = useState(false)
     const [isDrawing, setIsDrawing] = useState(false)
@@ -200,10 +200,10 @@ function QuotationCanvas() {
         node.scaleY(1)
 
         // Before updating images
-        setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+        setHistory((prev) => [...prev, { images, rectProps }]);
 
-        setImages((prevImages) =>
-            prevImages.map((img) =>
+        setImages((prev) =>
+            prev.map((img) =>
                 img.id === id ? { ...img, width, height, rotation } : img
             )
         )
@@ -214,12 +214,12 @@ function QuotationCanvas() {
 
         const lastState = history[history.length - 1];
         // Before updating images
-        setHistory((prevHistory) => [...prevHistory, { images, rectProps }]);
+        setHistory((prev) => [...prev, { images, rectProps }]);
         setImages(lastState.images);
         setRectProps(lastState.rectProps);
 
         // Remove the last state from history
-        setHistory((prevHistory) => prevHistory.slice(0, -1));
+        setHistory((prev) => prev.slice(0, -1));
     }, [history, images, rectProps])
 
     useEffect(() => {
@@ -274,7 +274,7 @@ function QuotationCanvas() {
     const StorageAction = useFirebaseStorageActions();
     const action = useFirebaseCustomerAction();
     const customers = useAppSelector((state) => state.Cms.Customer.value);
-    const handleDownload = useCallback(() => {
+    const handleDownload = useCallback(({ isRedirectBack }: { isRedirectBack: boolean }) => {
         const canvas = document.createElement('canvas')
         canvas.width = image.width
         canvas.height = image.height
@@ -330,12 +330,14 @@ function QuotationCanvas() {
                             ...currentCustomer,
                             components: currentCustomer.components?.map((item) => {
                                 if (item.value === CustomerComponentEnum.TwoDDesign) {
-                                    item.data[0].finish = args.finish
-                                    item.data[0].design = args.design
-                                    item.data[0].quantity = args.sunrooofCount
-                                    item.data[0].leftImage = args.url.customer
-                                    item.data[0].rightImage = args.url.proposed
-                                    return item;
+                                    return ({
+                                        ...item,
+                                        finish: args.finish,
+                                        design: args.design,
+                                        quantity: args.sunrooofCount,
+                                        leftImage: args.url.customer,
+                                        rightImage: args.url.proposed
+                                    });
                                 }
                                 return item;
                             }),
@@ -352,12 +354,14 @@ function QuotationCanvas() {
                             customerId: args.customerId,
                             components: INIT_CUSTOMER_ITEM.components?.map((item) => {
                                 if (item.value === CustomerComponentEnum.TwoDDesign) {
-                                    item.data[0].finish = args.finish
-                                    item.data[0].design = args.design
-                                    item.data[0].quantity = args.sunrooofCount
-                                    item.data[0].leftImage = args.url.customer
-                                    item.data[0].rightImage = args.url.proposed
-                                    return item;
+                                    return ({
+                                        ...item,
+                                        finish: args.finish,
+                                        design: args.design,
+                                        quantity: args.sunrooofCount,
+                                        leftImage: args.url.customer,
+                                        rightImage: args.url.proposed
+                                    });
                                 }
                                 return item;
                             }),
@@ -368,10 +372,13 @@ function QuotationCanvas() {
                     }
 
                     toast('Proposed image has been saved!')
-                    navigate('/cms')
                     link.click()
                     document.body.removeChild(link)
                     _.download({ url: uri, name: `proposed-layout-${uniq}` })
+                    if (isRedirectBack) {
+                        props.onToggleEditorPage(false)
+                    }
+                    navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
                 }
             })
         }
@@ -388,7 +395,8 @@ function QuotationCanvas() {
         ProposedLayoutDataAction,
         customers,
         navigate,
-        action
+        action,
+        props
     ])
 
     const handleCanvasClick = useCallback((event: TKonvaMouseEvent) => {
@@ -787,6 +795,8 @@ const INIT_IMAGE_PROPS = {
     x: 0,
     y: 0,
 }
+type TProps = { onToggleEditorPage: (e: boolean) => void }
+
 export default QuotationCanvas
 const boxHeight = 800
 const boxWidth = 1000

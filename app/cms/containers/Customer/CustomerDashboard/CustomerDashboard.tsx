@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { MdOutlineDesignServices } from "react-icons/md";
 import { MdAddchart } from "react-icons/md";
@@ -15,6 +15,9 @@ import { useProposedLayoutListener } from '../../../hooks';
 export default function CustomerDashboard() {
     useFirebaseCmsCustomerListener()
     useProposedLayoutListener()
+    useEffect(() => {
+        document.title = 'Customer | CMS'
+    }, [])
 
     const { loading, data, action } = useCustomerDashboard()
 
