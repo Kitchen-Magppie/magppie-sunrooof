@@ -499,7 +499,6 @@ function QuotationCanvas() {
         }
     }, [image]);
 
-    console.log(images)
     return (<form className="">
         <div
             className={`h-[25vh] text-white font-extrabold flex justify-center align-middle text-[100px] `}
