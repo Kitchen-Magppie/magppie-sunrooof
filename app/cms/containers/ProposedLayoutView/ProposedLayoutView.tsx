@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
-import Select from "react-select";
+// import Select from "react-select";
 
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
@@ -65,7 +65,7 @@ function ProposedLayoutView() {
                 onSubmit={onSubmit}
                 className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
             >
-                <Select
+                {/* <Select
                     theme={(theme) => ({
                         ...theme,
                         borderRadius: 6,
@@ -86,7 +86,7 @@ function ProposedLayoutView() {
                         ({ value }) => value === data.data
                     )}
                     options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
-                />
+                /> */}
                 <div className="mb-1">
                     <label
                         htmlFor="large-input"
