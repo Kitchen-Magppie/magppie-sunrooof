@@ -17,6 +17,7 @@ import {
     COMPONENT_DESIGN2D_FINISH_OPTIONS
 } from "../../mocks";
 import { _, TProposedLayoutItem } from "../../../../types";
+import MeasurementExample from "../../../QuotationGenerator/Containers/MeasurementExample";
 
 
 function ProposedLayoutView() {
@@ -165,7 +166,7 @@ function ProposedLayoutView() {
             </button>
         </form>
         }
-
+        <MeasurementExample />
     </div >);
 }
 

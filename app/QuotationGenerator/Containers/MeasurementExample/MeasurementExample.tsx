@@ -11,7 +11,7 @@ interface Measurement {
 }
 
 type TMouseEventKonva = Konva.KonvaEventObject<MouseEvent>
-export default function Canvas() {
+export default function MeasurementExample() {
     const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [isDrawing, setIsDrawing] = useState(false);
     const [currentMeasurement, setCurrentMeasurement] = useState<Measurement | null>(null);
@@ -57,65 +57,72 @@ export default function Canvas() {
     };
 
     return (
-        <Stage width={800} height={600} onMouseDown={handleCanvasClick} onMouseMove={handleMouseMove}>
-            <Layer>
-                {/* Background image in the rectangular shape */}
-                <Image image={image} x={0} y={0} width={800} height={600} />
+        <>
+            <button
+                className={`flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent font-medium text-lg rounded-md text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-indigo-600 hover:bg-indigo-700 mt-5`}
 
-                {/* Render each saved measurement with its pixel distance */}
-                {measurements.map((measurement, index) => {
-                    const distance = calculateDistance(measurement.start, measurement.end);
-                    const stroke = measurement.completed ? "red" : "black"
-                    return (
-                        <React.Fragment key={index}>
+            // onClick={() => { setIsDrawing(false) }}
+            >Start Drawing</button>
+            <Stage width={800} height={600} onMouseDown={handleCanvasClick} onMouseMove={handleMouseMove}>
+                <Layer>
+                    {/* Background image in the rectangular shape */}
+                    <Image image={image} x={0} y={0} width={800} height={600} />
+
+                    {/* Render each saved measurement with its pixel distance */}
+                    {measurements.map((measurement, index) => {
+                        const distance = calculateDistance(measurement.start, measurement.end);
+                        const stroke = measurement.completed ? "red" : "black"
+                        return (
+                            <React.Fragment key={index}>
+                                <Line
+                                    points={[
+                                        measurement.start.x,
+                                        measurement.start.y,
+                                        measurement.end.x,
+                                        measurement.end.y,
+                                    ]}
+                                    stroke={stroke}
+                                    strokeWidth={2}
+                                />
+                                <Text
+                                    x={(measurement.start.x + measurement.end.x) / 2}
+                                    y={(measurement.start.y + measurement.end.y) / 2 - 15}
+                                    text={`${distance}px`}
+                                    fontSize={15}
+                                    fill={stroke}
+                                />
+                                <Circle x={measurement.start.x} y={measurement.start.y} radius={5} fill={stroke} />
+                                <Circle x={measurement.end.x} y={measurement.end.y} radius={5} fill={stroke} />
+                            </React.Fragment>
+                        );
+                    })}
+
+                    {/* Render the current measurement being drawn */}
+                    {currentMeasurement && (
+                        <React.Fragment>
                             <Line
                                 points={[
-                                    measurement.start.x,
-                                    measurement.start.y,
-                                    measurement.end.x,
-                                    measurement.end.y,
+                                    currentMeasurement.start.x,
+                                    currentMeasurement.start.y,
+                                    currentMeasurement.end.x,
+                                    currentMeasurement.end.y,
                                 ]}
-                                stroke={stroke}
+                                stroke="gray"
                                 strokeWidth={2}
                             />
                             <Text
-                                x={(measurement.start.x + measurement.end.x) / 2}
-                                y={(measurement.start.y + measurement.end.y) / 2 - 15}
-                                text={`${distance}px`}
+                                x={(currentMeasurement.start.x + currentMeasurement.end.x) / 2}
+                                y={(currentMeasurement.start.y + currentMeasurement.end.y) / 2 - 15}
+                                text={`${calculateDistance(currentMeasurement.start, currentMeasurement.end)}px`}
                                 fontSize={15}
-                                fill={stroke}
+                                fill={'gray'}
                             />
-                            <Circle x={measurement.start.x} y={measurement.start.y} radius={5} fill={stroke} />
-                            <Circle x={measurement.end.x} y={measurement.end.y} radius={5} fill={stroke} />
+                            <Circle x={currentMeasurement.start.x} y={currentMeasurement.start.y} radius={5} fill="gray" />
+                            <Circle x={currentMeasurement.end.x} y={currentMeasurement.end.y} radius={5} fill="gray" />
                         </React.Fragment>
-                    );
-                })}
-
-                {/* Render the current measurement being drawn */}
-                {currentMeasurement && (
-                    <React.Fragment>
-                        <Line
-                            points={[
-                                currentMeasurement.start.x,
-                                currentMeasurement.start.y,
-                                currentMeasurement.end.x,
-                                currentMeasurement.end.y,
-                            ]}
-                            stroke="gray"
-                            strokeWidth={2}
-                        />
-                        <Text
-                            x={(currentMeasurement.start.x + currentMeasurement.end.x) / 2}
-                            y={(currentMeasurement.start.y + currentMeasurement.end.y) / 2 - 15}
-                            text={`${calculateDistance(currentMeasurement.start, currentMeasurement.end)}px`}
-                            fontSize={15}
-                            fill={'gray'}
-                        />
-                        <Circle x={currentMeasurement.start.x} y={currentMeasurement.start.y} radius={5} fill="gray" />
-                        <Circle x={currentMeasurement.end.x} y={currentMeasurement.end.y} radius={5} fill="gray" />
-                    </React.Fragment>
-                )}
-            </Layer>
-        </Stage>
+                    )}
+                </Layer>
+            </Stage>
+        </>
     );
 }
