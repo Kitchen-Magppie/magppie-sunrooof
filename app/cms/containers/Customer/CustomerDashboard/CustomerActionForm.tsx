@@ -28,6 +28,7 @@ import {
     // TCustomerComponentComparisonItem,
     TCustomerComponentDesign2DItem,
     TCustomerComponentFeatureItem,
+    TCustomerComponentItem,
     TCustomerComponentQuotationItem,
     TCustomerItem,
     validateCustomerItemSchema,
@@ -149,20 +150,50 @@ export function CustomerActionForm(props: TProps) {
         [StorageActions, setValue, values?.customerId]
     );
 
-    // console.log(values)
-    const totalGrossAmount = useMemo(() => {
-        const quotation = (
-            values?.components as TCustomerComponentQuotationItem[]
-        )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-        if (quotation?.data?.entries?.length) {
-            return quotation.data.entries.reduce((acc, entry) => {
-                const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-                const total = price * (entry.qty || 1);
-                return acc + total;
-            }, 0);
-        }
-        return 0;
-    }, [values?.components]);
+    console.log(values)
+    // const totalGrossAmount = useMemo(() => {
+        // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
+        //     (item) => item.value === CustomerComponentEnum.TwoDDesign
+        // );
+        // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
+        // const quotation = (
+        //     values?.components as TCustomerComponentQuotationItem[]
+        // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
+        // if (quotation?.data?.entries?.length) {
+        //     return quotation.data.entries.reduce((acc, entry) => {
+        //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+        //         const total = price * (entry.qty || 1);
+        //         return acc + total;
+        //     }, 0);
+        // }
+        // if (twoDataItem?.data?.length) {
+        //     return twoDataItem.data.reduce((acc, entry) => {
+        //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+        //         const total = price * (entry.quantity || 1);
+        //         return acc + total;
+        //     }, 0);
+        // }
+        // return 0;
+    // }, [values?.components]);
+
+    const twoDataItem = (values.components as TCustomerComponentItem[]).find(
+        (item) => item.value === CustomerComponentEnum.TwoDDesign
+    );
+    
+    // Step 1: Calculate Total Gross Amount Directly
+    let totalGrossAmount = 0;
+    
+    if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
+        totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
+            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+            const total = price * (entry.quantity || 1);
+    
+            // Log each entry’s calculation for verification
+            console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
+            
+            return acc + total;
+        }, 0);
+    }
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
@@ -326,6 +357,7 @@ export function CustomerActionForm(props: TProps) {
                             const salutations = _.labelify(QUOTATION_SALUTATION_OPTIONS);
                             const data = component as TCustomerComponentQuotationItem;
 
+                            const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
                             const discountAmount =
                                 totalGrossAmount * (data.data.discount / 100);
                             const freightCharges = 50000;
@@ -337,6 +369,8 @@ export function CustomerActionForm(props: TProps) {
                                 ? data?.data?.entries
                                 : [];
                             const hasMoreThenOne = entries?.length > 1;
+                            console.log(twoDataItem);
+                            
 
                             return (
                                 <div key={i}>
@@ -715,12 +749,12 @@ export function CustomerActionForm(props: TProps) {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {entries.map((entry, index) => {
+                                                                {twoDataItem.data.map((entry, index) => {
                                                                     const price =
                                                                         CMS_QUOTATION_OPTIONS[entry.design]?.[
                                                                         entry.finish
                                                                         ] || 0;
-                                                                    const total = price * (entry.qty || 1);
+                                                                    const total = price * (entry.quantity || 1);
 
                                                                     return (
                                                                         <tr
@@ -734,13 +768,13 @@ export function CustomerActionForm(props: TProps) {
                                                                                 {entry.design} {entry.finish}
                                                                             </td>
                                                                             <td className="border border-black px-4 py-2">
-                                                                                {entry.area}
+                                                                                {entry.areaName}
                                                                             </td>
                                                                             <td className="border border-black text-center px-4 py-2">
                                                                                 {entry.floor}
                                                                             </td>
                                                                             <td className="border border-black text-center px-4 py-2">
-                                                                                {entry.qty}
+                                                                                {entry.quantity}
                                                                             </td>
                                                                             <td className="border border-black text-center px-4 py-2">
                                                                                 ₹{price.toLocaleString()}
@@ -782,7 +816,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         Discount Amount
                                                                     </td>
                                                                     <td className="border border-black px-4 py-2 text-center">
-                                                                        ₹{discountAmount.toLocaleString()}
+                                                                        ₹{discountAmount.toLocaleString("en-IN")}
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
@@ -815,7 +849,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         Tax @ 18%
                                                                     </td>
                                                                     <td className="border border-black px-4 py-2 text-center">
-                                                                        ₹{taxAmount.toLocaleString()}
+                                                                        ₹{taxAmount.toLocaleString("en-IN")}
                                                                     </td>
                                                                 </tr>
                                                                 <tr className="font-bold">
@@ -920,12 +954,12 @@ export function CustomerActionForm(props: TProps) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {entries.map((entry, index) => {
+                                                            {twoDataItem.data.map((entry, index) => {
                                                                 const price =
                                                                     CMS_QUOTATION_OPTIONS[entry.design]?.[
                                                                     entry.finish
                                                                     ] || 0;
-                                                                const total = price * (entry.qty || 1);
+                                                                const total = price * (entry.quantity || 1);
 
                                                                 return (
                                                                     <tr
@@ -939,13 +973,13 @@ export function CustomerActionForm(props: TProps) {
                                                                             {entry.design} {entry.finish}
                                                                         </td>
                                                                         <td className="border border-black px-4 py-2">
-                                                                            {entry.area}
+                                                                            {entry.areaName}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
                                                                             {entry.floor}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
-                                                                            {entry.qty}
+                                                                            {entry.quantity}
                                                                         </td>
                                                                         <td className="border border-black text-center px-4 py-2">
                                                                             ₹{price.toLocaleString()}
@@ -1250,33 +1284,6 @@ export function CustomerActionForm(props: TProps) {
                                                             );
                                                         })}
                                                     </div>
-                                                    {/* <div className="grid grid-cols-2 gap-2 mb-2">
-                                                        {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                            ({ field }) => field === "text"
-                                                        )?.map((item, j) => {
-                                                            return (
-                                                                <div
-                                                                    className="bg-white"
-                                                                    key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                >
-                                                                    <label className="block text-sm font-medium text-gray-700">
-                                                                        {item.label}
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        {...register(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                        placeholder={item.placeholder}
-                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                                                    />
-                                                                    {renderErrorMessage(
-                                                                        `components.${i}.data.${k}.${item.value}`
-                                                                    )}
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div> */}
                                                     <div className="grid grid-cols-2 gap-2">
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
