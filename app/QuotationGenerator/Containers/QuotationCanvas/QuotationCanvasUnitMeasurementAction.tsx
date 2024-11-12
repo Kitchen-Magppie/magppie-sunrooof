@@ -153,7 +153,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
             </div>
             <div className="flex gap-1 align-middle flex-row justify-between">
                 {renderQuantityContent}
-                <div className="">
+                <div className="flex flex-col">
                     <div className="mt-7" />
 
                     <KonvaActionButton

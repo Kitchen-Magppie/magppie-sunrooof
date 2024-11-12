@@ -15,13 +15,6 @@ function QuotationCanvasEditAction(props: TProps) {
                 options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                 onChange={(e) => {
                     props?.onChangeSunroofWindow(e.value)
-                    // setCorpus((prev) => ({
-                    //     ...prev,
-                    //     selection: {
-                    //         ...prev.selection,
-                    //         sunrooofWindow: e.value,
-                    //     },
-                    // }))
                 }}
             />
         </div>

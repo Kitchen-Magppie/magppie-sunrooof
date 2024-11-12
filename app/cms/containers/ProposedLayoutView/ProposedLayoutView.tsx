@@ -17,7 +17,7 @@ import {
     COMPONENT_DESIGN2D_FINISH_OPTIONS
 } from "../../mocks";
 import { _, TProposedLayoutItem } from "../../../../types";
-import MeasurementExample from "../../../QuotationGenerator/Containers/MeasurementExample";
+// import MeasurementExample from "../../../QuotationGenerator/Containers/MeasurementExample";
 
 
 function ProposedLayoutView() {
@@ -68,7 +68,7 @@ function ProposedLayoutView() {
             }
         }, 2000)
     })
-    return (<div>
+    return (<div className="container mx-auto">
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
 
         {toggle?.isOpenEditorPage ? <QuotationCanvas onToggleEditorPage={(isOpenEditorPage) => {
@@ -166,7 +166,7 @@ function ProposedLayoutView() {
             </button>
         </form>
         }
-        <MeasurementExample />
+        {/* <MeasurementExample /> */}
     </div >);
 }
 
