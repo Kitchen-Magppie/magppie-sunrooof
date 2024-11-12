@@ -3,15 +3,17 @@ import { RouteObject } from 'react-router-dom'
 
 //====================================================================
 
-import { SignIn } from '../containers'
 import { useFirebaseCmsAuthListener } from '../utils/firebase'
 import { ProtectedRoute } from '../components'
 import { PageProgress } from '../../../components'
 
+// Lazy components
 // ======================================================================
 
 const CustomerView = lazy(() => import('../containers/Customer'))
 const ProposedLayoutView = lazy(() => import('../containers/ProposedLayoutView'))
+const SignInView = lazy(() => import('../containers/auth/SignIn/SignIn'))
+
 
 export default function CmsRoutes() {
     useFirebaseCmsAuthListener()
@@ -21,7 +23,7 @@ export default function CmsRoutes() {
         children: [
             {
                 path: 'sign-in',
-                element: <SignIn />,
+                element: <SignInView />,
             },
             {
                 path: '',
