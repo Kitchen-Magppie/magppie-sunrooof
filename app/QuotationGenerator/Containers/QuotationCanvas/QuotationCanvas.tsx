@@ -63,6 +63,7 @@ function QuotationCanvas(props: TProps) {
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const [imageProps, setImageProps] = useState(INIT_IMAGE_PROPS);
 
+    console.log(measurement)
     useEffect(() => {
         const img = new window.Image()
         const currentItem = CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
@@ -447,32 +448,34 @@ function QuotationCanvas(props: TProps) {
     }, [])
 
     const renderUnitMeasurementComponent = useMemo(() => {
-        return (
-            linePoints.length > 0 && (
-                <>
-                    <Line
-                        points={linePoints}
-                        stroke="red"
-                        strokeWidth={2}
-                        lineCap="round"
-                        lineJoin="round"
-                    />
-                    <Circle
-                        x={linePoints[0]}
-                        y={linePoints[1]}
-                        radius={4} // Adjust radius as needed
-                        fill="red"
-                    />
-                    <Circle
-                        x={linePoints[2]}
-                        y={linePoints[3]}
-                        radius={4} // Adjust radius as needed
-                        fill="red"
-                    />
-                </>
+        if (measurement.isStartDrawing)
+            return (
+                linePoints.length > 0 && (
+                    <>
+                        <Line
+                            points={linePoints}
+                            stroke="red"
+                            strokeWidth={2}
+                            lineCap="round"
+                            lineJoin="round"
+                        />
+                        <Circle
+                            x={linePoints[0]}
+                            y={linePoints[1]}
+                            radius={4} // Adjust radius as needed
+                            fill="red"
+                        />
+                        <Circle
+                            x={linePoints[2]}
+                            y={linePoints[3]}
+                            radius={4} // Adjust radius as needed
+                            fill="red"
+                        />
+                    </>
+                )
             )
-        )
-    }, [linePoints])
+        return <></>
+    }, [linePoints, measurement.isStartDrawing])
 
 
     useEffect(() => {
