@@ -39,6 +39,13 @@ import { useFirebaseStorageActions } from '../../../../hooks'
 import { useProposedLayoutAction } from '../../../cms/hooks'
 import { useFirebaseCustomerAction } from '../../../cms/utils/firebase/customer'
 
+// type TImageProps = {
+//     image: HTMLImageElement;
+//     width: number;
+//     height: number;
+//     x: number;
+//     y: number;
+// }
 function QuotationCanvas(props: TProps) {
     const { Presentation } = useAppSelector(({ Cms }) => Cms)
     const [corpus, setCorpus] = useState(INIT_CANVAS_KONVA_CORPUS)
@@ -62,6 +69,44 @@ function QuotationCanvas(props: TProps) {
     const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const [imageProps, setImageProps] = useState(INIT_IMAGE_PROPS);
+    // const [plotImage, setPlotImage] = useState<TImageProps | null>(null)
+
+
+    // useEffect(() => {
+    //     if (corpus.selection.image?.size) {
+
+    //         const reader = new FileReader();
+
+
+    //         reader.onload = () => {
+    //             const img = new Image();
+    //             img.src = corpus.selection.image?.src;
+
+    //             img.onload = () => {
+    //                 const imageWidth = img.width;
+    //                 const imageHeight = img.height;
+    //                 const canvasWidth = 500; // Adjust to your canvas width
+    //                 const canvasHeight = 400; // Adjust to your canvas height
+
+    //                 // Calculate scale factor to fit the image within the canvas
+    //                 const scaleX = Math.min(canvasWidth / imageWidth, 1);
+    //                 const scaleY = Math.min(canvasHeight / imageHeight, 1);
+
+    //                 // Calculate x and y positions to center the image
+    //                 const x = (canvasWidth - imageWidth * scaleX) / 2;
+    //                 const y = (canvasHeight - imageHeight * scaleY) / 2;
+
+    //                 setPlotImage({
+    //                     image: img,
+    //                     width: imageWidth * scaleX,
+    //                     height: imageHeight * scaleY,
+    //                     x,
+    //                     y,
+    //                 });
+    //             }
+    //         }
+    //     }
+    // }, [corpus.selection.image?.size, corpus.selection.image?.src])
 
     useEffect(() => {
         const img = new window.Image()
@@ -537,27 +582,49 @@ function QuotationCanvas(props: TProps) {
             remark={KonvaAlertMessage.Measurement.remark}
         />
     }, [corpus.selection.tool, isDrawingStarted])
+
     useEffect(() => {
         if (image) {
-            const aspectRatio = image.width / image.height;
-            let width: number, height: number;
+            const imageWidth = image.width;
+            const imageHeight = image.height;
+            const canvasWidth = stageWidth; // Adjust to your canvas width
+            const canvasHeight = stageHeight; // Adjust to your canvas height
 
-            // Calculate width and height to fit the image within the box
-            if (aspectRatio > boxWidth / boxHeight) {
-                width = boxWidth;
-                height = boxWidth / aspectRatio;
-            } else {
-                width = boxHeight * aspectRatio;
-                height = boxHeight;
-            }
+            // Calculate scale factor to fit the image within the canvas
+            const scaleX = Math.min(canvasWidth / imageWidth, 1);
+            const scaleY = Math.min(canvasHeight / imageHeight, 1);
 
-            // Center the image in the box
-            const x = (boxWidth - width) / 2;
-            const y = (boxHeight - height) / 2;
+            // Calculate x and y positions to center the image
+            const x = (canvasWidth - imageWidth * scaleX) / 2;
+            const y = (canvasHeight - imageHeight * scaleY) / 2;
 
-            setImageProps({ width, height, x, y });
+            setImageProps({
+                // image: img,
+                width: imageWidth * scaleX,
+                height: imageHeight * scaleY,
+                x: x,
+                y: y,
+            });
+
+            // const aspectRatio = image.width / image.height;
+            // let width: number, height: number;
+
+            // // Calculate width and height to fit the image within the box
+            // if (aspectRatio > boxWidth / boxHeight) {
+            //     width = boxWidth;
+            //     height = boxWidth / aspectRatio;
+            // } else {
+            //     width = boxHeight * aspectRatio;
+            //     height = boxHeight;
+            // }
+
+            // // Center the image in the box
+            // const x = (boxWidth - width) / 2;
+            // const y = (boxHeight - height) / 2;
+
+            // setImageProps({ width, height, x, y });
         }
-    }, [image]);
+    }, [image, stageWidth]);
 
     return (<form className="">
         <div className="grid grid-cols-12 gap-10 mt-10 justify-start">
@@ -603,7 +670,7 @@ function QuotationCanvas(props: TProps) {
                     <Stage
 
                         width={stageWidth}
-                        height={700}
+                        height={stageHeight}
                         // style={{ background: "1px solid red" }}
                         // height={CANVAS_STAGE_HEIGHT}
                         ref={stageRef}
@@ -753,8 +820,9 @@ const INIT_IMAGE_PROPS = {
     x: 0,
     y: 0,
 }
+const stageHeight = 700
 type TProps = { onToggleEditorPage: (e: boolean) => void }
 
 export default QuotationCanvas
-const boxHeight = 800
-const boxWidth = 1000
+// const boxHeight = 800
+// const boxWidth = 1000
