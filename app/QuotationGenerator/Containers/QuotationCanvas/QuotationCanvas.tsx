@@ -39,13 +39,7 @@ import { useFirebaseStorageActions } from '../../../../hooks'
 import { useProposedLayoutAction } from '../../../cms/hooks'
 import { useFirebaseCustomerAction } from '../../../cms/utils/firebase/customer'
 
-// type TImageProps = {
-//     image: HTMLImageElement;
-//     width: number;
-//     height: number;
-//     x: number;
-//     y: number;
-// }
+
 function QuotationCanvas(props: TProps) {
     const { Presentation } = useAppSelector(({ Cms }) => Cms)
     const [corpus, setCorpus] = useState(INIT_CANVAS_KONVA_CORPUS)
@@ -255,16 +249,15 @@ function QuotationCanvas(props: TProps) {
     }, [images, rectProps])
 
     const handleUndo = useCallback(() => {
-        if (history.length === 0) return;
-
-        const lastState = history[history.length - 1];
-        // Before updating images
-        setHistory((prev) => [...prev, { images, rectProps }]);
-        setImages(lastState.images);
-        setRectProps(lastState.rectProps);
-
-        // Remove the last state from history
-        setHistory((prev) => prev.slice(0, -1));
+        if (history.length) {
+            const lastState = history[history.length - 1];
+            // Before updating images
+            setHistory((prev) => [...prev, { images, rectProps }]);
+            setImages(lastState.images);
+            setRectProps(lastState.rectProps);
+            // Remove the last state from history
+            setHistory((prev) => prev.slice(0, -1));
+        }
     }, [history, images, rectProps])
 
     useEffect(() => {
@@ -625,6 +618,7 @@ function QuotationCanvas(props: TProps) {
             // setImageProps({ width, height, x, y });
         }
     }, [image, stageWidth]);
+    console.log(corpus.selection.tool)
 
     return (<form className="">
         <div className="grid grid-cols-12 gap-10 mt-10 justify-start">
@@ -826,3 +820,10 @@ type TProps = { onToggleEditorPage: (e: boolean) => void }
 export default QuotationCanvas
 // const boxHeight = 800
 // const boxWidth = 1000
+// type TImageProps = {
+//     image: HTMLImageElement;
+//     width: number;
+//     height: number;
+//     x: number;
+//     y: number;
+// }
