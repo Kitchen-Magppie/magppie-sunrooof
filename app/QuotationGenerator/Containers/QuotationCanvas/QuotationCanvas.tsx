@@ -196,7 +196,8 @@ function QuotationCanvas(props: TProps) {
                 y: node.y(),
                 width: node.width() * newScaleX,
                 height: node.height() * newScaleY,
-            }));
+                rotation: node.rotation(), // Update rotation
+            }))
 
             node.scaleX(1);
             node.scaleY(1);
@@ -600,8 +601,8 @@ useEffect(() => {
                             measurement={measurement}
                             setMeasurement={setMeasurement}
                             onProceed={() => {
-                                if (!measurement.isStartDrawing) return;
-                                    setIsDrawingStarted(true)
+                                if (!measurement.isStartDrawing) return
+                                setIsDrawingStarted(true)
                             }}
                         />
                     )}
@@ -655,6 +656,64 @@ useEffect(() => {
                                 )}
                                 {isDrawingStarted ? (
                                     <>
+                                        {/* Outer Frame */}
+                                        <Rect
+                                            x={
+                                                rectProps.x -
+                                                measurement.value *
+                                                    patternImageData?.outerFrameGap
+                                            }
+                                            y={
+                                                rectProps.y -
+                                                measurement.value *
+                                                    patternImageData?.outerFrameGap
+                                            }
+                                            width={
+                                                rectProps.width +
+                                                2 *
+                                                    measurement.value *
+                                                    patternImageData?.outerFrameGap
+                                            }
+                                            height={
+                                                rectProps.height +
+                                                2 *
+                                                    measurement.value *
+                                                    patternImageData?.outerFrameGap
+                                            }
+                                            fill="#2222"
+                                            listening={false} // Not interactive
+                                        />
+
+                                        {/* Dashed Line for Inner Frame Gap */}
+                                        <Rect
+                                            x={
+                                                rectProps.x +
+                                                measurement.value *
+                                                    patternImageData?.innerFrameGap
+                                            }
+                                            y={
+                                                rectProps.y +
+                                                measurement.value *
+                                                    patternImageData?.innerFrameGap
+                                            }
+                                            width={
+                                                rectProps.width -
+                                                2 *
+                                                    measurement.value *
+                                                    patternImageData?.innerFrameGap
+                                            }
+                                            height={
+                                                rectProps.height -
+                                                2 *
+                                                    measurement.value *
+                                                    patternImageData?.innerFrameGap
+                                            }
+                                            stroke="#000"
+                                            strokeWidth={2}
+                                            dash={[10, 5]} // Dashed line
+                                            listening={false} // Not interactive
+                                        />
+
                                         <Rect
                                             {...rectProps}
                                             ref={rectRef}
@@ -682,62 +741,67 @@ useEffect(() => {
 
                                         {/* Images */}
                                         {images.map((img) => (
-                                            <KonvaImage
-                                                key={img.id}
-                                                image={
-                                                    img.image as CanvasImageSource
-                                                }
-                                                x={img.x}
-                                                y={img.y}
-                                                width={img.width}
-                                                height={img.height}
-                                                rotation={img.rotation}
-                                                fill="red"
-                                                filters={[Konva.Filters.RGBA]}
-                                                // red={92}
-                                                // green={64}
-                                                // blue={51}
-                                                //alpha={100 / 255} // Convert alpha to a value between 0 and 1
-                                                draggable
-                                                onClick={(e) =>
-                                                    handleImageSelect(e, img.id)
-                                                }
-                                                onDragEnd={(e) =>
-                                                    handleImageDragEnd(
-                                                        e,
-                                                        img.id
-                                                    )
-                                                }
-                                                onTransformEnd={(e) =>
-                                                    handleImageTransformEnd(
-                                                        e,
-                                                        img.id
-                                                    )
-                                                }
-                                                onMouseDown={(
-                                                    e: TKonvaMouseEvent
-                                                ) => {
-                                                    console.log(e)
-                                                    if (isDrawing) return
-                                                    setSelectedObjectId(img.id)
-                                                }}
-                                                ref={(node) => {
-                                                    imageRefs.current[img.id] =
-                                                        node
-                                                    if (
-                                                        node &&
-                                                        selectedImageId ===
-                                                            img.id
-                                                    ) {
-                                                        transformerRef.current.nodes(
-                                                            [node]
-                                                        )
-                                                        transformerRef.current
-                                                            .getLayer()
-                                                            .batchDraw()
+                                            <>
+                                                {/* Child Image */}
+                                                <KonvaImage
+                                                    key={img.id}
+                                                    image={
+                                                        img.image as CanvasImageSource
                                                     }
-                                                }}
-                                            />
+                                                    x={img.x}
+                                                    y={img.y}
+                                                    width={img.width}
+                                                    height={img.height}
+                                                    rotation={img.rotation}
+                                                    draggable
+                                                    onClick={(e) =>
+                                                        handleImageSelect(
+                                                            e,
+                                                            img.id
+                                                        )
+                                                    }
+                                                    onDragEnd={(e) =>
+                                                        handleImageDragEnd(
+                                                            e,
+                                                            img.id
+                                                        )
+                                                    }
+                                                    onTransformEnd={(e) =>
+                                                        handleImageTransformEnd(
+                                                            e,
+                                                            img.id
+                                                        )
+                                                    }
+                                                    ref={(node) => {
+                                                        imageRefs.current[
+                                                            img.id
+                                                        ] = node
+                                                        if (
+                                                            node &&
+                                                            selectedImageId ===
+                                                                img.id
+                                                        ) {
+                                                            transformerRef.current.nodes(
+                                                                [node]
+                                                            )
+                                                            transformerRef.current
+                                                                .getLayer()
+                                                                .batchDraw()
+                                                        }
+                                                    }}
+                                                />
+
+                                                {/* Purple Mask */}
+                                                <Rect
+                                                    x={img.x}
+                                                    y={img.y}
+                                                    width={img.width}
+                                                    height={img.height}
+                                                    fill="purple"
+                                                    opacity={0.3} // Semi-transparent mask
+                                                    listening={false} // Not interactive
+                                                />
+                                            </>
                                         ))}
 
                                         <Transformer ref={transformerRef} />
