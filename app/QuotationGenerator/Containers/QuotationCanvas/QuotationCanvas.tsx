@@ -47,7 +47,6 @@ function QuotationCanvas(props: TProps) {
     const [isDrawing, setIsDrawing] = useState(false)
     const [linePoints, setLinePoints] = useState<number[]>([])
     const stageContainerRef = useRef<HTMLDivElement>(null);
-    const [stageWidth, setStageWidth] = useState<number>(800)
     const [measurement, setMeasurement] = useState(INIT_CANVAS_MEASUREMENT)
     const [rectProps, setRectProps] = useState(INIT_CANVAS_RECT_PROPS)
     const stageRef = useRef<Konva.Stage>(null)
@@ -515,35 +514,6 @@ function QuotationCanvas(props: TProps) {
     }, [linePoints, measurement.isStartDrawing])
 
 
-    useEffect(() => {
-        const handleResize = () => {
-            setStageWidth(window.innerWidth)
-            // setStageHeight(window.innerHeight)
-        };
-
-        // Add event listener on component mount
-        window.addEventListener('resize', handleResize);
-
-        // Clean up event listener on component unmount
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-
-    }, [])
-
-    // Update the stage width to match the container's width
-    const updateStageSize = () => {
-        if (stageContainerRef.current) {
-            setStageWidth(stageContainerRef.current.clientWidth);
-        }
-    };
-
-    useEffect(() => {
-        updateStageSize();
-        window.addEventListener('resize', updateStageSize);
-        return () => window.removeEventListener('resize', updateStageSize);
-    }, []);
-
     const renderGuideAlert = useMemo(() => {
         if (isDrawingStarted) {
 
@@ -576,222 +546,210 @@ function QuotationCanvas(props: TProps) {
         />
     }, [corpus.selection.tool, isDrawingStarted])
 
-    useEffect(() => {
-        if (image) {
-            const imageWidth = image.width;
-            const imageHeight = image.height;
-            const canvasWidth = stageWidth; // Adjust to your canvas width
-            const canvasHeight = stageHeight; // Adjust to your canvas height
+useEffect(() => {
+    if (image) {
+        const imageWidth = image.width
+        const imageHeight = image.height
 
-            // Calculate scale factor to fit the image within the canvas
-            const scaleX = Math.min(canvasWidth / imageWidth, 1);
-            const scaleY = Math.min(canvasHeight / imageHeight, 1);
+        // Center the image (although it's not necessary, since the stage matches the image size)
+        setImageProps({
+            width: imageWidth, // Use original image width
+            height: imageHeight, // Use original image height
+            x: 0, // Start at top-left corner
+            y: 0, // Start at top-left corner
+        })
+    }
+}, [image])
 
-            // Calculate x and y positions to center the image
-            const x = (canvasWidth - imageWidth * scaleX) / 2;
-            const y = (canvasHeight - imageHeight * scaleY) / 2;
-
-            setImageProps({
-                // image: img,
-                width: imageWidth * scaleX,
-                height: imageHeight * scaleY,
-                x: x,
-                y: y,
-            });
-
-            // const aspectRatio = image.width / image.height;
-            // let width: number, height: number;
-
-            // // Calculate width and height to fit the image within the box
-            // if (aspectRatio > boxWidth / boxHeight) {
-            //     width = boxWidth;
-            //     height = boxWidth / aspectRatio;
-            // } else {
-            //     width = boxHeight * aspectRatio;
-            //     height = boxHeight;
-            // }
-
-            // // Center the image in the box
-            // const x = (boxWidth - width) / 2;
-            // const y = (boxHeight - height) / 2;
-
-            // setImageProps({ width, height, x, y });
-        }
-    }, [image, stageWidth]);
-    console.log(corpus.selection.tool)
-
-    return (<form className="">
-        <div className="grid grid-cols-12 gap-10 mt-10 justify-start">
-            <div className="col-span-4">
-                <div className="mb-4">
-                    {renderGuideAlert}
+    return (
+        <form className="">
+            <div className="grid grid-cols-12 gap-10 mt-10 justify-start">
+                <div className="col-span-4">
+                    <div className="mb-4">{renderGuideAlert}</div>
+                    {isDrawingStarted ? (
+                        <QuotationCanvasEditAction
+                            onToolToggle={(tool) => {
+                                setCorpus((prev) => ({
+                                    ...prev,
+                                    selection: {
+                                        ...prev.selection,
+                                        tool:
+                                            prev.selection.tool === tool
+                                                ? CanvasToolEnum.None
+                                                : tool,
+                                    },
+                                }))
+                            }}
+                            tool={corpus.selection.tool}
+                            handleDownload={handleDownload}
+                            handleUndo={handleUndo}
+                            onChangeSunroofWindow={(sunrooofWindow) => {
+                                setCorpus((prev) => ({
+                                    ...prev,
+                                    selection: {
+                                        ...prev.selection,
+                                        sunrooofWindow,
+                                    },
+                                }))
+                            }}
+                        />
+                    ) : (
+                        <QuotationCanvasUnitMeasurementAction
+                            measurement={measurement}
+                            setMeasurement={setMeasurement}
+                            onProceed={() => {
+                                setIsDrawingStarted(true)
+                            }}
+                        />
+                    )}
                 </div>
-                {isDrawingStarted
-                    ? <QuotationCanvasEditAction
-                        onToolToggle={(tool) => {
-                            setCorpus((prev) => ({
-                                ...prev,
-                                selection: {
-                                    ...prev.selection,
-                                    tool: prev.selection.tool === tool ? CanvasToolEnum.None : tool
+                <div
+                    className="col-span-8 border border-gray-300 bg-white"
+                    ref={stageContainerRef}
+                >
+                    {Presentation?.value?.file?.size ? (
+                        <Stage
+                            width={imageProps.width} // Set the stage width to match the image width
+                            height={imageProps.height} // Set the stage height to match the image height
+                            // style={{ background: "1px solid red" }}
+                            // height={CANVAS_STAGE_HEIGHT}
+                            ref={stageRef}
+                            onClick={handleCanvasClick}
+                            onMouseMove={handleMouseMove}
+                            onMouseDown={(e) => {
+                                if (isDrawing) return
+                                // If the clicked target is the stage, clear selection
+                                if (e.target === stageRef.current) {
+                                    transformerRef.current.detach()
+                                    setSelectedObjectId(null)
                                 }
-                            }))
-                        }}
-                        tool={corpus.selection.tool}
-                        handleDownload={handleDownload}
-                        handleUndo={handleUndo}
-                        onChangeSunroofWindow={(sunrooofWindow) => {
-                            setCorpus((prev) => ({
-                                ...prev,
-                                selection: {
-                                    ...prev.selection,
-                                    sunrooofWindow,
-                                },
-                            }))
-                        }}
-                    />
-                    : <QuotationCanvasUnitMeasurementAction
-                        measurement={measurement}
-                        setMeasurement={setMeasurement}
-
-                        onProceed={() => {
-                            setIsDrawingStarted(true)
-                        }}
-                    />}
-            </div>
-            <div className="col-span-8 border border-gray-300 bg-white" ref={stageContainerRef}>
-                {Presentation?.value?.file?.size ? (
-                    <Stage
-
-                        width={stageWidth}
-                        height={stageHeight}
-                        // style={{ background: "1px solid red" }}
-                        // height={CANVAS_STAGE_HEIGHT}
-                        ref={stageRef}
-                        onClick={handleCanvasClick}
-                        onMouseMove={handleMouseMove}
-                        onMouseDown={(e) => {
-                            if (isDrawing) return;
-                            // If the clicked target is the stage, clear selection
-                            if (e.target === stageRef.current) {
-                                transformerRef.current.detach();
-                                setSelectedObjectId(null);
-                            }
-                        }}
-                    >
-                        <Layer>
-                            {Presentation?.value?.file?.size ? (<KonvaImage
-                                image={image}
-                                listening
-                                x={imageProps.x}
-                                y={imageProps.y}
-                                width={imageProps.width}
-                                height={imageProps.height}
-                                // crop={{ x: 100, y: 100, width: 100, height: 100 }}
-                                // draggable
-                                onClick={(e) => {
-                                    if (selectedObjectId) {
-                                        e.cancelBubble = true; // Prevent event from reaching the stage
-                                        setSelectedObjectId(null); // Clear selection
-                                        transformerRef.current.detach();
-                                        transformerRef.current.getLayer().batchDraw();
-                                    }
-
-                                }} />) : ''}
-                            {isDrawingStarted ? (
-                                <>
-                                    <Rect
-                                        {...rectProps}
-                                        ref={rectRef}
-                                        draggable={true}
-                                        listening={true}
-                                        hitStrokeWidth={10} // Adjust as needed
-                                        onDragEnd={(e) => {
-                                            setRectProps((prev) => ({
-                                                ...prev,
-                                                x: e.target.x(),
-                                                y: e.target.y(),
-                                            }));
-                                            updateImagesInRect();
-                                        }}
-                                        onTransformEnd={handleRectTransform}
-                                        onClick={handleRectSelect}
-                                        onMouseDown={(e: TKonvaMouseEvent) => {
-                                            console.log(e)
-                                            if (isDrawing) return;
-                                            setSelectedObjectId('parent');
+                            }}
+                        >
+                            <Layer>
+                                {Presentation?.value?.file?.size ? (
+                                    <KonvaImage
+                                        image={image}
+                                        listening
+                                        x={imageProps.x}
+                                        y={imageProps.y}
+                                        width={imageProps.width}
+                                        height={imageProps.height}
+                                        // crop={{ x: 100, y: 100, width: 100, height: 100 }}
+                                        // draggable
+                                        onClick={(e) => {
+                                            if (selectedObjectId) {
+                                                e.cancelBubble = true // Prevent event from reaching the stage
+                                                setSelectedObjectId(null) // Clear selection
+                                                transformerRef.current.detach()
+                                                transformerRef.current
+                                                    .getLayer()
+                                                    .batchDraw()
+                                            }
                                         }}
                                     />
-
-                                    {/* Images */}
-                                    {images.map((img) => (
-                                        <KonvaImage
-                                            key={img.id}
-                                            image={img.image as CanvasImageSource}
-                                            x={img.x}
-                                            y={img.y}
-                                            width={img.width}
-                                            height={img.height}
-                                            rotation={img.rotation}
-                                            fill="red"
-                                            filters={[Konva.Filters.RGBA]}
-                                            // red={92}
-                                            // green={64}
-                                            // blue={51}
-                                            //alpha={100 / 255} // Convert alpha to a value between 0 and 1
-                                            draggable
-                                            onClick={(e) => handleImageSelect(e,
-                                                img.id
-                                            )}
-                                            onDragEnd={(e) =>
-                                                handleImageDragEnd(
-                                                    e,
-                                                    img.id
-                                                )
-                                            }
-                                            onTransformEnd={(e) =>
-                                                handleImageTransformEnd(
-                                                    e,
-                                                    img.id
-                                                )
-                                            }
-                                            onMouseDown={(e: TKonvaMouseEvent) => {
-                                                console.log(e)
-                                                if (isDrawing) return;
-                                                setSelectedObjectId(img.id);
+                                ) : (
+                                    ''
+                                )}
+                                {isDrawingStarted ? (
+                                    <>
+                                        <Rect
+                                            {...rectProps}
+                                            ref={rectRef}
+                                            draggable={true}
+                                            listening={true}
+                                            hitStrokeWidth={10} // Adjust as needed
+                                            onDragEnd={(e) => {
+                                                setRectProps((prev) => ({
+                                                    ...prev,
+                                                    x: e.target.x(),
+                                                    y: e.target.y(),
+                                                }))
+                                                updateImagesInRect()
                                             }}
-                                            ref={(node) => {
-                                                imageRefs.current[img.id] = node;
-                                                if (
-                                                    node &&
-                                                    selectedImageId ===
-                                                    img.id
-                                                ) {
-                                                    transformerRef.current.nodes(
-                                                        [node]
-                                                    )
-                                                    transformerRef.current
-                                                        .getLayer()
-                                                        .batchDraw()
-                                                }
+                                            onTransformEnd={handleRectTransform}
+                                            onClick={handleRectSelect}
+                                            onMouseDown={(
+                                                e: TKonvaMouseEvent
+                                            ) => {
+                                                console.log(e)
+                                                if (isDrawing) return
+                                                setSelectedObjectId('parent')
                                             }}
                                         />
-                                    ))}
 
-                                    <Transformer ref={transformerRef} />
-                                </>
-                            ) : (
-                                renderUnitMeasurementComponent
-                            )}
-                        </Layer>
-                    </Stage>
-                ) : (
-                    ''
-                )}
+                                        {/* Images */}
+                                        {images.map((img) => (
+                                            <KonvaImage
+                                                key={img.id}
+                                                image={
+                                                    img.image as CanvasImageSource
+                                                }
+                                                x={img.x}
+                                                y={img.y}
+                                                width={img.width}
+                                                height={img.height}
+                                                rotation={img.rotation}
+                                                fill="red"
+                                                filters={[Konva.Filters.RGBA]}
+                                                // red={92}
+                                                // green={64}
+                                                // blue={51}
+                                                //alpha={100 / 255} // Convert alpha to a value between 0 and 1
+                                                draggable
+                                                onClick={(e) =>
+                                                    handleImageSelect(e, img.id)
+                                                }
+                                                onDragEnd={(e) =>
+                                                    handleImageDragEnd(
+                                                        e,
+                                                        img.id
+                                                    )
+                                                }
+                                                onTransformEnd={(e) =>
+                                                    handleImageTransformEnd(
+                                                        e,
+                                                        img.id
+                                                    )
+                                                }
+                                                onMouseDown={(
+                                                    e: TKonvaMouseEvent
+                                                ) => {
+                                                    console.log(e)
+                                                    if (isDrawing) return
+                                                    setSelectedObjectId(img.id)
+                                                }}
+                                                ref={(node) => {
+                                                    imageRefs.current[img.id] =
+                                                        node
+                                                    if (
+                                                        node &&
+                                                        selectedImageId ===
+                                                            img.id
+                                                    ) {
+                                                        transformerRef.current.nodes(
+                                                            [node]
+                                                        )
+                                                        transformerRef.current
+                                                            .getLayer()
+                                                            .batchDraw()
+                                                    }
+                                                }}
+                                            />
+                                        ))}
+
+                                        <Transformer ref={transformerRef} />
+                                    </>
+                                ) : (
+                                    renderUnitMeasurementComponent
+                                )}
+                            </Layer>
+                        </Stage>
+                    ) : (
+                        ''
+                    )}
+                </div>
             </div>
-        </div>
-
-    </form>
+        </form>
     )
 }
 
@@ -814,7 +772,7 @@ const INIT_IMAGE_PROPS = {
     x: 0,
     y: 0,
 }
-const stageHeight = 700
+
 type TProps = { onToggleEditorPage: (e: boolean) => void }
 
 export default QuotationCanvas
