@@ -56,6 +56,5 @@ export const INIT_CANVAS_MEASUREMENT: TCanvasMeasurement = {
     feet: 0,
     inches: 0,
     isStartDrawing: false
-
 }
 

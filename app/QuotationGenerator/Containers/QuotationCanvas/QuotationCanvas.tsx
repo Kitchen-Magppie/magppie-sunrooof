@@ -28,6 +28,7 @@ import {
     INIT_CANVAS_KONVA_CORPUS,
     INIT_CANVAS_MEASUREMENT,
     INIT_CANVAS_RECT_PROPS,
+    TComponentComparisonDataOption,
     TKonvaImageItem
 } from '../../../../types'
 import {
@@ -53,7 +54,8 @@ function QuotationCanvas(props: TProps) {
     const rectRef = useRef<Konva.Rect>(null)
     const transformerRef = useRef<Konva.Transformer>(null)
     const [image, setImage] = useImage(corpus.selection.image)
-    const [patternImage, setPatternImage] = useState(null)
+    const [patternImageData, setPatternImageData] =
+        useState<TComponentComparisonDataOption>(null);
     const [images, setImages] = useState<TKonvaImageItem[]>([])
     const [selectedImageId, setSelectedImageId] = useState<string | null>(null)
     const navigate = useNavigate()
@@ -110,7 +112,7 @@ function QuotationCanvas(props: TProps) {
             img.src = currentItem?.image?.low
         }
         img.onload = () => {
-            setPatternImage(img)
+            setPatternImageData({ ...currentItem, imgComponent: img })
         }
     }, [corpus.selection.sunrooofWindow])
 
@@ -136,15 +138,15 @@ function QuotationCanvas(props: TProps) {
 
     // Function to update images inside the rectangle
     const updateImagesInRect = useCallback(() => {
-        if (!rectProps || !patternImage) return;
+        if (!rectProps || !patternImageData?.imgComponent) return
 
         const { x: rectX, y: rectY, width: rectWidth, height: rectHeight } = rectProps;
 
-        const imageWidth = measurement.pixelLength / 2; // Desired image width
+        const imageWidth = measurement.value * patternImageData?.width; // Desired image width
 
         // const imageWidth = 50; // Desired image width
-        const imageHeight = measurement.pixelLength / 2; // Desired image height
-        const spacing = 20; // Space between images
+        const imageHeight = measurement.value * patternImageData?.height // Desired image height
+        const spacing = measurement.value * patternImageData?.gap // Space between images
 
         const columns = Math.floor(rectWidth / (imageWidth + spacing));
         const rows = Math.floor(rectHeight / (imageHeight + spacing));
@@ -162,7 +164,7 @@ function QuotationCanvas(props: TProps) {
                     width: imageWidth,
                     height: imageHeight,
                     rotation: 0,
-                    image: patternImage,
+                    image: patternImageData?.imgComponent,
                 });
             }
         }
@@ -172,13 +174,13 @@ function QuotationCanvas(props: TProps) {
 
         setImages(newImages);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [rectProps, patternImage]);
+    }, [rectProps, patternImageData]);
 
 
     // Update images when rectangle or pattern image changes
     useEffect(() => {
         updateImagesInRect()
-    }, [rectProps, patternImage, updateImagesInRect])
+    }, [rectProps, patternImageData, updateImagesInRect])
 
     // Handle rectangle transform
     const handleRectTransform = useCallback(() => {
@@ -598,7 +600,8 @@ useEffect(() => {
                             measurement={measurement}
                             setMeasurement={setMeasurement}
                             onProceed={() => {
-                                setIsDrawingStarted(true)
+                                if (!measurement.isStartDrawing) return;
+                                    setIsDrawingStarted(true)
                             }}
                         />
                     )}

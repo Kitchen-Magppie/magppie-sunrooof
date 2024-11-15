@@ -91,18 +91,19 @@ export enum ComponentComparisonDataEnum {
 }
 
 export type TComponentComparisonDataOption = {
-    label: string;
-    value: ComponentComparisonDataEnum;
+    label: string
+    value: ComponentComparisonDataEnum
     image: {
-        high: string;
-        low: string;
-    };
-    height: number;          // Height with units, e.g., '100px'
-    width: number;           // Width with units, e.g., '50%'
-    gap: number;             // Gap with units
-    outerFrameGap?: number;   // Outer frame gap with units
-    innerFrameGap?: number;   // Inner frame gap with units
-};
+        high: string
+        low: string
+    }
+    height: number // Height with units, e.g., '100px'
+    width: number // Width with units, e.g., '50%'
+    gap: number // Gap with units
+    outerFrameGap?: number // Outer frame gap with units
+    innerFrameGap?: number // Inner frame gap with units
+    imgComponent?: HTMLImageElement
+}
 
 export type TCustomerComponentDesign3DItem = {
     value: CustomerComponentEnum.ThreeDDesign
