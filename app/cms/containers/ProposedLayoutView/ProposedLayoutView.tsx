@@ -8,7 +8,6 @@ import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import CreatableSelect from "react-select/creatable"
 import * as pdfjsLib from 'pdfjs-dist';
-// import pdfjsWorker from "pdfjs-dist/build/pdf.worker.entry";
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
@@ -19,8 +18,10 @@ import {
     COMPONENT_DESIGN2D_FINISH_OPTIONS
 } from "../../mocks";
 import { _, TProposedLayoutItem } from "../../../../types";
+
 import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
+
 function ProposedLayoutView() {
 
     useProposedLayoutListener()
