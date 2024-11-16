@@ -68,7 +68,6 @@ export function CustomerActionForm(props: TProps) {
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
-    // console.log(proposedLayout)
 
     const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current;
@@ -150,7 +149,6 @@ export function CustomerActionForm(props: TProps) {
         [StorageActions, setValue, values?.customerId]
     );
 
-    console.log(values)
     // const totalGrossAmount = useMemo(() => {
     // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
     //     (item) => item.value === CustomerComponentEnum.TwoDDesign
@@ -187,9 +185,8 @@ export function CustomerActionForm(props: TProps) {
         totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
             const total = price * (entry.quantity || 1);
-
             // Log each entry’s calculation for verification
-            console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
+            // console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
 
             return acc + total;
         }, 0);
@@ -402,7 +399,7 @@ export function CustomerActionForm(props: TProps) {
                                 ? data?.data?.entries
                                 : [];
                             const hasMoreThenOne = entries?.length > 1;
-                            console.log(twoDataItem);
+                            // console.log(twoDataItem);
 
 
                             return (
