@@ -68,7 +68,6 @@ export function CustomerActionForm(props: TProps) {
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
-
     const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current;
 
@@ -118,7 +117,7 @@ export function CustomerActionForm(props: TProps) {
         },
     });
 
-    const values = watch();
+    const values = watch() as TCustomerItem;
 
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
@@ -1244,7 +1243,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         onChange={(e) => {
                                                                             if (item.value === 'rightImage') {
 
-                                                                                const currentProposedLayout = proposedLayout?.find((currentItem) => currentItem.label === e.label)
+                                                                                const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.rightImage`,
                                                                                     currentProposedLayout.url.proposed
