@@ -225,7 +225,7 @@ function QuotationCanvas(props: TProps) {
         setSelectedImageId(id)
     }, [])
     // Handle image drag end
-    const handleImageDragEnd = useCallback((e: Konva.KonvaEventObject<DragEvent>, id: string) => {
+    const handleImageDragEnd = useCallback((e: TKonvaMouseEvent, id: string) => {
         const { x, y } = e.target.position()
 
         // Before updating images
