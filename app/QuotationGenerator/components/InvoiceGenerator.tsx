@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react'
 import html2canvas from 'html2canvas'
 import { RiDeleteBin6Fill } from 'react-icons/ri'
-import logoBlack from '../assets/logo_black.png'
-import qr from '../assets/qr.png'
-import { paymentTermsData } from './paymentTermsData'
+// import logoBlack from '../assets/logo_black.png'
+// import qr from '../assets/qr.png'
+// import { paymentTermsData } from './paymentTermsData'
 import jsPDF from 'jspdf'
 
 const prices = {
@@ -420,7 +420,7 @@ const InvoiceGenerator = () => {
                             ref={invoiceRef}
                             className="container mx-auto max-w-7xl mt-10 px-10 py-10"
                         >
-                            <div className="flex justify-between">
+                            {/* <div className="flex justify-between">
                                 <div>
                                     <img
                                         src={logoBlack}
@@ -450,10 +450,10 @@ const InvoiceGenerator = () => {
                                         www.sunrooof.com
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div>
-                                <h3 className="text-3xl font-bold mb-4">
+                                {/* <h3 className="text-3xl font-bold mb-4">
                                     Quotation
                                 </h3>
                                 <p className="text-lg mb-5">
@@ -481,7 +481,7 @@ const InvoiceGenerator = () => {
                                 <p className="text-lg mb-5">
                                     <span className="font-bold">Date:</span>{' '}
                                     {date}
-                                </p>
+                                </p> */}
                                 <table className="mt-5 container mx-auto max-w-7xl border border-black">
                                     <thead className="bg-[darkorange]">
                                         <tr className="">
@@ -632,7 +632,7 @@ const InvoiceGenerator = () => {
                                         </tr>
                                     </tbody>
                                 </table>
-
+{/* 
                                 <div className="mt-10">
                                     <h1 className="text-2xl font-bold mb-2">
                                         Payment Terms
@@ -650,7 +650,7 @@ const InvoiceGenerator = () => {
                                             </div>
                                         )
                                     })}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className="container mx-auto max-w-7xl px-10 my-4">
