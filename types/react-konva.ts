@@ -38,6 +38,7 @@ export const INIT_CANVAS_RECT_PROPS = {
     stroke: '#22222',
     strokeWidth: 2,
     draggable: true,
+    rotation:0
 }
 
 export type TCanvasMeasurement = {
