@@ -90,36 +90,37 @@ export const CMS_QUOTATION_OPTIONS = {
         Grey: 39650,
         Bronze: 39650,
     },
-    // 'Fluted Minimalist': {
-    //     Wooden: 35650,
-    //     White: 37950,
-    //     Grey: 39650,
-    //     Bronze: 39650,
-    // },
-    // 'French Window': {
-    //     White: 55200,
-    // },
-    // 'Louvered Window': {
-    //     White: 51750,
-    //     Wooden: 51750,
-    // },
-    // 'Classical Atrium': {
-    //     White: 40250,
-    //     Wooden: 37950,
-    // },
-    // 'Fluted Minimalist Atrium': {
-    //     Wooden: 37950,
-    //     Bronze: 41950,
-    //     Grey: 41950,
-    // },
-    // 'Arch Window': {
-    //     White: 55200,
-    // },
-    // 'Moorgan Premium Remote': {
-    //     Gold: 42000,
-    //     Black: 38500,
-    //     Chrome: 38500,
-    // },
+    'Fluted Minimalist': {
+        Wooden: 35650,
+        White: 37950,
+        Grey: 39650,
+        Bronze: 39650,
+        Gold: 39650,
+    },
+    'French Window': {
+        White: 55200,
+    },
+    'Louvered Window': {
+        White: 51750,
+        Wooden: 51750,
+    },
+    'Classical Atrium': {
+        White: 40250,
+        Wooden: 37950,
+    },
+    'Fluted Minimalist Atrium': {
+        Wooden: 37950,
+        Bronze: 41950,
+        Grey: 41950,
+    },
+    'Arch Window': {
+        White: 55200,
+    },
+    'Moorgan Premium Remote': {
+        Gold: 42000,
+        Black: 38500,
+        Chrome: 38500,
+    },
 }
 
 export const CMS_QUOTATION_FLOOR_OPTIONS = ['BSMT', 'GF', 'FF', 'SF', 'TF']
