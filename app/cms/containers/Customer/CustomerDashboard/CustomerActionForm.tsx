@@ -118,7 +118,8 @@ export function CustomerActionForm(props: TProps) {
     });
 
     const values = watch() as TCustomerItem;
-
+    console.log(values)
+    console.log(errors)
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
             const invoiceElement = invoiceRefPng.current;
@@ -1241,7 +1242,7 @@ export function CustomerActionForm(props: TProps) {
                                                                                 option.value === data[item.value]
                                                                         )}
                                                                         onChange={(e) => {
-                                                                            if (item.value === 'rightImage') {
+                                                                            if (item.value === 'proposedLayout') {
 
                                                                                 const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
                                                                                 setValue(
@@ -1261,6 +1262,10 @@ export function CustomerActionForm(props: TProps) {
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.finish`,
                                                                                     currentProposedLayout.finish);
+
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.proposedLayout`,
+                                                                                    e.value);
 
                                                                                 setValue(
                                                                                     `name`,
@@ -1389,7 +1394,7 @@ function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayoutItem[
             return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS);
         case "finish":
             return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS);
-        case "rightImage":
+        case "proposedLayout":
             return proposedLayout?.map((item) => ({
                 label: item.label,
                 value: item.url.proposed,

@@ -111,7 +111,7 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
     { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
     { label: "Floor", value: 'floor', field: 'text', placeholder: '' },
     { label: "Quantity", value: 'quantity', field: 'text', placeholder: '' },
-    { label: "Proposed Layout", value: 'rightImage', field: 'select', placeholder: '' },
+    { label: "Proposed Layout", value: 'proposedLayout', field: 'select', placeholder: '' },
 
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },

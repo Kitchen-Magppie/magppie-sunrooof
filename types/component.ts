@@ -60,6 +60,7 @@ export type TCustomerComponentDesign2DDataItem = {
     // invoiceUrl: string,
     leftImage: string
     rightImage: string
+    proposedLayout?: string
     // designBy: string,
     // approvedBy: string,
     // ceilingHeightOnSite: string,
@@ -235,6 +236,7 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
                 areaName: yup.string().required('Area Name field is Required'),
                 floor: yup.string().required('Floor field is Required'),
                 quantity: yup.number().required('Quantity field is Required'),
+                proposedLayout: yup.string().nullable(),
                 // invoiceUrl: yup.string().required(),
 
                 leftImage: yup
@@ -281,7 +283,7 @@ export const validateCustomerItemSchema = yup.object().shape({
     at: yup
         .object()
         .shape({
-            created: yup.date().required(),
+            created: yup.date().nullable(),
             updated: yup.date().required(),
         })
         .required(),
