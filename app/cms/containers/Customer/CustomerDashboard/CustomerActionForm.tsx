@@ -68,8 +68,6 @@ export function CustomerActionForm(props: TProps) {
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
-    // console.log(proposedLayout)
-
     const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current;
 
@@ -119,7 +117,7 @@ export function CustomerActionForm(props: TProps) {
         },
     });
 
-    const values = watch();
+    const values = watch() as TCustomerItem;
 
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
@@ -150,47 +148,45 @@ export function CustomerActionForm(props: TProps) {
         [StorageActions, setValue, values?.customerId]
     );
 
-    console.log(values)
     // const totalGrossAmount = useMemo(() => {
-        // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
-        //     (item) => item.value === CustomerComponentEnum.TwoDDesign
-        // );
-        // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
-        // const quotation = (
-        //     values?.components as TCustomerComponentQuotationItem[]
-        // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-        // if (quotation?.data?.entries?.length) {
-        //     return quotation.data.entries.reduce((acc, entry) => {
-        //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-        //         const total = price * (entry.qty || 1);
-        //         return acc + total;
-        //     }, 0);
-        // }
-        // if (twoDataItem?.data?.length) {
-        //     return twoDataItem.data.reduce((acc, entry) => {
-        //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-        //         const total = price * (entry.quantity || 1);
-        //         return acc + total;
-        //     }, 0);
-        // }
-        // return 0;
+    // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
+    //     (item) => item.value === CustomerComponentEnum.TwoDDesign
+    // );
+    // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
+    // const quotation = (
+    //     values?.components as TCustomerComponentQuotationItem[]
+    // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
+    // if (quotation?.data?.entries?.length) {
+    //     return quotation.data.entries.reduce((acc, entry) => {
+    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+    //         const total = price * (entry.qty || 1);
+    //         return acc + total;
+    //     }, 0);
+    // }
+    // if (twoDataItem?.data?.length) {
+    //     return twoDataItem.data.reduce((acc, entry) => {
+    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+    //         const total = price * (entry.quantity || 1);
+    //         return acc + total;
+    //     }, 0);
+    // }
+    // return 0;
     // }, [values?.components]);
 
     const twoDataItem = (values.components as TCustomerComponentItem[]).find(
         (item) => item.value === CustomerComponentEnum.TwoDDesign
     );
-    
+
     // Step 1: Calculate Total Gross Amount Directly
     let totalGrossAmount = 0;
-    
+
     if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
         totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
             const total = price * (entry.quantity || 1);
-    
             // Log each entry’s calculation for verification
-            console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
-            
+            // console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
+
             return acc + total;
         }, 0);
     }
@@ -212,7 +208,7 @@ export function CustomerActionForm(props: TProps) {
     // const totalGrossAmount = useMemo(() => {
     //     const quotations = (values?.components as TCustomerComponentQuotationItem[])
     //         ?.filter((item) => item.value === CustomerComponentEnum.Quotation);
-    
+
     //     if (quotations?.length) {
     //         return quotations.reduce((acc, quotation) => {
     //             const entryTotal = quotation.data.entries.reduce((entryAcc, entry) => {
@@ -220,11 +216,11 @@ export function CustomerActionForm(props: TProps) {
     //                 const total = price * (entry.qty || 1);
     //                 return entryAcc + total;
     //             }, 0);
-                
+
     //             return acc + entryTotal;
     //         }, 0);
     //     }
-    
+
     //     return 0;
     // }, [values?.components]);
 
@@ -402,8 +398,8 @@ export function CustomerActionForm(props: TProps) {
                                 ? data?.data?.entries
                                 : [];
                             const hasMoreThenOne = entries?.length > 1;
-                            console.log(twoDataItem);
-                            
+                            // console.log(twoDataItem);
+
 
                             return (
                                 <div key={i}>
@@ -1247,7 +1243,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         onChange={(e) => {
                                                                             if (item.value === 'rightImage') {
 
-                                                                                const currentProposedLayout = proposedLayout?.find((currentItem) => currentItem.label === e.label)
+                                                                                const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.rightImage`,
                                                                                     currentProposedLayout.url.proposed
@@ -1321,12 +1317,8 @@ export function CustomerActionForm(props: TProps) {
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
-                                                            const value = data[item.value];
-                                                            const items = (value as string)?.length ? [value] : [];
-                                                            // console.log(items);
-                                                            // console.log(item);
-                                                            // console.log(value);
-
+                                                            const value = prev[item.value];
+                                                            const items = value?.length ? [value] : [];
                                                             return (
                                                                 <div key={j}>
                                                                     <ImageInput
