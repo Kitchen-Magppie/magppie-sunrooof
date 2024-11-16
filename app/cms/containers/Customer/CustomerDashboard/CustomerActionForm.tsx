@@ -1316,7 +1316,7 @@ export function CustomerActionForm(props: TProps) {
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
-                                                            const value = prev[item.value];
+                                                            const value = _.get(prev, `data.${k}.${item.value}`, '');
                                                             const items = value?.length ? [value] : [];
                                                             return (
                                                                 <div key={j}>

@@ -29,6 +29,7 @@ import {
     INIT_CANVAS_MEASUREMENT,
     INIT_CANVAS_RECT_PROPS,
     TComponentComparisonDataOption,
+    TCustomerComponentDesign2DItem,
     TKonvaImageItem
 } from '../../../../types'
 import {
@@ -377,18 +378,24 @@ function QuotationCanvas(props: TProps) {
 
                     const currentCustomer = customers?.find((customer) => customer.customerId === Presentation?.value?.customerId)
                     if (currentCustomer) {
-                        action.edit({
+                        const results = {
                             ...currentCustomer,
                             components: currentCustomer.components?.map((item) => {
                                 if (item.value === CustomerComponentEnum.TwoDDesign) {
                                     return ({
                                         ...item,
-                                        finish: args.finish,
-                                        design: args.design,
-                                        quantity: args.sunrooofCount,
-                                        leftImage: args.url.customer,
-                                        rightImage: args.url.proposed
-                                    });
+                                        data: [
+                                            ...item.data,
+                                            {
+                                                finish: args.finish,
+                                                design: args.design,
+                                                quantity: args.sunrooofCount,
+                                                leftImage: args.url.customer,
+                                                rightImage: args.url.proposed
+                                            }
+                                        ],
+                                    }) as TCustomerComponentDesign2DItem;
+
                                 }
                                 return item;
                             }),
@@ -396,30 +403,41 @@ function QuotationCanvas(props: TProps) {
                                 created: currentCustomer.at.created,
                                 updated: new Date()
                             }
-                        })
+                        }
+                        console.log(results)
+
+                        action.edit(results)
                     }
                     else {
 
-                        action.add({
+                        const results = {
                             name: args.name,
                             customerId: args.customerId,
                             components: INIT_CUSTOMER_ITEM.components?.map((item) => {
+
                                 if (item.value === CustomerComponentEnum.TwoDDesign) {
                                     return ({
                                         ...item,
-                                        finish: args.finish,
-                                        design: args.design,
-                                        quantity: args.sunrooofCount,
-                                        leftImage: args.url.customer,
-                                        rightImage: args.url.proposed
-                                    });
+                                        data: [
+                                            ...item.data,
+                                            {
+                                                finish: args.finish,
+                                                design: args.design,
+                                                quantity: args.sunrooofCount,
+                                                leftImage: args.url.customer,
+                                                rightImage: args.url.proposed
+                                            }
+                                        ]
+                                    }) as TCustomerComponentDesign2DItem;
                                 }
                                 return item;
                             }),
                             at: {
                                 created: new Date(),
                             }
-                        })
+                        }
+                        console.log(results)
+                        action.add(results)
                     }
 
                     toast('Proposed image has been saved!')
