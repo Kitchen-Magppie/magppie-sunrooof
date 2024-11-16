@@ -65,8 +65,6 @@ function QuotationCanvas(props: TProps) {
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const [imageProps, setImageProps] = useState(INIT_IMAGE_PROPS);
     // const [plotImage, setPlotImage] = useState<TImageProps | null>(null)
-
-
     // useEffect(() => {
     //     if (corpus.selection.image?.size) {
 
@@ -227,7 +225,7 @@ function QuotationCanvas(props: TProps) {
         setSelectedImageId(id)
     }, [])
     // Handle image drag end
-    const handleImageDragEnd = useCallback((e: Konva.KonvaEventObject<DragEvent>, id: string) => {
+    const handleImageDragEnd = useCallback((e: TKonvaMouseEvent, id: string) => {
         const { x, y } = e.target.position()
 
         // Before updating images
@@ -325,6 +323,8 @@ function QuotationCanvas(props: TProps) {
 
     const StorageAction = useFirebaseStorageActions();
     const action = useFirebaseCustomerAction();
+    console.log(Presentation.value)
+
     const customers = useAppSelector((state) => state.Cms.Customer.value);
     const handleDownload = useCallback(({ isRedirectBack }: { isRedirectBack: boolean }) => {
         const canvas = document.createElement('canvas')
@@ -357,7 +357,6 @@ function QuotationCanvas(props: TProps) {
             const uri = stageRef.current.toDataURL()
             transformerRef.current.nodes([rectRef.current])
             transformerRef.current.getLayer()?.batchDraw()
-
 
             StorageAction.batch.upload({
                 files: [Presentation.value.file,
