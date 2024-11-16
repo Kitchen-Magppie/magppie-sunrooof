@@ -5,15 +5,14 @@ import {
     ComponentComparisonDataEnum,
     ComponentFeatureEnum,
     CustomerComponentEnum,
-    TComponentComparisonDataOption,
     TCustomerComponent2DDesignOptionItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentItem,
+    TCustomerComponentQuotationEntryItem,
     TCustomerItem,
     _
 } from "../../../types"
 import { QuotationMock } from ".";
-
 export const CUSTOMER_COMPONENT_FEATURE_OPTIONS: { label: string, value: ComponentFeatureEnum }[] = [
     {
         value: ComponentFeatureEnum.Office,
@@ -87,6 +86,8 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
     areaName: '',
     leftImage: '',
     rightImage: '',
+    floor: '',
+    quantity: 0
     // invoiceUrl: '',
     // designBy: '',
     // approvedBy: '',
@@ -98,14 +99,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 
 
 
-export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOption[] = [
-    { label: "French Window", value: ComponentComparisonDataEnum.FrenchWindow, },
-    { label: "Arch Window", value: ComponentComparisonDataEnum.ArchWindow },
-    { label: "Louvered Window", value: ComponentComparisonDataEnum.LouveredWindow },
-    { label: "Classical Sunrooof", value: ComponentComparisonDataEnum.ClassicalSunrooof },
-    { label: "Fluted Minimalist Sunrooof", value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof },
-    { label: "Modern Sunrooof", value: ComponentComparisonDataEnum.ModernSunrooof },
-];
+
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
     // { label: "Design By", value: "designBy", field: 'text' },
@@ -115,6 +109,10 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDes
     // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
     // { label: "After Installation", value: 'afterInstallation', field: 'text' },
     { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
+    { label: "Floor", value: 'floor', field: 'text', placeholder: '' },
+    { label: "Quantity", value: 'quantity', field: 'text', placeholder: '' },
+    { label: "Proposed Layout", value: 'rightImage', field: 'select', placeholder: '' },
+
     // { label: "Your Plan", value: 'yourPlan', field: 'text' },
     { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },
     { label: "Proposed Image", value: 'rightImage', field: 'image', placeholder: '' },
@@ -141,7 +139,9 @@ export const INIT_CUSTOMER_COMPONENTS: TCustomerComponentItem[] = [
             address: '',
             zone: '',
             city: '',
-            invoiceUrl: ''
+            discount: 0,
+            invoiceUrl: '',
+            entries: []
         }
     },
     {
@@ -256,3 +256,12 @@ export const COMPONENT_DESIGN2D_FINISH_OPTIONS = [
     'Regal Bronze',
     'Titanium Grey'
 ]
+
+export const INIT_COMPONENT_QUOTATION_ENTRY_ITEM: TCustomerComponentQuotationEntryItem = {
+    design: '',
+    finish: '',
+    area: '',
+    floor: '',
+    qty: 1,
+    // unitPrice: '',
+}

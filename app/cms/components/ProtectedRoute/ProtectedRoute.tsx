@@ -25,7 +25,7 @@ export default function ProtectedRoute() {
         return (
             <div className="bg-slate-50 h-screen">
                 <Header />
-                <div className="container mx-auto p-2 max-w-7xl">
+                <div className="p-2">
                     <div className="mt-20 ">
                         <Outlet />
                     </div>
