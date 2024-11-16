@@ -194,6 +194,39 @@ export function CustomerActionForm(props: TProps) {
             return acc + total;
         }, 0);
     }
+    // console.log(values)
+    // const totalGrossAmount = useMemo(() => {
+    //     const quotation = (
+    //         values?.components as TCustomerComponentQuotationItem[]
+    //     )?.find((item) => item.value === CustomerComponentEnum.Quotation);
+    //     if (quotation?.data?.entries?.length) {
+    //         return quotation.data.entries.reduce((acc, entry) => {
+    //             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+    //             const total = price * (entry.qty || 1);
+    //             return acc + total;
+    //         }, 0);
+    //     }
+    //     return 0;
+    // }, [values?.components]);
+
+    // const totalGrossAmount = useMemo(() => {
+    //     const quotations = (values?.components as TCustomerComponentQuotationItem[])
+    //         ?.filter((item) => item.value === CustomerComponentEnum.Quotation);
+    
+    //     if (quotations?.length) {
+    //         return quotations.reduce((acc, quotation) => {
+    //             const entryTotal = quotation.data.entries.reduce((entryAcc, entry) => {
+    //                 const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+    //                 const total = price * (entry.qty || 1);
+    //                 return entryAcc + total;
+    //             }, 0);
+                
+    //             return acc + entryTotal;
+    //         }, 0);
+    //     }
+    
+    //     return 0;
+    // }, [values?.components]);
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {

@@ -6,46 +6,75 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
-import Select from "react-select/creatable"
+import CreatableSelect from "react-select/creatable"
+import * as pdfjsLib from 'pdfjs-dist';
 //====================================================================
 import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
-import {
-    COMPONENT_DESIGN2D_DESIGN_OPTIONS,
-    COMPONENT_DESIGN2D_FINISH_OPTIONS
-} from "../../mocks";
-import { _, TProposedLayoutItem } from "../../../../types";
 
+import { TProposedLayoutItem } from "../../../../types";
+
+import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
 
 function ProposedLayoutView() {
 
     useProposedLayoutListener()
+    useFirebaseCmsCustomerListener()
 
     useEffect(() => {
         document.title = 'Proposed Layout | CMS'
     }, [])
     const [toggle, setToggle] = useState(INIT_TOGGLE)
+    const customers = useAppSelector((state) => state.Cms.Customer.value)
 
+    // const [imageFile, setImageFile] = useState<File | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch()
     const { watch, register, handleSubmit, formState: { errors }, setValue } = useForm({
         resolver: yupResolver(proposedLayoutSchema),
     });
-    useFirebaseCmsCustomerListener()
 
     const values = watch() as TProposedLayoutItem
-    const customers = useAppSelector((state) => state.Cms.Customer.value)
+    const convertPdfToImage = useCallback(async (file: File) => {
+        const fileUrl = URL.createObjectURL(file);
+        const pdfDoc = await pdfjsLib.getDocument(fileUrl).promise;
+        const page = await pdfDoc.getPage(1); // Assuming you want the first page
 
-    const onFileChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const scale = 1.5; // Adjust the scale as needed
+        const viewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        const renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+
+        };
+        await page.render(renderContext).promise;
+
+
+        const imageDataUrl = canvas.toDataURL('image/png');
+
+        setValue('file', base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
+    }, [setValue])
+
+
+    const onFileChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
+        convertPdfToImage(content.file)
         if (content?.isValid && content?.accessor !== 'pdf') {
             setValue('file', content.file)
         } else {
             toast('*Please upload an image or pdf file.')
         }
-    }, [setValue])
+    }, [convertPdfToImage, setValue])
 
     const onSubmit = handleSubmit((e) => {
         setToggle((prev) => ({ ...prev, isLoading: true }))
@@ -55,8 +84,8 @@ function ProposedLayoutView() {
                     file: e?.file as File,
                     title: e?.title,
                     name: e.name,
-                    design: e.design,
-                    finish: e.finish,
+                    design: '',
+                    finish: '',
                     customerId: customers?.find((item) => item.name === e.name)?.customerId || ''
                 }))
                 setToggle((prev) => ({
@@ -67,7 +96,7 @@ function ProposedLayoutView() {
             }
         }, 2000)
     })
-    return (<div>
+    return (<div className="container mx-auto">
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
 
         {toggle?.isOpenEditorPage ? <QuotationCanvas onToggleEditorPage={(isOpenEditorPage) => {
@@ -76,8 +105,8 @@ function ProposedLayoutView() {
             onSubmit={onSubmit}
             className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
         >
-            <div className="mb-1">
-                <Select
+            {/* <div className="mb-1">
+                <CreatableSelect
                     options={_.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS)}
                     onChange={({ value }) => { setValue('design', value) }}
                     placeholder="Design"
@@ -85,9 +114,9 @@ function ProposedLayoutView() {
                 {errors?.design?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
                     <IoIosHelpCircleOutline className="text-sm my-1" />
                     {errors?.design?.message}</span>}
-            </div>
-            <div className="mb-1">
-                <Select
+            </div> */}
+            {/* <div className="mb-1">
+                <ReactSelect
                     options={_.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS)}
                     onChange={({ value }) => { setValue('finish', value) }}
                     placeholder="Finish"
@@ -95,9 +124,9 @@ function ProposedLayoutView() {
                 {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
                     <IoIosHelpCircleOutline className="text-sm my-1" />
                     {errors?.title?.message}</span>}
-            </div>
+            </div> */}
             <div className="mb-1">
-                <Select
+                <CreatableSelect
                     options={customers?.map((customer) => ({
                         value: customer.id,
                         label: customer.name
@@ -165,7 +194,7 @@ function ProposedLayoutView() {
             </button>
         </form>
         }
-
+        {/* <MeasurementExample /> */}
     </div >);
 }
 
@@ -190,9 +219,20 @@ const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
 const proposedLayoutSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     title: yup.string().required('Title is required'),
-    finish: yup.string().required('Finish is required'),
-    design: yup.string().required('Design is required'),
+    // finish: yup.string().required('Finish is required'),
+    // design: yup.string().required('Design is required'),
     file: yup.mixed().required('File is required'),
 });
+
+function base64ToFile(base64String, fileName) {
+    const imageType = base64String.split(';')[0].split(':')[1];
+    const byteString = atob(base64String.split(',')[1]);
+    const arrayBuffer = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+        arrayBuffer[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: imageType });
+    return new File([blob], fileName, { type: imageType });
+}
 
 export default ProposedLayoutView;

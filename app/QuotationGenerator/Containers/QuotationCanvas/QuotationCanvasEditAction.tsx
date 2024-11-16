@@ -7,21 +7,21 @@ import { PiDownloadSimpleFill } from "react-icons/pi";
 import { CUSTOMER_COMPONENT_COMPARISON_OPTIONS } from "../../../cms/mocks";
 import { KonvaActionButton } from "../../components";
 import { CanvasToolEnum } from '../../../../types';
+import { setPresentationData, useAppDispatch, useAppSelector } from '../../../../redux';
 
 function QuotationCanvasEditAction(props: TProps) {
+    const dispatch = useAppDispatch()
+    const presentation = useAppSelector((state) => state.Cms.Presentation.value);
     return (<div>
         <div className="flex flex-col mb-3">
             <Select
                 options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                 onChange={(e) => {
+                    dispatch(setPresentationData({
+                        ...presentation,
+                        design: e.value,
+                    }))
                     props?.onChangeSunroofWindow(e.value)
-                    // setCorpus((prev) => ({
-                    //     ...prev,
-                    //     selection: {
-                    //         ...prev.selection,
-                    //         sunrooofWindow: e.value,
-                    //     },
-                    // }))
                 }}
             />
         </div>

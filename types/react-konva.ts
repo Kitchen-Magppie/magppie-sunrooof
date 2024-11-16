@@ -35,9 +35,10 @@ export const INIT_CANVAS_RECT_PROPS = {
     y: 500,
     width: 300,
     height: 100,
-    stroke: 'red',
+    stroke: '#22222',
     strokeWidth: 2,
     draggable: true,
+    rotation:0
 }
 
 export type TCanvasMeasurement = {
@@ -56,6 +57,5 @@ export const INIT_CANVAS_MEASUREMENT: TCanvasMeasurement = {
     feet: 0,
     inches: 0,
     isStartDrawing: false
-
 }
 

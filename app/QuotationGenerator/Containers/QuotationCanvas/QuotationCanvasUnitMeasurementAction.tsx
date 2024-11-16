@@ -14,33 +14,43 @@ type TProps = {
 
 function QuotationCanvasUnitMeasurementAction(props: TProps) {
     // Local state to hold feet and inches when unit is 'inch'
-    const [feet, setFeet] = useState(Math.floor(props.measurement.quantity / 12));
-    const [inches, setInches] = useState(props.measurement.quantity % 12);
+const [feet, setFeet] = useState(
+    Math.floor(props.measurement.quantity / 12 / 0.0254)
+)
+const [inches, setInches] = useState(
+    Math.floor((props.measurement.quantity / 0.0254) % 12)
+)
 
-    const handleFeetChange = useCallback((e) => {
-        const newFeet = Number(e.target.value);
+const handleFeetChange = useCallback(
+    (e) => {
+        const newFeet = Number(e.target.value)
         if (newFeet >= 0) {
-            setFeet(newFeet);
-            // Update total inches in the parent component
+            setFeet(newFeet)
+            // Update total quantity in mm in the parent component
             props.setMeasurement((prev) => ({
                 ...prev,
-                quantity: newFeet * 12 + inches,
-            }));
+                quantity: Math.round((newFeet * 12 + inches) * 25.4), // Convert to mm
+            }))
         }
-    }, [inches, props]);
+    },
+    [inches, props]
+)
 
-    const handleInchesChange = useCallback((e) => {
-        const newInches = Number(e.target.value);
-        if (newInches >= 0 && newInches <= 11) {  // Ensure inches are between 0 and 11
-            setInches(newInches);
-            // Update total inches in the parent component
+const handleInchesChange = useCallback(
+    (e) => {
+        const newInches = Number(e.target.value)
+        if (newInches >= 0 && newInches <= 11) {
+            // Ensure inches are between 0 and 11
+            setInches(newInches)
+            // Update total quantity in mm in the parent component
             props.setMeasurement((prev) => ({
                 ...prev,
-                quantity: feet * 12 + newInches,
-            }));
+                quantity: Math.round((feet * 12 + newInches) * 25.4), // Convert to mm
+            }))
         }
-    }, [feet, props]);
-
+    },
+    [feet, props]
+)
     const renderQuantityContent = useMemo(() => {
         if (props.measurement.unit === 'inch') {
             // Render feet and inches input for "inch" unit
@@ -104,6 +114,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
                         value={props.measurement.quantity}
                         onChange={(e) => {
                             const newQuantity = Number(e.target.value);
+                            console.log("🚀 ~ renderQuantityContent ~ e.target.value:", e.target.value)
                             if (newQuantity >= 1) {
                                 props.setMeasurement((prev) => ({
                                     ...prev,
@@ -153,7 +164,7 @@ function QuotationCanvasUnitMeasurementAction(props: TProps) {
             </div>
             <div className="flex gap-1 align-middle flex-row justify-between">
                 {renderQuantityContent}
-                <div className="">
+                <div className="flex flex-col">
                     <div className="mt-7" />
 
                     <KonvaActionButton
