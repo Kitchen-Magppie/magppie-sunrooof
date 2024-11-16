@@ -118,7 +118,8 @@ export function CustomerActionForm(props: TProps) {
     });
 
     const values = watch() as TCustomerItem;
-
+    // console.log(values)
+    console.log(errors)
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
             const invoiceElement = invoiceRefPng.current;
@@ -1182,6 +1183,7 @@ export function CustomerActionForm(props: TProps) {
                                             }}
                                         />
                                         {prev.data?.map((data, k) => {
+                                            const currentData = prev.data[k]
                                             const hasMoreThenOne = prev.data?.length > 1;
                                             return (
                                                 <div
@@ -1241,7 +1243,7 @@ export function CustomerActionForm(props: TProps) {
                                                                                 option.value === data[item.value]
                                                                         )}
                                                                         onChange={(e) => {
-                                                                            if (item.value === 'rightImage') {
+                                                                            if (item.value === 'proposedLayout') {
 
                                                                                 const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
                                                                                 setValue(
@@ -1261,6 +1263,10 @@ export function CustomerActionForm(props: TProps) {
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.finish`,
                                                                                     currentProposedLayout.finish);
+
+                                                                                setValue(
+                                                                                    `components.${i}.data.${k}.proposedLayout`,
+                                                                                    e.value);
 
                                                                                 setValue(
                                                                                     `name`,
@@ -1302,8 +1308,10 @@ export function CustomerActionForm(props: TProps) {
                                                                         {...register(
                                                                             `components.${i}.data.${k}.${item.value}`
                                                                         )}
+
+                                                                        disabled={!!currentData.proposedLayout?.length}
                                                                         placeholder={item.placeholder}
-                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                        className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                                                                     />
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.${k}.${item.value}`
@@ -1316,7 +1324,7 @@ export function CustomerActionForm(props: TProps) {
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
-                                                            const value = _.get(prev, `data.${k}.${item.value}`, '');
+                                                            const value = `${_.get(currentData, `${item.value}`, '')}`;
                                                             const items = value?.length ? [value] : [];
                                                             return (
                                                                 <div key={j}>
@@ -1389,7 +1397,7 @@ function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayoutItem[
             return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS);
         case "finish":
             return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS);
-        case "rightImage":
+        case "proposedLayout":
             return proposedLayout?.map((item) => ({
                 label: item.label,
                 value: item.url.proposed,
