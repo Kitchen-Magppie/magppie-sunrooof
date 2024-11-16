@@ -284,7 +284,7 @@ export const validateCustomerItemSchema = yup.object().shape({
         .object()
         .shape({
             created: yup.date().nullable(),
-            updated: yup.date().required(),
+            updated: yup.date().nullable(),
         })
         .required(),
 })

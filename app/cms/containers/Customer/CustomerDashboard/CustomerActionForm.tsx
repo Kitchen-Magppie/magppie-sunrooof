@@ -118,7 +118,7 @@ export function CustomerActionForm(props: TProps) {
     });
 
     const values = watch() as TCustomerItem;
-    console.log(values)
+    // console.log(values)
     console.log(errors)
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
@@ -1183,6 +1183,7 @@ export function CustomerActionForm(props: TProps) {
                                             }}
                                         />
                                         {prev.data?.map((data, k) => {
+                                            const currentData = prev.data[k]
                                             const hasMoreThenOne = prev.data?.length > 1;
                                             return (
                                                 <div
@@ -1307,8 +1308,10 @@ export function CustomerActionForm(props: TProps) {
                                                                         {...register(
                                                                             `components.${i}.data.${k}.${item.value}`
                                                                         )}
+
+                                                                        disabled={!!currentData.proposedLayout?.length}
                                                                         placeholder={item.placeholder}
-                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                        className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                                                                     />
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.${k}.${item.value}`
@@ -1321,7 +1324,7 @@ export function CustomerActionForm(props: TProps) {
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
-                                                            const value = `${_.get(prev, `data.${k}.${item.value}`, '')}`;
+                                                            const value = `${_.get(currentData, `${item.value}`, '')}`;
                                                             const items = value?.length ? [value] : [];
                                                             return (
                                                                 <div key={j}>
