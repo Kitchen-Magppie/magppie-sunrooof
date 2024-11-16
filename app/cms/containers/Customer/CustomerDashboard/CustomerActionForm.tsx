@@ -68,8 +68,6 @@ export function CustomerActionForm(props: TProps) {
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
-    // console.log(proposedLayout)
-    console.log("QA Branch")
     const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current;
 
@@ -119,7 +117,7 @@ export function CustomerActionForm(props: TProps) {
         },
     });
 
-    const values = watch();
+    const values = watch() as TCustomerItem;
 
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
@@ -150,7 +148,6 @@ export function CustomerActionForm(props: TProps) {
         [StorageActions, setValue, values?.customerId]
     );
 
-    console.log(values)
     // const totalGrossAmount = useMemo(() => {
     // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
     //     (item) => item.value === CustomerComponentEnum.TwoDDesign
@@ -187,9 +184,8 @@ export function CustomerActionForm(props: TProps) {
         totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
             const total = price * (entry.quantity || 1);
-
             // Log each entry’s calculation for verification
-            console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
+            // console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
 
             return acc + total;
         }, 0);
@@ -402,7 +398,7 @@ export function CustomerActionForm(props: TProps) {
                                 ? data?.data?.entries
                                 : [];
                             const hasMoreThenOne = entries?.length > 1;
-                            console.log(twoDataItem);
+                            // console.log(twoDataItem);
 
 
                             return (
@@ -1247,7 +1243,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         onChange={(e) => {
                                                                             if (item.value === 'rightImage') {
 
-                                                                                const currentProposedLayout = proposedLayout?.find((currentItem) => currentItem.label === e.label)
+                                                                                const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
                                                                                 setValue(
                                                                                     `components.${i}.data.${k}.rightImage`,
                                                                                     currentProposedLayout.url.proposed
@@ -1320,12 +1316,8 @@ export function CustomerActionForm(props: TProps) {
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
-                                                            const value = data[item.value];
-                                                            const items = (value as string)?.length ? [value] : [];
-                                                            // console.log(items);
-                                                            // console.log(item);
-                                                            // console.log(value);
-
+                                                            const value = prev[item.value];
+                                                            const items = value?.length ? [value] : [];
                                                             return (
                                                                 <div key={j}>
                                                                     <ImageInput
