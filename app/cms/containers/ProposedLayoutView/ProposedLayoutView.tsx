@@ -13,11 +13,8 @@ import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
-import {
-    COMPONENT_DESIGN2D_DESIGN_OPTIONS,
-    COMPONENT_DESIGN2D_FINISH_OPTIONS
-} from "../../mocks";
-import { _, TProposedLayoutItem } from "../../../../types";
+
+import { TProposedLayoutItem } from "../../../../types";
 
 import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
@@ -87,8 +84,8 @@ function ProposedLayoutView() {
                     file: e?.file as File,
                     title: e?.title,
                     name: e.name,
-                    design: e.design,
-                    finish: e.finish,
+                    design: '',
+                    finish: '',
                     customerId: customers?.find((item) => item.name === e.name)?.customerId || ''
                 }))
                 setToggle((prev) => ({
@@ -108,7 +105,7 @@ function ProposedLayoutView() {
             onSubmit={onSubmit}
             className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
         >
-            <div className="mb-1">
+            {/* <div className="mb-1">
                 <CreatableSelect
                     options={_.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS)}
                     onChange={({ value }) => { setValue('design', value) }}
@@ -117,9 +114,9 @@ function ProposedLayoutView() {
                 {errors?.design?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
                     <IoIosHelpCircleOutline className="text-sm my-1" />
                     {errors?.design?.message}</span>}
-            </div>
-            <div className="mb-1">
-                <CreatableSelect
+            </div> */}
+            {/* <div className="mb-1">
+                <ReactSelect
                     options={_.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS)}
                     onChange={({ value }) => { setValue('finish', value) }}
                     placeholder="Finish"
@@ -127,7 +124,7 @@ function ProposedLayoutView() {
                 {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
                     <IoIosHelpCircleOutline className="text-sm my-1" />
                     {errors?.title?.message}</span>}
-            </div>
+            </div> */}
             <div className="mb-1">
                 <CreatableSelect
                     options={customers?.map((customer) => ({
@@ -222,8 +219,8 @@ const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
 const proposedLayoutSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     title: yup.string().required('Title is required'),
-    finish: yup.string().required('Finish is required'),
-    design: yup.string().required('Design is required'),
+    // finish: yup.string().required('Finish is required'),
+    // design: yup.string().required('Design is required'),
     file: yup.mixed().required('File is required'),
 });
 

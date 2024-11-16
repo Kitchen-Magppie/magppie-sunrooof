@@ -64,6 +64,30 @@ function QuotationCanvas(props: TProps) {
     const imageRefs = useRef<{ [key: string]: Konva.Image }>({});
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const [imageProps, setImageProps] = useState(INIT_IMAGE_PROPS);
+
+    console.log(history)
+
+    useEffect(() => {
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if ((event.metaKey || event.ctrlKey) && event.key === 'z') {
+                // Trigger your undo action here
+                console.log('Undo pressed');
+                // ... other undo logic
+            }
+        };
+
+        const element = stageContainerRef.current;
+        if (element) {
+            element.addEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            if (element) {
+                element.removeEventListener('keydown', handleKeyDown);
+            }
+        };
+    }, [])
     // const [plotImage, setPlotImage] = useState<TImageProps | null>(null)
 
 
@@ -548,24 +572,46 @@ function QuotationCanvas(props: TProps) {
         />
     }, [corpus.selection.tool, isDrawingStarted])
 
-useEffect(() => {
-    if (image) {
-        const imageWidth = image.width
-        const imageHeight = image.height
+    useEffect(() => {
+        if (image) {
+            const imageWidth = image.width
+            const imageHeight = image.height
 
-        // Center the image (although it's not necessary, since the stage matches the image size)
-        setImageProps({
-            width: imageWidth, // Use original image width
-            height: imageHeight, // Use original image height
-            x: 0, // Start at top-left corner
-            y: 0, // Start at top-left corner
-        })
-    }
-}, [image])
+            // Center the image (although it's not necessary, since the stage matches the image size)
+            setImageProps({
+                width: imageWidth, // Use original image width
+                height: imageHeight, // Use original image height
+                x: 0, // Start at top-left corner
+                y: 0, // Start at top-left corner
+            })
+        }
+    }, [image])
+
+
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        if (event.ctrlKey && event.key === "z") {
+            setHistory((prev) => (prev.slice(0, -1)))
+        }
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleKeyDown]);
+
 
     return (
-        <form className="">
-            <div className="grid grid-cols-12 gap-10 mt-10 justify-start">
+        <form className=""
+            onKeyDown={(e) => {
+                console.log(e.ctrlKey && e.key === 'z')
+            }}
+        >
+            <div className="grid grid-cols-12 gap-10 mt-10 justify-start"
+                ref={stageContainerRef}
+
+            >
                 <div className="col-span-4">
                     <div className="mb-4">{renderGuideAlert}</div>
                     {isDrawingStarted ? (
@@ -601,14 +647,13 @@ useEffect(() => {
                             setMeasurement={setMeasurement}
                             onProceed={() => {
                                 if (!measurement.isStartDrawing) return;
-                                    setIsDrawingStarted(true)
+                                setIsDrawingStarted(true)
                             }}
                         />
                     )}
                 </div>
                 <div
                     className="col-span-8 border border-gray-300 bg-white"
-                    ref={stageContainerRef}
                 >
                     {Presentation?.value?.file?.size ? (
                         <Stage
@@ -727,7 +772,7 @@ useEffect(() => {
                                                     if (
                                                         node &&
                                                         selectedImageId ===
-                                                            img.id
+                                                        img.id
                                                     ) {
                                                         transformerRef.current.nodes(
                                                             [node]
