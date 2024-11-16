@@ -206,6 +206,18 @@ function QuotationCanvas(props: TProps) {
         }
     }, [updateImagesInRect]);
 
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        if (event.ctrlKey && event.key === "z") {
+            setHistory((prev) => (prev.slice(0, -1)))
+        }
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleKeyDown]);
 
     // Handle image selection
     const handleImageSelect = useCallback((e: TKonvaMouseEvent, id: string) => {
@@ -549,20 +561,20 @@ function QuotationCanvas(props: TProps) {
         />
     }, [corpus.selection.tool, isDrawingStarted])
 
-useEffect(() => {
-    if (image) {
-        const imageWidth = image.width
-        const imageHeight = image.height
+    useEffect(() => {
+        if (image) {
+            const imageWidth = image.width
+            const imageHeight = image.height
 
-        // Center the image (although it's not necessary, since the stage matches the image size)
-        setImageProps({
-            width: imageWidth, // Use original image width
-            height: imageHeight, // Use original image height
-            x: 0, // Start at top-left corner
-            y: 0, // Start at top-left corner
-        })
-    }
-}, [image])
+            // Center the image (although it's not necessary, since the stage matches the image size)
+            setImageProps({
+                width: imageWidth, // Use original image width
+                height: imageHeight, // Use original image height
+                x: 0, // Start at top-left corner
+                y: 0, // Start at top-left corner
+            })
+        }
+    }, [image])
 
     return (
         <form className="">
@@ -661,24 +673,24 @@ useEffect(() => {
                                             x={
                                                 rectProps.x -
                                                 measurement.value *
-                                                    patternImageData?.outerFrameGap
+                                                patternImageData?.outerFrameGap
                                             }
                                             y={
                                                 rectProps.y -
                                                 measurement.value *
-                                                    patternImageData?.outerFrameGap
+                                                patternImageData?.outerFrameGap
                                             }
                                             width={
                                                 rectProps.width +
                                                 2 *
-                                                    measurement.value *
-                                                    patternImageData?.outerFrameGap
+                                                measurement.value *
+                                                patternImageData?.outerFrameGap
                                             }
                                             height={
                                                 rectProps.height +
                                                 2 *
-                                                    measurement.value *
-                                                    patternImageData?.outerFrameGap
+                                                measurement.value *
+                                                patternImageData?.outerFrameGap
                                             }
                                             fill="#2222"
                                             listening={false} // Not interactive
@@ -689,24 +701,24 @@ useEffect(() => {
                                             x={
                                                 rectProps.x +
                                                 measurement.value *
-                                                    patternImageData?.innerFrameGap
+                                                patternImageData?.innerFrameGap
                                             }
                                             y={
                                                 rectProps.y +
                                                 measurement.value *
-                                                    patternImageData?.innerFrameGap
+                                                patternImageData?.innerFrameGap
                                             }
                                             width={
                                                 rectProps.width -
                                                 2 *
-                                                    measurement.value *
-                                                    patternImageData?.innerFrameGap
+                                                measurement.value *
+                                                patternImageData?.innerFrameGap
                                             }
                                             height={
                                                 rectProps.height -
                                                 2 *
-                                                    measurement.value *
-                                                    patternImageData?.innerFrameGap
+                                                measurement.value *
+                                                patternImageData?.innerFrameGap
                                             }
                                             stroke="#000"
                                             strokeWidth={2}
@@ -779,7 +791,7 @@ useEffect(() => {
                                                         if (
                                                             node &&
                                                             selectedImageId ===
-                                                                img.id
+                                                            img.id
                                                         ) {
                                                             transformerRef.current.nodes(
                                                                 [node]
