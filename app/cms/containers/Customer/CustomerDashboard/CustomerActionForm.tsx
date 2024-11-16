@@ -152,45 +152,45 @@ export function CustomerActionForm(props: TProps) {
 
     console.log(values)
     // const totalGrossAmount = useMemo(() => {
-        // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
-        //     (item) => item.value === CustomerComponentEnum.TwoDDesign
-        // );
-        // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
-        // const quotation = (
-        //     values?.components as TCustomerComponentQuotationItem[]
-        // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-        // if (quotation?.data?.entries?.length) {
-        //     return quotation.data.entries.reduce((acc, entry) => {
-        //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-        //         const total = price * (entry.qty || 1);
-        //         return acc + total;
-        //     }, 0);
-        // }
-        // if (twoDataItem?.data?.length) {
-        //     return twoDataItem.data.reduce((acc, entry) => {
-        //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-        //         const total = price * (entry.quantity || 1);
-        //         return acc + total;
-        //     }, 0);
-        // }
-        // return 0;
+    // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
+    //     (item) => item.value === CustomerComponentEnum.TwoDDesign
+    // );
+    // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
+    // const quotation = (
+    //     values?.components as TCustomerComponentQuotationItem[]
+    // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
+    // if (quotation?.data?.entries?.length) {
+    //     return quotation.data.entries.reduce((acc, entry) => {
+    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+    //         const total = price * (entry.qty || 1);
+    //         return acc + total;
+    //     }, 0);
+    // }
+    // if (twoDataItem?.data?.length) {
+    //     return twoDataItem.data.reduce((acc, entry) => {
+    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+    //         const total = price * (entry.quantity || 1);
+    //         return acc + total;
+    //     }, 0);
+    // }
+    // return 0;
     // }, [values?.components]);
 
     const twoDataItem = (values.components as TCustomerComponentItem[]).find(
         (item) => item.value === CustomerComponentEnum.TwoDDesign
     );
-    
+
     // Step 1: Calculate Total Gross Amount Directly
     let totalGrossAmount = 0;
-    
+
     if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
         totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
             const total = price * (entry.quantity || 1);
-    
+
             // Log each entry’s calculation for verification
             console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
-            
+
             return acc + total;
         }, 0);
     }
@@ -212,7 +212,7 @@ export function CustomerActionForm(props: TProps) {
     // const totalGrossAmount = useMemo(() => {
     //     const quotations = (values?.components as TCustomerComponentQuotationItem[])
     //         ?.filter((item) => item.value === CustomerComponentEnum.Quotation);
-    
+
     //     if (quotations?.length) {
     //         return quotations.reduce((acc, quotation) => {
     //             const entryTotal = quotation.data.entries.reduce((entryAcc, entry) => {
@@ -220,11 +220,11 @@ export function CustomerActionForm(props: TProps) {
     //                 const total = price * (entry.qty || 1);
     //                 return entryAcc + total;
     //             }, 0);
-                
+
     //             return acc + entryTotal;
     //         }, 0);
     //     }
-    
+
     //     return 0;
     // }, [values?.components]);
 
@@ -403,7 +403,7 @@ export function CustomerActionForm(props: TProps) {
                                 : [];
                             const hasMoreThenOne = entries?.length > 1;
                             console.log(twoDataItem);
-                            
+
 
                             return (
                                 <div key={i}>
@@ -1277,7 +1277,6 @@ export function CustomerActionForm(props: TProps) {
                                                                                     `components.${i}.data.${k}.${item.value}`,
                                                                                     e?.value?.length ? e.value : ""
                                                                                 );
-
                                                                             }
 
                                                                         }}
