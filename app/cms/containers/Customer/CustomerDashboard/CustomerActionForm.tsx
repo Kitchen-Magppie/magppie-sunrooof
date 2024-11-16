@@ -69,7 +69,7 @@ export function CustomerActionForm(props: TProps) {
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
     // console.log(proposedLayout)
-
+    console.log("QA Branch")
     const downloadInvoice = useCallback(() => {
         const invoiceElement = invoiceRef.current;
 
