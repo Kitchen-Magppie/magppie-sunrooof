@@ -68,9 +68,14 @@ function ProposedLayoutView() {
 
     const onFileChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
-        convertPdfToImage(content.file)
-        if (content?.isValid && content?.accessor !== 'pdf') {
-            setValue('file', content.file)
+
+        if (content?.isValid) {
+            if (content.accessor === 'pdf') {
+                convertPdfToImage(content.file)
+            }
+            if (content?.accessor === 'image') {
+                setValue('file', content.file)
+            }
         } else {
             toast('*Please upload an image or pdf file.')
         }
