@@ -361,7 +361,7 @@ export function CustomerActionForm(props: TProps) {
                                                                                 `components.${i}.data.${k}.${item.value}`
                                                                             )}
 
-                                                                            disabled={!!currentData.proposedLayout?.length}
+                                                                            // disabled={!!currentData.proposedLayout?.length}
                                                                             placeholder={item.placeholder}
                                                                             className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                                                                         />
