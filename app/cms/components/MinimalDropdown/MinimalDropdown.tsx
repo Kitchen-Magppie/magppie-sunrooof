@@ -23,7 +23,7 @@ function MinimalDropdown(props: TProps) {
 export default MinimalDropdown;
 type TValueItem = { label: string, value: string }
 type TProps = {
-    onChange: (newValue: unknown, actionMeta: ActionMeta<unknown>) => void,
+    onChange: (newValue: TValueItem, actionMeta: ActionMeta<TValueItem>) => void,
     defaultValue?: { label: string, value: string },
     options: TValueItem[],
     placeholder?: string
