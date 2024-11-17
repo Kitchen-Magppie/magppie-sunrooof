@@ -149,82 +149,6 @@ export function CustomerActionForm(props: TProps) {
         [StorageActions, setValue, values?.customerId]
     );
 
-    // const totalGrossAmount = useMemo(() => {
-    // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
-    //     (item) => item.value === CustomerComponentEnum.TwoDDesign
-    // );
-    // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
-    // const quotation = (
-    //     values?.components as TCustomerComponentQuotationItem[]
-    // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-    // if (quotation?.data?.entries?.length) {
-    //     return quotation.data.entries.reduce((acc, entry) => {
-    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //         const total = price * (entry.qty || 1);
-    //         return acc + total;
-    //     }, 0);
-    // }
-    // if (twoDataItem?.data?.length) {
-    //     return twoDataItem.data.reduce((acc, entry) => {
-    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //         const total = price * (entry.quantity || 1);
-    //         return acc + total;
-    //     }, 0);
-    // }
-    // return 0;
-    // }, [values?.components]);
-
-    const twoDataItem = (values.components as TCustomerComponentItem[]).find(
-        (item) => item.value === CustomerComponentEnum.TwoDDesign
-    );
-
-    // Step 1: Calculate Total Gross Amount Directly
-    let totalGrossAmount = 0;
-
-    if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
-        totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
-            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-            const total = price * (entry.quantity || 1);
-            // Log each entry’s calculation for verification
-            // console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
-
-            return acc + total;
-        }, 0);
-    }
-    // console.log(values)
-    // const totalGrossAmount = useMemo(() => {
-    //     const quotation = (
-    //         values?.components as TCustomerComponentQuotationItem[]
-    //     )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-    //     if (quotation?.data?.entries?.length) {
-    //         return quotation.data.entries.reduce((acc, entry) => {
-    //             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //             const total = price * (entry.qty || 1);
-    //             return acc + total;
-    //         }, 0);
-    //     }
-    //     return 0;
-    // }, [values?.components]);
-
-    // const totalGrossAmount = useMemo(() => {
-    //     const quotations = (values?.components as TCustomerComponentQuotationItem[])
-    //         ?.filter((item) => item.value === CustomerComponentEnum.Quotation);
-
-    //     if (quotations?.length) {
-    //         return quotations.reduce((acc, quotation) => {
-    //             const entryTotal = quotation.data.entries.reduce((entryAcc, entry) => {
-    //                 const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //                 const total = price * (entry.qty || 1);
-    //                 return entryAcc + total;
-    //             }, 0);
-
-    //             return acc + entryTotal;
-    //         }, 0);
-    //     }
-
-    //     return 0;
-    // }, [values?.components]);
-
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return (<p className="text-red-500 text-xs mt-1">
@@ -386,8 +310,8 @@ export function CustomerActionForm(props: TProps) {
                         case CustomerComponentEnum.Quotation: {
                             const salutations = _.labelify(QUOTATION_SALUTATION_OPTIONS);
                             const data = component as TCustomerComponentQuotationItem;
-
-                            const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
+                            const totalGrossAmount = TO_TOTAL_GROSS_AMOUNT(values.components);
+                            const twoDataItem = values.components.find((item) => item.value === CustomerComponentEnum.TwoDDesign);
                             const discountAmount =
                                 totalGrossAmount * (data.data.discount / 100);
                             const freightCharges = 50000;
@@ -1422,4 +1346,20 @@ const INIT_CORPUS = {
     isSubmitting: false,
     isQuotationImageDownload: false,
 };
+const TO_TOTAL_GROSS_AMOUNT = (arr: TCustomerComponentItem[]) => {
+    const twoDataItem = arr.find(
+        (item) => item.value === CustomerComponentEnum.TwoDDesign
+    );
+    // Step 1: Calculate Total Gross Amount Directly
+    let totalGrossAmount = 0;
+
+    if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
+        totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
+            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+            const total = price * (entry.quantity || 1);
+            return acc + total;
+        }, 0);
+    }
+    return totalGrossAmount
+}
 //1330
