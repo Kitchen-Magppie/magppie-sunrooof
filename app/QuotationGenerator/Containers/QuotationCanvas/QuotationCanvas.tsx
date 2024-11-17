@@ -361,7 +361,7 @@ function QuotationCanvas(props: TProps) {
 
             StorageAction.batch.upload({
                 files: [Presentation.value.file,
-                Base64ToFile(uri, Presentation.value.file.name)
+                _.base64ToFile(uri, Presentation.value.file.name)
                 ],
                 path: 'proposed-layout',
                 onSuccess: (e) => {
@@ -850,17 +850,7 @@ function QuotationCanvas(props: TProps) {
 }
 
 type TKonvaMouseEvent = Konva.KonvaEventObject<MouseEvent>
-function Base64ToFile(base64: string, filename: string): File {
-    const arr = typeof base64 === 'string' ? base64.split(',') : [];
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], filename, { type: mime });
-}
+
 
 const INIT_IMAGE_PROPS = {
     width: 0,
@@ -872,12 +862,4 @@ const INIT_IMAGE_PROPS = {
 type TProps = { onToggleEditorPage: (e: boolean) => void }
 
 export default QuotationCanvas
-// const boxHeight = 800
-// const boxWidth = 1000
-// type TImageProps = {
-//     image: HTMLImageElement;
-//     width: number;
-//     height: number;
-//     x: number;
-//     y: number;
-// }
+

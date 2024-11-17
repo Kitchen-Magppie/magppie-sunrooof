@@ -14,7 +14,7 @@ import { setPresentationData, useAppDispatch, useAppSelector } from "../../../..
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
 
-import { TProposedLayoutItem } from "../../../../types";
+import { _, TProposedLayoutItem } from "../../../../types";
 
 import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
@@ -62,7 +62,7 @@ function ProposedLayoutView() {
 
         const imageDataUrl = canvas.toDataURL('image/png');
 
-        setValue('file', base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
+        setValue('file', _.base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
     }, [setValue])
 
 
@@ -229,15 +229,5 @@ const proposedLayoutSchema = yup.object().shape({
     file: yup.mixed().required('File is required'),
 });
 
-function base64ToFile(base64String, fileName) {
-    const imageType = base64String.split(';')[0].split(':')[1];
-    const byteString = atob(base64String.split(',')[1]);
-    const arrayBuffer = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++) {
-        arrayBuffer[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([arrayBuffer], { type: imageType });
-    return new File([blob], fileName, { type: imageType });
-}
 
 export default ProposedLayoutView;

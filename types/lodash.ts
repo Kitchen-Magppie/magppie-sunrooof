@@ -6,6 +6,7 @@ type TLabelify = { value: string, label: string }
 type TDownload = { url: string, name: string }
 
 type TFromCanvasElementToFile = { element: HTMLCanvasElement, name: string, type: string }
+// type TBase64ToFile=
 interface TLodashMixin extends _.LoDashStatic {
     labelify: (e: string[]) => TLabelify[]
     titleCase: (e: string) => string,
@@ -16,7 +17,8 @@ interface TLodashMixin extends _.LoDashStatic {
     uuid: () => string,
     download: (e: TDownload) => void,
     dataURLtoBlob: (e: string) => Blob,
-    fromCanvasElementToFile: (e: TFromCanvasElementToFile) => File
+    fromCanvasElementToFile: (e: TFromCanvasElementToFile) => File,
+    base64ToFile: (content: string, fileName: string) => File
 }
 
 
@@ -88,6 +90,17 @@ function fromCanvasElementToFile(e: TFromCanvasElementToFile) {
     return file
 }
 
+function base64ToFile(base64String: string, fileName: string) {
+    const imageType = base64String.split(';')[0].split(':')[1];
+    const byteString = atob(base64String.split(',')[1]);
+    const arrayBuffer = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+        arrayBuffer[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([arrayBuffer], { type: imageType });
+    return new File([blob], fileName, { type: imageType });
+}
+
 _.mixin({
     download,
     labelify,
@@ -98,6 +111,7 @@ _.mixin({
     applyOrder,
     uuid,
     dataURLtoBlob,
-    fromCanvasElementToFile
+    fromCanvasElementToFile,
+    base64ToFile
 })
 export default _ as TLodashMixin
