@@ -7,7 +7,6 @@ import { IoIosLink } from "react-icons/io";
 import { toast, ToastOptions } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-use";
-import Select from "react-select";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -51,6 +50,7 @@ import {
     CmsCopyClipboard,
     FieldCautation,
     MinimalAccordion,
+    MinimalDropdown,
 } from "../../../components";
 import { ImageInput } from "../../../../../components";
 import { useFirebaseCustomerAction } from "../../../utils/firebase/customer";
@@ -118,7 +118,8 @@ export function CustomerActionForm(props: TProps) {
     });
 
     const values = watch() as TCustomerItem;
-
+    // console.log(values)
+    console.log(errors)
     const onClickGenerateSaveInvoiceImage = useCallback(
         (i: number) => {
             const invoiceElement = invoiceRefPng.current;
@@ -147,82 +148,6 @@ export function CustomerActionForm(props: TProps) {
         },
         [StorageActions, setValue, values?.customerId]
     );
-
-    // const totalGrossAmount = useMemo(() => {
-    // const twoDataItem = (values.components as TCustomerComponentItem[]).find(
-    //     (item) => item.value === CustomerComponentEnum.TwoDDesign
-    // );
-    // const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
-    // const quotation = (
-    //     values?.components as TCustomerComponentQuotationItem[]
-    // )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-    // if (quotation?.data?.entries?.length) {
-    //     return quotation.data.entries.reduce((acc, entry) => {
-    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //         const total = price * (entry.qty || 1);
-    //         return acc + total;
-    //     }, 0);
-    // }
-    // if (twoDataItem?.data?.length) {
-    //     return twoDataItem.data.reduce((acc, entry) => {
-    //         const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //         const total = price * (entry.quantity || 1);
-    //         return acc + total;
-    //     }, 0);
-    // }
-    // return 0;
-    // }, [values?.components]);
-
-    const twoDataItem = (values.components as TCustomerComponentItem[]).find(
-        (item) => item.value === CustomerComponentEnum.TwoDDesign
-    );
-
-    // Step 1: Calculate Total Gross Amount Directly
-    let totalGrossAmount = 0;
-
-    if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
-        totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
-            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-            const total = price * (entry.quantity || 1);
-            // Log each entry’s calculation for verification
-            // console.log(`Design: ${entry.design}, Finish: ${entry.finish}, Quantity: ${entry.quantity}, Price: ${price}, Total: ${total}`);
-
-            return acc + total;
-        }, 0);
-    }
-    // console.log(values)
-    // const totalGrossAmount = useMemo(() => {
-    //     const quotation = (
-    //         values?.components as TCustomerComponentQuotationItem[]
-    //     )?.find((item) => item.value === CustomerComponentEnum.Quotation);
-    //     if (quotation?.data?.entries?.length) {
-    //         return quotation.data.entries.reduce((acc, entry) => {
-    //             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //             const total = price * (entry.qty || 1);
-    //             return acc + total;
-    //         }, 0);
-    //     }
-    //     return 0;
-    // }, [values?.components]);
-
-    // const totalGrossAmount = useMemo(() => {
-    //     const quotations = (values?.components as TCustomerComponentQuotationItem[])
-    //         ?.filter((item) => item.value === CustomerComponentEnum.Quotation);
-
-    //     if (quotations?.length) {
-    //         return quotations.reduce((acc, quotation) => {
-    //             const entryTotal = quotation.data.entries.reduce((entryAcc, entry) => {
-    //                 const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-    //                 const total = price * (entry.qty || 1);
-    //                 return entryAcc + total;
-    //             }, 0);
-
-    //             return acc + entryTotal;
-    //         }, 0);
-    //     }
-
-    //     return 0;
-    // }, [values?.components]);
 
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
@@ -323,20 +248,7 @@ export function CustomerActionForm(props: TProps) {
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
                                         <div className="d-flex flex-row gap">
-                                            <Select
-                                                theme={(theme) => ({
-                                                    ...theme,
-                                                    borderRadius: 6,
-                                                    colors: {
-                                                        ...theme.colors,
-                                                        text: "white",
-                                                        primary25: "#3F51B5",
-                                                        primary: "#3F51B5",
-                                                    },
-                                                })}
-                                                classNames={{
-                                                    control: () => AUTOCOMPLETE_STYLE,
-                                                }}
+                                            <MinimalDropdown
                                                 onChange={(e) => {
                                                     setValue(`components.${i}.data`, e.value);
                                                 }}
@@ -355,20 +267,7 @@ export function CustomerActionForm(props: TProps) {
                             return (
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
-                                        <Select
-                                            theme={(theme) => ({
-                                                ...theme,
-                                                borderRadius: 6,
-                                                colors: {
-                                                    ...theme.colors,
-                                                    text: "white",
-                                                    primary25: "#3F51B5",
-                                                    primary: "#3F51B5",
-                                                },
-                                            })}
-                                            classNames={{
-                                                control: () => AUTOCOMPLETE_STYLE,
-                                            }}
+                                        <MinimalDropdown
                                             defaultValue={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
                                                 (item) => item.value === _.get(component, "data")
                                             )}
@@ -377,6 +276,7 @@ export function CustomerActionForm(props: TProps) {
                                             }}
                                             options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                                         />
+
                                         {renderErrorMessage(`components.${i}.data`)}
                                     </MinimalAccordion>
                                 </div>
@@ -385,8 +285,8 @@ export function CustomerActionForm(props: TProps) {
                         case CustomerComponentEnum.Quotation: {
                             const salutations = _.labelify(QUOTATION_SALUTATION_OPTIONS);
                             const data = component as TCustomerComponentQuotationItem;
-
-                            const twoDataItem = (values.components as TCustomerComponentItem[]).find((item) => item.value === CustomerComponentEnum.TwoDDesign);
+                            const totalGrossAmount = TO_TOTAL_GROSS_AMOUNT(values.components);
+                            const twoDataItem = values.components.find((item) => item.value === CustomerComponentEnum.TwoDDesign);
                             const discountAmount =
                                 totalGrossAmount * (data.data.discount / 100);
                             const freightCharges = 50000;
@@ -410,26 +310,14 @@ export function CustomerActionForm(props: TProps) {
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         Salutation
                                                     </label>
-                                                    <Select
-                                                        theme={(theme) => ({
-                                                            ...theme,
-                                                            borderRadius: 6,
-                                                            colors: {
-                                                                ...theme.colors,
-                                                                text: "white",
-                                                                primary25: "#3F51B5",
-                                                                primary: "#3F51B5",
-                                                            },
-                                                        })}
-                                                        classNames={{
-                                                            control: () => AUTOCOMPLETE_STYLE,
-                                                        }}
+                                                    <MinimalDropdown
                                                         defaultValue={salutations?.find(
                                                             (salutation) =>
                                                                 salutation.value === data.data.salutation
                                                         )}
                                                         options={salutations}
                                                         onChange={(e) => {
+                                                            console.log(e)
                                                             setValue(
                                                                 `components.${i}.data.salutation`,
                                                                 e.value
@@ -1182,6 +1070,7 @@ export function CustomerActionForm(props: TProps) {
                                             }}
                                         />
                                         {prev.data?.map((data, k) => {
+                                            const currentData = prev.data[k]
                                             const hasMoreThenOne = prev.data?.length > 1;
                                             return (
                                                 <div
@@ -1221,27 +1110,14 @@ export function CustomerActionForm(props: TProps) {
                                                                     className="bg-white"
                                                                     key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
                                                                 >
-                                                                    <Select
-                                                                        theme={(theme) => ({
-                                                                            ...theme,
-                                                                            borderRadius: 6,
-                                                                            colors: {
-                                                                                ...theme.colors,
-                                                                                text: "white",
-                                                                                primary25: "#3F51B5",
-                                                                                primary: "#3F51B5",
-                                                                            },
-                                                                        })}
-                                                                        classNames={{
-                                                                            control: () => AUTOCOMPLETE_STYLE,
-                                                                        }}
+                                                                    <MinimalDropdown
                                                                         placeholder={item.label}
                                                                         defaultValue={options?.find(
                                                                             (option) =>
                                                                                 option.value === data[item.value]
                                                                         )}
                                                                         onChange={(e) => {
-                                                                            if (item.value === 'rightImage') {
+                                                                            if (item.value === 'proposedLayout') {
 
                                                                                 const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
                                                                                 setValue(
@@ -1263,6 +1139,10 @@ export function CustomerActionForm(props: TProps) {
                                                                                     currentProposedLayout.finish);
 
                                                                                 setValue(
+                                                                                    `components.${i}.data.${k}.proposedLayout`,
+                                                                                    e.value);
+
+                                                                                setValue(
                                                                                     `name`,
                                                                                     currentProposedLayout.name
                                                                                 );
@@ -1278,6 +1158,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         }}
                                                                         options={options}
                                                                     />
+
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.${k}.${item.value}`
                                                                     )}
@@ -1302,8 +1183,10 @@ export function CustomerActionForm(props: TProps) {
                                                                         {...register(
                                                                             `components.${i}.data.${k}.${item.value}`
                                                                         )}
+
+                                                                        disabled={!!currentData.proposedLayout?.length}
                                                                         placeholder={item.placeholder}
-                                                                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                                        className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                                                                     />
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.${k}.${item.value}`
@@ -1316,7 +1199,7 @@ export function CustomerActionForm(props: TProps) {
                                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                             (item) => item.field === "image"
                                                         )?.map((item, j) => {
-                                                            const value = `${_.get(prev, `data.${k}.${item.value}`, '')}`;
+                                                            const value = `${_.get(currentData, `${item.value}`, '')}`;
                                                             const items = value?.length ? [value] : [];
                                                             return (
                                                                 <div key={j}>
@@ -1381,15 +1264,13 @@ type TProps = {
 };
 // 631
 
-const AUTOCOMPLETE_STYLE =
-    "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayoutItem[]) {
     switch (e) {
         case "design":
             return _.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS);
         case "finish":
             return _.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS);
-        case "rightImage":
+        case "proposedLayout":
             return proposedLayout?.map((item) => ({
                 label: item.label,
                 value: item.url.proposed,
@@ -1414,4 +1295,20 @@ const INIT_CORPUS = {
     isSubmitting: false,
     isQuotationImageDownload: false,
 };
+const TO_TOTAL_GROSS_AMOUNT = (arr: TCustomerComponentItem[]) => {
+    const twoDataItem = arr.find(
+        (item) => item.value === CustomerComponentEnum.TwoDDesign
+    );
+    // Step 1: Calculate Total Gross Amount Directly
+    let totalGrossAmount = 0;
+
+    if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
+        totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
+            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
+            const total = price * (entry.quantity || 1);
+            return acc + total;
+        }, 0);
+    }
+    return totalGrossAmount
+}
 //1330
