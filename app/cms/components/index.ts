@@ -9,8 +9,9 @@ import CmsNotFound from "./CmsNotFound";
 import { CmsCustomerCardItem } from "./CmsCustomerCardItem";
 import CmsCopyClipboard from "./CmsCopyClipboard"
 export * from "./FieldCautation"
-
+import MinimalDropdown from "./MinimalDropdown";
 export {
+    MinimalDropdown,
     CmsCopyClipboard,
     CmsCustomerCardItem,
     CmsNotFound,

@@ -7,7 +7,6 @@ import { IoIosLink } from "react-icons/io";
 import { toast, ToastOptions } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-use";
-import Select from "react-select";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -51,6 +50,7 @@ import {
     CmsCopyClipboard,
     FieldCautation,
     MinimalAccordion,
+    MinimalDropdown,
 } from "../../../components";
 import { ImageInput } from "../../../../../components";
 import { useFirebaseCustomerAction } from "../../../utils/firebase/customer";
@@ -248,20 +248,7 @@ export function CustomerActionForm(props: TProps) {
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
                                         <div className="d-flex flex-row gap">
-                                            <Select
-                                                theme={(theme) => ({
-                                                    ...theme,
-                                                    borderRadius: 6,
-                                                    colors: {
-                                                        ...theme.colors,
-                                                        text: "white",
-                                                        primary25: "#3F51B5",
-                                                        primary: "#3F51B5",
-                                                    },
-                                                })}
-                                                classNames={{
-                                                    control: () => AUTOCOMPLETE_STYLE,
-                                                }}
+                                            <MinimalDropdown
                                                 onChange={(e) => {
                                                     setValue(`components.${i}.data`, e.value);
                                                 }}
@@ -280,20 +267,7 @@ export function CustomerActionForm(props: TProps) {
                             return (
                                 <div key={i}>
                                     <MinimalAccordion isExpanded title={title}>
-                                        <Select
-                                            theme={(theme) => ({
-                                                ...theme,
-                                                borderRadius: 6,
-                                                colors: {
-                                                    ...theme.colors,
-                                                    text: "white",
-                                                    primary25: "#3F51B5",
-                                                    primary: "#3F51B5",
-                                                },
-                                            })}
-                                            classNames={{
-                                                control: () => AUTOCOMPLETE_STYLE,
-                                            }}
+                                        <MinimalDropdown
                                             defaultValue={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
                                                 (item) => item.value === _.get(component, "data")
                                             )}
@@ -302,6 +276,7 @@ export function CustomerActionForm(props: TProps) {
                                             }}
                                             options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
                                         />
+
                                         {renderErrorMessage(`components.${i}.data`)}
                                     </MinimalAccordion>
                                 </div>
@@ -335,26 +310,14 @@ export function CustomerActionForm(props: TProps) {
                                                     <label className="block text-sm font-medium text-gray-700">
                                                         Salutation
                                                     </label>
-                                                    <Select
-                                                        theme={(theme) => ({
-                                                            ...theme,
-                                                            borderRadius: 6,
-                                                            colors: {
-                                                                ...theme.colors,
-                                                                text: "white",
-                                                                primary25: "#3F51B5",
-                                                                primary: "#3F51B5",
-                                                            },
-                                                        })}
-                                                        classNames={{
-                                                            control: () => AUTOCOMPLETE_STYLE,
-                                                        }}
+                                                    <MinimalDropdown
                                                         defaultValue={salutations?.find(
                                                             (salutation) =>
                                                                 salutation.value === data.data.salutation
                                                         )}
                                                         options={salutations}
                                                         onChange={(e) => {
+                                                            console.log(e)
                                                             setValue(
                                                                 `components.${i}.data.salutation`,
                                                                 e.value
@@ -1147,20 +1110,7 @@ export function CustomerActionForm(props: TProps) {
                                                                     className="bg-white"
                                                                     key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
                                                                 >
-                                                                    <Select
-                                                                        theme={(theme) => ({
-                                                                            ...theme,
-                                                                            borderRadius: 6,
-                                                                            colors: {
-                                                                                ...theme.colors,
-                                                                                text: "white",
-                                                                                primary25: "#3F51B5",
-                                                                                primary: "#3F51B5",
-                                                                            },
-                                                                        })}
-                                                                        classNames={{
-                                                                            control: () => AUTOCOMPLETE_STYLE,
-                                                                        }}
+                                                                    <MinimalDropdown
                                                                         placeholder={item.label}
                                                                         defaultValue={options?.find(
                                                                             (option) =>
@@ -1208,6 +1158,7 @@ export function CustomerActionForm(props: TProps) {
                                                                         }}
                                                                         options={options}
                                                                     />
+
                                                                     {renderErrorMessage(
                                                                         `components.${i}.data.${k}.${item.value}`
                                                                     )}
@@ -1313,8 +1264,6 @@ type TProps = {
 };
 // 631
 
-const AUTOCOMPLETE_STYLE =
-    "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayoutItem[]) {
     switch (e) {
         case "design":
