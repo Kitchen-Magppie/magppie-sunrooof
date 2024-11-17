@@ -176,19 +176,19 @@ function CustomerFormQuotationTable(props: TProps) {
 }
 
 const TO_TOTAL_GROSS_AMOUNT = (item: TCustomerComponentDesign2DItem) => {
-
-    // Step 1: Calculate Total Gross Amount Directly
+    // Ensure the function processes all entries in the item
     let totalGrossAmount = 0;
 
     if (item && Array.isArray(item.data) && item.data.length > 0) {
         totalGrossAmount = item.data.reduce((acc, entry) => {
             const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-            const total = price * (entry.quantity || 1);
-            return acc + total;
+            const total = price * (entry.quantity || 1); // Calculate total for the entry
+            return acc + total; // Add to accumulator
         }, 0);
     }
-    return totalGrossAmount
-}
+    return totalGrossAmount; // Return the gross total
+};
+
 const freightCharges = 50000;
 
 export default CustomerFormQuotationTable;
