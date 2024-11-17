@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RiLoader4Line, RiUploadCloud2Line } from "react-icons/ri";
 import { useForm } from 'react-hook-form';
@@ -29,6 +29,24 @@ function ProposedLayoutView() {
     }, [])
     const [toggle, setToggle] = useState(INIT_TOGGLE)
     const customers = useAppSelector((state) => state.Cms.Customer.value)
+    const proposedLayouts = useAppSelector((state) => state.Cms.ProposedLayout.value)
+    // const ar = proposedLayouts?.map((item) => item.name?.toLowerCase()?.trim())
+    // console.log(ar)
+
+    // console.log(ar)
+    const proposedLayoutSchema = useMemo(() => (yup.object().shape({
+        name: yup.string().required('Name is required'),
+        title: yup.string().required('Title is required')
+            .test('unique', 'Title already exists.', (value: string) => {
+                const ar = _.uniq(proposedLayouts?.map((item) => item.name?.toLowerCase()?.trim()))
+                // console.log(ar)
+                // console.log(value)
+                return !ar?.find((item) => item === value?.toLowerCase()?.trim())
+            }),
+        // finish: yup.string().required('Finish is required'),
+        // design: yup.string().required('Design is required'),
+        file: yup.mixed().required('File is required'),
+    })), [proposedLayouts]);
 
     // const [imageFile, setImageFile] = useState<File | null>(null)
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -141,9 +159,9 @@ function ProposedLayoutView() {
                     }}
                     placeholder="Customer Name"
                 />
-                {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
+                {errors?.name?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
                     <IoIosHelpCircleOutline className="text-sm my-1" />
-                    {errors?.title?.message}</span>}
+                    {errors?.name?.message}</span>}
             </div>
 
 
@@ -221,13 +239,7 @@ const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
 // const AUTOCOMPLETE_STYLE =
 //     "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
-const proposedLayoutSchema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    title: yup.string().required('Title is required'),
-    // finish: yup.string().required('Finish is required'),
-    // design: yup.string().required('Design is required'),
-    file: yup.mixed().required('File is required'),
-});
+
 
 
 export default ProposedLayoutView;
