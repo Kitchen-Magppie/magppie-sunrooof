@@ -288,6 +288,14 @@ function CustomerFormQuotationSection(props: TProps) {
                                         <label className="block text-sm font-medium text-gray-700">
                                             Design
                                         </label>
+                                        {/* <MinimalDropdown
+                                            placeholder="Select Design"
+                                            defaultValue={{ label: entry.design || '', value: entry.design || '' }}
+                                            options={_.labelify(Object.keys(CMS_QUOTATION_OPTIONS))}
+                                            onChange={(e) => {
+                                                setValue(`components.${i}.data.entries.${index}.design`, e.value)
+                                            }}
+                                        /> */}
                                         <select
                                             value={entry.design}
                                             {...register(
