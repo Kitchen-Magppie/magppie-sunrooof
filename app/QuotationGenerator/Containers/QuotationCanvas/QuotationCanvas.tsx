@@ -324,7 +324,7 @@ function QuotationCanvas(props: TProps) {
 
     const StorageAction = useFirebaseStorageActions();
     const action = useFirebaseCustomerAction();
-    console.log(Presentation.value)
+    // console.log(Presentation.value)
 
     const customers = useAppSelector((state) => state.Cms.Customer.value);
     const handleDownload = useCallback(({ isRedirectBack }: { isRedirectBack: boolean }) => {

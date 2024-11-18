@@ -29,7 +29,7 @@ function CustomerFormQuotationSection(props: TProps) {
     const StorageActions = useFirebaseStorageActions();
     const { watch, register, formState: { errors }, setValue } = useFormContext<TCustomerItem>();
     const values = watch() as TCustomerItem;
-    console.log(values)
+    // console.log(values)
 
     const invoiceRef = useRef(null);
     const invoiceRefPng = useRef(null);
