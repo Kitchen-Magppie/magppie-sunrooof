@@ -84,9 +84,12 @@ function ProposedLayoutView() {
     }, [setValue])
 
 
+    console.log(values)
+
     const onFileChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
 
+        console.log(content)
         if (content?.isValid) {
             if (content.accessor === 'pdf') {
                 convertPdfToImage(content.file)
@@ -222,12 +225,8 @@ function ProposedLayoutView() {
 }
 
 const FROM_FILE_TO_ACCESSOR = (file: File) => {
-    let accessor
     const docType = file.type?.toLowerCase()
-    if (docType?.startsWith('application/pdf')) {
-        accessor = 'pdf'
-    }
-    accessor = 'image'
+    const accessor = docType?.startsWith('application/pdf') ? 'pdf' : 'image'
     return ({
         accessor,
         isValid: docType?.startsWith('application/pdf') || docType?.startsWith('image/'),
