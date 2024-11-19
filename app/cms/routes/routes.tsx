@@ -11,9 +11,13 @@ import { PageProgress } from '../../../components'
 // ======================================================================
 
 const CustomerView = lazy(() => import('../containers/Customer'))
-const ProposedLayoutView = lazy(() => import('../containers/ProposedLayoutView'))
+const ProposedLayoutView = lazy(
+    () => import('../containers/ProposedLayoutView')
+)
+const ProposedLayoutOldView = lazy(
+    () => import('../containers/Old/ProposedLayoutOldView')
+)
 const SignInView = lazy(() => import('../containers/auth/SignIn/SignIn'))
-
 
 export default function CmsRoutes() {
     useFirebaseCmsAuthListener()
@@ -27,15 +31,27 @@ export default function CmsRoutes() {
             },
             {
                 path: '',
-                element: (<Suspense fallback={<PageProgress />}>
-                    <CustomerView />
-                </ Suspense>)
+                element: (
+                    <Suspense fallback={<PageProgress />}>
+                        <CustomerView />
+                    </Suspense>
+                ),
             },
             {
                 path: 'proposed/layout',
-                element: (<Suspense fallback={<PageProgress />}>
-                    <ProposedLayoutView />
-                </Suspense>)
+                element: (
+                    <Suspense fallback={<PageProgress />}>
+                        <ProposedLayoutView />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'proposed/old/layout',
+                element: (
+                    <Suspense fallback={<PageProgress />}>
+                        <ProposedLayoutOldView />
+                    </Suspense>
+                ),
             },
         ],
     } as RouteObject

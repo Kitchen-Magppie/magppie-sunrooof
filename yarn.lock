@@ -2074,6 +2074,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/p5@npm:1.7.0":
+  version: 1.7.0
+  resolution: "@types/p5@npm:1.7.0"
+  checksum: 10c0/163f11228f968ea124738f55f0749e091e5148baa55a4e483377125ec79a8c596b8ce48dc584ad3efd635b49ce8e4e5dacf421667e53eadbab8659a15e6e14c6
+  languageName: node
+  linkType: hard
+
+"@types/p5@npm:^1":
+  version: 1.7.6
+  resolution: "@types/p5@npm:1.7.6"
+  checksum: 10c0/92f53b7666a346a70c144fd72e09d06b9ef54a099098629717d0a70043d2ce96f1e3f49e6d36c7afa7f27ceaa4b833cca50d9d33878d201fce7105658ace0a6e
+  languageName: node
+  linkType: hard
+
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -4335,6 +4349,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.40.0"
     "@tanstack/react-table": "npm:^8.20.1"
     "@types/lodash": "npm:^4.17.4"
+    "@types/p5": "npm:^1"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@types/react-lazy-load-image-component": "npm:^1.6.4"
@@ -4363,6 +4378,7 @@ __metadata:
     konva: "npm:^9.3.15"
     lodash: "npm:^4.17.21"
     lucide-react: "npm:^0.440.0"
+    p5: "npm:^1.11.1"
     pdfjs-dist: "npm:^4.8.69"
     postcss: "npm:^8.4.38"
     react: "npm:^18.2.0"
@@ -4371,6 +4387,7 @@ __metadata:
     react-icons: "npm:^5.2.1"
     react-konva: "npm:^18.2.10"
     react-lazy-load-image-component: "npm:^1.6.2"
+    react-p5: "npm:^1.4.1"
     react-redux: "npm:^9.1.2"
     react-responsive-carousel: "npm:^3.2.23"
     react-router-dom: "npm:^6.23.1"
@@ -4918,6 +4935,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"opencollective-postinstall@npm:2.0.2":
+  version: 2.0.2
+  resolution: "opencollective-postinstall@npm:2.0.2"
+  bin:
+    opencollective-postinstall: index.js
+  checksum: 10c0/d12cb4c79428ac47752628e56be0840f0ff7d106acb89103cad0dedd9f8b1f532833e987a7a82f06b42e35577b81ebc9a6cbf8ee780833bf542b5182496d7885
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -4956,6 +4982,20 @@ __metadata:
   dependencies:
     aggregate-error: "npm:^3.0.0"
   checksum: 10c0/592c05bd6262c466ce269ff172bb8de7c6975afca9b50c975135b974e9bdaafbfe80e61aaaf5be6d1200ba08b30ead04b88cfa7e25ff1e3b93ab28c9f62a2c75
+  languageName: node
+  linkType: hard
+
+"p5@npm:1.7.0":
+  version: 1.7.0
+  resolution: "p5@npm:1.7.0"
+  checksum: 10c0/8b6e9f8ed167f2b30afde7ac6c0eced27f1d0d96f831500d2e6a08238c28a4b9fe949a47e60e7ae8ab2fac8c20b0275bbac55e2561639850e9a87b2f6dfe3d80
+  languageName: node
+  linkType: hard
+
+"p5@npm:^1.11.1":
+  version: 1.11.1
+  resolution: "p5@npm:1.11.1"
+  checksum: 10c0/77178d75e7150c1d2f5c8cebca1f978c102299908efc188a8712c56431f492e1cba845d57331d0374c9fdb9069bffddb046046ea365b29be5aba83938576875d
   languageName: node
   linkType: hard
 
@@ -5413,6 +5453,20 @@ __metadata:
   peerDependencies:
     react: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x
   checksum: 10c0/e0bf069d734c9371cfcea6e9402b6327adf18c6e57c98616f48b38dbbeb5c8d1e9262ad4b8f5626fdd26d5ddfa7c547ff9d17419a9617306195f5fe577f0b430
+  languageName: node
+  linkType: hard
+
+"react-p5@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "react-p5@npm:1.4.1"
+  dependencies:
+    "@types/p5": "npm:1.7.0"
+    opencollective-postinstall: "npm:2.0.2"
+    p5: "npm:1.7.0"
+  peerDependencies:
+    react: ">= 17.0.1"
+    react-dom: ">= 17.0.1"
+  checksum: 10c0/340c10c30d90f03d11976bc7c0e94a55b5854d4a97f2f7482f5c2430412d247556b65c46fc3d25392d8ca7e03a1096b9feaf67badae10f206bcb62aaf996c60f
   languageName: node
   linkType: hard
 
