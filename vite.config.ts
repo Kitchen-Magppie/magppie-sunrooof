@@ -4,4 +4,12 @@ import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
     plugins: [react(), svgr()],
+    build: {
+        rollupOptions: {
+            input: {
+                main: 'index.html',       // Entry point for React app
+                vanilla: 'vanilla.html',  // Entry point for Vanilla JS page
+            },
+        },
+    },
 })
