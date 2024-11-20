@@ -81,7 +81,7 @@ function ProposedLayoutView() {
         const imageDataUrl = canvas.toDataURL('image/png');
 
         setValue('file', _.base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
-        sessionStorage.setItem('IMAGE_DATA', `${imageDataUrl}`)
+        sessionStorage.setItem('CUSTOMER_IMAGE', `${imageDataUrl}`)
     }, [setValue])
 
 
@@ -97,7 +97,7 @@ function ProposedLayoutView() {
             }
             if (content?.accessor === 'image') {
                 const data = await convertFileToBase64(content.file)
-                sessionStorage.setItem('IMAGE_DATA', `${data}`)
+                sessionStorage.setItem('CUSTOMER_IMAGE', `${data}`)
                 setValue('file', content.file)
             }
         } else {
@@ -122,8 +122,11 @@ function ProposedLayoutView() {
                     isOpenEditorPage: true,
                     isLoading: false
                 }))
+
+                window.location.href = '/vanilla.html';
             }
         }, 2000)
+
     })
     return (<div className="container mx-auto">
         <div className="text-2xl font-medium uppercase">Proposed Layout Generator</div>
