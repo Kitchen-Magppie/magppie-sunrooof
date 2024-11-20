@@ -886,8 +886,35 @@ function downloadCanvas() {
         // Store the final image in session storage as PROPOSED_IMAGE
         sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64);
         console.log('Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE');
+
+        // Navigate to /design-submit
+        window.location.href = '/cms/design-submit';
     }, 200);
 }
+
+
+// function downloadCanvas() {
+//     const canvas = document.getElementsByTagName('canvas')[0];
+//     if (!canvas) {
+//         console.error('Canvas not found!');
+//         return;
+//     }
+
+//     // Get the true image from the canvas as a Base64 Data URL
+//     const trueImgBase64 = canvas.toDataURL('image/png');
+
+//     // Simulate some processing for masked image
+//     setTimeout(() => {
+//         const maskedImgBase64 = canvas.toDataURL('image/png'); // Replace with actual masked image logic if needed
+
+//         // Choose the image to store as Base64
+//         const finalImageBase64 = maskedImgBase64; // Use maskedImgBase64 or trueImgBase64 based on requirement
+
+//         // Store the final image in session storage as PROPOSED_IMAGE
+//         sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64);
+//         console.log('Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE');
+//     }, 200);
+// }
 
 
 // function downloadCanvas() {

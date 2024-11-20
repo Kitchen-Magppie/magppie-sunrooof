@@ -16,7 +16,7 @@ const CustomerLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="text-black lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap text-[#78746c]">
+                    <div className="lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap text-[#78746c]">
                         <div className="mb-2 text-3xl lg:text-xl text-[#78746c]">
                             <strong>Design :</strong> {item.design}
                         </div>

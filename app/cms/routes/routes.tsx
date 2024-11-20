@@ -17,6 +17,9 @@ const ProposedLayoutView = lazy(
 const ProposedLayoutOldView = lazy(
     () => import('../containers/Old/ProposedLayoutOldView')
 )
+const DesignSubmit = lazy(
+    () => import('../containers/DesignSubmit')
+)
 const SignInView = lazy(() => import('../containers/auth/SignIn/SignIn'))
 
 export default function CmsRoutes() {
@@ -42,6 +45,14 @@ export default function CmsRoutes() {
                 element: (
                     <Suspense fallback={<PageProgress />}>
                         <ProposedLayoutView />
+                    </Suspense>
+                ),
+            },
+            {
+                path: 'design-submit',
+                element: (
+                    <Suspense fallback={<PageProgress />}>
+                        <DesignSubmit />
                     </Suspense>
                 ),
             },
