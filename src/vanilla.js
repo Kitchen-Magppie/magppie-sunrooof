@@ -165,7 +165,7 @@ function removePoints() {
 
 // Preload the background image from local storage
 function preload() {
-    const imageData = localStorage.getItem('imageData')
+    const imageData = sessionStorage.getItem('IMAGE_DATA')
     bgImage = loadImage(imageData, (img) => {
         imgWidth = img.width
         imgHeight = img.height
@@ -915,7 +915,7 @@ function downloadCanvas() {
 }
 
 function generateInvoice() {
-    localStorage.setItem('units', JSON.stringify(unitsCount))
+    sessionStorage.setItem('units', JSON.stringify(unitsCount))
     window.open('/quotation.html', '_blank')
 }
 
