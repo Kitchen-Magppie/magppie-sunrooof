@@ -20,8 +20,8 @@ const DesignSubmit = ({
     props,
     isRedirectBack,
 }: {
-    props: TProps
-    isRedirectBack: boolean
+    props?: TProps
+    isRedirectBack?: boolean
 }) => {
     const { Presentation } = useAppSelector(({ Cms }) => Cms)
     const customerImage = sessionStorage.getItem('CUSTOMER_IMAGE')

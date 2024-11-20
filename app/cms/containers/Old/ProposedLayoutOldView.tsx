@@ -13,9 +13,9 @@ import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
 import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
-
 import { _, TProposedLayoutItem } from "../../../../types";
 
+//====================================================================
 import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
 
