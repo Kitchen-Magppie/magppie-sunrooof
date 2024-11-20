@@ -191,6 +191,7 @@ function preload() {
     ]
 }
 
+
 // Setup the canvas and display client name
 function setup() {
     //   hw_ratio = imgHeight / imgWidth;

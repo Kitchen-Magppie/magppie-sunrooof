@@ -161,7 +161,9 @@ function ProposedLayoutView() {
                         label: customer.name
                     }))}
                     onChange={(e) => {
-                        sessionStorage.setItem('CUSTOMER_NAME', e.label)
+                        const currentCustomer = customers.find((customer) => customer.name === e.label)
+                        sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
+                        console.log(currentCustomer);
                         setValue('name', e.label)
                     }}
                     placeholder="Customer Name"
