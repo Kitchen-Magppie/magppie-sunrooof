@@ -62,6 +62,7 @@ const DesignSubmit = ({
 
     useEffect(() => {
         if (customerImage && proposedImage && !firestoreRunRef.current) {
+            firestoreRunRef.current = true
             StorageAction.batch.upload({
                 files: [
                     _.base64ToFile(customerImage, 'customer-image.png'),
@@ -164,21 +165,36 @@ const DesignSubmit = ({
                     if (isRedirectBack) {
                         props.onToggleEditorPage(false)
                     }
-                    navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
+                    // navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
                 },
             })
         } else {
             toast('Images could not be retrieved from session storage')
         }
-    }, [Presentation?.value?.customerId, Presentation?.value?.design, Presentation?.value.finish, Presentation?.value?.name, Presentation?.value?.title, ProposedLayoutDataAction, StorageAction.batch, action, customerImage, customers, isRedirectBack, navigate, proposedImage, props])
+    }, [
+        Presentation?.value?.customerId,
+        Presentation?.value?.design,
+        Presentation?.value.finish,
+        Presentation?.value?.name,
+        Presentation?.value?.title,
+        ProposedLayoutDataAction,
+        StorageAction.batch,
+        action,
+        customerImage,
+        customers,
+        isRedirectBack,
+        navigate,
+        proposedImage,
+        props,
+    ])
 
     return (
         <div className="flex flex-col justify-center w-full items-center min-h-screen">
             {/* <div className="flex flex-col items-center container mx-auto mb-5 justify-center w-full max-w-2xl"> */}
-                {/* <h1 className="text-4xl font-bold mb-5">Layout Details</h1> */}
-                {/* <div className=" w-full"> */}
-                    {/* <form className="flex justify-around"> */}
-                        {/* <div>
+            {/* <h1 className="text-4xl font-bold mb-5">Layout Details</h1> */}
+            {/* <div className=" w-full"> */}
+            {/* <form className="flex justify-around"> */}
+            {/* <div>
                             <label
                                 htmlFor="desings"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -196,7 +212,7 @@ const DesignSubmit = ({
                                 <option value="DE">Germany</option>
                             </select>
                         </div> */}
-                        {/* <div>
+            {/* <div>
                             <label
                                 htmlFor="finishes"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -221,7 +237,7 @@ const DesignSubmit = ({
                                 )}
                             </select>
                         </div> */}
-                        {/* <div>
+            {/* <div>
                             <label
                                 htmlFor="floor"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -244,7 +260,7 @@ const DesignSubmit = ({
                                 <option value="TF">TF</option>
                             </select>
                         </div> */}
-                        {/* <div>
+            {/* <div>
                             <label
                                 htmlFor="area_name"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -261,8 +277,8 @@ const DesignSubmit = ({
                                 required
                             />
                         </div> */}
-                    {/* </form> */}
-                {/* </div> */}
+            {/* </form> */}
+            {/* </div> */}
             {/* </div> */}
             <h1 className="text-4xl font-bold mb-5">Layout Submission</h1>
             <div className="flex items-center justify-center">
@@ -285,13 +301,20 @@ const DesignSubmit = ({
                     />
                 </div>
             </div>
-
-            <button
-                type="button"
-                className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
-            >
-                Submit Layouts
-            </button>
+            <div className="flex items-center justify-center w-full gap-4">
+                <button
+                    type="button"
+                    className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+                >
+                    Back to Old Design Generator
+                </button>
+                <button
+                    type="button"
+                    className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+                >
+                    Proceed to CMS
+                </button>
+            </div>
         </div>
     )
 }
