@@ -885,6 +885,7 @@ function downloadCanvas() {
 
         // Store the final image in session storage as PROPOSED_IMAGE
         sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64);
+        sessionStorage.setItem('units_count', JSON.stringify(unitsCount))
         console.log('Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE');
 
         // Navigate to /design-submit
@@ -996,7 +997,7 @@ function downloadCanvas() {
 // }
 
 // function generateInvoice() {
-//     sessionStorage.setItem('units', JSON.stringify(unitsCount))
+//     sessionStorage.setItem('units_count', JSON.stringify(unitsCount))
 //     window.open('/quotation.html', '_blank')
 // }
 
