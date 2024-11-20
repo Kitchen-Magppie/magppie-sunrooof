@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { toast } from 'react-toastify'
 import {
@@ -7,7 +7,7 @@ import {
     _,
 } from '../../../../types'
 import {
-    COMPONENT_DESIGN2D_FINISH_OPTIONS,
+    // COMPONENT_DESIGN2D_FINISH_OPTIONS,
     INIT_CUSTOMER_ITEM,
 } from '../../mocks'
 import { useFirebaseStorageActions } from '../../../../hooks'
@@ -32,33 +32,33 @@ const DesignSubmit = ({
     const customers = useAppSelector((state) => state.Cms.Customer.value)
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const firestoreRunRef = useRef(null)
-    const [selectedFinish, setSelectedFinish] = useState(
-        sessionStorage.getItem('selectedFinish') || ''
-    )
-    const [selectedFloor, setSelectedFloor] = useState(
-        sessionStorage.getItem('selectedFloor') || ''
-    )
-    const [areaName, setAreaName] = useState(
-        sessionStorage.getItem('areaName') || ''
-    )
+    // const [selectedFinish, setSelectedFinish] = useState(
+    //     sessionStorage.getItem('selectedFinish') || ''
+    // )
+    // const [selectedFloor, setSelectedFloor] = useState(
+    //     sessionStorage.getItem('selectedFloor') || ''
+    // )
+    // const [areaName, setAreaName] = useState(
+    //     sessionStorage.getItem('areaName') || ''
+    // )
 
-    const handleFinishChange = (event) => {
-        setSelectedFinish(event.target.value)
-    }
+    // const handleFinishChange = (event) => {
+    //     setSelectedFinish(event.target.value)
+    // }
 
-    const handleFloorChange = (event) => {
-        setSelectedFloor(event.target.value)
-    }
+    // const handleFloorChange = (event) => {
+    //     setSelectedFloor(event.target.value)
+    // }
 
-    const handleAreaNameChange = (event) => {
-        setAreaName(event.target.value)
-    }
+    // const handleAreaNameChange = (event) => {
+    //     setAreaName(event.target.value)
+    // }
 
-    useEffect(() => {
-        sessionStorage.setItem('selectedFinish', selectedFinish)
-        sessionStorage.setItem('selectedFloor', selectedFloor)
-        sessionStorage.setItem('areaName', areaName)
-    }, [selectedFinish, selectedFloor, areaName])
+    // useEffect(() => {
+    //     sessionStorage.setItem('selectedFinish', selectedFinish)
+    //     sessionStorage.setItem('selectedFloor', selectedFloor)
+    //     sessionStorage.setItem('areaName', areaName)
+    // }, [selectedFinish, selectedFloor, areaName])
 
     useEffect(() => {
         if (customerImage && proposedImage && !firestoreRunRef.current) {
@@ -73,8 +73,8 @@ const DesignSubmit = ({
                         label: Presentation?.value?.title,
                         name: Presentation?.value?.name,
                         design: Presentation?.value?.design,
-                        sunrooofCount: images?.length,
-                        finish: selectedFinish,
+                        sunrooofCount: 0,
+                        finish: Presentation?.value.finish,
                         customerId: Presentation?.value?.customerId || _.uuid(),
                         url: { customer: e[0], proposed: e[1] },
                     }
@@ -170,14 +170,14 @@ const DesignSubmit = ({
         } else {
             toast('Images could not be retrieved from session storage')
         }
-    }, [customerImage, proposedImage])
+    }, [Presentation?.value?.customerId, Presentation?.value?.design, Presentation?.value.finish, Presentation?.value?.name, Presentation?.value?.title, ProposedLayoutDataAction, StorageAction.batch, action, customerImage, customers, isRedirectBack, navigate, proposedImage, props])
 
     return (
         <div className="flex flex-col justify-center w-full items-center min-h-screen">
-            <div className="flex flex-col items-center container mx-auto mb-5 justify-center w-full max-w-2xl">
-                <h1 className="text-4xl font-bold mb-5">Layout Details</h1>
-                <div className=" w-full">
-                    <form className="flex justify-around">
+            {/* <div className="flex flex-col items-center container mx-auto mb-5 justify-center w-full max-w-2xl"> */}
+                {/* <h1 className="text-4xl font-bold mb-5">Layout Details</h1> */}
+                {/* <div className=" w-full"> */}
+                    {/* <form className="flex justify-around"> */}
                         {/* <div>
                             <label
                                 htmlFor="desings"
@@ -196,7 +196,7 @@ const DesignSubmit = ({
                                 <option value="DE">Germany</option>
                             </select>
                         </div> */}
-                        <div>
+                        {/* <div>
                             <label
                                 htmlFor="finishes"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -220,8 +220,8 @@ const DesignSubmit = ({
                                     )
                                 )}
                             </select>
-                        </div>
-                        <div>
+                        </div> */}
+                        {/* <div>
                             <label
                                 htmlFor="floor"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -243,8 +243,8 @@ const DesignSubmit = ({
                                 <option value="SF">SF</option>
                                 <option value="TF">TF</option>
                             </select>
-                        </div>
-                        <div>
+                        </div> */}
+                        {/* <div>
                             <label
                                 htmlFor="area_name"
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -260,10 +260,10 @@ const DesignSubmit = ({
                                 placeholder="Living Room || Kitchen"
                                 required
                             />
-                        </div>
-                    </form>
-                </div>
-            </div>
+                        </div> */}
+                    {/* </form> */}
+                {/* </div> */}
+            {/* </div> */}
             <h1 className="text-4xl font-bold mb-5">Layout Submission</h1>
             <div className="flex items-center justify-center">
                 <div className="flex flex-col justify-center items-center">
