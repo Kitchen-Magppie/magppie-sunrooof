@@ -9,10 +9,10 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import CreatableSelect from "react-select/creatable"
 import * as pdfjsLib from 'pdfjs-dist';
 //====================================================================
-import { useProposedLayoutListener } from "../../hooks";
+// import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
-import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
+// import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
 import { _, TProposedLayoutItem } from "../../../../types";
 
 //====================================================================
@@ -20,9 +20,6 @@ import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
 
 function ProposedLayoutView() {
-
-    useProposedLayoutListener()
-    useFirebaseCmsCustomerListener()
 
     useEffect(() => {
         document.title = 'Proposed Layout | CMS'
@@ -165,8 +162,13 @@ function ProposedLayoutView() {
                     }))}
                     onChange={(e) => {
                         const currentCustomer = customers.find((customer) => customer.name === e.label)
-                        sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
-                        console.log(currentCustomer);
+                        if (currentCustomer)
+                            sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
+                        else {
+                            sessionStorage.setItem('CUSTOMER_NAME', e.label)
+
+                        }
+                        // console.log(currentCustomer);
                         setValue('name', e.label)
                     }}
                     placeholder="Customer Name"

@@ -1,191 +1,177 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { toast } from 'react-toastify'
 import {
     CustomerComponentEnum,
+    TCustomerComponentDesign2DDataItem,
     TCustomerComponentDesign2DItem,
     _,
 } from '../../../../types'
-import {
-    // COMPONENT_DESIGN2D_FINISH_OPTIONS,
-    INIT_CUSTOMER_ITEM,
-} from '../../mocks'
+import { INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM, INIT_CUSTOMER_ITEM } from '../../mocks'
 import { useFirebaseStorageActions } from '../../../../hooks'
 import { useAppSelector } from '../../../../redux'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import { useFirebaseCustomerAction } from '../../utils/firebase/customer'
 import { useProposedLayoutAction } from '../../hooks'
+import { useFirebaseCmsCustomerListener } from '../../utils/firebase'
+import { useNavigate } from 'react-router-dom'
 
-const DesignSubmit = ({
-    props,
-    isRedirectBack,
-}: {
-    props?: TProps
-    isRedirectBack?: boolean
-}) => {
-    const { Presentation } = useAppSelector(({ Cms }) => Cms)
-    const customerImage = sessionStorage.getItem('CUSTOMER_IMAGE')
-    const proposedImage = sessionStorage.getItem('PROPOSED_IMAGE')
+const DesignSubmit = () => {
+
     const StorageAction = useFirebaseStorageActions()
-    const action = useFirebaseCustomerAction()
-    const navigate = useNavigate()
-    const customers = useAppSelector((state) => state.Cms.Customer.value)
+    const CustomerAction = useFirebaseCustomerAction()
     const ProposedLayoutDataAction = useProposedLayoutAction()
+    const navigate = useNavigate()
+    useFirebaseCmsCustomerListener()
+    const customers = useAppSelector((state) => state.Cms.Customer)
     const firestoreRunRef = useRef(null)
-    // const [selectedFinish, setSelectedFinish] = useState(
-    //     sessionStorage.getItem('selectedFinish') || ''
-    // )
-    // const [selectedFloor, setSelectedFloor] = useState(
-    //     sessionStorage.getItem('selectedFloor') || ''
-    // )
-    // const [areaName, setAreaName] = useState(
-    //     sessionStorage.getItem('areaName') || ''
-    // )
+    const STORAGE_DATA: TSessionStorageData = useMemo(() => {
+        const units_count = JSON.parse(sessionStorage.getItem("units_count"))
+        return {
+            ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
+            customerId: sessionStorage.getItem("CUSTOMER_ID"),
+            title: sessionStorage.getItem("LAYOUT_TITLE"),
+            leftImage: sessionStorage.getItem("CUSTOMER_IMAGE"),
+            rightImage: sessionStorage.getItem("PROPOSED_IMAGE"),
+            windows: _.isObject(units_count) ? _.keys(units_count)?.map((win) => {
+                return ({
+                    label: win,
+                    count: _.get(units_count, win, 0)
+                })
+            })?.filter((win) => win.count) : []
+        }
+    }, [])
 
-    // const handleFinishChange = (event) => {
-    //     setSelectedFinish(event.target.value)
-    // }
 
-    // const handleFloorChange = (event) => {
-    //     setSelectedFloor(event.target.value)
-    // }
-
-    // const handleAreaNameChange = (event) => {
-    //     setAreaName(event.target.value)
-    // }
-
-    // useEffect(() => {
-    //     sessionStorage.setItem('selectedFinish', selectedFinish)
-    //     sessionStorage.setItem('selectedFloor', selectedFloor)
-    //     sessionStorage.setItem('areaName', areaName)
-    // }, [selectedFinish, selectedFloor, areaName])
 
     useEffect(() => {
-        if (customerImage && proposedImage && !firestoreRunRef.current) {
-            firestoreRunRef.current = true
-            StorageAction.batch.upload({
-                files: [
-                    _.base64ToFile(customerImage, 'customer-image.png'),
-                    _.base64ToFile(proposedImage, 'proposed-layout.png'),
-                ],
-                path: 'proposed-layout',
-                onSuccess: (e) => {
-                    const args = {
-                        label: Presentation?.value?.title,
-                        name: Presentation?.value?.name,
-                        design: Presentation?.value?.design,
-                        sunrooofCount: 0,
-                        finish: Presentation?.value.finish,
-                        customerId: Presentation?.value?.customerId || _.uuid(),
-                        url: { customer: e[0], proposed: e[1] },
-                    }
-                    ProposedLayoutDataAction.add(args)
+        if (!customers?.loading) {
+            if (STORAGE_DATA.rightImage?.length && STORAGE_DATA.leftImage?.length && !firestoreRunRef.current) {
+                firestoreRunRef.current = true
+                const files = [
+                    _.base64ToFile(STORAGE_DATA.leftImage, `customer-image.png`),
+                    _.base64ToFile(STORAGE_DATA.rightImage, 'proposed-layout.png'),
+                ]
+                // console.log(files)
+                console.log(STORAGE_DATA)
+                StorageAction.batch.upload({
+                    files,
+                    path: 'proposed-layout',
+                    onSuccess: (e) => {
+                        const currentCustomer = customers?.value?.find(
+                            (customer) =>
+                                customer.id ===
+                                STORAGE_DATA?.customerId
+                        )
 
-                    const currentCustomer = customers?.find(
-                        (customer) =>
-                            customer.customerId ===
-                            Presentation?.value?.customerId
-                    )
-                    if (currentCustomer) {
-                        const results = {
-                            ...currentCustomer,
-                            components: currentCustomer.components?.map(
-                                (item) => {
-                                    if (
-                                        item.value ===
-                                        CustomerComponentEnum.TwoDDesign
-                                    ) {
-                                        return {
-                                            ...item,
-                                            data: [
-                                                ...item.data,
-                                                {
-                                                    finish: args.finish,
-                                                    design: args.design,
-                                                    quantity:
-                                                        args.sunrooofCount,
-                                                    leftImage:
-                                                        args.url.customer,
-                                                    rightImage:
-                                                        args.url.proposed,
-                                                },
-                                            ],
-                                        } as TCustomerComponentDesign2DItem
-                                    }
-                                    return item
-                                }
-                            ),
-                            at: {
-                                created: currentCustomer.at.created,
-                                updated: new Date(),
-                            },
+                        console.log(currentCustomer)
+                        const args = {
+                            label: STORAGE_DATA.title,
+                            name: currentCustomer?.name || sessionStorage.getItem('CUSTOMER_NAME'),
+                            design: _.first(STORAGE_DATA?.windows).label,
+                            sunrooofCount: _.first(STORAGE_DATA?.windows).count || 0,
+                            finish: '',
+                            customerId: STORAGE_DATA?.customerId || _.uuid(),
+                            url: { customer: e[0], proposed: e[1] },
                         }
-                        console.log(results)
-
-                        action.edit(results)
-                    } else {
-                        const results = {
-                            name: args.name,
-                            customerId: args.customerId,
-                            components: INIT_CUSTOMER_ITEM.components?.map(
-                                (item) => {
-                                    if (
-                                        item.value ===
-                                        CustomerComponentEnum.TwoDDesign
-                                    ) {
-                                        return {
-                                            ...item,
-                                            data: [
-                                                ...item.data,
-                                                {
-                                                    finish: args.finish,
-                                                    design: args.design,
-                                                    quantity:
-                                                        args.sunrooofCount,
-                                                    leftImage:
-                                                        args.url.customer,
-                                                    rightImage:
-                                                        args.url.proposed,
-                                                },
-                                            ],
-                                        } as TCustomerComponentDesign2DItem
+                        console.log(args)
+                        ProposedLayoutDataAction.add(args)
+                        if (currentCustomer) {
+                            const results = {
+                                ...currentCustomer,
+                                components: currentCustomer.components?.map(
+                                    (item) => {
+                                        if (
+                                            item.value ===
+                                            CustomerComponentEnum.TwoDDesign
+                                        ) {
+                                            return {
+                                                ...item,
+                                                data: [
+                                                    ...item.data,
+                                                    {
+                                                        finish: args.finish,
+                                                        design: args.design,
+                                                        quantity:
+                                                            args.sunrooofCount,
+                                                        leftImage:
+                                                            args.url.customer,
+                                                        rightImage:
+                                                            args.url.proposed,
+                                                    },
+                                                ],
+                                            } as TCustomerComponentDesign2DItem
+                                        }
+                                        return item
                                     }
-                                    return item
-                                }
-                            ),
-                            at: {
-                                created: new Date(),
-                            },
-                        }
-                        console.log(results)
-                        action.add(results)
-                    }
+                                ),
+                                at: {
+                                    created: currentCustomer.at.created,
+                                    updated: new Date(),
+                                },
+                            }
+                            // console.log(results)
 
-                    toast('Proposed image has been saved!')
-                    if (isRedirectBack) {
-                        props.onToggleEditorPage(false)
-                    }
-                    // navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
-                },
-            })
-        } else {
-            toast('Images could not be retrieved from session storage')
+                            CustomerAction.edit(results)
+                        } else {
+                            const results = {
+                                name: args.name,
+                                customerId: args.customerId,
+                                components: INIT_CUSTOMER_ITEM.components?.map(
+                                    (item) => {
+                                        if (
+                                            item.value ===
+                                            CustomerComponentEnum.TwoDDesign
+                                        ) {
+                                            return {
+                                                ...item,
+                                                data: [
+                                                    ...item.data,
+                                                    {
+                                                        finish: args.finish,
+                                                        design: args.design,
+                                                        quantity:
+                                                            args.sunrooofCount,
+                                                        leftImage:
+                                                            args.url.customer,
+                                                        rightImage:
+                                                            args.url.proposed,
+                                                    },
+                                                ],
+                                            } as TCustomerComponentDesign2DItem
+                                        }
+                                        return item
+                                    }
+                                ),
+                                at: {
+                                    created: new Date(),
+                                },
+                            }
+                            console.log(results)
+                            CustomerAction.add(results)
+                        }
+
+                        toast('Proposed image has been saved!')
+                        sessionStorage.clear()
+                        // navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
+                    },
+                })
+            } else {
+                console.log('Images could not be retrieved from session storage')
+                // toast('Images could not be retrieved from session storage')
+            }
         }
     }, [
-        Presentation?.value?.customerId,
-        Presentation?.value?.design,
-        Presentation?.value.finish,
-        Presentation?.value?.name,
-        Presentation?.value?.title,
-        ProposedLayoutDataAction,
+        STORAGE_DATA.rightImage,
+        STORAGE_DATA.leftImage,
+        STORAGE_DATA.title,
+        STORAGE_DATA?.windows,
+        STORAGE_DATA?.customerId,
         StorageAction.batch,
-        action,
-        customerImage,
         customers,
-        isRedirectBack,
-        navigate,
-        proposedImage,
-        props,
+        ProposedLayoutDataAction,
+        CustomerAction,
+        STORAGE_DATA
     ])
 
     return (
@@ -286,7 +272,7 @@ const DesignSubmit = ({
                     <h1 className="text-2xl font-bold mb-5">Customer Image</h1>
                     <LazyLoadImage
                         effect="blur"
-                        src={customerImage}
+                        src={STORAGE_DATA.leftImage}
                         alt="Customer Layout"
                         className="rounded-lg shadow-md max-w-[600px] max-h-[600px] object-contain"
                     />
@@ -295,7 +281,7 @@ const DesignSubmit = ({
                     <h1 className="text-2xl font-bold mb-5">Proposed Image</h1>
                     <LazyLoadImage
                         effect="blur"
-                        src={proposedImage}
+                        src={STORAGE_DATA.rightImage}
                         alt="Proposed Layout"
                         className="rounded-lg shadow-md max-w-[600px] max-h-[600px] object-contain"
                     />
@@ -304,12 +290,18 @@ const DesignSubmit = ({
             <div className="flex items-center justify-center w-full gap-4">
                 <button
                     type="button"
+                    onClick={() => {
+                        navigate('/cms/proposed/old/layout')
+                    }}
                     className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
                 >
                     Back to Old Design Generator
                 </button>
                 <button
                     type="button"
+                    onClick={() => {
+                        navigate('/cms')
+                    }}
                     className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
                 >
                     Proceed to CMS
@@ -319,6 +311,6 @@ const DesignSubmit = ({
     )
 }
 
-type TProps = { onToggleEditorPage: (e: boolean) => void }
-
+type TSessionStorageData = TCustomerComponentDesign2DDataItem & { windows: { label: string, count: number }[], customerId: string, title: string }
 export default DesignSubmit
+//322

@@ -8,11 +8,14 @@ import { useAppDispatch, useAppSelector } from '../../../../redux'
 import { useFirebaseCmsAuthAction } from '../../utils/firebase/use-firebase-cms-actions';
 import { setAuthSignOut } from '../../redux/slices/Auth.slice';
 import { Tooltip } from 'flowbite-react';
+import { useProposedLayoutListener } from '../../hooks';
+import { useFirebaseCmsCustomerListener } from '../../utils/firebase';
 
 export default function Header() {
     const user = useAppSelector(({ Cms }) => Cms.Auth);
     const AuthAction = useFirebaseCmsAuthAction()
-
+    useProposedLayoutListener()
+    useFirebaseCmsCustomerListener()
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
