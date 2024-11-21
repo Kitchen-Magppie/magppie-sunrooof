@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 let bgImage
 let smallRectImage
 let imgWidth, imgHeight
@@ -190,7 +188,6 @@ function preload() {
         // Add Design Here
     ]
 }
-
 
 // Setup the canvas and display client name
 function setup() {
@@ -851,11 +848,11 @@ function drawMaskGrid(
 
 // Toggle remove mask mode and update button color
 function dataURLtoBlob(dataurl) {
-    var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n)
+    var arr = dataurl.split(',')
+    mime = arr[0].match(/:(.*?);/)[1]
+    bstr = atob(arr[1])
+    n = bstr.length
+    u8arr = new Uint8Array(n)
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n)
     }
@@ -867,32 +864,33 @@ function sleep(time) {
 }
 
 function downloadCanvas() {
-    const canvas = document.getElementsByTagName('canvas')[0];
+    const canvas = document.getElementsByTagName('canvas')[0]
     if (!canvas) {
-        console.error('Canvas not found!');
-        return;
+        console.error('Canvas not found!')
+        return
     }
 
     // Get the true image from the canvas as a Base64 Data URL
-    const trueImgBase64 = canvas.toDataURL('image/png');
+    const trueImgBase64 = canvas.toDataURL('image/png')
 
     // Simulate some processing for masked image
     setTimeout(() => {
-        const maskedImgBase64 = canvas.toDataURL('image/png'); // Replace with actual masked image logic if needed
+        const maskedImgBase64 = canvas.toDataURL('image/png') // Replace with actual masked image logic if needed
 
         // Choose the image to store as Base64
-        const finalImageBase64 = maskedImgBase64; // Use maskedImgBase64 or trueImgBase64 based on requirement
+        const finalImageBase64 = maskedImgBase64 // Use maskedImgBase64 or trueImgBase64 based on requirement
 
         // Store the final image in session storage as PROPOSED_IMAGE
-        sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64);
+        sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64)
         sessionStorage.setItem('units_count', JSON.stringify(unitsCount))
-        console.log('Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE');
+        console.log(
+            'Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE'
+        )
 
         // Navigate to /design-submit
-        window.location.href = '/cms/design-submit';
-    }, 200);
+        window.location.href = '/cms/design-submit'
+    }, 200)
 }
-
 
 // function downloadCanvas() {
 //     const canvas = document.getElementsByTagName('canvas')[0];
@@ -916,7 +914,6 @@ function downloadCanvas() {
 //         console.log('Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE');
 //     }, 200);
 // }
-
 
 // function downloadCanvas() {
 //     const canvas = document.getElementsByTagName('canvas')[0];
@@ -948,7 +945,6 @@ function downloadCanvas() {
 //         document.body.removeChild(maskedImgLink);
 //     }, 200);
 // }
-
 
 // function downloadCanvas() {
 //     var canvas = document.getElementsByTagName('canvas')[0]
