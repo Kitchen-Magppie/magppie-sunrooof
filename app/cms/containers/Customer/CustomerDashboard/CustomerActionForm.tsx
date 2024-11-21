@@ -73,7 +73,6 @@ export function CustomerActionForm(props: TProps) {
     const values = watch() as TCustomerItem;
     // console.log(values)
     console.log(errors)
-
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return (<p className="text-red-500 text-xs mt-1">
@@ -85,6 +84,7 @@ export function CustomerActionForm(props: TProps) {
         [errors]
     );
 
+    // console.log(values)
     const action = useFirebaseCustomerAction();
 
     const onSubmit = handleSubmit((data: TCustomerItem) => {
@@ -279,7 +279,8 @@ export function CustomerActionForm(props: TProps) {
                                                             )?.map((item, j) => {
                                                                 const options = DESIGN_2D_SELECT_OPTION(
                                                                     item.value,
-                                                                    proposedLayout
+                                                                    proposedLayout,
+                                                                    currentData.design
                                                                 );
 
                                                                 return (
