@@ -81,7 +81,6 @@ function ProposedLayoutView() {
         const imageDataUrl = canvas.toDataURL('image/png');
 
         setValue('file', _.base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
-        sessionStorage.setItem('IMAGE_DATA', `${imageDataUrl}`)
     }, [setValue])
 
 
@@ -96,8 +95,8 @@ function ProposedLayoutView() {
                 convertPdfToImage(content.file)
             }
             if (content?.accessor === 'image') {
-                const data = await convertFileToBase64(content.file)
-                sessionStorage.setItem('IMAGE_DATA', `${data}`)
+                // const data = await convertFileToBase64(content.file)
+                // sessionStorage.setItem('IMAGE_DATA', `${data}`)
                 setValue('file', content.file)
             }
         } else {
@@ -161,9 +160,9 @@ function ProposedLayoutView() {
                         label: customer.name
                     }))}
                     onChange={(e) => {
-                        const currentCustomer = customers.find((customer) => customer.name === e.label)
-                        sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
-                        console.log(currentCustomer);
+                        // const currentCustomer = customers.find((customer) => customer.name === e.label)
+                        // sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
+                        // console.log(currentCustomer);
                         setValue('name', e.label)
                     }}
                     placeholder="Customer Name"
@@ -182,7 +181,6 @@ function ProposedLayoutView() {
                     {...register('title')}
                     id="large-input"
                     onChange={(e) => {
-                        sessionStorage.setItem('LAYOUT_TITLE', e.target.value)
                         setValue('name', e.target.value)
                     }}
                     className={`block w-full rounded-sm py-1.5 bg-white text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
@@ -258,14 +256,14 @@ const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
 //         reader.readAsDataURL(image);
 //     }
 // }
-function convertFileToBase64(file: File) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload
-            = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
+// function convertFileToBase64(file: File) {
+//     return new Promise((resolve, reject) => {
+//         const reader = new FileReader();
+//         reader.readAsDataURL(file);
+//         reader.onload
+//             = () => resolve(reader.result);
+//         reader.onerror = error => reject(error);
+//     });
+// }
 
 export default ProposedLayoutView;
