@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { useCallback, useRef, useState } from "react";
-import { IoIosRemoveCircleOutline } from "react-icons/io";
+// import { IoIosRemoveCircleOutline } from "react-icons/io";
 import html2canvas from "html2canvas";
 import { MdOutlineCloudUpload } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -8,21 +8,31 @@ import jsPDF from "jspdf";
 import { FaRegFilePdf } from "react-icons/fa";
 //====================================================================
 
-import { _, CustomerComponentEnum, TCustomerComponentItem, TCustomerComponentQuotationItem, TCustomerItem } from "../../../../../types";
-import { FieldCautation, MinimalAccordion, MinimalDropdown } from "../../../components";
-import { CMS_QUOTATION_FLOOR_OPTIONS, CMS_QUOTATION_OPTIONS, INIT_COMPONENT_QUOTATION_ENTRY_ITEM, QUOTATION_SALUTATION_OPTIONS } from "../../../mocks";
+import {
+    _,
+    CustomerComponentEnum,
+    TCustomerComponentItem,
+    TCustomerComponentQuotationItem,
+    TCustomerItem
+} from "../../../../../types";
+import {
+    // FieldCautation,
+    MinimalAccordion,
+    MinimalDropdown
+} from "../../../components";
+import {
+    // CMS_QUOTATION_FLOOR_OPTIONS,
+    CMS_QUOTATION_OPTIONS,
+    // INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
+    QUOTATION_SALUTATION_OPTIONS
+} from "../../../mocks";
 import { useFirebaseStorageActions } from "../../../../../hooks";
 import { ImageInput } from "../../../../../components";
 import { paymentTermsData } from "../../../../QuotationGenerator/components/paymentTermsData";
-import qr from "../../../../QuotationGenerator/assets/qr.png";
+import QR_ILLUSTRATION from "../../../../QuotationGenerator/assets/qr.png";
 import logoBlack from "../../../../QuotationGenerator/assets/logo_black.png";
 import CustomerFormQuotationTable from "../CustomerDashboard/CustomerFormQuotationTable";
 
-type TProps = {
-    title: string,
-    i: number,
-    data: TCustomerComponentQuotationItem
-}
 function CustomerFormQuotationSection(props: TProps) {
     const { title, i, data } = props;
     const [corpus, setCorpus] = useState(INIT_CORPUS);
@@ -109,10 +119,10 @@ function CustomerFormQuotationSection(props: TProps) {
         totalGrossAmount - discountAmount + freightCharges;
     const taxAmount = totalAmount * (18 / 100);
     const grandTotal = totalAmount + taxAmount;
-    const entries = data?.data?.entries?.length
-        ? data?.data?.entries
-        : [];
-    const hasMoreThenOne = entries?.length > 1;
+    // const entries = data?.data?.entries?.length
+    //     ? data?.data?.entries
+    //     : [];
+    // const hasMoreThenOne = entries?.length > 1;
     return (<MinimalAccordion isExpanded title={title}>
         <div className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
@@ -248,7 +258,7 @@ function CustomerFormQuotationSection(props: TProps) {
             </div>
 
             <div className="border rounded-lg p-3">
-                <FieldCautation
+                {/* <FieldCautation
                     label="Entries"
                     onClickAdd={() => {
                         setValue(`components.${i}.data.entries`, [
@@ -256,9 +266,9 @@ function CustomerFormQuotationSection(props: TProps) {
                             INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
                         ]);
                     }}
-                />
-                {renderErrorMessage(`components.${i}.data.entries`)}
-                <div id="entries" className="w-full">
+                /> */}
+                {/* {renderErrorMessage(`components.${i}.data.entries`)} */}
+                {/* <div id="entries" className="w-full">
                     {entries?.map((entry, index) => {
                         return (
                             <div key={i}>
@@ -288,20 +298,12 @@ function CustomerFormQuotationSection(props: TProps) {
                                         <label className="block text-sm font-medium text-gray-700">
                                             Design
                                         </label>
-                                        {/* <MinimalDropdown
-                                            placeholder="Select Design"
-                                            defaultValue={{ label: entry.design || '', value: entry.design || '' }}
-                                            options={_.labelify(Object.keys(CMS_QUOTATION_OPTIONS))}
-                                            onChange={(e) => {
-                                                setValue(`components.${i}.data.entries.${index}.design`, e.value)
-                                            }}
-                                        /> */}
+
                                         <select
                                             value={entry.design}
                                             {...register(
                                                 `components.${i}.data.entries.${index}.design`
                                             )}
-                                            // onChange={(e) => handleChangeEntry(index, 'design', e.target.value)}
                                             className="bg-gray-50 border w-full mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
                                         >
                                             <option value="">Select Design</option>
@@ -328,7 +330,6 @@ function CustomerFormQuotationSection(props: TProps) {
                                             {...register(
                                                 `components.${i}.data.entries.${index}.finish`
                                             )}
-                                            // onChange={(e) => handleChangeEntry(index, 'finish', e.target.value)}
                                             className="bg-gray-50 border mr-2 mb-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 w-full"
                                         >
                                             <option value="">Select Finish</option>
@@ -376,7 +377,6 @@ function CustomerFormQuotationSection(props: TProps) {
                                         </label>
                                         <select
                                             value={entry.floor}
-                                            // onChange={(e) => handleChangeEntry(index, 'floor', e.target.value)}
                                             {...register(
                                                 `components.${i}.data.entries.${index}.floor`
                                             )}
@@ -421,7 +421,7 @@ function CustomerFormQuotationSection(props: TProps) {
                             </div>
                         );
                     })}
-                </div>
+                </div> */}
                 <div className="flex gap-2 mt-2 flex-row-reverse">
                     <button
                         disabled={corpus.isQuotationImageDownload}
@@ -487,7 +487,7 @@ function CustomerFormQuotationSection(props: TProps) {
                         </p>
                     </div>
                     <div>
-                        <img src={qr} alt="QR Code" className="w-[150px]" />
+                        <img src={QR_ILLUSTRATION} alt="QR Code" className="w-[150px]" />
                         <a
                             href="https://www.sunrooof.com"
                             className="text-lg mb-5"
@@ -740,4 +740,9 @@ const TO_TOTAL_GROSS_AMOUNT = (arr: TCustomerComponentItem[]) => {
 }
 const freightCharges = 50000;
 
+type TProps = {
+    title: string,
+    i: number,
+    data: TCustomerComponentQuotationItem
+}
 export default CustomerFormQuotationSection;
