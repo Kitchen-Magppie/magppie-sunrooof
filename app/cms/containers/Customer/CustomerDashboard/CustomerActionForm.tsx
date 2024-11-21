@@ -39,7 +39,7 @@ import { ImageInput } from "../../../../../components";
 import { useFirebaseCustomerAction } from "../../../utils/firebase/customer";
 import { useAppSelector } from "../../../../../redux";
 import CustomerFormQuotationSection from "../components/CustomerFormQuotationSection";
-import { CMS_TOAST_CONFIG } from "../../../types/toast";
+import { CMS_TOAST_CONFIG } from "../../../types";
 
 export function CustomerActionForm(props: TProps) {
     const [corpus, setCorpus] = useState(INIT_CORPUS);
