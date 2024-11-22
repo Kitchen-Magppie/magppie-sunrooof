@@ -169,22 +169,22 @@ function preload() {
         imgHeight = img.height
     })
     images = [
-        loadImage('assets/high/Classical.jpeg'),
-        loadImage('assets/high/Fluted.jpeg'),
-        loadImage('assets/high/French.jpeg'),
-        loadImage('assets/high/Louvered.jpeg'),
-        loadImage('assets/high/Modern.jpeg'),
-        loadImage('assets/high/Minimalist.png'),
+        loadImage('/vanilla-assets/high/Classical.jpeg'),
+        loadImage('/vanilla-assets/high/Fluted.jpeg'),
+        loadImage('/vanilla-assets/high/French.jpeg'),
+        loadImage('/vanilla-assets/high/Louvered.jpeg'),
+        loadImage('/vanilla-assets/high/Modern.jpeg'),
+        loadImage('/vanilla-assets/high/Minimalist.png'),
         // Add Design Here
     ]
 
     images_low = [
-        loadImage('assets/low/Classical.png'),
-        loadImage('assets/low/Fluted.png'),
-        loadImage('assets/low/French.png'),
-        loadImage('assets/low/Louvered.jpeg'),
-        loadImage('assets/low/Modern.png'),
-        loadImage('assets/low/Minimalist.jpeg'),
+        loadImage('/vanilla-assets/low/Classical.png'),
+        loadImage('/vanilla-assets/low/Fluted.png'),
+        loadImage('/vanilla-assets/low/French.png'),
+        loadImage('/vanilla-assets/low/Louvered.jpeg'),
+        loadImage('/vanilla-assets/low/Modern.png'),
+        loadImage('/vanilla-assets/low/Minimalist.jpeg'),
         // Add Design Here
     ]
 }
