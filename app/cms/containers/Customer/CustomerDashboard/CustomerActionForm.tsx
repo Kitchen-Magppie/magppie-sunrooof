@@ -44,11 +44,12 @@ import { CMS_TOAST_CONFIG } from "../../../types";
 export function CustomerActionForm(props: TProps) {
     const [corpus, setCorpus] = useState(INIT_CORPUS);
     const { mode, item } = props;
-
+    console.log(item)
     const isCreateAction = mode === ComponentModeEnum.Create;
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
+    console.log(proposedLayout)
     const publishedUrl = useMemo(() => {
         if (item.id?.length)
             return [location.origin, "quotation", item.id].join("/");
@@ -297,36 +298,38 @@ export function CustomerActionForm(props: TProps) {
                                                                             onChange={(e) => {
                                                                                 if (item.value === 'proposedLayout') {
 
-                                                                                    const currentProposedLayout = proposedLayout?.find(({ label }) => label === e.label)
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.rightImage`,
-                                                                                        currentProposedLayout.url.proposed
-                                                                                    );
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.leftImage`,
-                                                                                        currentProposedLayout.url.customer
-                                                                                    );
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.quantity`,
-                                                                                        currentProposedLayout.sunrooofCount);
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.design`,
-                                                                                        currentProposedLayout.design);
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.finish`,
-                                                                                        currentProposedLayout.finish);
+                                                                                    const currLayout = _.find(proposedLayout, { id: e.value })
+                                                                                    if (currLayout) {
 
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.proposedLayout`,
-                                                                                        e.value);
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.rightImage`,
+                                                                                            currLayout.url.proposed
+                                                                                        );
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.leftImage`,
+                                                                                            currLayout.url.customer
+                                                                                        );
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.quantity`,
+                                                                                            currLayout.sunrooofCount);
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.design`,
+                                                                                            currLayout.design);
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.finish`,
+                                                                                            currLayout.finish);
 
-                                                                                    setValue(
-                                                                                        `name`,
-                                                                                        currentProposedLayout.name
-                                                                                    );
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.proposedLayout`,
+                                                                                            currLayout.url.proposed);
 
-                                                                                }
-                                                                                else {
+                                                                                        setValue(
+                                                                                            `name`,
+                                                                                            currLayout.name
+                                                                                        );
+                                                                                    }
+
+                                                                                } else {
                                                                                     setValue(
                                                                                         `components.${i}.data.${k}.${item.value}`,
                                                                                         e?.value?.length ? e.value : ""
