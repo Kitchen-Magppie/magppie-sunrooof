@@ -9,6 +9,7 @@ import { IoIosLink } from "react-icons/io";
 import { DEFAULT_CUSTOMER } from '../../mocks'
 
 import { TCmsCustomerCardItem } from "../../types";
+import { IS_VALID_FOR_URL } from "../../../../types";
 
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
@@ -16,11 +17,11 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
     const isDefault = DEFAULT_CUSTOMER.customerId === props.item.customerId
 
     const publishedUrl = useMemo(() => {
-        if (props.item.id?.length) {
+        if (props.item.id?.length && IS_VALID_FOR_URL(props.item)) {
             return ([location.origin, 'quotation', props.item.id].join('/'))
         }
         return ''
-    }, [location.origin, props.item.id])
+    }, [location.origin, props.item])
 
     return (<div className="bg-indigo-100 p-4 rounded-lg border hover:bg-indigo-100 transition-all duration-200 ease-in-out">
         <div className="flex justify-between items-center mb-2">
@@ -57,7 +58,7 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
                 </Link>
             </>) : (<>
                 <IoLocationOutline size={24} />
-                Location
+                -
             </>)}
 
 
