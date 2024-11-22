@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { toast } from 'react-toastify'
 import {
     CustomerComponentEnum,
+    IProposedLayoutItem,
     TCustomerComponentDesign2DDataItem,
     TCustomerComponentDesign2DItem,
+    TCustomerComponentItem,
     _,
 } from '../../../../types'
 import { INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM, INIT_CUSTOMER_ITEM } from '../../mocks'
@@ -15,9 +17,11 @@ import { useFirebaseCustomerAction } from '../../utils/firebase/customer'
 import { useProposedLayoutAction } from '../../hooks'
 import { useFirebaseCmsCustomerListener } from '../../utils/firebase'
 import { useNavigate } from 'react-router-dom'
+import { CircularProgress } from '../../../../components'
 
-const DesignSubmit = () => {
+export default function DesignSubmit() {
 
+    const [isLoading, setLoading] = useState(true)
     const StorageAction = useFirebaseStorageActions()
     const CustomerAction = useFirebaseCustomerAction()
     const ProposedLayoutDataAction = useProposedLayoutAction()
@@ -43,8 +47,7 @@ const DesignSubmit = () => {
     }, [])
 
 
-
-    useEffect(() => {
+    const onCreateDatabaseCall = useCallback(async () => {
         if (!customers?.loading) {
             if (STORAGE_DATA.rightImage?.length && STORAGE_DATA.leftImage?.length && !firestoreRunRef.current) {
                 firestoreRunRef.current = true
@@ -57,14 +60,13 @@ const DesignSubmit = () => {
                 StorageAction.batch.upload({
                     files,
                     path: 'proposed-layout',
-                    onSuccess: (e) => {
+                    onSuccess: async (e) => {
                         const currentCustomer = customers?.value?.find(
                             (customer) =>
                                 customer.id ===
                                 STORAGE_DATA?.customerId
                         )
 
-                        console.log(currentCustomer)
                         const args = {
                             label: STORAGE_DATA.title,
                             name: currentCustomer?.name || sessionStorage.getItem('CUSTOMER_NAME'),
@@ -75,36 +77,11 @@ const DesignSubmit = () => {
                             url: { customer: e[0], proposed: e[1] },
                         }
                         console.log(args)
-                        ProposedLayoutDataAction.add(args)
+                        const proposedLayoutId = await ProposedLayoutDataAction.add(args)
                         if (currentCustomer) {
                             const results = {
                                 ...currentCustomer,
-                                components: currentCustomer.components?.map(
-                                    (item) => {
-                                        if (
-                                            item.value ===
-                                            CustomerComponentEnum.TwoDDesign
-                                        ) {
-                                            return {
-                                                ...item,
-                                                data: [
-                                                    ...item.data,
-                                                    {
-                                                        finish: args.finish,
-                                                        design: args.design,
-                                                        quantity:
-                                                            args.sunrooofCount,
-                                                        leftImage:
-                                                            args.url.customer,
-                                                        rightImage:
-                                                            args.url.proposed,
-                                                    },
-                                                ],
-                                            } as TCustomerComponentDesign2DItem
-                                        }
-                                        return item
-                                    }
-                                ),
+                                components: currentCustomer.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'edit')),
                                 at: {
                                     created: currentCustomer.at.created,
                                     updated: new Date(),
@@ -117,42 +94,17 @@ const DesignSubmit = () => {
                             const results = {
                                 name: args.name,
                                 customerId: args.customerId,
-                                components: INIT_CUSTOMER_ITEM.components?.map(
-                                    (item) => {
-                                        if (
-                                            item.value ===
-                                            CustomerComponentEnum.TwoDDesign
-                                        ) {
-                                            return {
-                                                ...item,
-                                                data: [
-                                                    ...item.data,
-                                                    {
-                                                        finish: args.finish,
-                                                        design: args.design,
-                                                        quantity:
-                                                            args.sunrooofCount,
-                                                        leftImage:
-                                                            args.url.customer,
-                                                        rightImage:
-                                                            args.url.proposed,
-                                                    },
-                                                ],
-                                            } as TCustomerComponentDesign2DItem
-                                        }
-                                        return item
-                                    }
-                                ),
+                                components: INIT_CUSTOMER_ITEM.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'create')),
                                 at: {
                                     created: new Date(),
                                 },
                             }
-                            console.log(results)
                             CustomerAction.add(results)
                         }
 
                         toast('Proposed image has been saved!')
                         sessionStorage.clear()
+                        setLoading(false)
                         // navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
                     },
                 })
@@ -161,111 +113,13 @@ const DesignSubmit = () => {
                 // toast('Images could not be retrieved from session storage')
             }
         }
-    }, [
-        STORAGE_DATA.rightImage,
-        STORAGE_DATA.leftImage,
-        STORAGE_DATA.title,
-        STORAGE_DATA?.windows,
-        STORAGE_DATA?.customerId,
-        StorageAction.batch,
-        customers,
-        ProposedLayoutDataAction,
-        CustomerAction,
-        STORAGE_DATA
-    ])
+    }, [CustomerAction, ProposedLayoutDataAction, STORAGE_DATA, StorageAction.batch, customers?.loading, customers?.value])
+
+    useEffect(() => { onCreateDatabaseCall() }, [onCreateDatabaseCall])
 
     return (
         <div className="flex flex-col justify-center w-full items-center min-h-screen">
-            {/* <div className="flex flex-col items-center container mx-auto mb-5 justify-center w-full max-w-2xl"> */}
-            {/* <h1 className="text-4xl font-bold mb-5">Layout Details</h1> */}
-            {/* <div className=" w-full"> */}
-            {/* <form className="flex justify-around"> */}
-            {/* <div>
-                            <label
-                                htmlFor="desings"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                Select Design
-                            </label>
-                            <select
-                                id="desings"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                                <option selected="">Choose a country</option>
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
-                                <option value="FR">France</option>
-                                <option value="DE">Germany</option>
-                            </select>
-                        </div> */}
-            {/* <div>
-                            <label
-                                htmlFor="finishes"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                Select Finish
-                            </label>
-                            <select
-                                id="finishes"
-                                value={selectedFinish}
-                                onChange={handleFinishChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                                <option value="" defaultValue="Finish" disabled>
-                                    Finish
-                                </option>
-                                {COMPONENT_DESIGN2D_FINISH_OPTIONS.map(
-                                    (finish) => (
-                                        <option key={finish} value={finish}>
-                                            {finish}
-                                        </option>
-                                    )
-                                )}
-                            </select>
-                        </div> */}
-            {/* <div>
-                            <label
-                                htmlFor="floor"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                Select Floor
-                            </label>
-                            <select
-                                id="floor"
-                                value={selectedFloor}
-                                onChange={handleFloorChange}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                                <option value="" disabled defaultValue="Floor">
-                                    Floor
-                                </option>
-                                <option value="BSMT">BSMT</option>
-                                <option value="GF">GF</option>
-                                <option value="FF">FF</option>
-                                <option value="SF">SF</option>
-                                <option value="TF">TF</option>
-                            </select>
-                        </div> */}
-            {/* <div>
-                            <label
-                                htmlFor="area_name"
-                                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >
-                                Area Name
-                            </label>
-                            <input
-                                type="text"
-                                value={areaName}
-                                onChange={handleAreaNameChange}
-                                id="area_name"
-                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[200px] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Living Room || Kitchen"
-                                required
-                            />
-                        </div> */}
-            {/* </form> */}
-            {/* </div> */}
-            {/* </div> */}
+
             <h1 className="text-4xl font-bold mb-5">Layout Submission</h1>
             <div className="flex items-center justify-center">
                 <div className="flex flex-col justify-center items-center">
@@ -307,10 +161,32 @@ const DesignSubmit = () => {
                     Proceed to CMS
                 </button>
             </div>
+            {isLoading && (<div className="">
+                <CircularProgress />
+            </div>)}
         </div>
     )
 }
+const CUSTOMER_COMPONENT_ITEM = (item: TCustomerComponentItem, args: Omit<IProposedLayoutItem, 'id' | 'at'> & { proposedLayoutId: string }, action: 'create' | 'edit') => {
+    if (item.value === CustomerComponentEnum.TwoDDesign) {
+        const current2Design = {
+            proposedLayoutId: args.proposedLayoutId,
+            finish: args.finish,
+            design: args.design,
+            quantity: args.sunrooofCount,
+            leftImage: args.url.customer,
+            rightImage: args.url.proposed,
+        }
+        return {
+            ...item,
+            data: action === 'create' ? [current2Design] : [
+                ...item.data,
+                current2Design
+            ],
+        } as TCustomerComponentDesign2DItem
+    }
+    return item
+}
 
 type TSessionStorageData = TCustomerComponentDesign2DDataItem & { windows: { label: string, count: number }[], customerId: string, title: string }
-export default DesignSubmit
 //322

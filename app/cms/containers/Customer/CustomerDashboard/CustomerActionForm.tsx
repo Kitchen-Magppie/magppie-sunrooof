@@ -44,12 +44,12 @@ import { CMS_TOAST_CONFIG } from "../../../types";
 export function CustomerActionForm(props: TProps) {
     const [corpus, setCorpus] = useState(INIT_CORPUS);
     const { mode, item } = props;
-    console.log(item)
     const isCreateAction = mode === ComponentModeEnum.Create;
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
-    console.log(proposedLayout)
+    // console.table(proposedLayout?.map((item) => ({ value: item.customerId, label: item.label })))
+    // console.log(item)
     const publishedUrl = useMemo(() => {
         if (item.id?.length)
             return [location.origin, "quotation", item.id].join("/");
@@ -278,12 +278,15 @@ export function CustomerActionForm(props: TProps) {
                                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                                 ({ field }) => field === "select"
                                                             )?.map((item, j) => {
+                                                                const isProposedLayoutField = item.value === 'proposedLayout'
+                                                                const proposedOptions = proposedLayout?.filter((proposedLayoutItem) => proposedLayoutItem.customerId === values.id)
+
                                                                 const options = DESIGN_2D_SELECT_OPTION(
                                                                     item.value,
-                                                                    proposedLayout,
+                                                                    proposedOptions,
                                                                     currentData.design
                                                                 );
-
+                                                                const defaultValue = (options?.find((option) => isProposedLayoutField ? _.get(option, 'id') === data.proposedLayoutId : data[item.value]))
                                                                 return (
                                                                     <div
                                                                         className="bg-white"
@@ -291,14 +294,14 @@ export function CustomerActionForm(props: TProps) {
                                                                     >
                                                                         <MinimalDropdown
                                                                             placeholder={item.label}
-                                                                            defaultValue={options?.find(
-                                                                                (option) =>
-                                                                                    option.value === data[item.value]
-                                                                            )}
+                                                                            defaultValue={defaultValue}
+                                                                            // defaultValue={options?.find(
+                                                                            //     (option) =>
+                                                                            //         option.value === data[item.value]
+                                                                            // )}
                                                                             onChange={(e) => {
-                                                                                if (item.value === 'proposedLayout') {
-
-                                                                                    const currLayout = _.find(proposedLayout, { id: e.value })
+                                                                                if (isProposedLayoutField) {
+                                                                                    const currLayout = _.find(proposedLayout, { id: _.get(e, 'id') })
                                                                                     if (currLayout) {
 
                                                                                         setValue(
@@ -322,6 +325,10 @@ export function CustomerActionForm(props: TProps) {
                                                                                         setValue(
                                                                                             `components.${i}.data.${k}.proposedLayout`,
                                                                                             currLayout.url.proposed);
+
+                                                                                        setValue(
+                                                                                            `components.${i}.data.${k}.proposedLayoutId`,
+                                                                                            currLayout.id);
 
                                                                                         setValue(
                                                                                             `name`,

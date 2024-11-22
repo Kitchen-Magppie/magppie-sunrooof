@@ -56,7 +56,7 @@ export default function CustomerDashboard() {
         data.values.modal.value,
     ])
 
-    console.log(data.values)
+    // console.log(data.values)
     return (<div className='container mx-auto'>
         <div className="pt-4">
             <div className="flex gap-2 justify-between">

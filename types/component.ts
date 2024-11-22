@@ -61,6 +61,7 @@ export type TCustomerComponentDesign2DDataItem = {
     leftImage: string
     rightImage: string
     proposedLayout?: string
+    proposedLayoutId?: string
     // designBy: string,
     // approvedBy: string,
     // ceilingHeightOnSite: string,
@@ -223,29 +224,21 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
     data: yup
         .array()
-        .of(
-            yup.object().shape({
-                // designBy: yup.string().required(),
-                // approvedBy: yup.string().required(),
-                design: yup.string().required('Design field is Required'),
-                finish: yup.string().required('Finish field is Required'),
-                // ceilingHeightOnSite: yup.string().required(),
-                // afterInstallation: yup.string().required(),
-                // cityName: yup.string().required(),
-                // yourPlan: yup.string().required(),
-                areaName: yup.string().required('Area Name field is Required'),
-                floor: yup.string().required('Floor field is Required'),
-                quantity: yup.number().required('Quantity field is Required'),
-                proposedLayout: yup.string().nullable(),
-                // invoiceUrl: yup.string().required(),
-
-                leftImage: yup
-                    .string()
-                    .required('Customer Image field is Required'),
-                rightImage: yup
-                    .string()
-                    .required('Proposed Image field is Required'),
-            })
+        .of(yup.object().shape({
+            design: yup.string().required('Design field is Required'),
+            finish: yup.string().required('Finish field is Required'),
+            areaName: yup.string().required('Area Name field is Required'),
+            floor: yup.string().required('Floor field is Required'),
+            quantity: yup.number().required('Quantity field is Required'),
+            proposedLayout: yup.string().nullable(),
+            proposedLayoutId: yup.string().nullable(),
+            leftImage: yup
+                .string()
+                .required('Customer Image field is Required'),
+            rightImage: yup
+                .string()
+                .required('Proposed Image field is Required'),
+        })
         )
         .min(1)
         .required(),

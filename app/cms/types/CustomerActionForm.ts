@@ -11,7 +11,9 @@ export function DESIGN_2D_SELECT_OPTION(e: string, proposedLayout: IProposedLayo
         case "proposedLayout":
             return proposedLayout?.map((item) => ({
                 label: item.label,
-                value: item.id,
+                value: item.customerId,
+                id: item.id,
+
             }));
         default:
             return [];
