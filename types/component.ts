@@ -291,3 +291,9 @@ export type TProposedLayoutItem = {
     design: string,
     customerId: string,
 }
+
+
+export const IS_VALID_FOR_URL = (item: TCustomerItem) => {
+    const quotation = item.components?.find((component) => component.value === CustomerComponentEnum.Quotation) as TCustomerComponentQuotationItem
+    return quotation?.data?.invoiceUrl?.length
+}

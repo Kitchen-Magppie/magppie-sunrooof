@@ -15,6 +15,7 @@ import {
     ComponentModeEnum,
     CustomerComponentEnum,
     DESIGN_2D_SELECT_OPTION,
+    IS_VALID_FOR_URL,
     TCustomerComponentDesign2DItem,
     TCustomerComponentFeatureItem,
     TCustomerComponentQuotationItem,
@@ -48,13 +49,13 @@ export function CustomerActionForm(props: TProps) {
 
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
-    // console.table(proposedLayout?.map((item) => ({ value: item.customerId, label: item.label })))
-    // console.log(item)
+
+    console.log(IS_VALID_FOR_URL(item))
     const publishedUrl = useMemo(() => {
-        if (item.id?.length)
+        if (item.id?.length && IS_VALID_FOR_URL(item))
             return [location.origin, "quotation", item.id].join("/");
         return "";
-    }, [item.id, location.origin]);
+    }, [item, location.origin]);
 
     const methods = useForm({
         resolver: yupResolver(validateCustomerItemSchema),
