@@ -9,10 +9,8 @@ import { IoIosHelpCircleOutline } from "react-icons/io";
 import CreatableSelect from "react-select/creatable"
 import * as pdfjsLib from 'pdfjs-dist';
 //====================================================================
-// import { useProposedLayoutListener } from "../../hooks";
 import { setPresentationData, useAppDispatch, useAppSelector } from "../../../../redux";
 import QuotationCanvas from "../../../QuotationGenerator/Containers/QuotationCanvas";
-// import { useFirebaseCmsCustomerListener } from "../../utils/firebase";
 import { _, TProposedLayoutItem } from "../../../../types";
 
 //====================================================================
@@ -134,26 +132,6 @@ function ProposedLayoutView() {
             onSubmit={onSubmit}
             className="p-4 bg-white bg-whtie w-max m-auto rounded-lg border justify-center flex flex-col align-middle mt-36"
         >
-            {/* <div className="mb-1">
-                <CreatableSelect
-                    options={_.labelify(COMPONENT_DESIGN2D_DESIGN_OPTIONS)}
-                    onChange={({ value }) => { setValue('design', value) }}
-                    placeholder="Design"
-                />
-                {errors?.design?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
-                    <IoIosHelpCircleOutline className="text-sm my-1" />
-                    {errors?.design?.message}</span>}
-            </div> */}
-            {/* <div className="mb-1">
-                <ReactSelect
-                    options={_.labelify(COMPONENT_DESIGN2D_FINISH_OPTIONS)}
-                    onChange={({ value }) => { setValue('finish', value) }}
-                    placeholder="Finish"
-                />
-                {errors?.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
-                    <IoIosHelpCircleOutline className="text-sm my-1" />
-                    {errors?.title?.message}</span>}
-            </div> */}
             <div className="mb-1">
                 <CreatableSelect
                     options={customers?.map((customer) => ({
