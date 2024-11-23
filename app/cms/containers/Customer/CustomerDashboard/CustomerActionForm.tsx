@@ -286,14 +286,20 @@ export function CustomerActionForm(props: TProps) {
                                                                     proposedOptions,
                                                                     currentData.design
                                                                 );
-                                                                if (isProposedLayoutField) {
-                                                                    console.log(values.id)
-                                                                    console.log(options)
-                                                                    console.log(proposedLayout?.filter((item) => item.id === data.proposedLayoutId))
-                                                                    // console.log(proposedLayout)
+                                                                const defaultValue = (options?.find((option) => isProposedLayoutField ? _.get(option, 'id') === data.proposedLayoutId : data[item.value] === option.value))
 
-                                                                }
-                                                                const defaultValue = (options?.find((option) => isProposedLayoutField ? _.get(option, 'id') === data.proposedLayoutId : data[item.value]))
+                                                                // if (item.value === 'design') {
+                                                                //     console.log(item)
+                                                                //     console.log(options)
+                                                                //     console.log(currentData.design)
+                                                                //     console.log(defaultValue)
+                                                                // }
+                                                                // console.log()
+                                                                // if (isProposedLayoutField) {
+                                                                //     console.log(values.id)
+                                                                //     console.log(options)
+                                                                //     console.log(proposedLayout?.filter((item) => item.id === data.proposedLayoutId))
+                                                                // }
                                                                 return (
                                                                     <div
                                                                         className="bg-white"

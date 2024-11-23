@@ -11,12 +11,8 @@ import { PageProgress } from '../../../components'
 // ======================================================================
 
 const CustomerView = lazy(() => import('../containers/Customer'))
-const ProposedLayoutView = lazy(
-    () => import('../containers/ProposedLayoutView')
-)
-const ProposedLayoutOldView = lazy(
-    () => import('../containers/Old/ProposedLayoutOldView')
-)
+const ProposedLayoutView = lazy(() => import('../containers/ProposedLayoutView'))
+const ProposedLayoutOldView = lazy(() => import('../containers/Old/ProposedLayoutOldView'))
 const DesignSubmit = lazy(() => import('../containers/DesignSubmit'))
 const SignInView = lazy(() => import('../containers/auth/SignIn/SignIn'))
 
