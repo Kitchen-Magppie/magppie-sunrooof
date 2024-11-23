@@ -6,16 +6,26 @@ import { db } from "../../../config"
 import { setProposedLayouts, useAppDispatch } from "../../../redux"
 
 export function useProposedLayoutAction() {
-    const add = useCallback(async (row: Omit<IProposedLayoutItem, 'id' | 'at'>) => {
-        const results = await addDoc(collection(db, COLLECTION), _.omit({
+    const add = useCallback((row: Omit<IProposedLayoutItem, 'id' | 'at'>) => {
+        return addDoc(collection(db, COLLECTION), _.omit({
             ...row,
             at: { created: new Date() }
         }, ['id']))
-        return results.id;
     }, [])
 
     return ({ add })
 }
+// export function useProposedLayoutAction() {
+//     const add = useCallback(async (row: Omit<IProposedLayoutItem, 'id' | 'at'>) => {
+//         const results = await addDoc(collection(db, COLLECTION), _.omit({
+//             ...row,
+//             at: { created: new Date() }
+//         }, ['id']))
+//         return results.id;
+//     }, [])
+
+//     return ({ add })
+// }
 
 export function useProposedLayoutListener() {
     const dispatch = useAppDispatch()

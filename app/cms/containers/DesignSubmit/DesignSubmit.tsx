@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+//====================================================================
+
 import {
     CustomerComponentEnum,
     IProposedLayoutItem,
@@ -16,7 +19,6 @@ import { useAppSelector } from '../../../../redux'
 import { useFirebaseCustomerAction } from '../../utils/firebase/customer'
 import { useProposedLayoutAction } from '../../hooks'
 import { useFirebaseCmsCustomerListener } from '../../utils/firebase'
-import { useNavigate } from 'react-router-dom'
 import { CircularProgress } from '../../../../components'
 
 export default function DesignSubmit() {
@@ -47,7 +49,7 @@ export default function DesignSubmit() {
     }, [])
 
 
-    const onCreateDatabaseCall = useCallback(async () => {
+    const onCreateDatabaseCall = useCallback(() => {
         if (!customers?.loading) {
             if (STORAGE_DATA.rightImage?.length && STORAGE_DATA.leftImage?.length && !firestoreRunRef.current) {
                 firestoreRunRef.current = true
@@ -60,7 +62,7 @@ export default function DesignSubmit() {
                 StorageAction.batch.upload({
                     files,
                     path: 'proposed-layout',
-                    onSuccess: async (e) => {
+                    onSuccess: (e) => {
                         const currentCustomer = customers?.value?.find(
                             (customer) =>
                                 customer.id ===
@@ -77,30 +79,33 @@ export default function DesignSubmit() {
                             url: { customer: e[0], proposed: e[1] },
                         }
                         console.log(args)
-                        const proposedLayoutId = await ProposedLayoutDataAction.add(args)
-                        if (currentCustomer) {
-                            const results = {
-                                ...currentCustomer,
-                                components: currentCustomer.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'edit')),
-                                at: {
-                                    created: currentCustomer.at.created,
-                                    updated: new Date(),
-                                },
-                            }
-                            // console.log(results)
+                        ProposedLayoutDataAction.add(args).then((response) => {
+                            const proposedLayoutId = response.id
+                            if (currentCustomer) {
+                                const results = {
+                                    ...currentCustomer,
+                                    components: currentCustomer.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'edit')),
+                                    at: {
+                                        created: currentCustomer.at.created,
+                                        updated: new Date(),
+                                    },
+                                }
+                                // console.log(results)
 
-                            CustomerAction.edit(results)
-                        } else {
-                            const results = {
-                                name: args.name,
-                                customerId: args.customerId,
-                                components: INIT_CUSTOMER_ITEM.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'create')),
-                                at: {
-                                    created: new Date(),
-                                },
+                                CustomerAction.edit(results)
+                            } else {
+                                const results = {
+                                    name: args.name,
+                                    customerId: args.customerId,
+                                    components: INIT_CUSTOMER_ITEM.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'create')),
+                                    at: {
+                                        created: new Date(),
+                                    },
+                                }
+                                CustomerAction.add(results)
                             }
-                            CustomerAction.add(results)
-                        }
+                        })
+
 
                         toast('Proposed image has been saved!')
                         sessionStorage.clear()
@@ -147,7 +152,9 @@ export default function DesignSubmit() {
                     onClick={() => {
                         navigate('/cms/proposed/old/layout')
                     }}
-                    className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+                    className={`text-white mt-10  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none ${isLoading ? 'bg-blue-300 ' : 'bg-blue-700 hover:bg-blue-800'}`}
+                    disabled={isLoading}
+
                 >
                     Back to Old Design Generator
                 </button>
@@ -156,7 +163,8 @@ export default function DesignSubmit() {
                     onClick={() => {
                         navigate('/cms')
                     }}
-                    className="text-white mt-10 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+                    className={`text-white mt-10  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none ${isLoading ? 'bg-blue-300 ' : 'bg-blue-700 hover:bg-blue-800'}`}
+                    disabled={isLoading}
                 >
                     Proceed to CMS
                 </button>

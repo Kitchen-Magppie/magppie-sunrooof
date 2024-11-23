@@ -33,14 +33,15 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
                 </div>) : ''}
 
             </div>
-            <button className="border p-1 rounded-full border-gray-400  bg-white cursor-pointer"
-                title="Go to Published Link"
-            >
-                {publishedUrl?.length ? (<Link to={publishedUrl} target="_blank">
-                    <IoIosLink className="cursor-pointer"
-                    />
-                </Link>) : ''}
-            </button>
+            {publishedUrl?.length ? (
+                <button className="border p-1 rounded-full border-gray-400  bg-white cursor-pointer"
+                    title="Go to Published Link">
+                    <Link to={publishedUrl} target="_blank">
+                        <IoIosLink className="cursor-pointer" />
+                    </Link>
+                </button>
+
+            ) : ''}
         </div>
         <div className="flex items-center mb-2 gap-2">
             <FaRegCalendarAlt size={24} />
