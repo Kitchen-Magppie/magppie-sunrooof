@@ -50,7 +50,6 @@ export function CustomerActionForm(props: TProps) {
     const location = useLocation();
     const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
 
-    console.log(IS_VALID_FOR_URL(item))
     const publishedUrl = useMemo(() => {
         if (item.id?.length && IS_VALID_FOR_URL(item))
             return [location.origin, "quotation", item.id].join("/");
@@ -82,11 +81,9 @@ export function CustomerActionForm(props: TProps) {
             </p>);
         }
         return <></>;
-    },
-        [errors]
-    );
+    }, [errors]);
 
-    // console.log(values)
+
     const action = useFirebaseCustomerAction();
 
     const onSubmit = handleSubmit((data: TCustomerItem) => {
@@ -279,14 +276,23 @@ export function CustomerActionForm(props: TProps) {
                                                             {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
                                                                 ({ field }) => field === "select"
                                                             )?.map((item, j) => {
+                                                                console.log(item)
                                                                 const isProposedLayoutField = item.value === 'proposedLayout'
-                                                                const proposedOptions = proposedLayout?.filter((proposedLayoutItem) => proposedLayoutItem.customerId === values.id)
+                                                                const proposedOptions = proposedLayout?.filter((proposedLayoutItem) => isCreateAction ? true : proposedLayoutItem.customerId === values.customerId)
+
 
                                                                 const options = DESIGN_2D_SELECT_OPTION(
                                                                     item.value,
                                                                     proposedOptions,
                                                                     currentData.design
                                                                 );
+                                                                if (isProposedLayoutField) {
+                                                                    console.log(values.id)
+                                                                    console.log(options)
+                                                                    console.log(proposedLayout?.filter((item) => item.id === data.proposedLayoutId))
+                                                                    // console.log(proposedLayout)
+
+                                                                }
                                                                 const defaultValue = (options?.find((option) => isProposedLayoutField ? _.get(option, 'id') === data.proposedLayoutId : data[item.value]))
                                                                 return (
                                                                     <div

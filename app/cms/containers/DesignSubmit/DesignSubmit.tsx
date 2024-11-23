@@ -49,7 +49,7 @@ export default function DesignSubmit() {
     }, [])
 
 
-    const onCreateDatabaseCall = useCallback(async () => {
+    const onCreateDatabaseCall = useCallback(() => {
         if (!customers?.loading) {
             if (STORAGE_DATA.rightImage?.length && STORAGE_DATA.leftImage?.length && !firestoreRunRef.current) {
                 firestoreRunRef.current = true
@@ -62,7 +62,7 @@ export default function DesignSubmit() {
                 StorageAction.batch.upload({
                     files,
                     path: 'proposed-layout',
-                    onSuccess: async (e) => {
+                    onSuccess: (e) => {
                         const currentCustomer = customers?.value?.find(
                             (customer) =>
                                 customer.id ===
@@ -79,30 +79,33 @@ export default function DesignSubmit() {
                             url: { customer: e[0], proposed: e[1] },
                         }
                         console.log(args)
-                        const proposedLayoutId = await ProposedLayoutDataAction.add(args)
-                        if (currentCustomer) {
-                            const results = {
-                                ...currentCustomer,
-                                components: currentCustomer.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'edit')),
-                                at: {
-                                    created: currentCustomer.at.created,
-                                    updated: new Date(),
-                                },
-                            }
-                            // console.log(results)
+                        ProposedLayoutDataAction.add(args).then((response) => {
+                            const proposedLayoutId = response.id
+                            if (currentCustomer) {
+                                const results = {
+                                    ...currentCustomer,
+                                    components: currentCustomer.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'edit')),
+                                    at: {
+                                        created: currentCustomer.at.created,
+                                        updated: new Date(),
+                                    },
+                                }
+                                // console.log(results)
 
-                            CustomerAction.edit(results)
-                        } else {
-                            const results = {
-                                name: args.name,
-                                customerId: args.customerId,
-                                components: INIT_CUSTOMER_ITEM.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'create')),
-                                at: {
-                                    created: new Date(),
-                                },
+                                CustomerAction.edit(results)
+                            } else {
+                                const results = {
+                                    name: args.name,
+                                    customerId: args.customerId,
+                                    components: INIT_CUSTOMER_ITEM.components?.map((item) => CUSTOMER_COMPONENT_ITEM(item, { ...args, proposedLayoutId }, 'create')),
+                                    at: {
+                                        created: new Date(),
+                                    },
+                                }
+                                CustomerAction.add(results)
                             }
-                            CustomerAction.add(results)
-                        }
+                        })
+
 
                         toast('Proposed image has been saved!')
                         sessionStorage.clear()
