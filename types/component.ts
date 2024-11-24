@@ -228,7 +228,8 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
             design: yup.string().required('Design field is Required'),
             finish: yup.string().required('Finish field is Required'),
             areaName: yup.string().required('Area Name field is Required'),
-            floor: yup.string().required('Floor field is Required'),
+            // floor: yup.string().required('Floor field is Required'),
+            floor: yup.string().nullable(),
             quantity: yup.number().required('Quantity field is Required'),
             proposedLayout: yup.string().nullable(),
             proposedLayoutId: yup.string().nullable(),
@@ -293,7 +294,7 @@ export type TProposedLayoutItem = {
 }
 
 
-export const IS_VALID_FOR_URL = (item: TCustomerItem) => {
-    const quotation = item.components?.find((component) => component.value === CustomerComponentEnum.Quotation) as TCustomerComponentQuotationItem
+export const IS_VALID_FOR_URL = ({ components }: TCustomerItem) => {
+    const quotation = components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as TCustomerComponentQuotationItem
     return quotation?.data?.invoiceUrl?.length
 }
