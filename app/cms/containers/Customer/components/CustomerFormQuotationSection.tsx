@@ -27,11 +27,12 @@ import {
     QUOTATION_SALUTATION_OPTIONS
 } from "../../../mocks";
 import { useFirebaseStorageActions } from "../../../../../hooks";
-import { ImageInput } from "../../../../../components";
+// import { ImageInput } from "../../../../../components";
 import { paymentTermsData } from "../../../../QuotationGenerator/components/paymentTermsData";
 import QR_ILLUSTRATION from "../../../../QuotationGenerator/assets/qr.png";
-import logoBlack from "../../../../QuotationGenerator/assets/logo_black.png";
+import COMPANY_LOGO from "../../../../QuotationGenerator/assets/logo_black.png";
 import CustomerFormQuotationTable from "../CustomerDashboard/CustomerFormQuotationTable";
+import { toast } from "react-toastify";
 
 function CustomerFormQuotationSection(props: TProps) {
     const { title, i, data } = props;
@@ -87,8 +88,11 @@ function CustomerFormQuotationSection(props: TProps) {
                 StorageActions.upload({
                     file,
                     path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
+
                     onSuccess(e) {
+                        console.log(e)
                         setValue(`components.${i}.data.invoiceUrl`, e.link);
+                        toast('Image url has been generated. Press submit this to save the changes.')
                     },
                 });
                 link.click();
@@ -472,7 +476,7 @@ function CustomerFormQuotationSection(props: TProps) {
                 <div className="flex justify-between">
                     <div>
                         <img
-                            src={logoBlack}
+                            src={COMPANY_LOGO}
                             className="w-[220px] mb-5"
                             alt="Logo"
                         />
@@ -671,11 +675,11 @@ function CustomerFormQuotationSection(props: TProps) {
                         <h1 className="text-2xl font-bold mb-2">
                             Payment Terms
                         </h1>
-                        {paymentTermsData.map((data) => {
+                        {paymentTermsData.map((data, i) => {
                             return (
                                 <div
                                     className="text-lg mb-2 list-decimal"
-                                    key={data.id}
+                                    key={i}
                                 >
                                     <div className="flex items-start">
                                         <span className="mr-2">{data.id}.</span>
@@ -687,31 +691,26 @@ function CustomerFormQuotationSection(props: TProps) {
                     </div>
                 </div>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-                <div className="">
-                    <>
-                        {/* <button>Upload Image</button> */}
-                        <ImageInput
-                            label="Invoice URL"
-                            values={
-                                data.data.invoiceUrl?.length
-                                    ? [data.data.invoiceUrl]
-                                    : []
-                            }
-                            path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
-                            onSuccess={(e) => {
-                                setValue(
-                                    `components.${i}.data.invoiceUrl`,
-                                    e[0]
-                                );
-                            }}
-                        />
-                        {renderErrorMessage(
-                            `components.${i}.data.invoiceUrl`
-                        )}
-                    </>
-                </div>
-            </div>
+            {/* <div className="grid grid-cols-2 gap-2">
+                <ImageInput
+                    label="Invoice URL"
+                    values={
+                        data.data.invoiceUrl?.length
+                            ? [data.data.invoiceUrl]
+                            : []
+                    }
+                    path={`customers/${values.customerId}/${CustomerComponentEnum.Quotation}`}
+                    onSuccess={(e) => {
+                        setValue(
+                            `components.${i}.data.invoiceUrl`,
+                            e[0]
+                        );
+                    }}
+                />
+                {renderErrorMessage(
+                    `components.${i}.data.invoiceUrl`
+                )}
+            </div> */}
         </div>
     </MinimalAccordion>);
 }
