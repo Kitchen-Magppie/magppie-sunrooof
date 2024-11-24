@@ -131,64 +131,62 @@ const Layout2dDesign = (props: TProps) => {
                     >
                         {props.item.data.map((image, i) => {
                             return (
-                                <>
-                                    <SwiperSlide
-                                        key={i}
-                                        className="flex items-center justify-center h-full !w-full"
-                                    >
-                                        <div className="flex flex-col">
-                                            <h2 className="text-3xl font-medium capitalize text-center mb-10 text-[#78746c]">
-                                                {image.areaName}
-                                            </h2>
-                                            <div className="flex">
-                                                <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
-                                                    <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
-                                                        Customer Layout
-                                                    </h1>
-                                                    <div>
-                                                        <LazyLoadImage
-                                                            effect="blur"
-                                                            src={
-                                                                image.leftImage
-                                                            }
-                                                            alt=""
-                                                            className="block w-screen h-full object-contain rounded-lg shadow-md"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col  swiper-zoom-container">
-                                                    <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
-                                                        Proposed Layout
-                                                    </h1>
-                                                    <div>
-                                                        <LazyLoadImage
-                                                            effect="blur"
-                                                            src={
-                                                                image.rightImage
-                                                            }
-                                                            alt=""
-                                                            className="block w-screen h-full object-contain rounded-lg shadow-md"
-                                                        />
-                                                    </div>
+                                <SwiperSlide
+                                    key={i}
+                                    className="flex items-center justify-center h-full !w-full"
+                                >
+                                    <div className="flex flex-col">
+                                        <h2 className="text-3xl font-medium capitalize text-center mb-10 text-[#78746c]">
+                                            {image.areaName}
+                                        </h2>
+                                        <div className="flex">
+                                            <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
+                                                <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
+                                                    Customer Layout
+                                                </h1>
+                                                <div>
+                                                    <LazyLoadImage
+                                                        effect="blur"
+                                                        src={
+                                                            image.leftImage
+                                                        }
+                                                        alt=""
+                                                        className="block w-screen h-full object-contain rounded-lg shadow-md"
+                                                    />
                                                 </div>
                                             </div>
-                                            <div className="flex justify-end mb-5 text-[#78746c]">
-                                                <div className="mr-4 text-2xl lg:text-lg">
-                                                    <span className="font-semibold text-[#78746c]">
-                                                        Design :
-                                                    </span>{' '}
-                                                    {image.design}
-                                                </div>
-                                                <div className="mr-4 text-2xl lg:text-lg">
-                                                    <span className="font-semibold text-[#78746c]">
-                                                        Finish :
-                                                    </span>{' '}
-                                                    {image.finish}
+                                            <div className="flex flex-col  swiper-zoom-container">
+                                                <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
+                                                    Proposed Layout
+                                                </h1>
+                                                <div>
+                                                    <LazyLoadImage
+                                                        effect="blur"
+                                                        src={
+                                                            image.rightImage
+                                                        }
+                                                        alt=""
+                                                        className="block w-screen h-full object-contain rounded-lg shadow-md"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
-                                    </SwiperSlide>
-                                </>
+                                        <div className="flex justify-end mb-5 text-[#78746c]">
+                                            <div className="mr-4 text-2xl lg:text-lg">
+                                                <span className="font-semibold text-[#78746c]">
+                                                    Design :
+                                                </span>{' '}
+                                                {image.design}
+                                            </div>
+                                            <div className="mr-4 text-2xl lg:text-lg">
+                                                <span className="font-semibold text-[#78746c]">
+                                                    Finish :
+                                                </span>{' '}
+                                                {image.finish}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
                             )
                         })}
                     </Swiper>

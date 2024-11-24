@@ -141,6 +141,7 @@ export function CustomerActionForm(props: TProps) {
         );
     }, [publishedUrl]);
 
+    console.log(item)
     return (
         <FormProvider {...methods}>
             <form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll ">
