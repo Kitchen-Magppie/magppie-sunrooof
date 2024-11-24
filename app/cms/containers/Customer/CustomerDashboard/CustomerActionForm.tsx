@@ -37,7 +37,7 @@ import {
     MinimalDropdown,
 } from "../../../components";
 import { ImageInput } from "../../../../../components";
-import { useFirebaseCustomerAction } from "../../../utils/firebase/customer";
+import { useFirebaseCustomerAction } from "../../../utils";
 import { useAppSelector } from "../../../../../redux";
 import CustomerFormQuotationSection from "../components/CustomerFormQuotationSection";
 import { CMS_TOAST_CONFIG } from "../../../types";
