@@ -209,7 +209,7 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
             discount: yup.string().nullable(),
-            invoiceUrl: yup.string().nullable('Invoice URL field is required'),
+            invoiceUrl: yup.string().required('Invoice URL field is required'),
             // entries: yup.array().of(yup.object().shape({
             //     design: yup.string().required('Design field is Required'),
             //     finish: yup.string().required('Finish field is Required'),
