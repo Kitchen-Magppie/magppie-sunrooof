@@ -106,7 +106,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM: TCustomerComponent2DDesignOptionItem[] = [
     { label: "Design", value: 'design', field: 'select', placeholder: '', lock: true },
     { label: "Finish", value: 'finish', field: 'select', placeholder: '', lock: false },
-    { label: "Area Name", value: 'area', field: 'text', placeholder: 'Living Room | Dining Room', lock: true },
+    { label: "Area Name", value: 'area', field: 'text', placeholder: 'Living Room | Dining Room', lock: false },
     { label: "Floor", value: 'floor', field: 'text', placeholder: '', lock: false },
     { label: "Quantity", value: 'quantity', field: 'text', placeholder: '', lock: true },
 ];

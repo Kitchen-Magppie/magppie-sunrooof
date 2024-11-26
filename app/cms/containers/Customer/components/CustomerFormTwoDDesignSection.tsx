@@ -84,6 +84,9 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                         if (currentLayout) {
                                             setValue(`components.${index}.data.${j}.proposedLayoutId`, currentProposedLayoutId)
                                             setValue(`components.${index}.data.${j}.entries`, currentLayout.entries)
+                                            setValue(`components.${index}.data.${j}.leftImage`, currentLayout.url.customer)
+                                            setValue(`components.${index}.data.${j}.rightImage`, currentLayout.url.customer)
+
                                         }
                                     }}
                                     options={layouts}
@@ -91,10 +94,10 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                 {renderErrorMessage(`components.${index}.data.${j}.proposedLayout`)}
                             </div>
                         </div>
-                        <div className="border rounded-sm border-gray-300 p-2">
+                        <div className="border rounded-lg border-gray-300 p-2 ">
 
                             <div className="text-lg font-medium text-indigo-800 dark:text-gray-300 flex  justify-between align-middle flex-col">
-
+                                Window Sunrooof
                                 {/* <FieldCautation
                                     label=" Sunrooof Window"
                                     onClickAdd={() => {
@@ -157,7 +160,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                         <MinimalDropdown
                                                             defaultValue={defaultValue}
                                                             placeholder={label}
-                                                            // isDisabled={(lock && !!defaultValue?.value?.length)}
+                                                            isDisabled={(lock && !!defaultValue?.value?.length)}
                                                             options={options}
                                                             onChange={(e) => {
                                                                 setValue(`components.${index}.data.${j}.entries.${k}.${value}`, e.value)
@@ -167,7 +170,8 @@ function CustomerFormTwoDDesignSection(props: TProps) {
 
                                                     </div>
 
-                                                default:
+                                                default: {
+                                                    const disabled = lock && !!(value === 'quantity' ? Number(entry[value]) > 0 : `${entry[value]}`?.length)
                                                     return <div
                                                         className="bg-white"
                                                         key={`entry-${index}-${fieldIndex}`}
@@ -177,14 +181,15 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            disabled={(lock && !!`${entry[value]}`?.length)}
+                                                            disabled={disabled}
                                                             {...register(`components.${index}.data.${j}.entries.${k}.${value}`)}
                                                             value={entry[value]}
                                                             placeholder={placeholder}
-                                                            className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+                                                            className={`mt-1 block w-full p-3 border ${disabled ? 'text-gray-500 bg-gray-100' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                                                         />
                                                         {renderErrorMessage(`components.${index}.data.${j}.entries.${k}.${value}`)}
                                                     </div>
+                                                }
                                             }
                                         })}
                                     </div>
