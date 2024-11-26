@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { TCustomerComponentDesign2DItem, TCustomerComponentQuotationItem } from "../../../../../types";
+import { useCallback, useMemo } from "react";
+import { _, TCustomerComponentDesign2DItem, TCustomerComponentQuotationItem } from "../../../../../types";
 import { CMS_QUOTATION_OPTIONS } from "../../../mocks";
 
 type TProps = {
@@ -9,6 +9,19 @@ type TProps = {
 function CustomerFormQuotationTable(props: TProps) {
     const data = props.quotation as TCustomerComponentQuotationItem;
 
+    const TO_TOTAL_GROSS_AMOUNT = useCallback((item: TCustomerComponentDesign2DItem) => {
+        // Ensure the function processes all entries in the item
+        let totalGrossAmount = 0;
+
+        if (item && Array.isArray(item.data) && item.data.length > 0) {
+            totalGrossAmount = item.data?.flatMap((x) => x.entries || []).reduce((acc, entry) => {
+                const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0);
+                const total = price * (entry.quantity || 1); // Calculate total for the entry
+                return acc + total; // Add to accumulator
+            }, 0);
+        }
+        return totalGrossAmount; // Return the gross total
+    }, [])
     const row = useMemo(() => {
         const totalGrossAmount = TO_TOTAL_GROSS_AMOUNT(props.item);
         const discountAmount =
@@ -26,8 +39,10 @@ function CustomerFormQuotationTable(props: TProps) {
             grandTotal
 
         })
-    }, [data.data.discount, props.item])
+    }, [TO_TOTAL_GROSS_AMOUNT, data.data.discount, props])
 
+
+    console.log(row)
     return (<table style={{ width: "100%" }}>
         <thead className="bg-[darkorange]">
             <tr className="">
@@ -55,13 +70,11 @@ function CustomerFormQuotationTable(props: TProps) {
             </tr>
         </thead>
         <tbody>
-            {props.item.data.map((entry, index) => {
-                const price =
-                    CMS_QUOTATION_OPTIONS[entry.design]?.[
-                    entry.finish
-                    ] || 0;
+            {props.item.data?.flatMap((item) => item.entries || []).map((entry, index) => {
+                const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0)
                 const total = price * (entry.quantity || 1);
 
+                console.log(index)
                 return (
                     <tr
                         key={index}
@@ -71,16 +84,16 @@ function CustomerFormQuotationTable(props: TProps) {
                             {index + 1}
                         </td>
                         <td className="border border-black px-4 py-2">
-                            {entry.design} {entry.finish}
+                            {entry?.design} {entry?.finish}
                         </td>
                         <td className="border border-black px-4 py-2">
-                            {entry.areaName}
+                            {entry?.area}
                         </td>
                         <td className="border border-black text-center px-4 py-2">
-                            {entry.floor}
+                            {entry?.floor}
                         </td>
                         <td className="border border-black text-center px-4 py-2">
-                            {entry.quantity}
+                            {entry?.quantity}
                         </td>
                         <td className="border border-black text-center px-4 py-2">
                             ₹{price.toLocaleString()}
@@ -175,19 +188,8 @@ function CustomerFormQuotationTable(props: TProps) {
 
 }
 
-const TO_TOTAL_GROSS_AMOUNT = (item: TCustomerComponentDesign2DItem) => {
-    // Ensure the function processes all entries in the item
-    let totalGrossAmount = 0;
 
-    if (item && Array.isArray(item.data) && item.data.length > 0) {
-        totalGrossAmount = item.data.reduce((acc, entry) => {
-            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-            const total = price * (entry.quantity || 1); // Calculate total for the entry
-            return acc + total; // Add to accumulator
-        }, 0);
-    }
-    return totalGrossAmount; // Return the gross total
-};
+
 
 const freightCharges = 50000;
 

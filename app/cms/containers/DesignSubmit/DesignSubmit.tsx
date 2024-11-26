@@ -21,15 +21,20 @@ import { useProposedLayoutAction } from '../../hooks'
 import { useFirebaseCmsCustomerListener } from '../../utils/firebase'
 import { CircularProgress } from '../../../../components'
 
+// const UNIT_COUNT = { "Classical": 30, "Fluted": 30, "French Window": 0, "Louvered Window": 0, "Modern": 0, "Minimalist": 0 }
 export default function DesignSubmit() {
 
     const [isLoading, setLoading] = useState(true)
     const StorageAction = useFirebaseStorageActions()
     const CustomerAction = useFirebaseCustomerAction()
     const ProposedLayoutDataAction = useProposedLayoutAction()
+    const customers = useAppSelector(({ Cms }) => Cms.Customer)
+
+
+
+
     const navigate = useNavigate()
     useFirebaseCmsCustomerListener()
-    const customers = useAppSelector((state) => state.Cms.Customer)
     const firestoreRunRef = useRef(null)
     const STORAGE_DATA: TSessionStorageData = useMemo(() => {
         const units_count = JSON.parse(sessionStorage.getItem("units_count"))
@@ -44,7 +49,16 @@ export default function DesignSubmit() {
                     label: win,
                     count: _.get(units_count, win, 0)
                 })
-            })?.filter((win) => win.count) : []
+            })?.filter((win) => win.count) : [],
+            entries: _.keys(units_count).filter((win) => _.get(units_count, win))?.map((design) => {
+                const quantity = _.get(units_count, design)
+                const _common = { finish: '', area: '', floor: '' }
+                return ({
+                    ..._common,
+                    design,
+                    quantity
+                })
+            }),
         }
     }, [])
 
@@ -77,6 +91,7 @@ export default function DesignSubmit() {
                             finish: '',
                             customerId: STORAGE_DATA?.customerId || _.uuid(),
                             url: { customer: e[0], proposed: e[1] },
+                            entries: _.get(STORAGE_DATA, 'entries', [])
                         }
                         console.log(args)
                         ProposedLayoutDataAction.add(args).then((response) => {
@@ -108,7 +123,7 @@ export default function DesignSubmit() {
 
 
                         toast('Proposed image has been saved!')
-                        sessionStorage.clear()
+                        // sessionStorage.clear()
                         setLoading(false)
                         // navigate(isRedirectBack ? '/cms/proposed/layout' : '/cms')
                     },
@@ -184,6 +199,12 @@ const CUSTOMER_COMPONENT_ITEM = (item: TCustomerComponentItem, args: Omit<IPropo
             quantity: args.sunrooofCount,
             leftImage: args.url.customer,
             rightImage: args.url.proposed,
+            entries: args.entries?.map((item) => {
+                return ({
+                    ...item,
+                    proposedLayoutId: args.proposedLayoutId
+                })
+            }),
         }
         return {
             ...item,
