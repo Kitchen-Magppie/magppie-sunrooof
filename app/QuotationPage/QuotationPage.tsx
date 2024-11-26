@@ -1,3 +1,7 @@
+import { useEffect } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
+//====================================================================
+import { CMS_NAV_ITEMS } from '../cms/mocks'
 import TwodDesigns from './2dDesigns'
 import ThreedDesigns from './3dDesigns'
 import About from './About'
@@ -17,11 +21,9 @@ import ImageComparison from './Image'
 import { CustomerComponentEnum } from '../../types'
 import { PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
-import { useLocation, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
-import { CMS_NAV_ITEMS } from '../cms/mocks'
 
-const QuotationPage = () => {
+
+export default function QuotationPage() {
     const { loading, components } = useHomeData()
     const { pathname } = useLocation()
 
@@ -67,4 +69,3 @@ const QuotationPage = () => {
     )
 }
 
-export default QuotationPage
