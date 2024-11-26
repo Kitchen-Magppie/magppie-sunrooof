@@ -4,12 +4,17 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 //====================================================================
 
-import { _, CustomerComponentEnum, DESIGN_2D_SELECT_OPTION, TCustomerComponentDesign2DItem, TCustomerItem } from "../../../../../types";
+import {
+    _,
+    CustomerComponentEnum,
+    DESIGN_2D_SELECT_OPTION,
+    TCustomerComponentDesign2DItem,
+    TCustomerItem
+} from "../../../../../types";
 import { FieldCautation, MinimalAccordion, MinimalDropdown } from "../../../components";
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM,
     CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS,
-    // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM,
     INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
 } from "../../../mocks";
 import { useAppSelector } from "../../../../../redux";
@@ -41,13 +46,10 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                     }}
                 />
                 {item.data?.map((data, j) => {
-                    const currentData = item.data[j]
-                    const hasMoreThenOne = item.data?.length > 1;
                     const layouts = proposedLayouts?.map((item) => ({
                         label: item.label,
                         value: item.customerId,
-                        id: item.id,
-
+                        id: item.id
                     }));
                     return (<div
                         key={`${CustomerComponentEnum.TwoDDesign}-${index}-${j}`}
@@ -56,20 +58,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                         <div className="text-gray-400 italic text-lg flex justify-between">
                             #{j + 1}
                             <div className="py-1">
-                                <IoIosRemoveCircleOutline
-                                    className={
-                                        hasMoreThenOne
-                                            ? "text-red-500 cursor-pointer hover:text-red-800"
-                                            : ""
-                                    }
-                                    onClick={() => {
-                                        if (hasMoreThenOne)
-                                            setValue(
-                                                `components.${index}.data`,
-                                                item.data.filter((_, m) => m !== j)
-                                            );
-                                    }}
-                                />
+                                <IoIosRemoveCircleOutline />
                             </div>
                         </div>
                         <div className="grid  gap-2 mb-2">
@@ -113,8 +102,8 @@ function CustomerFormTwoDDesignSection(props: TProps) {
 
 
                             </div>
-                            {currentData?.entries?.map((entry, k) => {
-                                const entryLength = currentData?.entries?.length
+                            {data?.entries?.map((entry, k) => {
+                                const entryLength = data?.entries?.length
                                 return <div key={`${index}-${k}-${j}`} className={`${(entryLength - 1 === k) ? '' : 'border-b-2 border-dashed'}`}>
                                     <div className="text-gray-400 italic text-sm flex justify-between">
                                         #{j + 1}.{k + 1}
@@ -145,13 +134,6 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                 proposedOptions,
                                                 entry['design']
                                             );
-                                            if (['design', 'finish']?.includes(value)) {
-
-                                                console.log(value)
-                                                console.log(currentData.design)
-                                                console.log(entry[value])
-                                                console.log(options)
-                                            }
                                             const defaultValue = (options?.find((option) => option.value === entry[value]))
 
                                             switch (field) {
@@ -200,7 +182,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
 
                             {_.filter(CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS, { field: 'image' })?.map((item, j) => {
                                 return <div key={j} className="border py-1 rounded-sm">
-                                    <LazyLoadImage src={`${_.get(currentData, item.value, '')}`} key={j} />
+                                    <LazyLoadImage src={`${_.get(data, item.value, '')}`} key={j} />
                                 </div>
                             })}
                         </div>
