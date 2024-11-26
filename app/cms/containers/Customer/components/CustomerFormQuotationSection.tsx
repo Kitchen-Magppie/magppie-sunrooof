@@ -687,7 +687,7 @@ function CustomerFormQuotationSection(props: TProps) {
                         </tbody>
                     </table>
 
-                    <div className="mt-20">
+                    <div className="mt-80">
                         <h1 className="text-2xl font-bold mb-2">
                             Payment Terms
                         </h1>
