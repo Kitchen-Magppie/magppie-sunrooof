@@ -37,13 +37,13 @@ export default function DesignSubmit() {
     useFirebaseCmsCustomerListener()
     const firestoreRunRef = useRef(null)
     const STORAGE_DATA: TSessionStorageData = useMemo(() => {
-        const units_count = JSON.parse(sessionStorage.getItem("units_count"))
+        const units_count = JSON.parse(localStorage.getItem("units_count"))
         return {
             ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-            customerId: sessionStorage.getItem("CUSTOMER_ID"),
-            title: sessionStorage.getItem("LAYOUT_TITLE"),
-            leftImage: sessionStorage.getItem("CUSTOMER_IMAGE"),
-            rightImage: sessionStorage.getItem("PROPOSED_IMAGE"),
+            customerId: localStorage.getItem("CUSTOMER_ID"),
+            title: localStorage.getItem("LAYOUT_TITLE"),
+            leftImage: localStorage.getItem("CUSTOMER_IMAGE"),
+            rightImage: localStorage.getItem("PROPOSED_IMAGE"),
             windows: _.isObject(units_count) ? _.keys(units_count)?.map((win) => {
                 return ({
                     label: win,
@@ -85,7 +85,7 @@ export default function DesignSubmit() {
 
                         const args = {
                             label: STORAGE_DATA.title,
-                            name: currentCustomer?.name || sessionStorage.getItem('CUSTOMER_NAME'),
+                            name: currentCustomer?.name || localStorage.getItem('CUSTOMER_NAME'),
                             design: _.first(STORAGE_DATA?.windows).label,
                             sunrooofCount: _.first(STORAGE_DATA?.windows).count || 0,
                             finish: '',

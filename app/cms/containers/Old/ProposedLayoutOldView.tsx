@@ -76,7 +76,7 @@ function ProposedLayoutView() {
         const imageDataUrl = canvas.toDataURL('image/png');
 
         setValue('file', _.base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
-        sessionStorage.setItem('CUSTOMER_IMAGE', `${imageDataUrl}`)
+        localStorage.setItem('CUSTOMER_IMAGE', `${imageDataUrl}`)
     }, [setValue])
 
 
@@ -92,7 +92,7 @@ function ProposedLayoutView() {
             }
             if (content?.accessor === 'image') {
                 const data = await convertFileToBase64(content.file)
-                sessionStorage.setItem('CUSTOMER_IMAGE', `${data}`)
+                localStorage.setItem('CUSTOMER_IMAGE', `${data}`)
                 setValue('file', content.file)
             }
         } else {
@@ -141,9 +141,9 @@ function ProposedLayoutView() {
                     onChange={(e) => {
                         const currentCustomer = customers.find((customer) => customer.name === e.label)
                         if (currentCustomer)
-                            sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
+                            localStorage.setItem('CUSTOMER_ID', currentCustomer.id)
                         else {
-                            sessionStorage.setItem('CUSTOMER_NAME', e.label)
+                            localStorage.setItem('CUSTOMER_NAME', e.label)
 
                         }
                         // console.log(currentCustomer);
@@ -165,7 +165,7 @@ function ProposedLayoutView() {
                     {...register('title')}
                     id="large-input"
                     onChange={(e) => {
-                        sessionStorage.setItem('LAYOUT_TITLE', e.target.value)
+                        localStorage.setItem('LAYOUT_TITLE', e.target.value)
                         setValue('name', e.target.value)
                     }}
                     className={`block w-full rounded-sm py-1.5 bg-white text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}

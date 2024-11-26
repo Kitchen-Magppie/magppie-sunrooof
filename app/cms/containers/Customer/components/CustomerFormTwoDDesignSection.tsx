@@ -135,14 +135,21 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                     <div className="grid grid-cols-2 gap-2 mb-2 ">
 
                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM?.map((row, fieldIndex) => {
-                                            const { value, field, label, placeholder } = row
+                                            const { value, field, label, placeholder, lock } = row
                                             const proposedOptions = proposedLayouts?.filter(({ customerId }) => isCreateAction ? true : customerId === values.customerId)
                                             const options = DESIGN_2D_SELECT_OPTION(
                                                 value,
                                                 proposedOptions,
-                                                currentData.design
+                                                entry['design']
                                             );
-                                            const defaultValue = (options?.find((option) => entry[value] === option.value))
+                                            if (['design', 'finish']?.includes(value)) {
+
+                                                console.log(value)
+                                                console.log(currentData.design)
+                                                console.log(entry[value])
+                                                console.log(options)
+                                            }
+                                            const defaultValue = (options?.find((option) => option.value === entry[value]))
 
                                             switch (field) {
                                                 case 'select':
@@ -150,6 +157,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                         <MinimalDropdown
                                                             defaultValue={defaultValue}
                                                             placeholder={label}
+                                                            // isDisabled={(lock && !!defaultValue?.value?.length)}
                                                             options={options}
                                                             onChange={(e) => {
                                                                 setValue(`components.${index}.data.${j}.entries.${k}.${value}`, e.value)
@@ -169,8 +177,9 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            disabled={(lock && !!`${entry[value]}`?.length)}
                                                             {...register(`components.${index}.data.${j}.entries.${k}.${value}`)}
-                                                            value={entry[row.value]}
+                                                            value={entry[value]}
                                                             placeholder={placeholder}
                                                             className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
                                                         />

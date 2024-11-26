@@ -84,7 +84,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM: TCustomerComponentQuo
     finish: '',
     area: '',
     floor: '',
-    quantity: 0,
+    quantity: '',
 }
 
 export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
@@ -104,11 +104,11 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
 }
 
 export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM: TCustomerComponent2DDesignOptionItem[] = [
-    { label: "Design", value: 'design', field: 'select', placeholder: '' },
-    { label: "Finish", value: 'finish', field: 'select', placeholder: '' },
-    { label: "Area Name", value: 'area', field: 'text', placeholder: 'Living Room | Dining Room' },
-    { label: "Floor", value: 'floor', field: 'text', placeholder: '' },
-    { label: "Quantity", value: 'quantity', field: 'text', placeholder: '' },
+    { label: "Design", value: 'design', field: 'select', placeholder: '', lock: true },
+    { label: "Finish", value: 'finish', field: 'select', placeholder: '', lock: false },
+    { label: "Area Name", value: 'area', field: 'text', placeholder: 'Living Room | Dining Room', lock: true },
+    { label: "Floor", value: 'floor', field: 'text', placeholder: '', lock: false },
+    { label: "Quantity", value: 'quantity', field: 'text', placeholder: '', lock: true },
 ];
 
 
@@ -238,17 +238,30 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
 }
 
 export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
-    "Arch Window",
     "Classical",
-    "Classical Atrium",
-    "Fluted Minimalist",
-    "Fluted Minimalist Atrium",
+    "Fluted",
     "French Window",
     "Louvered Window",
-    "Moorgan Premium Remote",
     "Modern",
     "Minimalist",
+    // "Classical Atrium",
+    // "Arch Window",
+    // "Fluted Minimalist",
+    // "Fluted Minimalist Atrium",
+    // "Moorgan Premium Remote",
 ]
+// export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
+//     "Arch Window",
+//     "Classical",
+//     "Classical Atrium",
+//     "Fluted Minimalist",
+//     "Fluted Minimalist Atrium",
+//     "French Window",
+//     "Louvered Window",
+//     "Moorgan Premium Remote",
+//     "Modern",
+//     "Minimalist",
+// ]
 // export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
 //     "Arch Window",
 //     "Classical",

@@ -26,7 +26,7 @@ export type TCustomerComponentQuotationEntryItem = {
     finish: string,
     area: string,
     floor: string,
-    quantity: number,
+    quantity: string,
     // unitPrice: string,
 }
 export type TCustomerComponentQuotationItem = {
@@ -51,6 +51,7 @@ export type TCustomerComponent2DDesignOptionItem = {
     value: keyof IProposedLayoutEntryItem
     field: 'text' | 'image' | 'select'
     placeholder?: string
+    lock: boolean
 }
 export type TCustomerComponentDesign2DDataItem = {
     design: string
@@ -209,7 +210,7 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
             discount: yup.string().nullable(),
-            invoiceUrl: yup.string().required('Invoice URL field is required'),
+            invoiceUrl: yup.string().required('To save your quotation, please generate the design first.'),
             // entries: yup.array().of(yup.object().shape({
             //     design: yup.string().required('Design field is Required'),
             //     finish: yup.string().required('Finish field is Required'),

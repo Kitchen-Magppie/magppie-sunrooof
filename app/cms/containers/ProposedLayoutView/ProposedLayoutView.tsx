@@ -95,8 +95,6 @@ function ProposedLayoutView() {
                 convertPdfToImage(content.file)
             }
             if (content?.accessor === 'image') {
-                // const data = await convertFileToBase64(content.file)
-                // sessionStorage.setItem('IMAGE_DATA', `${data}`)
                 setValue('file', content.file)
             }
         } else {
@@ -160,9 +158,6 @@ function ProposedLayoutView() {
                         label: customer.name
                     }))}
                     onChange={(e) => {
-                        // const currentCustomer = customers.find((customer) => customer.name === e.label)
-                        // sessionStorage.setItem('CUSTOMER_ID', currentCustomer.id)
-                        // console.log(currentCustomer);
                         setValue('name', e.label)
                     }}
                     placeholder="Customer Name"
