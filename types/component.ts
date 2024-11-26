@@ -227,13 +227,13 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
     data: yup
         .array()
         .of(yup.object().shape({
-            design: yup.string().required('Design field is Required'),
-            finish: yup.string().required('Finish field is Required'),
-            areaName: yup.string().required('Area Name field is Required'),
+            design: yup.string().required('Design fi/eld is Required'),
+            // finish: yup.string().required('Finish field is Required'),
+            // areaName: yup.string().required('Area Name field is Required'),
             // floor: yup.string().required('Floor field is Required'),
-            floor: yup.string().nullable(),
-            quantity: yup.number().required('Quantity field is Required'),
-            proposedLayout: yup.string().nullable(),
+            // floor: yup.string().nullable(),
+            // quantity: yup.number().required('Quantity field is Required'),
+            // proposedLayout: yup.string().nullable(),
             proposedLayoutId: yup.string().nullable(),
             leftImage: yup
                 .string()

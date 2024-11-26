@@ -706,6 +706,9 @@ function CustomerFormQuotationSection(props: TProps) {
                     </div>
                 </div>
             </div>
+            {renderErrorMessage(
+                `components.${i}.data.invoiceUrl`
+            )}
             {/* <div className="grid grid-cols-2 gap-2">
                 <ImageInput
                     label="Invoice URL"

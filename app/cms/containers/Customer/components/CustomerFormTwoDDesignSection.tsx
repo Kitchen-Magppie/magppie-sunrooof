@@ -9,7 +9,7 @@ import { FieldCautation, MinimalAccordion, MinimalDropdown } from "../../../comp
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM,
     CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS,
-    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM,
+    // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM,
     INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
 } from "../../../mocks";
 import { useAppSelector } from "../../../../../redux";
@@ -43,7 +43,6 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                 {item.data?.map((data, j) => {
                     const currentData = item.data[j]
                     const hasMoreThenOne = item.data?.length > 1;
-                    console.log(currentData)
                     const layouts = proposedLayouts?.map((item) => ({
                         label: item.label,
                         value: item.customerId,
@@ -79,7 +78,13 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                     placeholder='Proposed Layout'
                                     defaultValue={layouts?.find((option) => _.get(option, 'id') === data.proposedLayoutId)}
                                     onChange={(e) => {
-                                        console.log(e)
+                                        const currentProposedLayoutId = _.get(e, 'id')
+                                        const currentLayout = proposedLayouts?.find((layout) => layout.id === currentProposedLayoutId)
+
+                                        if (currentLayout) {
+                                            setValue(`components.${index}.data.${j}.proposedLayoutId`, currentProposedLayoutId)
+                                            setValue(`components.${index}.data.${j}.entries`, currentLayout.entries)
+                                        }
                                     }}
                                     options={layouts}
                                 />
@@ -88,9 +93,9 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                         </div>
                         <div className="border rounded-sm border-gray-300 p-2">
 
-                            <div className="text-lg font-medium text-indigo-800 dark:text-gray-300 flex  justify-between align-middle">
+                            <div className="text-lg font-medium text-indigo-800 dark:text-gray-300 flex  justify-between align-middle flex-col">
 
-                                <FieldCautation
+                                {/* <FieldCautation
                                     label=" Sunrooof Window"
                                     onClickAdd={() => {
                                         const entries = currentData.entries || []
@@ -100,18 +105,18 @@ function CustomerFormTwoDDesignSection(props: TProps) {
 
                                         ])
                                     }}
-                                />
-
+                                /> */}
+                                {renderErrorMessage(`components.${index}.data.${j}.entries`)}
 
 
                             </div>
                             {currentData?.entries?.map((entry, k) => {
                                 const entryLength = currentData?.entries?.length
-                                return <div key={`${index}-${k}`} className={`${(entryLength - 1 === k) ? '' : 'border-b-2 border-dashed'}`}>
+                                return <div key={`${index}-${k}-${j}`} className={`${(entryLength - 1 === k) ? '' : 'border-b-2 border-dashed'}`}>
                                     <div className="text-gray-400 italic text-sm flex justify-between">
                                         #{j + 1}.{k + 1}
                                         <div className="py-1">
-                                            <IoIosRemoveCircleOutline
+                                            {/* <IoIosRemoveCircleOutline
                                                 className={
                                                     entryLength > 1
                                                         ? "text-red-500 cursor-pointer hover:text-red-800"
@@ -124,7 +129,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                             item.data.filter((_, m) => m !== j)
                                                         );
                                                 }}
-                                            />
+                                            /> */}
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 mb-2 ">
@@ -176,63 +181,14 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                     </div>
                                 </div>
                             })}
-                            {/* <div className="grid grid-cols-2 gap-2 mb-2">
-                                {_.filter(CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, { field: 'text' }).map((item, j) => {
-                                    return (
-                                        <div
-                                            className="bg-white"
-                                            key={`${CustomerComponentEnum.TwoDDesign}-${index}-${k}-${j}`}
-                                        >
-                                            <label className="block text-sm font-medium text-gray-700">
-                                                {item.label}
-                                            </label>
-                                            <input
-                                                type="text"
-                                                {...register(`components.${index}.data.${k}.${item.value}`)}
-
-                                                // disabled={!!currentData.proposedLayout?.length}
-                                                placeholder={item.placeholder}
-                                                className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-                                            />
-                                            {renderErrorMessage(
-                                                `components.${index}.data.${k}.${item.value}`
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div> */}
                         </div>
-                        <div className="grid grid-cols-2 gap-5 m-5">
+                        <div className="grid grid-cols-2 gap-5 my-5">
 
                             {_.filter(CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS, { field: 'image' })?.map((item, j) => {
-                                return <LazyLoadImage src={`${currentData[item.value]}`} key={j} />
+                                return <div key={j} className="border py-1 rounded-sm">
+                                    <LazyLoadImage src={`${_.get(currentData, item.value, '')}`} key={j} />
+                                </div>
                             })}
-                            {/* {_.filter(CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS, { field: 'image' })?.map((item, j) => {
-const value = `${_.get(currentData, `${item.value}`, '')}`;
-const items = value?.length ? [value] : [];
-console.log(
-`components.${index}.data.${k}.${item.value}`
-)
-return (
-<div key={j}>
-<ImageInput
-label={item.label}
-key={j}
-path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-values={items as string[]}
-onSuccess={(e) => {
-setValue(
-`components.${index}.data.${k}.${item.value}`,
-e[0]
-);
-}}
-/>
-{renderErrorMessage(
-`components.${index}.data.${k}.entries.${item.value}`
-)}
-</div>
-);
-})} */}
                         </div>
 
                     </div>

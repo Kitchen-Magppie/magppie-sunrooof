@@ -113,6 +113,7 @@ export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM: TCustomerComponent2D
 
 
 type TCustomerComponent2DLayoutFieldItem = { label: string, value: 'leftImage' | 'rightImage', field: 'image', placeholder: string }
+
 export const CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS: TCustomerComponent2DLayoutFieldItem[] = [
     { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },
     { label: "Proposed Image", value: 'rightImage', field: 'image', placeholder: '' },
