@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 // import { IoIosRemoveCircleOutline } from "react-icons/io";
 import html2canvas from "html2canvas";
 import { MdOutlineCloudUpload } from "react-icons/md";
@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import {
     _,
     CustomerComponentEnum,
-    TCustomerComponentItem,
+    // TCustomerComponentItem,
     TCustomerComponentQuotationItem,
     TCustomerItem
 } from "../../../../../types";
@@ -23,7 +23,7 @@ import {
 } from "../../../components";
 import {
     // CMS_QUOTATION_FLOOR_OPTIONS,
-    CMS_QUOTATION_OPTIONS,
+    // CMS_QUOTATION_OPTIONS,
     // INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
     QUOTATION_SALUTATION_OPTIONS
 } from "../../../mocks";
@@ -73,24 +73,24 @@ function CustomerFormQuotationSection(props: TProps) {
         });
     }, []);
 
-    const TO_TOTAL_GROSS_AMOUNT = useCallback((arr: TCustomerComponentItem[]) => {
-        const twoDataItem = arr.find(
-            (item) => item.value === CustomerComponentEnum.TwoDDesign
-        );
-        // Step 1: Calculate Total Gross Amount Directly
-        let totalGrossAmount = 0;
+    // const TO_TOTAL_GROSS_AMOUNT = useCallback((arr: TCustomerComponentItem[]) => {
+    //     const twoDataItem = arr.find(
+    //         (item) => item.value === CustomerComponentEnum.TwoDDesign
+    //     );
+    //     // Step 1: Calculate Total Gross Amount Directly
+    //     let totalGrossAmount = 0;
 
-        if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
-            totalGrossAmount = twoDataItem.data?.flatMap((item) => item.entries || []).reduce((acc, entry) => {
-                console.log(entry)
+    //     if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
+    //         totalGrossAmount = twoDataItem.data?.flatMap((item) => item.entries || []).reduce((acc, entry) => {
+    //             console.log(entry)
 
-                const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0)
-                const total = price * (entry.quantity || 1);
-                return acc + total;
-            }, 0);
-        }
-        return totalGrossAmount
-    }, [])
+    //             const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0)
+    //             const total = price * (entry.quantity || 1);
+    //             return acc + total;
+    //         }, 0);
+    //     }
+    //     return totalGrossAmount
+    // }, [])
     const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
         const invoiceElement = invoiceRefPng.current;
         setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
@@ -133,13 +133,13 @@ function CustomerFormQuotationSection(props: TProps) {
         [errors]
     );
 
-    const totalGrossAmount = useMemo(() => TO_TOTAL_GROSS_AMOUNT(values.components), [TO_TOTAL_GROSS_AMOUNT, values.components]);
+    // const totalGrossAmount = useMemo(() => TO_TOTAL_GROSS_AMOUNT(values.components), [TO_TOTAL_GROSS_AMOUNT, values.components]);
     const twoDataItem = values.components.find((item) => item.value === CustomerComponentEnum.TwoDDesign);
-    const discountAmount = totalGrossAmount * (data.data.discount / 100);
-    const totalAmount =
-        totalGrossAmount - discountAmount + freightCharges;
-    const taxAmount = totalAmount * (18 / 100);
-    const grandTotal = totalAmount + taxAmount;
+    // const discountAmount = totalGrossAmount * (data.data.discount / 100);
+    // const totalAmount =
+        // totalGrossAmount - discountAmount + freightCharges;
+    // const taxAmount = totalAmount * (18 / 100);
+    // const grandTotal = totalAmount + taxAmount;
     // const entries = data?.data?.entries?.length
     //     ? data?.data?.entries
     //     : [];
@@ -545,8 +545,12 @@ function CustomerFormQuotationSection(props: TProps) {
                         <span className="font-bold">Date:</span>{" "}
                         {data.data.createdDate}
                     </p>
-                    <table className="container mx-auto max-w-7xl border border-black">
-                        <thead className="bg-[darkorange]">
+                    <CustomerFormQuotationTable
+                            item={twoDataItem}
+                            quotation={data}
+                        />
+                    {/* <table className="container mx-auto max-w-7xl border border-black"> */}
+                        {/* <thead className="bg-[darkorange]">
                             <tr className="">
                                 <th className="border border-black py-2 px-4">
                                     S.No
@@ -570,9 +574,9 @@ function CustomerFormQuotationSection(props: TProps) {
                                     Total Price
                                 </th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {twoDataItem.data?.flatMap((item) => item.entries || []).map((entry, index) => {
+                        </thead> */}
+                        {/* <tbody> */}
+                            {/* {twoDataItem.data?.flatMap((item) => item.entries || []).map((entry, index) => {
                                 const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0)
 
                                 const total = price * (entry.quantity || 1);
@@ -605,9 +609,9 @@ function CustomerFormQuotationSection(props: TProps) {
                                         </td>
                                     </tr>
                                 );
-                            })}
+                            })} */}
                             {/* After all entries, render the totals */}
-                            <tr className="font-bold">
+                            {/* <tr className="font-bold">
                                 <td
                                     colSpan={6}
                                     className="px-4 py-2 text-right border border-black"
@@ -683,9 +687,9 @@ function CustomerFormQuotationSection(props: TProps) {
                                 <td className="border border-black px-4 py-2 text-center">
                                     ₹{grandTotal.toLocaleString("en-IN")}
                                 </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </tr> */}
+                        {/* </tbody> */}
+                    {/* </table> */}
 
                     <div className="mt-80">
                         <h1 className="text-2xl font-bold mb-2">
@@ -740,7 +744,7 @@ const INIT_CORPUS = {
     isQuotationImageDownload: false,
 };
 
-const freightCharges = 50000;
+// const freightCharges = 50000;
 
 type TProps = {
     title: string,
