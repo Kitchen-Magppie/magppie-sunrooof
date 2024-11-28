@@ -20,10 +20,11 @@ import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 
 //hooks
 import { useMedia } from 'react-use'
-import { TCustomerComponentDesign2DItem } from '../../../types'
+import { _, TCustomerComponentDesign2DItem } from '../../../types'
 // import { images } from './data'
 
-const Layout2dDesign = (props: TProps) => {
+
+export default function Layout2dDesign(props: TProps) {
     const leftImagesLength = props.item.data.map((item) => {
         return item.leftImage
     })
@@ -31,6 +32,11 @@ const Layout2dDesign = (props: TProps) => {
     const [swiperInstance, setSwiperInstance] = useState(null)
 
     const isMobile = useMedia('(orientation: portrait)')
+
+    // console.log(_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.design))?.filter((design) => design?.length)))
+    // console.log(_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.finish))?.filter((finish) => finish?.length)))
+
+    // console.log(_.flatMap(props.item?.data, 'entries.*.design'))
 
     // const onNext = useCallback(() => {
     //     if (swiperInstance && selectedLayout < props.item.data.length - 1) {
@@ -162,9 +168,7 @@ const Layout2dDesign = (props: TProps) => {
                                                 <div>
                                                     <LazyLoadImage
                                                         effect="blur"
-                                                        src={
-                                                            image.rightImage
-                                                        }
+                                                        src={image.rightImage}
                                                         alt=""
                                                         className="block w-screen h-full object-contain rounded-lg shadow-md"
                                                     />
@@ -174,15 +178,19 @@ const Layout2dDesign = (props: TProps) => {
                                         <div className="flex justify-end mb-5 text-[#78746c]">
                                             <div className="mr-4 text-2xl lg:text-lg">
                                                 <span className="font-semibold text-[#78746c]">
-                                                    Design :
-                                                </span>{' '}
-                                                {image.design}
+                                                    Design :&nbsp;
+                                                </span>
+                                                {/* {image.design} */}
+                                                {_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.design))?.filter((design) => design?.length))}
+
+
+
                                             </div>
                                             <div className="mr-4 text-2xl lg:text-lg">
                                                 <span className="font-semibold text-[#78746c]">
-                                                    Finish :
-                                                </span>{' '}
-                                                {image.finish}
+                                                    Finish :&nbsp;
+                                                </span>
+                                                {_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.finish))?.filter((finish) => finish?.length))}
                                             </div>
                                         </div>
                                     </div>
@@ -303,4 +311,3 @@ const Layout2dDesign = (props: TProps) => {
 }
 
 type TProps = { item: TCustomerComponentDesign2DItem }
-export default Layout2dDesign

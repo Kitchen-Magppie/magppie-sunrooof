@@ -7,14 +7,13 @@ import { IoIosLink } from "react-icons/io";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-use";
-import { IoIosRemoveCircleOutline } from "react-icons/io";
+
 //====================================================================
 
 import {
     _,
     ComponentModeEnum,
     CustomerComponentEnum,
-    DESIGN_2D_SELECT_OPTION,
     IS_VALID_FOR_URL,
     TCustomerComponentDesign2DItem,
     TCustomerComponentFeatureItem,
@@ -23,12 +22,11 @@ import {
     validateCustomerItemSchema,
 } from "../../../../../types";
 import {
-    CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS,
+
     CUSTOMER_COMPONENT_COMPARISON_OPTIONS,
     CUSTOMER_COMPONENT_FEATURE_OPTIONS,
     CUSTOMER_COMPONENT_VALUE_OPTIONS,
     DEFAULT_CUSTOMER,
-    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
 } from "../../../mocks";
 import {
     CmsCopyClipboard,
@@ -38,9 +36,9 @@ import {
 } from "../../../components";
 import { ImageInput } from "../../../../../components";
 import { useFirebaseCustomerAction } from "../../../utils";
-import { useAppSelector } from "../../../../../redux";
 import CustomerFormQuotationSection from "../components/CustomerFormQuotationSection";
 import { CMS_TOAST_CONFIG } from "../../../types";
+import { CustomerFormTwoDDesignSection } from "../components";
 
 export function CustomerActionForm(props: TProps) {
     const [corpus, setCorpus] = useState(INIT_CORPUS);
@@ -48,7 +46,6 @@ export function CustomerActionForm(props: TProps) {
     const isCreateAction = mode === ComponentModeEnum.Create;
 
     const location = useLocation();
-    const proposedLayout = useAppSelector((state) => state.Cms.ProposedLayout.value);
 
     const publishedUrl = useMemo(() => {
         if (item.id?.length && IS_VALID_FOR_URL(item))
@@ -141,7 +138,7 @@ export function CustomerActionForm(props: TProps) {
         );
     }, [publishedUrl]);
 
-    console.log(item)
+    console.log(values)
     return (
         <FormProvider {...methods}>
             <form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll ">
@@ -236,199 +233,12 @@ export function CustomerActionForm(props: TProps) {
                             case CustomerComponentEnum.TwoDDesign: {
                                 const prev = component as TCustomerComponentDesign2DItem;
                                 return (<div key={i}>
-                                    <MinimalAccordion isExpanded title={title}>
-                                        <div >
-                                            <FieldCautation
-                                                onClickAdd={() => {
-                                                    setValue(`components.${i}.data`, [
-                                                        ...prev.data,
-                                                        INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-                                                    ]);
-                                                }}
-                                            />
-                                            {prev.data?.map((data, k) => {
-                                                const currentData = prev.data[k]
-                                                const hasMoreThenOne = prev.data?.length > 1;
-                                                return (
-                                                    <div
-                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}`}
-                                                        className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
-                                                    >
-                                                        <div className="text-gray-400 italic text-lg flex justify-between">
-                                                            #{k + 1}
-                                                            <div className="py-1">
-                                                                <IoIosRemoveCircleOutline
-                                                                    className={
-                                                                        hasMoreThenOne
-                                                                            ? "text-red-500 cursor-pointer hover:text-red-800"
-                                                                            : ""
-                                                                    }
-                                                                    onClick={() => {
-                                                                        if (hasMoreThenOne)
-                                                                            setValue(
-                                                                                `components.${i}.data`,
-                                                                                prev.data.filter((_, m) => m !== k)
-                                                                            );
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2 mb-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) => field === "select"
-                                                            )?.map((item, j) => {
-                                                                console.log(item)
-                                                                const isProposedLayoutField = item.value === 'proposedLayout'
-                                                                const proposedOptions = proposedLayout?.filter((proposedLayoutItem) => isCreateAction ? true : proposedLayoutItem.customerId === values.customerId)
-
-
-                                                                const options = DESIGN_2D_SELECT_OPTION(
-                                                                    item.value,
-                                                                    proposedOptions,
-                                                                    currentData.design
-                                                                );
-                                                                const defaultValue = (options?.find((option) => isProposedLayoutField ? _.get(option, 'id') === data.proposedLayoutId : data[item.value] === option.value))
-
-                                                                // if (item.value === 'design') {
-                                                                //     console.log(item)
-                                                                //     console.log(options)
-                                                                //     console.log(currentData.design)
-                                                                //     console.log(defaultValue)
-                                                                // }
-                                                                // console.log()
-                                                                // if (isProposedLayoutField) {
-                                                                //     console.log(values.id)
-                                                                //     console.log(options)
-                                                                //     console.log(proposedLayout?.filter((item) => item.id === data.proposedLayoutId))
-                                                                // }
-                                                                return (
-                                                                    <div
-                                                                        className="bg-white"
-                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                    >
-                                                                        <MinimalDropdown
-                                                                            placeholder={item.label}
-                                                                            defaultValue={defaultValue}
-                                                                            // defaultValue={options?.find(
-                                                                            //     (option) =>
-                                                                            //         option.value === data[item.value]
-                                                                            // )}
-                                                                            onChange={(e) => {
-                                                                                if (isProposedLayoutField) {
-                                                                                    const currLayout = _.find(proposedLayout, { id: _.get(e, 'id') })
-                                                                                    if (currLayout) {
-
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.rightImage`,
-                                                                                            currLayout.url.proposed
-                                                                                        );
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.leftImage`,
-                                                                                            currLayout.url.customer
-                                                                                        );
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.quantity`,
-                                                                                            currLayout.sunrooofCount);
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.design`,
-                                                                                            currLayout.design);
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.finish`,
-                                                                                            currLayout.finish);
-
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.proposedLayout`,
-                                                                                            currLayout.url.proposed);
-
-                                                                                        setValue(
-                                                                                            `components.${i}.data.${k}.proposedLayoutId`,
-                                                                                            currLayout.id);
-
-                                                                                        setValue(
-                                                                                            `name`,
-                                                                                            currLayout.name
-                                                                                        );
-                                                                                    }
-
-                                                                                } else {
-                                                                                    setValue(
-                                                                                        `components.${i}.data.${k}.${item.value}`,
-                                                                                        e?.value?.length ? e.value : ""
-                                                                                    );
-                                                                                }
-
-                                                                            }}
-                                                                            options={options}
-                                                                        />
-
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2 mb-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                ({ field }) => field === "text"
-                                                            )?.map((item, j) => {
-                                                                return (
-                                                                    <div
-                                                                        className="bg-white"
-                                                                        key={`${CustomerComponentEnum.TwoDDesign}-${i}-${k}-${j}`}
-                                                                    >
-                                                                        <label className="block text-sm font-medium text-gray-700">
-                                                                            {item.label}
-                                                                        </label>
-                                                                        <input
-                                                                            type="text"
-                                                                            {...register(
-                                                                                `components.${i}.data.${k}.${item.value}`
-                                                                            )}
-
-                                                                            // disabled={!!currentData.proposedLayout?.length}
-                                                                            placeholder={item.placeholder}
-                                                                            className={`mt-1 block w-full p-3 border ${currentData.proposedLayout?.length ? 'text-gray-500' : ''} border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS?.filter(
-                                                                (item) => item.field === "image"
-                                                            )?.map((item, j) => {
-                                                                const value = `${_.get(currentData, `${item.value}`, '')}`;
-                                                                const items = value?.length ? [value] : [];
-                                                                return (
-                                                                    <div key={j}>
-                                                                        <ImageInput
-                                                                            label={item.label}
-                                                                            key={j}
-                                                                            path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
-                                                                            values={items as string[]}
-                                                                            onSuccess={(e) => {
-                                                                                setValue(
-                                                                                    `components.${i}.data.${k}.${item.value}`,
-                                                                                    e[0]
-                                                                                );
-                                                                            }}
-                                                                        />
-                                                                        {renderErrorMessage(
-                                                                            `components.${i}.data.${k}.${item.value}`
-                                                                        )}
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </MinimalAccordion>
+                                    <CustomerFormTwoDDesignSection
+                                        index={i}
+                                        title={title}
+                                        item={prev}
+                                        isCreateAction={isCreateAction}
+                                    />
                                 </div>
                                 );
                             }
@@ -455,9 +265,9 @@ export function CustomerActionForm(props: TProps) {
                         )}
                     </button>
                 </div>
-            </form>
+            </form >
 
-        </FormProvider>
+        </FormProvider >
     );
 }
 

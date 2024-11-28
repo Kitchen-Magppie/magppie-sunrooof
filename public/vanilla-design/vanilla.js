@@ -163,7 +163,7 @@ function removePoints() {
 
 // Preload the background image from local storage
 function preload() {
-    const imageData = sessionStorage.getItem('CUSTOMER_IMAGE')
+    const imageData = localStorage.getItem('CUSTOMER_IMAGE')
     bgImage = loadImage(imageData, (img) => {
         imgWidth = img.width
         imgHeight = img.height
@@ -881,8 +881,8 @@ function downloadCanvas() {
         const finalImageBase64 = maskedImgBase64 // Use maskedImgBase64 or trueImgBase64 based on requirement
 
         // Store the final image in session storage as PROPOSED_IMAGE
-        sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64)
-        sessionStorage.setItem('units_count', JSON.stringify(unitsCount))
+        localStorage.setItem('PROPOSED_IMAGE', finalImageBase64)
+        localStorage.setItem('units_count', JSON.stringify(unitsCount))
         console.log(
             'Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE'
         )
@@ -910,7 +910,7 @@ function downloadCanvas() {
 //         const finalImageBase64 = maskedImgBase64; // Use maskedImgBase64 or trueImgBase64 based on requirement
 
 //         // Store the final image in session storage as PROPOSED_IMAGE
-//         sessionStorage.setItem('PROPOSED_IMAGE', finalImageBase64);
+//         localStorage.setItem('PROPOSED_IMAGE', finalImageBase64);
 //         console.log('Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE');
 //     }, 200);
 // }
@@ -993,7 +993,7 @@ function downloadCanvas() {
 // }
 
 // function generateInvoice() {
-//     sessionStorage.setItem('units_count', JSON.stringify(unitsCount))
+//     localStorage.setItem('units_count', JSON.stringify(unitsCount))
 //     window.open('/quotation.html', '_blank')
 // }
 

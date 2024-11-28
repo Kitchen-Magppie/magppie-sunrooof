@@ -6,12 +6,13 @@ import { MdOutlineCloudUpload } from "react-icons/md";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import jsPDF from "jspdf";
 import { FaRegFilePdf } from "react-icons/fa";
+import { toast } from "react-toastify";
 //====================================================================
 
 import {
     _,
     CustomerComponentEnum,
-    TCustomerComponentItem,
+    // TCustomerComponentItem,
     TCustomerComponentQuotationItem,
     TCustomerItem
 } from "../../../../../types";
@@ -22,7 +23,7 @@ import {
 } from "../../../components";
 import {
     // CMS_QUOTATION_FLOOR_OPTIONS,
-    CMS_QUOTATION_OPTIONS,
+    // CMS_QUOTATION_OPTIONS,
     // INIT_COMPONENT_QUOTATION_ENTRY_ITEM,
     QUOTATION_SALUTATION_OPTIONS
 } from "../../../mocks";
@@ -32,7 +33,6 @@ import { paymentTermsData } from "../../../../QuotationGenerator/components/paym
 import QR_ILLUSTRATION from "../../../../QuotationGenerator/assets/qr.png";
 import COMPANY_LOGO from "../../../../QuotationGenerator/assets/logo_black.png";
 import CustomerFormQuotationTable from "../CustomerDashboard/CustomerFormQuotationTable";
-import { toast } from "react-toastify";
 
 function CustomerFormQuotationSection(props: TProps) {
     const { title, i, data } = props;
@@ -73,6 +73,24 @@ function CustomerFormQuotationSection(props: TProps) {
         });
     }, []);
 
+    // const TO_TOTAL_GROSS_AMOUNT = useCallback((arr: TCustomerComponentItem[]) => {
+    //     const twoDataItem = arr.find(
+    //         (item) => item.value === CustomerComponentEnum.TwoDDesign
+    //     );
+    //     // Step 1: Calculate Total Gross Amount Directly
+    //     let totalGrossAmount = 0;
+
+    //     if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
+    //         totalGrossAmount = twoDataItem.data?.flatMap((item) => item.entries || []).reduce((acc, entry) => {
+    //             console.log(entry)
+
+    //             const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0)
+    //             const total = price * (entry.quantity || 1);
+    //             return acc + total;
+    //         }, 0);
+    //     }
+    //     return totalGrossAmount
+    // }, [])
     const onClickGenerateSaveInvoiceImage = useCallback((i: number) => {
         const invoiceElement = invoiceRefPng.current;
         setCorpus((prev) => ({ ...prev, isQuotationImageDownload: true }));
@@ -115,18 +133,18 @@ function CustomerFormQuotationSection(props: TProps) {
         [errors]
     );
 
-    const totalGrossAmount = TO_TOTAL_GROSS_AMOUNT(values.components);
+    // const totalGrossAmount = useMemo(() => TO_TOTAL_GROSS_AMOUNT(values.components), [TO_TOTAL_GROSS_AMOUNT, values.components]);
     const twoDataItem = values.components.find((item) => item.value === CustomerComponentEnum.TwoDDesign);
-    const discountAmount =
-        totalGrossAmount * (data.data.discount / 100);
-    const totalAmount =
-        totalGrossAmount - discountAmount + freightCharges;
-    const taxAmount = totalAmount * (18 / 100);
-    const grandTotal = totalAmount + taxAmount;
+    // const discountAmount = totalGrossAmount * (data.data.discount / 100);
+    // const totalAmount =
+        // totalGrossAmount - discountAmount + freightCharges;
+    // const taxAmount = totalAmount * (18 / 100);
+    // const grandTotal = totalAmount + taxAmount;
     // const entries = data?.data?.entries?.length
     //     ? data?.data?.entries
     //     : [];
     // const hasMoreThenOne = entries?.length > 1;
+    console.log(twoDataItem)
     return (<MinimalAccordion isExpanded title={title}>
         <div className="flex flex-col gap-2">
             <div className="grid grid-cols-2 gap-2">
@@ -426,7 +444,7 @@ function CustomerFormQuotationSection(props: TProps) {
                         );
                     })}
                 </div> */}
-                <div className="flex gap-2 mt-2 flex-row-reverse">
+                <div className="flex gap-2 mt-2 flex-row-r,everse">
                     <button
                         disabled={corpus.isQuotationImageDownload}
                         type="button"
@@ -457,7 +475,7 @@ function CustomerFormQuotationSection(props: TProps) {
                         /> */}
                 </div>
                 <div
-                    className=" py-10 px-5  w-full"
+                    className=" py-10  w-full"
                     ref={invoiceRefPng}
                 >
                     <div className="w-full">
@@ -527,8 +545,12 @@ function CustomerFormQuotationSection(props: TProps) {
                         <span className="font-bold">Date:</span>{" "}
                         {data.data.createdDate}
                     </p>
-                    <table className="container mx-auto max-w-7xl border border-black">
-                        <thead className="bg-[darkorange]">
+                    <CustomerFormQuotationTable
+                            item={twoDataItem}
+                            quotation={data}
+                        />
+                    {/* <table className="container mx-auto max-w-7xl border border-black"> */}
+                        {/* <thead className="bg-[darkorange]">
                             <tr className="">
                                 <th className="border border-black py-2 px-4">
                                     S.No
@@ -552,13 +574,11 @@ function CustomerFormQuotationSection(props: TProps) {
                                     Total Price
                                 </th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {twoDataItem.data.map((entry, index) => {
-                                const price =
-                                    CMS_QUOTATION_OPTIONS[entry.design]?.[
-                                    entry.finish
-                                    ] || 0;
+                        </thead> */}
+                        {/* <tbody> */}
+                            {/* {twoDataItem.data?.flatMap((item) => item.entries || []).map((entry, index) => {
+                                const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0)
+
                                 const total = price * (entry.quantity || 1);
 
                                 return (
@@ -573,7 +593,7 @@ function CustomerFormQuotationSection(props: TProps) {
                                             {entry.design} {entry.finish}
                                         </td>
                                         <td className="border border-black px-4 py-2">
-                                            {entry.areaName}
+                                            {entry.area}
                                         </td>
                                         <td className="border border-black text-center px-4 py-2">
                                             {entry.floor}
@@ -589,9 +609,9 @@ function CustomerFormQuotationSection(props: TProps) {
                                         </td>
                                     </tr>
                                 );
-                            })}
+                            })} */}
                             {/* After all entries, render the totals */}
-                            <tr className="font-bold">
+                            {/* <tr className="font-bold">
                                 <td
                                     colSpan={6}
                                     className="px-4 py-2 text-right border border-black"
@@ -667,30 +687,32 @@ function CustomerFormQuotationSection(props: TProps) {
                                 <td className="border border-black px-4 py-2 text-center">
                                     ₹{grandTotal.toLocaleString("en-IN")}
                                 </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </tr> */}
+                        {/* </tbody> */}
+                    {/* </table> */}
 
                     <div className="mt-80">
                         <h1 className="text-2xl font-bold mb-2">
                             Payment Terms
                         </h1>
                         {paymentTermsData.map((data, i) => {
-                            return (
-                                <div
-                                    className="text-lg mb-2 list-decimal"
-                                    key={i}
-                                >
-                                    <div className="flex items-start">
-                                        <span className="mr-2">{data.id}.</span>
-                                        <p>{data.content}</p>
-                                    </div>
+                            return (<div
+                                className="text-lg mb-2 list-decimal"
+                                key={i}
+                            >
+                                <div className="flex items-start">
+                                    <span className="mr-2">{data.id}.</span>
+                                    <p>{data.content}</p>
                                 </div>
+                            </div>
                             );
                         })}
                     </div>
                 </div>
             </div>
+            {renderErrorMessage(
+                `components.${i}.data.invoiceUrl`
+            )}
             {/* <div className="grid grid-cols-2 gap-2">
                 <ImageInput
                     label="Invoice URL"
@@ -721,23 +743,8 @@ const INIT_CORPUS = {
     isSubmitting: false,
     isQuotationImageDownload: false,
 };
-const TO_TOTAL_GROSS_AMOUNT = (arr: TCustomerComponentItem[]) => {
-    const twoDataItem = arr.find(
-        (item) => item.value === CustomerComponentEnum.TwoDDesign
-    );
-    // Step 1: Calculate Total Gross Amount Directly
-    let totalGrossAmount = 0;
 
-    if (twoDataItem && Array.isArray(twoDataItem.data) && twoDataItem.data.length > 0) {
-        totalGrossAmount = twoDataItem.data.reduce((acc, entry) => {
-            const price = CMS_QUOTATION_OPTIONS[entry.design]?.[entry.finish] || 0;
-            const total = price * (entry.quantity || 1);
-            return acc + total;
-        }, 0);
-    }
-    return totalGrossAmount
-}
-const freightCharges = 50000;
+// const freightCharges = 50000;
 
 type TProps = {
     title: string,
