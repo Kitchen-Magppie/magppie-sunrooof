@@ -46,11 +46,15 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                     }}
                 />
                 {item.data?.map((data, j) => {
-                    const layouts = proposedLayouts?.map((item) => ({
+                    // console.log(_.map(proposedLayouts, 'customerId'))
+                    // console.log(_.map(proposedLayouts, 'customerId')?.includes(values.customerId))
+                    // console.log(values.customerId)
+                    const layouts = proposedLayouts?.filter(((layout) => [values.id, values.customerId]?.includes(layout.customerId)))?.map((item) => ({
                         label: item.label,
                         value: item.customerId,
                         id: item.id
                     }));
+                    const defaultValue = layouts?.find((option) => _.get(option, 'id') === data.proposedLayoutId)
                     return (<div
                         key={`${CustomerComponentEnum.TwoDDesign}-${index}-${j}`}
                         className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
@@ -62,10 +66,10 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                             </div>
                         </div>
                         <div className="grid  gap-2 mb-2">
-                            <div className="bg-white">
+                            <div className={`bg-white ${defaultValue ? 'pointer-events-none' : ''}`}>
                                 <MinimalDropdown
                                     placeholder='Proposed Layout'
-                                    defaultValue={layouts?.find((option) => _.get(option, 'id') === data.proposedLayoutId)}
+                                    defaultValue={defaultValue}
                                     onChange={(e) => {
                                         const currentProposedLayoutId = _.get(e, 'id')
                                         const currentLayout = proposedLayouts?.find((layout) => layout.id === currentProposedLayoutId)

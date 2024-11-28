@@ -79,21 +79,20 @@ export default function DesignSubmit() {
                     onSuccess: (e) => {
                         const currentCustomer = customers?.value?.find(
                             (customer) =>
-                                customer.id ===
+                                customer.customerId ===
                                 STORAGE_DATA?.customerId
                         )
 
                         const args = {
                             label: STORAGE_DATA.title,
                             name: currentCustomer?.name || localStorage.getItem('CUSTOMER_NAME'),
-                            design: _.first(STORAGE_DATA?.windows).label,
+                            design: `${_.first(STORAGE_DATA?.windows)?.label || ''}`,
                             sunrooofCount: _.first(STORAGE_DATA?.windows).count || 0,
                             finish: '',
                             customerId: STORAGE_DATA?.customerId || _.uuid(),
                             url: { customer: e[0], proposed: e[1] },
                             entries: _.get(STORAGE_DATA, 'entries', [])
                         }
-                        console.log(args)
                         ProposedLayoutDataAction.add(args).then((response) => {
                             const proposedLayoutId = response.id
                             if (currentCustomer) {
@@ -192,6 +191,7 @@ export default function DesignSubmit() {
 }
 const CUSTOMER_COMPONENT_ITEM = (item: TCustomerComponentItem, args: Omit<IProposedLayoutItem, 'id' | 'at'> & { proposedLayoutId: string }, action: 'create' | 'edit') => {
     if (item.value === CustomerComponentEnum.TwoDDesign) {
+
         const current2Design = {
             proposedLayoutId: args.proposedLayoutId,
             finish: args.finish,
@@ -199,12 +199,12 @@ const CUSTOMER_COMPONENT_ITEM = (item: TCustomerComponentItem, args: Omit<IPropo
             quantity: args.sunrooofCount,
             leftImage: args.url.customer,
             rightImage: args.url.proposed,
-            entries: args.entries?.map((item) => {
+            entries: item.data.entries?.length ? args.entries?.map((entry) => {
                 return ({
-                    ...item,
+                    ...entry,
                     proposedLayoutId: args.proposedLayoutId
                 })
-            }),
+            }) : [],
         }
         return {
             ...item,
