@@ -141,7 +141,7 @@ function ProposedLayoutView() {
                     onChange={(e) => {
                         const currentCustomer = customers.find((customer) => customer.name === e.label)
                         if (currentCustomer)
-                            localStorage.setItem('CUSTOMER_ID', currentCustomer.id)
+                            localStorage.setItem('CUSTOMER_ID', currentCustomer.customerId)
                         else {
                             localStorage.setItem('CUSTOMER_NAME', e.label)
 
