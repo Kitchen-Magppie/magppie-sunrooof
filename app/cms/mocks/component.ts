@@ -79,6 +79,13 @@ export const INIT_CUSTOMER_COMPONENT_ITEM: TCustomerItem = {
     id: '',
     at: { created: new Date(), updated: new Date() }
 }
+export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM: TCustomerComponentQuotationEntryItem = {
+    design: '',
+    finish: '',
+    area: '',
+    floor: '',
+    quantity: '',
+}
 
 export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DDataItem = {
     design: '',
@@ -96,24 +103,18 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
     // yourPlan: '',
 }
 
+export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM: TCustomerComponent2DDesignOptionItem[] = [
+    { label: "Design", value: 'design', field: 'select', placeholder: '', lock: true },
+    { label: "Finish", value: 'finish', field: 'select', placeholder: '', lock: false },
+    { label: "Area Name", value: 'area', field: 'text', placeholder: 'Living Room | Dining Room', lock: false },
+    { label: "Floor", value: 'floor', field: 'text', placeholder: '', lock: false },
+    { label: "Quantity", value: 'quantity', field: 'text', placeholder: '', lock: true },
+];
 
 
+type TCustomerComponent2DLayoutFieldItem = { label: string, value: 'leftImage' | 'rightImage', field: 'image', placeholder: string }
 
-
-
-export const CUSTOMER_COMPONENT_2D_DESIGN_FIELD_OPTIONS: TCustomerComponent2DDesignOptionItem[] = [
-    // { label: "Design By", value: "designBy", field: 'text' },
-    // { label: "Approved By", value: 'approvedBy', field: 'text' },
-    { label: "Design", value: 'design', field: 'select', placeholder: '' },
-    { label: "Finish", value: 'finish', field: 'select', placeholder: '' },
-    // { label: "Ceiling Height On Site", value: 'ceilingHeightOnSite', field: 'text' },
-    // { label: "After Installation", value: 'afterInstallation', field: 'text' },
-    { label: "Area Name", value: 'areaName', field: 'text', placeholder: 'Living Room | Dining Room' },
-    { label: "Floor", value: 'floor', field: 'text', placeholder: '' },
-    { label: "Quantity", value: 'quantity', field: 'text', placeholder: '' },
-    { label: "Proposed Layout", value: 'proposedLayout', field: 'select', placeholder: '' },
-
-    // { label: "Your Plan", value: 'yourPlan', field: 'text' },
+export const CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS: TCustomerComponent2DLayoutFieldItem[] = [
     { label: "Customer Image", value: 'leftImage', field: 'image', placeholder: '' },
     { label: "Proposed Image", value: 'rightImage', field: 'image', placeholder: '' },
 ];
@@ -237,17 +238,30 @@ export const DEFAULT_CUSTOMER: TCustomerItem = {
 }
 
 export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
-    "Arch Window",
     "Classical",
-    "Classical Atrium",
-    "Fluted Minimalist",
-    "Fluted Minimalist Atrium",
+    "Fluted",
     "French Window",
     "Louvered Window",
-    "Moorgan Premium Remote",
     "Modern",
     "Minimalist",
+    // "Classical Atrium",
+    // "Arch Window",
+    // "Fluted Minimalist",
+    // "Fluted Minimalist Atrium",
+    // "Moorgan Premium Remote",
 ]
+// export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
+//     "Arch Window",
+//     "Classical",
+//     "Classical Atrium",
+//     "Fluted Minimalist",
+//     "Fluted Minimalist Atrium",
+//     "French Window",
+//     "Louvered Window",
+//     "Moorgan Premium Remote",
+//     "Modern",
+//     "Minimalist",
+// ]
 // export const COMPONENT_DESIGN2D_DESIGN_OPTIONS = [
 //     "Arch Window",
 //     "Classical",
@@ -269,11 +283,3 @@ export const COMPONENT_DESIGN2D_FINISH_OPTIONS = [
     'Titanium Grey'
 ]
 
-export const INIT_COMPONENT_QUOTATION_ENTRY_ITEM: TCustomerComponentQuotationEntryItem = {
-    design: '',
-    finish: '',
-    area: '',
-    floor: '',
-    qty: 1,
-    // unitPrice: '',
-}

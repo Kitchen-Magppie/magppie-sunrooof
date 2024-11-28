@@ -1,4 +1,5 @@
 import * as yup from 'yup'
+import { IProposedLayoutEntryItem } from '../app/cms/types';
 
 export type TComponentMeta = { order: { used: number[]; next: number } }
 
@@ -25,7 +26,7 @@ export type TCustomerComponentQuotationEntryItem = {
     finish: string,
     area: string,
     floor: string,
-    qty: number,
+    quantity: string,
     // unitPrice: string,
 }
 export type TCustomerComponentQuotationItem = {
@@ -47,9 +48,10 @@ export type TCustomerComponentQuotationItem = {
 
 export type TCustomerComponent2DDesignOptionItem = {
     label: string
-    value: keyof TCustomerComponentDesign2DDataItem
+    value: keyof IProposedLayoutEntryItem
     field: 'text' | 'image' | 'select'
     placeholder?: string
+    lock: boolean
 }
 export type TCustomerComponentDesign2DDataItem = {
     design: string
@@ -57,11 +59,12 @@ export type TCustomerComponentDesign2DDataItem = {
     areaName: string
     floor: string
     quantity: number
-    // invoiceUrl: string,
     leftImage: string
     rightImage: string
     proposedLayout?: string
     proposedLayoutId?: string
+    entries?: IProposedLayoutEntryItem[]
+    // invoiceUrl: string,
     // designBy: string,
     // approvedBy: string,
     // ceilingHeightOnSite: string,
@@ -207,15 +210,15 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
             discount: yup.string().nullable(),
-            invoiceUrl: yup.string().nullable('Invoice URL field is required'),
-            entries: yup.array().of(yup.object().shape({
-                design: yup.string().required('Design field is Required'),
-                finish: yup.string().required('Finish field is Required'),
-                area: yup.string().required('Area Name field is Required'),
-                floor: yup.string().nullable(),
-                qty: yup.number().required('Quantity Name field is Required'),
-                // unitPrice: yup.string().required('Unit Price field is Required'),
-            })).min(0).required('Atleast 1 entry is required'),
+            invoiceUrl: yup.string().required('To save your quotation, please generate the design first.'),
+            // entries: yup.array().of(yup.object().shape({
+            //     design: yup.string().required('Design field is Required'),
+            //     finish: yup.string().required('Finish field is Required'),
+            //     area: yup.string().required('Area Name field is Required'),
+            //     floor: yup.string().nullable(),
+            //     quantity: yup.number().required('Quantity Name field is Required'),
+            //     // unitPrice: yup.string().required('Unit Price field is Required'),
+            // })).min(0).required('Atleast 1 entry is required'),
         })
         .required(),
 })
@@ -225,13 +228,13 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
     data: yup
         .array()
         .of(yup.object().shape({
-            design: yup.string().required('Design field is Required'),
-            finish: yup.string().required('Finish field is Required'),
-            areaName: yup.string().required('Area Name field is Required'),
+            // design: yup.string().required('Design field is Required'),
+            // finish: yup.string().required('Finish field is Required'),
+            // areaName: yup.string().required('Area Name field is Required'),
             // floor: yup.string().required('Floor field is Required'),
-            floor: yup.string().nullable(),
-            quantity: yup.number().required('Quantity field is Required'),
-            proposedLayout: yup.string().nullable(),
+            // floor: yup.string().nullable(),
+            // quantity: yup.number().required('Quantity field is Required'),
+            // proposedLayout: yup.string().nullable(),
             proposedLayoutId: yup.string().nullable(),
             leftImage: yup
                 .string()
@@ -239,10 +242,19 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
             rightImage: yup
                 .string()
                 .required('Proposed Image field is Required'),
+            entries: yup.array().of(yup.object().shape({
+                design: yup.string().required('Design field is Required'),
+                finish: yup.string().required('Finish field is Required'),
+                area: yup.string().required('Area Name field is Required'),
+                floor: yup.string().nullable(),
+                quantity: yup.number().required('Quantity Name field is Required'),
+                // unitPrice: yup.string().required('Unit Price field is Required'),
+            })).min(1).required('Atleast 1 entry is required'),
         })
         )
         .min(1)
         .required(),
+
 })
 
 const customerComponentDesign3DItemSchema = yup.object().shape({
