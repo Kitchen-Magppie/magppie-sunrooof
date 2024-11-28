@@ -4,10 +4,11 @@ import { CMS_QUOTATION_OPTIONS } from "../../../mocks";
 
 
 function CustomerFormQuotationTable(props: TProps) {
-    const { item, quotation } = props;
     const { rows, calc } = useMemo(() => {
+        const { item, quotation } = props;
         return QUOTATION_TABLE_DATA(item, quotation?.data?.discount)
-    }, [item, quotation?.data?.discount])
+        // NOTE: Please don't remove this props array dependency. It helps to re-render on live changes;
+    }, [props])
 
     return (<table style={{ width: "100%" }}>
 
