@@ -46,9 +46,9 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                     }}
                 />
                 {item.data?.map((data, j) => {
-                    console.log(_.map(proposedLayouts, 'customerId'))
+                    // console.log(_.map(proposedLayouts, 'customerId'))
                     // console.log(_.map(proposedLayouts, 'customerId')?.includes(values.customerId))
-                    console.log(values.customerId)
+                    // console.log(values.customerId)
                     const layouts = proposedLayouts?.filter(((layout) => [values.id, values.customerId]?.includes(layout.customerId)))?.map((item) => ({
                         label: item.label,
                         value: item.customerId,
