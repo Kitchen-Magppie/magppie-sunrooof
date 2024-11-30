@@ -97,8 +97,7 @@ export default function DesignSubmit() {
                         console.log(args)
                         ProposedLayoutDataAction.add(args).then((response) => {
                             const proposedLayoutId = response.id
-                            console.log("Then of propsed layout")
-                            console.log(currentCustomer)
+                            console.log("Then of proposed layout")
                             if (currentCustomer) {
                                 const results = {
                                     ...currentCustomer,
@@ -112,8 +111,6 @@ export default function DesignSubmit() {
 
                                 CustomerAction.edit(results)
                             } else {
-                                console.log("Then of  update")
-
                                 const results = {
                                     name: args.name,
                                     customerId: args.customerId,
@@ -122,7 +119,7 @@ export default function DesignSubmit() {
                                         created: new Date(),
                                     },
                                 }
-                                console.log(results)
+                                // console.log(results)
                                 CustomerAction.add(results)
                             }
                             toast('Proposed image has been saved!')
