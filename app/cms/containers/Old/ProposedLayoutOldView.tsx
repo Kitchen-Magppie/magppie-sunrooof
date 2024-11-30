@@ -21,6 +21,7 @@ function ProposedLayoutView() {
 
     useEffect(() => {
         document.title = 'Proposed Layout | CMS'
+        localStorage.clear()
     }, [])
     const [toggle, setToggle] = useState(INIT_TOGGLE)
     const customers = useAppSelector((state) => state.Cms.Customer.value)
@@ -143,8 +144,8 @@ function ProposedLayoutView() {
                         if (currentCustomer)
                             localStorage.setItem('CUSTOMER_ID', currentCustomer.customerId)
                         else {
+                            localStorage.setItem('CUSTOMER_ID', '')
                             localStorage.setItem('CUSTOMER_NAME', e.label)
-
                         }
                         // console.log(currentCustomer);
                         setValue('name', e.label)
