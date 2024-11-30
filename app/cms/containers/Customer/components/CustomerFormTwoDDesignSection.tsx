@@ -26,6 +26,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
     const { watch, register, formState: { errors }, setValue } = useFormContext<TCustomerItem>();
     const values = watch() as TCustomerItem;
     const proposedLayouts = useAppSelector((state) => state.Cms.ProposedLayout.value);
+    console.log(item)
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return (<p className="text-red-500 text-xs mt-1">
