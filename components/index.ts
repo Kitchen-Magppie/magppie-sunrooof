@@ -3,7 +3,6 @@ import CustomSimpleModal from "./CustomSimpleModal"
 import ImageInput from "./ImageInput";
 import CircularProgress from "./CircularProgress";
 import PageProgress from "./PageProgress";
-import SimpleDropdown from "./SimpleDropdown";
 import CustomToggle from "./CustomToggle";
 import CustomConfirmationDialog from "./CustomConfirmationDialog"
 import CustomSiteModal from "./CustomSiteModal";
@@ -20,7 +19,6 @@ export {
     ImageInput,
     CircularProgress,
     PageProgress,
-    SimpleDropdown,
     CustomToggle
 
 }

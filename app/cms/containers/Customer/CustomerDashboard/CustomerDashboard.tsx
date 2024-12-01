@@ -6,11 +6,10 @@ import { MdAddchart } from "react-icons/md";
 import { CmsSearch, CmsCustomerCardItem, CmsNotFound } from '../../../components'
 import { CustomSimpleModal } from '../../../../../components'
 import { useFirebaseCmsCustomerListener } from '../../../utils/firebase'
-import { ComponentModeEnum, CustomerComponentEnum } from '../../../../../types'
+import { ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
 import { useProposedLayoutListener } from '../../../hooks';
-
 
 export default function CustomerDashboard() {
     useFirebaseCmsCustomerListener()
@@ -20,13 +19,6 @@ export default function CustomerDashboard() {
     }, [])
 
     const { loading, data, action } = useCustomerDashboard()
-
-    console.log(data.values.components?.filter((customer) => {
-
-        const currentCustomer = customer?.components?.find((item) => item.value === CustomerComponentEnum.TwoDDesign)
-
-        return currentCustomer?.data?.find((currentItem) => (!('entries' in currentItem) || !currentItem?.entries?.length))
-    }))
 
     const renderActionModal = useMemo(() => {
         const isCreateAction =
