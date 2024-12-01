@@ -19,6 +19,7 @@ interface TLodashMixin extends _.LoDashStatic {
     dataURLtoBlob: (e: string) => Blob,
     fromCanvasElementToFile: (e: TFromCanvasElementToFile) => File,
     base64ToFile: (content: string, fileName: string) => File
+    fromStrToSentence: (arr: string[]) => string
 }
 
 
@@ -101,6 +102,20 @@ function base64ToFile(base64String: string, fileName: string) {
     return new File([blob], fileName, { type: imageType });
 }
 
+function fromStrToSentence(arr: string[]): string {
+    const filteredArr = _.uniq(arr.filter(str => str.trim() !== ''))?.sort(); // Remove empty strings
+
+    if (filteredArr.length === 0) {
+        return ''; // Handle empty array
+    } else if (filteredArr.length === 1) {
+        return filteredArr[0];
+    } else if (filteredArr.length === 2) {
+        return filteredArr.join(' & ');
+    } else {
+        const lastIndex = filteredArr.length - 1;
+        return filteredArr.slice(0, lastIndex).join(', ') + ' & ' + filteredArr[lastIndex];
+    }
+}
 _.mixin({
     download,
     labelify,
@@ -112,6 +127,7 @@ _.mixin({
     uuid,
     dataURLtoBlob,
     fromCanvasElementToFile,
-    base64ToFile
+    base64ToFile,
+    fromStrToSentence
 })
 export default _ as TLodashMixin

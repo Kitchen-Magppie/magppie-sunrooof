@@ -1,7 +1,7 @@
 import { useMedia } from 'react-use'
-import { TCustomerComponentDesign2DDataItem } from '../../../types'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Swiper } from 'swiper/types'
+import { TCustomerComponentDesign2DDataItem } from '../../../types'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
@@ -46,11 +46,10 @@ const ProposedLayout = (props: TProps) => {
                                                 alt=""
                                                 effect="blur"
                                                 style={{
-                                                    border: `2px solid ${
-                                                        isActive
-                                                            ? '#0066FF'
-                                                            : 'white'
-                                                    }`,
+                                                    border: `2px solid ${isActive
+                                                        ? '#0066FF'
+                                                        : 'white'
+                                                        }`,
                                                 }}
                                                 className={`rounded-lg cursor-pointer w-[200px] `}
                                             />
@@ -79,11 +78,10 @@ const ProposedLayout = (props: TProps) => {
                                         <div className="mt-2 text-center">
                                             <div
                                                 style={{
-                                                    border: `2px solid ${
-                                                        isActive
-                                                            ? '#0066FF'
-                                                            : 'white'
-                                                    }`,
+                                                    border: `2px solid ${isActive
+                                                        ? '#0066FF'
+                                                        : 'white'
+                                                        }`,
                                                 }}
                                                 className={`flex justify-center overflow-hidden  w-60 h-40 rounded-lg  bg-white cursor-pointer`}
                                                 onClick={() => {

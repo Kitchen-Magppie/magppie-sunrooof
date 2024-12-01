@@ -84,9 +84,12 @@ function ProposedLayoutView() {
     }, [setValue])
 
 
+    // console.log(values)
+
     const onFileChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
 
+        // console.log(content)
         if (content?.isValid) {
             if (content.accessor === 'pdf') {
                 convertPdfToImage(content.file)
@@ -172,6 +175,9 @@ function ProposedLayoutView() {
                     type="text"
                     {...register('title')}
                     id="large-input"
+                    onChange={(e) => {
+                        setValue('name', e.target.value)
+                    }}
                     className={`block w-full rounded-sm py-1.5 bg-white text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
                 />
                 {errors.title?.message && <span className="text-red-500 flex gap-1 align-middle  flex-row text-sm">
@@ -222,12 +228,8 @@ function ProposedLayoutView() {
 }
 
 const FROM_FILE_TO_ACCESSOR = (file: File) => {
-    let accessor
     const docType = file.type?.toLowerCase()
-    if (docType?.startsWith('application/pdf')) {
-        accessor = 'pdf'
-    }
-    accessor = 'image'
+    const accessor = docType?.startsWith('application/pdf') ? 'pdf' : 'image'
     return ({
         accessor,
         isValid: docType?.startsWith('application/pdf') || docType?.startsWith('image/'),
@@ -239,7 +241,24 @@ const INIT_TOGGLE = { isOpenEditorPage: false, isLoading: false }
 // const AUTOCOMPLETE_STYLE =
 //     "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";
 
-
-
+// function fromImageToBase64(image: File) {
+//     if (image) {
+//         const reader = new FileReader();
+//         reader.onloadend = () => {
+//             const base64String = reader.result as string;
+//             return base64String
+//         };
+//         reader.readAsDataURL(image);
+//     }
+// }
+// function convertFileToBase64(file: File) {
+//     return new Promise((resolve, reject) => {
+//         const reader = new FileReader();
+//         reader.readAsDataURL(file);
+//         reader.onload
+//             = () => resolve(reader.result);
+//         reader.onerror = error => reject(error);
+//     });
+// }
 
 export default ProposedLayoutView;
