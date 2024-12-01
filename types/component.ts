@@ -1,5 +1,7 @@
 import * as yup from 'yup'
+//====================================================================
 import { IProposedLayoutEntryItem } from '../app/cms/types';
+import _ from './lodash';
 
 export type TComponentMeta = { order: { used: number[]; next: number } }
 
@@ -312,3 +314,47 @@ export const IS_VALID_FOR_URL = ({ components }: TCustomerItem) => {
 
     return quotation?.data?.invoiceUrl?.length && designItem?.data?.filter(({ entries }) => entries?.length && entries?.length == entries?.filter((entry) => entry.design?.length)?.length)?.length
 }
+
+
+export function TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(arr: TCustomerItem[], id: string) {
+    const removeObject = ['leftImage', 'rightImage', 'areaName']
+    const currentItem = _.find(arr || [], { id })
+    if (currentItem) {
+        return currentItem?.components?.map((currentComponent) => {
+            switch (currentComponent.value) {
+                case CustomerComponentEnum.TwoDDesign: {
+                    return {
+                        ...currentComponent,
+                        data: currentComponent?.data?.map((currentItem) => {
+                            if (!('entries' in currentItem)) {
+                                const currentEntry = {
+                                    ..._.omit(currentItem, removeObject),
+                                    area: currentItem.areaName,
+                                }
+                                const mainEntries = [..._.keys(currentEntry), 'areaName']
+                                const results = _.omit({
+                                    ...currentItem,
+                                    proposedLayoutId: '',
+                                    entries: [currentEntry]
+                                }, mainEntries)
+                                return results
+                            }
+                            return currentItem
+                        })
+                    } as TCustomerComponentDesign2DItem
+
+                }
+                default:
+                    return currentComponent;
+            }
+        });
+    }
+}
+
+// console.log(TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(data.values.components, 'z3FM8dIavU2m1PeieIPQ'))
+// console.log(data.values.components?.filter((customer) => {
+
+//     const currentCustomer = customer?.components?.find((item) => item.value === CustomerComponentEnum.TwoDDesign)
+
+//     return currentCustomer?.data?.find((currentItem) => (!('entries' in currentItem) || !currentItem?.entries?.length))
+// }))
