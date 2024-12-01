@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
-import ProposedLayout from './ProposedLayout'
-import CustomerLayout from './CustomerLayout'
+import { useMedia } from 'react-use'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
@@ -19,20 +18,32 @@ import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 // import ArrowDownIcon from '../../../assets/icons/arrowDown.svg?react'
 
 //hooks
-import { useMedia } from 'react-use'
+import ProposedLayout from './ProposedLayout'
+import CustomerLayout from './CustomerLayout'
 import { _, TCustomerComponentDesign2DItem } from '../../../types'
 // import { images } from './data'
 
 
 export default function Layout2dDesign(props: TProps) {
-    const leftImagesLength = props.item.data.map((item) => {
-        return item.leftImage
-    })
+    const { item: { data } } = props;
     const [selectedLayout, setSelectedLayout] = useState(0)
     const [swiperInstance, setSwiperInstance] = useState(null)
 
     const isMobile = useMedia('(orientation: portrait)')
 
+    const leftImagesLength = _.map(data, 'leftImage')
+
+    const currentLayoutCaption = useMemo(() => {
+
+        const currentEntries = _.get(data, `${selectedLayout}.entries`, [])
+        return ({
+            design: _.fromStrToSentence(_.map(currentEntries, 'design')),
+            finish: _.fromStrToSentence(_.map(currentEntries, 'finish'))
+        })
+    }, [data, selectedLayout])
+
+    // console.log(_.map(currentEntries, 'design'))
+    // console.log(_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.design))?.filter((design) => design?.length)))
     // console.log(_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.design))?.filter((design) => design?.length)))
     // console.log(_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.finish))?.filter((finish) => finish?.length)))
 
@@ -75,44 +86,43 @@ export default function Layout2dDesign(props: TProps) {
                         setSelectedLayout(swiper.activeIndex)
                     }
                 >
-                    {props.item.data.map((image, i) => {
-                        return (
-                            <SwiperSlide
-                                key={i}
-                                className="flex items-center justify-center h-full !w-full"
-                            >
-                                <div>
-                                    <h2 className="text-4xl text-center mb-10 font-medium capitalize text-[#78746c]">
-                                        {image.areaName}
-                                    </h2>
-                                    <div className="swiper-zoom-container flex flex-col mb-4">
-                                        <div className="flex flex-col mb-4">
-                                            <LazyLoadImage
-                                                effect="blur"
-                                                src={image.leftImage}
-                                                alt=""
-                                                className="block w-screen h-full object-contain"
-                                            />
-                                            <h1 className="text-3xl mb-4 p-2 font-[400] w-full text-[#fff] text-left bg-gradient-to-t from-stone-800 via-stone-600 to-stone-400">
-                                                Customer Layout
-                                            </h1>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col swiper-zoom-container">
-                                        <div className="flex flex-col mb-4">
-                                            <LazyLoadImage
-                                                effect="blur"
-                                                src={image.rightImage}
-                                                alt=""
-                                                className="block w-screen h-full object-contain"
-                                            />
-                                        </div>
+                    {data.map((image, i) => {
+                        return (<SwiperSlide
+                            key={i}
+                            className="flex items-center justify-center h-full !w-full"
+                        >
+                            <div>
+                                <h2 className="text-4xl text-center mb-10 font-medium capitalize text-[#78746c]">
+                                    {image.areaName}
+                                </h2>
+                                <div className="swiper-zoom-container flex flex-col mb-4">
+                                    <div className="flex flex-col mb-4">
+                                        <LazyLoadImage
+                                            effect="blur"
+                                            src={image.leftImage}
+                                            alt=""
+                                            className="block w-screen h-full object-contain"
+                                        />
                                         <h1 className="text-3xl mb-4 p-2 font-[400] w-full text-[#fff] text-left bg-gradient-to-t from-stone-800 via-stone-600 to-stone-400">
-                                            Proposed Layout
+                                            Customer Layout
                                         </h1>
                                     </div>
                                 </div>
-                            </SwiperSlide>
+                                <div className="flex flex-col swiper-zoom-container">
+                                    <div className="flex flex-col mb-4">
+                                        <LazyLoadImage
+                                            effect="blur"
+                                            src={image.rightImage}
+                                            alt=""
+                                            className="block w-screen h-full object-contain"
+                                        />
+                                    </div>
+                                    <h1 className="text-3xl mb-4 p-2 font-[400] w-full text-[#fff] text-left bg-gradient-to-t from-stone-800 via-stone-600 to-stone-400">
+                                        Proposed Layout
+                                    </h1>
+                                </div>
+                            </div>
+                        </SwiperSlide>
                         )
                     })}
                 </Swiper>
@@ -135,66 +145,65 @@ export default function Layout2dDesign(props: TProps) {
                             setSelectedLayout(swiper.activeIndex)
                         }
                     >
-                        {props.item.data.map((image, i) => {
-                            return (
-                                <SwiperSlide
-                                    key={i}
-                                    className="flex items-center justify-center h-full !w-full"
-                                >
-                                    <div className="flex flex-col">
-                                        <h2 className="text-3xl font-medium capitalize text-center mb-10 text-[#78746c]">
-                                            {image.areaName}
-                                        </h2>
-                                        <div className="flex">
-                                            <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
-                                                <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
-                                                    Customer Layout
-                                                </h1>
-                                                <div>
-                                                    <LazyLoadImage
-                                                        effect="blur"
-                                                        src={
-                                                            image.leftImage
-                                                        }
-                                                        alt=""
-                                                        className="block w-screen h-full object-contain rounded-lg shadow-md"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col  swiper-zoom-container">
-                                                <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
-                                                    Proposed Layout
-                                                </h1>
-                                                <div>
-                                                    <LazyLoadImage
-                                                        effect="blur"
-                                                        src={image.rightImage}
-                                                        alt=""
-                                                        className="block w-screen h-full object-contain rounded-lg shadow-md"
-                                                    />
-                                                </div>
+                        {data.map((image, i) => {
+                            return (<SwiperSlide
+                                key={i}
+                                className="flex items-center justify-center h-full !w-full"
+                            >
+                                <div className="flex flex-col">
+                                    <h2 className="text-3xl font-medium capitalize text-center mb-10 text-[#78746c]">
+                                        {image.areaName}
+                                    </h2>
+                                    <div className="flex">
+                                        <div className="swiper-zoom-container flex flex-col mb-4 mx-6">
+                                            <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
+                                                Customer Layout
+                                            </h1>
+                                            <div>
+                                                <LazyLoadImage
+                                                    effect="blur"
+                                                    src={
+                                                        image.leftImage
+                                                    }
+                                                    alt=""
+                                                    className="block w-screen h-full object-contain rounded-lg shadow-md"
+                                                />
                                             </div>
                                         </div>
-                                        <div className="flex justify-end mb-5 text-[#78746c]">
-                                            <div className="mr-4 text-2xl lg:text-lg">
-                                                <span className="font-semibold text-[#78746c]">
-                                                    Design :&nbsp;
-                                                </span>
-                                                {/* {image.design} */}
-                                                {_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.design))?.filter((design) => design?.length))}
-
-
-
-                                            </div>
-                                            <div className="mr-4 text-2xl lg:text-lg">
-                                                <span className="font-semibold text-[#78746c]">
-                                                    Finish :&nbsp;
-                                                </span>
-                                                {_.fromStrToSentence(props.item?.data?.flatMap((item) => item.entries?.flatMap((entry) => entry.finish))?.filter((finish) => finish?.length))}
+                                        <div className="flex flex-col  swiper-zoom-container">
+                                            <h1 className="text-2xl mb-2 font-[500] text-[#78746c]">
+                                                Proposed Layout
+                                            </h1>
+                                            <div>
+                                                <LazyLoadImage
+                                                    effect="blur"
+                                                    src={image.rightImage}
+                                                    alt=""
+                                                    className="block w-screen h-full object-contain rounded-lg shadow-md"
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                </SwiperSlide>
+                                    <div className="flex justify-end mb-5 text-[#78746c]">
+                                        <div className="mr-4 text-2xl lg:text-lg">
+                                            <span className="font-semibold text-[#78746c]">
+                                                Design :&nbsp;
+                                            </span>
+                                            {/* {image.design} */}
+
+                                            {currentLayoutCaption.design}
+
+
+                                        </div>
+                                        <div className="mr-4 text-2xl lg:text-lg">
+                                            <span className="font-semibold text-[#78746c]">
+                                                Finish :&nbsp;
+                                            </span>
+                                            {currentLayoutCaption.finish}
+                                        </div>
+                                    </div>
+                                </div>
+                            </SwiperSlide>
                             )
                         })}
                     </Swiper>
@@ -267,7 +276,13 @@ export default function Layout2dDesign(props: TProps) {
                 </>
             )
         }
-    }, [isMobile, props.item.data, leftImagesLength])
+    }, [
+        isMobile,
+        leftImagesLength.length,
+        data,
+        currentLayoutCaption.design,
+        currentLayoutCaption.finish
+    ])
 
     return (
         <div
@@ -281,12 +296,13 @@ export default function Layout2dDesign(props: TProps) {
                 <div className="flex gap-4 flex-col lg:flex-row container mx-auto">
                     <div className="flex">{renderSwiper}</div>
                     <CustomerLayout
-                        item={props.item.data[selectedLayout]}
+                        caption={currentLayoutCaption}
+                        item={data[selectedLayout]}
                     // selectedLayout={selectedLayout}
                     // isMobile={isMobile}
                     />
                     {leftImagesLength.length > 1 ? (
-                        <ProposedLayout item={props.item.data}
+                        <ProposedLayout item={data}
                             swiper={swiperInstance}
                         />
                     ) : null}
