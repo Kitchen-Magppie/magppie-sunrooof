@@ -308,5 +308,7 @@ export type TProposedLayoutItem = {
 
 export const IS_VALID_FOR_URL = ({ components }: TCustomerItem) => {
     const quotation = components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as TCustomerComponentQuotationItem
-    return quotation?.data?.invoiceUrl?.length
+    const designItem = components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as TCustomerComponentDesign2DItem
+
+    return quotation?.data?.invoiceUrl?.length && designItem?.data?.filter(({ entries }) => entries?.length && entries?.length == entries?.filter((entry) => entry.design?.length)?.length)?.length
 }
