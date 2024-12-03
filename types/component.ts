@@ -1,4 +1,7 @@
 import * as yup from 'yup'
+//====================================================================
+import { IProposedLayoutEntryItem } from '../app/cms/types';
+import _ from './lodash';
 
 export type TComponentMeta = { order: { used: number[]; next: number } }
 
@@ -25,7 +28,7 @@ export type TCustomerComponentQuotationEntryItem = {
     finish: string,
     area: string,
     floor: string,
-    qty: number,
+    quantity: string,
     // unitPrice: string,
 }
 export type TCustomerComponentQuotationItem = {
@@ -47,9 +50,10 @@ export type TCustomerComponentQuotationItem = {
 
 export type TCustomerComponent2DDesignOptionItem = {
     label: string
-    value: keyof TCustomerComponentDesign2DDataItem
+    value: keyof IProposedLayoutEntryItem
     field: 'text' | 'image' | 'select'
     placeholder?: string
+    lock: boolean
 }
 export type TCustomerComponentDesign2DDataItem = {
     design: string
@@ -57,10 +61,12 @@ export type TCustomerComponentDesign2DDataItem = {
     areaName: string
     floor: string
     quantity: number
-    // invoiceUrl: string,
     leftImage: string
     rightImage: string
     proposedLayout?: string
+    proposedLayoutId?: string
+    entries?: IProposedLayoutEntryItem[]
+    // invoiceUrl: string,
     // designBy: string,
     // approvedBy: string,
     // ceilingHeightOnSite: string,
@@ -206,15 +212,15 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
             discount: yup.string().nullable(),
-            invoiceUrl: yup.string().required('Invoice URL field is required'),
-            entries: yup.array().of(yup.object().shape({
-                design: yup.string().required('Design field is Required'),
-                finish: yup.string().required('Finish field is Required'),
-                area: yup.string().required('Area Name field is Required'),
-                floor: yup.string().required('Floor field is Required'),
-                qty: yup.number().required('Quantity Name field is Required'),
-                // unitPrice: yup.string().required('Unit Price field is Required'),
-            })).min(1).required('Atleast 1 entry is required'),
+            invoiceUrl: yup.string().required('To save your quotation, please generate the design first.'),
+            // entries: yup.array().of(yup.object().shape({
+            //     design: yup.string().required('Design field is Required'),
+            //     finish: yup.string().required('Finish field is Required'),
+            //     area: yup.string().required('Area Name field is Required'),
+            //     floor: yup.string().nullable(),
+            //     quantity: yup.number().required('Quantity Name field is Required'),
+            //     // unitPrice: yup.string().required('Unit Price field is Required'),
+            // })).min(0).required('Atleast 1 entry is required'),
         })
         .required(),
 })
@@ -223,32 +229,34 @@ const customerComponentDesign2DItemSchema = yup.object().shape({
     value: yup.mixed().oneOf([CustomerComponentEnum.TwoDDesign]).required(),
     data: yup
         .array()
-        .of(
-            yup.object().shape({
-                // designBy: yup.string().required(),
-                // approvedBy: yup.string().required(),
+        .of(yup.object().shape({
+            // design: yup.string().required('Design field is Required'),
+            // finish: yup.string().required('Finish field is Required'),
+            // areaName: yup.string().required('Area Name field is Required'),
+            // floor: yup.string().required('Floor field is Required'),
+            // floor: yup.string().nullable(),
+            // quantity: yup.number().required('Quantity field is Required'),
+            // proposedLayout: yup.string().nullable(),
+            proposedLayoutId: yup.string().nullable(),
+            leftImage: yup
+                .string()
+                .required('Customer Image field is Required'),
+            rightImage: yup
+                .string()
+                .required('Proposed Image field is Required'),
+            entries: yup.array().of(yup.object().shape({
                 design: yup.string().required('Design field is Required'),
                 finish: yup.string().required('Finish field is Required'),
-                // ceilingHeightOnSite: yup.string().required(),
-                // afterInstallation: yup.string().required(),
-                // cityName: yup.string().required(),
-                // yourPlan: yup.string().required(),
-                areaName: yup.string().required('Area Name field is Required'),
-                floor: yup.string().required('Floor field is Required'),
-                quantity: yup.number().required('Quantity field is Required'),
-                proposedLayout: yup.string().nullable(),
-                // invoiceUrl: yup.string().required(),
-
-                leftImage: yup
-                    .string()
-                    .required('Customer Image field is Required'),
-                rightImage: yup
-                    .string()
-                    .required('Proposed Image field is Required'),
-            })
+                area: yup.string().required('Area Name field is Required'),
+                floor: yup.string().nullable(),
+                quantity: yup.number().required('Quantity Name field is Required'),
+                // unitPrice: yup.string().required('Unit Price field is Required'),
+            })).min(1).required('Atleast 1 entry is required'),
+        })
         )
         .min(1)
         .required(),
+
 })
 
 const customerComponentDesign3DItemSchema = yup.object().shape({
@@ -298,3 +306,55 @@ export type TProposedLayoutItem = {
     design: string,
     customerId: string,
 }
+
+
+export const IS_VALID_FOR_URL = ({ components }: TCustomerItem) => {
+    const quotation = components?.find(({ value }) => value === CustomerComponentEnum.Quotation) as TCustomerComponentQuotationItem
+    const designItem = components?.find(({ value }) => value === CustomerComponentEnum.TwoDDesign) as TCustomerComponentDesign2DItem
+
+    return quotation?.data?.invoiceUrl?.length && designItem?.data?.filter(({ entries }) => entries?.length && entries?.length == entries?.filter((entry) => entry.design?.length)?.length)?.length
+}
+
+
+export function TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(arr: TCustomerItem[], id: string) {
+    const removeObject = ['leftImage', 'rightImage', 'areaName']
+    const currentItem = _.find(arr || [], { id })
+    if (currentItem) {
+        return currentItem?.components?.map((currentComponent) => {
+            switch (currentComponent.value) {
+                case CustomerComponentEnum.TwoDDesign: {
+                    return {
+                        ...currentComponent,
+                        data: currentComponent?.data?.map((currentItem) => {
+                            if (!('entries' in currentItem)) {
+                                const currentEntry = {
+                                    ..._.omit(currentItem, removeObject),
+                                    area: currentItem.areaName,
+                                }
+                                const mainEntries = [..._.keys(currentEntry), 'areaName']
+                                const results = _.omit({
+                                    ...currentItem,
+                                    proposedLayoutId: '',
+                                    entries: [currentEntry]
+                                }, mainEntries)
+                                return results
+                            }
+                            return currentItem
+                        })
+                    } as TCustomerComponentDesign2DItem
+
+                }
+                default:
+                    return currentComponent;
+            }
+        });
+    }
+}
+
+// console.log(TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(data.values.components, 'z3FM8dIavU2m1PeieIPQ'))
+// console.log(data.values.components?.filter((customer) => {
+
+//     const currentCustomer = customer?.components?.find((item) => item.value === CustomerComponentEnum.TwoDDesign)
+
+//     return currentCustomer?.data?.find((currentItem) => (!('entries' in currentItem) || !currentItem?.entries?.length))
+// }))
