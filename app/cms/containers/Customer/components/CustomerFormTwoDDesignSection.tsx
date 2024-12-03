@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 //====================================================================
@@ -8,6 +8,7 @@ import {
     _,
     CustomerComponentEnum,
     DESIGN_2D_SELECT_OPTION,
+    TCustomerComponentDesign2DDataItem,
     TCustomerComponentDesign2DItem,
     TCustomerItem
 } from "../../../../../types";
@@ -18,15 +19,16 @@ import {
     INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
 } from "../../../mocks";
 import { useAppSelector } from "../../../../../redux";
+import { CustomConfirmationDialog } from "../../../../../components";
 
 
 
 function CustomerFormTwoDDesignSection(props: TProps) {
     const { title, index, item, isCreateAction } = props;
     const { watch, register, formState: { errors }, setValue } = useFormContext<TCustomerItem>();
-    const values = watch() as TCustomerItem;
-    const proposedLayouts = useAppSelector((state) => state.Cms.ProposedLayout.value);
-    console.log(item)
+    const values = watch();
+    const [corpus, setCorpus] = useState(INIT_CORPUS)
+    const { value: proposedLayouts } = useAppSelector((state) => state.Cms.ProposedLayout);
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return (<p className="text-red-500 text-xs mt-1">
@@ -35,7 +37,28 @@ function CustomerFormTwoDDesignSection(props: TProps) {
         }
         return <></>;
     }, [errors]);
-    return (<div >
+
+    const renderCustomDeleteConfirmationDialog = useMemo(() => {
+        const onConfirm = () => {
+            setValue(`components.${index}`, {
+                ...item,
+                data: item.data.filter((_, currentIndex) => currentIndex !== corpus.confirmation.index)
+            })
+            setCorpus(INIT_CORPUS)
+
+        }
+        return <CustomConfirmationDialog show={!!corpus?.confirmation}
+            variant="danger"
+            text={{
+                header: 'Delete Confirmation',
+                remark: `Are you sure you want to delete layout #${corpus?.confirmation?.index + 1}? This will also affect the quotation.`
+            }}
+            onHide={() => {
+                setCorpus(INIT_CORPUS)
+            }} onConfirm={onConfirm} />
+    }, [corpus.confirmation, index, item, setValue])
+
+    return (<div>
         <MinimalAccordion isExpanded title={title}>
             <div>
                 <FieldCautation
@@ -47,9 +70,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                     }}
                 />
                 {item.data?.map((data, j) => {
-                    // console.log(_.map(proposedLayouts, 'customerId'))
-                    // console.log(_.map(proposedLayouts, 'customerId')?.includes(values.customerId))
-                    // console.log(values.customerId)
+                    const hasMoreThenOne = item?.data?.length > 1
                     const layouts = proposedLayouts?.filter(((layout) => [values.id, values.customerId]?.includes(layout.customerId)))?.map((item) => ({
                         label: item.label,
                         value: item.customerId,
@@ -62,8 +83,24 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                     >
                         <div className="text-gray-400 italic text-lg flex justify-between">
                             #{j + 1}
-                            <div className="py-1">
-                                <IoIosRemoveCircleOutline />
+                            <div className="py-1 ">
+                                <IoIosRemoveCircleOutline
+                                    className={
+                                        hasMoreThenOne
+                                            ? "text-red-500 cursor-pointer hover:text-red-800"
+                                            : ""
+                                    }
+                                    onClick={() => {
+                                        if (hasMoreThenOne)
+                                            setCorpus((prev) => ({
+                                                ...prev,
+                                                confirmation: {
+                                                    data,
+                                                    index: j
+                                                }
+                                            }))
+                                    }}
+                                />
                             </div>
                         </div>
                         <div className="grid  gap-2 mb-2">
@@ -197,6 +234,8 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                 })}
             </div>
         </MinimalAccordion>
+        {renderCustomDeleteConfirmationDialog}
+
     </div>
     );
 }
@@ -206,4 +245,6 @@ type TProps = {
     item: TCustomerComponentDesign2DItem,
     isCreateAction: boolean
 }
+type TCorpus = { confirmation?: { data: TCustomerComponentDesign2DDataItem, index: number } }
+const INIT_CORPUS: TCorpus = {}
 export default CustomerFormTwoDDesignSection;
