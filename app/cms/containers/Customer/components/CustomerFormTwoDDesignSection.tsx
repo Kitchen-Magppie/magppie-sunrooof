@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 //====================================================================
@@ -39,6 +39,26 @@ function CustomerFormTwoDDesignSection(props: TProps) {
         }
         return <></>;
     }, [errors]);
+
+    const renderCustomDeleteConfirmationDialog = useMemo(() => {
+        const onConfirm = () => {
+            setValue(`components.${index}`, {
+                ...item,
+                data: item.data.filter((_, currentIndex) => currentIndex !== corpus.confirmation.index)
+            })
+            setCorpus(INIT_CORPUS)
+
+        }
+        return <CustomConfirmationDialog show={!!corpus?.confirmation}
+            variant="danger"
+            text={{
+                header: 'Delete Confirmation',
+                remark: `Are you sure you want to delete layout #${corpus?.confirmation?.index + 1}? This will also affect the quotation.`
+            }}
+            onHide={() => {
+                setCorpus(INIT_CORPUS)
+            }} onConfirm={onConfirm} />
+    }, [corpus.confirmation, index, item, setValue])
 
     return (<div>
         <MinimalAccordion isExpanded title={title}>
@@ -209,22 +229,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                 })}
             </div>
         </MinimalAccordion>
-        <CustomConfirmationDialog show={!!corpus?.confirmation}
-            variant="danger"
-            text={{
-                header: 'Delete Confirmation',
-                remark: `Are you sure you want to delete layout #${corpus?.confirmation?.index + 1}? This will also affect the quotation.`
-            }}
-            onHide={() => {
-                setCorpus(INIT_CORPUS)
-            }} onConfirm={() => {
-                setValue(`components.${index}`, {
-                    ...item,
-                    data: item.data.filter((_, currentIndex) => currentIndex !== corpus.confirmation.index)
-                })
-                setCorpus(INIT_CORPUS)
-
-            }} />
+        {renderCustomDeleteConfirmationDialog}
 
     </div>
     );
