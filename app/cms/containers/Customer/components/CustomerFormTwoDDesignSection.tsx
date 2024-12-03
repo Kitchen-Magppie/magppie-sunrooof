@@ -22,15 +22,13 @@ import { useAppSelector } from "../../../../../redux";
 import { CustomConfirmationDialog } from "../../../../../components";
 
 
-type TCorpus = { confirmation?: { data: TCustomerComponentDesign2DDataItem, index: number } }
-const INIT_CORPUS: TCorpus = {}
+
 function CustomerFormTwoDDesignSection(props: TProps) {
     const { title, index, item, isCreateAction } = props;
     const { watch, register, formState: { errors }, setValue } = useFormContext<TCustomerItem>();
     const values = watch();
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const { value: proposedLayouts } = useAppSelector((state) => state.Cms.ProposedLayout);
-    console.log(item)
     const renderErrorMessage = useCallback((field: string) => {
         if (_.get(errors, field)) {
             return (<p className="text-red-500 text-xs mt-1">
@@ -72,6 +70,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                     }}
                 />
                 {item.data?.map((data, j) => {
+                    const hasMoreThenOne = item?.data?.length > 1
                     const layouts = proposedLayouts?.filter(((layout) => [values.id, values.customerId]?.includes(layout.customerId)))?.map((item) => ({
                         label: item.label,
                         value: item.customerId,
@@ -86,14 +85,20 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                             #{j + 1}
                             <div className="py-1 ">
                                 <IoIosRemoveCircleOutline
+                                    className={
+                                        hasMoreThenOne
+                                            ? "text-red-500 cursor-pointer hover:text-red-800"
+                                            : ""
+                                    }
                                     onClick={() => {
-                                        setCorpus((prev) => ({
-                                            ...prev,
-                                            confirmation: {
-                                                data,
-                                                index: j
-                                            }
-                                        }))
+                                        if (hasMoreThenOne)
+                                            setCorpus((prev) => ({
+                                                ...prev,
+                                                confirmation: {
+                                                    data,
+                                                    index: j
+                                                }
+                                            }))
                                     }}
                                 />
                             </div>
@@ -240,4 +245,6 @@ type TProps = {
     item: TCustomerComponentDesign2DItem,
     isCreateAction: boolean
 }
+type TCorpus = { confirmation?: { data: TCustomerComponentDesign2DDataItem, index: number } }
+const INIT_CORPUS: TCorpus = {}
 export default CustomerFormTwoDDesignSection;
