@@ -12,11 +12,15 @@ import {
     TCustomerComponentDesign2DItem,
     TCustomerItem
 } from "../../../../../types";
-import { FieldCautation, MinimalAccordion, MinimalDropdown } from "../../../components";
+import {
+    //  FieldCautation,
+    MinimalAccordion,
+    MinimalDropdown
+} from "../../../components";
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM,
     CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS,
-    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
+    // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
 } from "../../../mocks";
 import { useAppSelector } from "../../../../../redux";
 import { CustomConfirmationDialog } from "../../../../../components";
@@ -61,14 +65,14 @@ function CustomerFormTwoDDesignSection(props: TProps) {
     return (<div>
         <MinimalAccordion isExpanded title={title}>
             <div>
-                <FieldCautation
+                {/* <FieldCautation
                     onClickAdd={() => {
                         setValue(`components.${index}.data`, [
                             ...item.data,
                             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
                         ]);
                     }}
-                />
+                /> */}
                 {item.data?.map((data, j) => {
                     const hasMoreThenOne = item?.data?.length > 1
                     const layouts = proposedLayouts?.filter(((layout) => [values.id, values.customerId]?.includes(layout.customerId)))?.map((item) => ({
@@ -77,6 +81,16 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                         id: item.id
                     }));
                     const defaultValue = layouts?.find((option) => _.get(option, 'id') === data.proposedLayoutId)
+                    const onClickDeleteButton = () => {
+                        if (hasMoreThenOne)
+                            setCorpus((prev) => ({
+                                ...prev,
+                                confirmation: {
+                                    data,
+                                    index: j
+                                }
+                            }))
+                    }
                     return (<div
                         key={`${CustomerComponentEnum.TwoDDesign}-${index}-${j}`}
                         className="p-4 border shadow-sm rounded-lg  dark:border-gray-600 dark:bg-gray-800 my-3"
@@ -90,16 +104,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                             ? "text-red-500 cursor-pointer hover:text-red-800"
                                             : ""
                                     }
-                                    onClick={() => {
-                                        if (hasMoreThenOne)
-                                            setCorpus((prev) => ({
-                                                ...prev,
-                                                confirmation: {
-                                                    data,
-                                                    index: j
-                                                }
-                                            }))
-                                    }}
+                                    onClick={onClickDeleteButton}
                                 />
                             </div>
                         </div>
