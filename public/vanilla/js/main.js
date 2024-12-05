@@ -565,6 +565,7 @@ function mousePressed() {
 }
 
 function removeMask() {
+    maskDrawingEnabled = false
     var state = removeMaskEnabled
     toggleAllOff()
     removeMaskEnabled = !state
