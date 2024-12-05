@@ -138,137 +138,133 @@ export function CustomerActionForm(props: TProps) {
         );
     }, [publishedUrl]);
 
-    console.log(values)
-    return (
-        <FormProvider {...methods}>
-            <form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll ">
+    return (<FormProvider {...methods}>
+        <form onSubmit={onSubmit} className=" h-[85vh] overflow-y-scroll ">
 
-                <div className="flex flex-col gap-2">
-                    <div className="bg-white px-6">
-                        <label className="block text-sm font-medium text-gray-700">
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            {...register("name")}
-                            className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        />
-                        {renderErrorMessage("name")}
-                    </div>
-                    <div className="px-6"></div>
+            <div className="flex flex-col gap-2">
+                <div className="bg-white px-6">
+                    <label className="block text-sm font-medium text-gray-700">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        {...register("name")}
+                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                    {renderErrorMessage("name")}
                 </div>
+                <div className="px-6"></div>
+            </div>
 
-                {/* Components (rendering depends on the type of component) */}
-                <div className="px-6">
-                    {values?.components?.map((component, i) => {
-                        const value = _.get(component, "value");
-                        const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find(
-                            (item) => item.value === value
-                        ).label;
-                        switch (value) {
-                            case CustomerComponentEnum.Feature: {
-                                const data = component as TCustomerComponentFeatureItem;
-                                return (
-                                    <div key={i}>
-                                        <MinimalAccordion isExpanded title={title}>
-                                            <div className="d-flex flex-row gap">
-                                                <MinimalDropdown
-                                                    onChange={(e) => {
-                                                        setValue(`components.${i}.data`, e.value);
-                                                    }}
-                                                    defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
-                                                        ({ value }) => value === data.data
-                                                    )}
-                                                    options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
-                                                />
-                                                {renderErrorMessage(`components.${i}.data`)}
-                                            </div>
-                                        </MinimalAccordion>
-                                    </div>
-                                );
-                            }
-                            case CustomerComponentEnum.Comparison: {
-                                return (
-                                    <div key={i}>
-                                        <MinimalAccordion isExpanded title={title}>
+            {/* Components (rendering depends on the type of component) */}
+            <div className="px-6">
+                {values?.components?.map((component, i) => {
+                    const value = _.get(component, "value");
+                    const title = CUSTOMER_COMPONENT_VALUE_OPTIONS?.find(
+                        (item) => item.value === value
+                    ).label;
+                    switch (value) {
+                        case CustomerComponentEnum.Feature: {
+                            const data = component as TCustomerComponentFeatureItem;
+                            return (
+                                <div key={i}>
+                                    <MinimalAccordion isExpanded title={title}>
+                                        <div className="d-flex flex-row gap">
                                             <MinimalDropdown
-                                                defaultValue={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
-                                                    (item) => item.value === _.get(component, "data")
-                                                )}
                                                 onChange={(e) => {
                                                     setValue(`components.${i}.data`, e.value);
                                                 }}
-                                                options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
-                                            />
-
-                                            {renderErrorMessage(`components.${i}.data`)}
-                                        </MinimalAccordion>
-                                    </div>
-                                );
-                            }
-                            case CustomerComponentEnum.Quotation: {
-                                const data = component as TCustomerComponentQuotationItem;
-                                return (<div key={i}>
-                                    <CustomerFormQuotationSection data={data} title={title} i={i} />
-                                </div>);
-                            }
-                            case CustomerComponentEnum.ThreeDDesign: {
-                                const items = _.get(component, "data", []) as string[];
-                                return (
-                                    <div key={i}>
-                                        <MinimalAccordion isExpanded title={title}>
-                                            <ImageInput
-                                                isMulti
-                                                values={items}
-                                                path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
-                                                onSuccess={(e) => {
-                                                    setValue(`components.${i}.data`, e);
-                                                }}
+                                                defaultValue={CUSTOMER_COMPONENT_FEATURE_OPTIONS?.find(
+                                                    ({ value }) => value === data.data
+                                                )}
+                                                options={CUSTOMER_COMPONENT_FEATURE_OPTIONS}
                                             />
                                             {renderErrorMessage(`components.${i}.data`)}
-                                        </MinimalAccordion>
-                                    </div>
-                                );
-                            }
-                            case CustomerComponentEnum.TwoDDesign: {
-                                const prev = component as TCustomerComponentDesign2DItem;
-                                return (<div key={i}>
-                                    <CustomerFormTwoDDesignSection
-                                        index={i}
-                                        title={title}
-                                        item={prev}
-                                        isCreateAction={isCreateAction}
-                                    />
+                                        </div>
+                                    </MinimalAccordion>
                                 </div>
-                                );
-                            }
-                            default:
-                                return <div key={i} />;
+                            );
                         }
-                    })}
-                    {errors.components && <p>{errors.components.message}</p>}
+                        case CustomerComponentEnum.Comparison: {
+                            return (
+                                <div key={i}>
+                                    <MinimalAccordion isExpanded title={title}>
+                                        <MinimalDropdown
+                                            defaultValue={CUSTOMER_COMPONENT_COMPARISON_OPTIONS?.find(
+                                                (item) => item.value === _.get(component, "data")
+                                            )}
+                                            onChange={(e) => {
+                                                setValue(`components.${i}.data`, e.value);
+                                            }}
+                                            options={CUSTOMER_COMPONENT_COMPARISON_OPTIONS}
+                                        />
 
-                    {renderPublishUrlContent}
-                    <div className="mb-20" />
-                </div>
-                <div className="left-0 right-0 absolute bottom-5 px-10">
-                    <button
-                        disabled={corpus.isSubmitting}
-                        type="submit"
-                        className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        {isCreateAction ? "Create" : "Update"} Component
-                        {corpus.isSubmitting ? (
-                            <AiOutlineLoading3Quarters className="text-xl animate-spin" />
-                        ) : (
-                            <IoCreateOutline className="text-xl" />
-                        )}
-                    </button>
-                </div>
-            </form >
+                                        {renderErrorMessage(`components.${i}.data`)}
+                                    </MinimalAccordion>
+                                </div>
+                            );
+                        }
+                        case CustomerComponentEnum.Quotation: {
+                            const data = component as TCustomerComponentQuotationItem;
+                            return (<div key={i}>
+                                <CustomerFormQuotationSection data={data} title={title} i={i} />
+                            </div>);
+                        }
+                        case CustomerComponentEnum.ThreeDDesign: {
+                            const items = _.get(component, "data", []) as string[];
+                            return (
+                                <div key={i}>
+                                    <MinimalAccordion isExpanded title={title}>
+                                        <ImageInput
+                                            isMulti
+                                            values={items}
+                                            path={`customers/${values.customerId}/${CustomerComponentEnum.ThreeDDesign}`}
+                                            onSuccess={(e) => {
+                                                setValue(`components.${i}.data`, e);
+                                            }}
+                                        />
+                                        {renderErrorMessage(`components.${i}.data`)}
+                                    </MinimalAccordion>
+                                </div>
+                            );
+                        }
+                        case CustomerComponentEnum.TwoDDesign: {
+                            const prev = component as TCustomerComponentDesign2DItem;
+                            return (<div key={i}>
+                                <CustomerFormTwoDDesignSection
+                                    index={i}
+                                    title={title}
+                                    item={prev}
+                                    isCreateAction={isCreateAction}
+                                />
+                            </div>
+                            );
+                        }
+                        default:
+                            return <div key={i} />;
+                    }
+                })}
+                {errors.components && <p>{errors.components.message}</p>}
 
-        </FormProvider >
-    );
+                {renderPublishUrlContent}
+                <div className="mb-20" />
+            </div>
+            <div className="left-0 right-0 absolute bottom-5 px-10">
+                <button
+                    disabled={corpus.isSubmitting}
+                    type="submit"
+                    className=" flex justify-center gap-3 flex-row align-middle w-full p-3 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                    {isCreateAction ? "Create" : "Update"} Component
+                    {corpus.isSubmitting ? (
+                        <AiOutlineLoading3Quarters className="text-xl animate-spin" />
+                    ) : (
+                        <IoCreateOutline className="text-xl" />
+                    )}
+                </button>
+            </div>
+        </form>
+    </FormProvider>);
 }
 
 type TProps = {
@@ -278,6 +274,11 @@ type TProps = {
 };
 // 631
 
-const INIT_CORPUS = { isSubmitting: false };
+const INIT_CORPUS = {
+    isSubmitting: false,
+
+
+
+};
 
 //1330

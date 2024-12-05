@@ -6,7 +6,7 @@ import { MdAddchart } from "react-icons/md";
 import { CmsSearch, CmsCustomerCardItem, CmsNotFound } from '../../../components'
 import { CustomSimpleModal } from '../../../../../components'
 import { useFirebaseCmsCustomerListener } from '../../../utils/firebase'
-import { ComponentModeEnum } from '../../../../../types'
+import { _, ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
 import { useProposedLayoutListener } from '../../../hooks';
@@ -68,7 +68,7 @@ export default function CustomerDashboard() {
                     />
                 </div>
                 <div className="flex gap-2">
-                    <div className="">
+                    <div >
                         <button
                             className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             onClick={() => {
@@ -82,7 +82,7 @@ export default function CustomerDashboard() {
                             <MdAddchart className="text-lg" />
                         </button>
                     </div>
-                    <div className="">
+                    <div >
                         <Link
                             to='/cms/proposed/old/layout'
                             className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -92,14 +92,12 @@ export default function CustomerDashboard() {
                     </div>
                 </div>
             </div>
-            <div className="">
+            <div >
                 <div className="text-4xl font-bold my-5">Quotations</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {loading ? (
-                        Array.from({ length: 5 })?.map((_, i) => (
-                            <CardSkeleton key={i} />
-                        ))
-                    ) : data.values.components?.length ? (
+                    {loading ? (_.range(5)?.map((i) => (
+                        <CardSkeleton key={i} />
+                    ))) : data.values.components?.length ? (
                         <>
                             {data.values.components.map((item, i) => {
                                 const isSecondaryRecord =
