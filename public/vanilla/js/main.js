@@ -1,23 +1,23 @@
 let bgImage
-let smallRectImage
+// let smallRectImage
 let imgWidth, imgHeight
 let design = -1
 let theOrientation = 0
 let images, images_low
 let mousePosX, mousePosY
-let debug = 0
+// let debug = 0
 
 let displayRuler = 0
 let rulerOrigin = -1
 
 let selectedMask = -1
-let movingMask = false
+let movingMask = true // Default rectangular shape movable
 let removalPointsToMove = []
 let originalPos
 
 var sending = 0
 
-let fakeMaskGrid = []
+// let fakeMaskGrid = []
 
 let removeMaskEnabled = false
 
@@ -82,7 +82,7 @@ function selectUnitType() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', function (event) {
         if (event.key == 'M' || event.key == 'm') {
             startDrawingMask()
@@ -102,14 +102,14 @@ let rectStartX, rectStartY, rectEndX, rectEndY
 
 let masks = []
 
-let rotateEnabled = 0
+let rotateEnabled = false
 
 function toggleAllOff() {
     maskDrawingEnabled = false
     removalEnabled = false
     removeMaskEnabled = false
-    movingMask = false
-    rotateEnabled = false
+    // movingMask = false
+    // rotateEnabled = false
     displayRuler = false
 }
 
@@ -169,22 +169,22 @@ function preload() {
         imgHeight = img.height
     })
     images = [
-        loadImage('/vanilla-assets/high/Classical.jpeg'),
-        loadImage('/vanilla-assets/high/Fluted.jpeg'),
-        loadImage('/vanilla-assets/high/French.jpeg'),
-        loadImage('/vanilla-assets/high/Louvered.jpeg'),
-        loadImage('/vanilla-assets/high/Modern.jpeg'),
-        loadImage('/vanilla-assets/high/Minimalist.png'),
+        loadImage('/vanilla/assets/high/Classical.jpeg'),
+        loadImage('/vanilla/assets/high/Fluted.jpeg'),
+        loadImage('/vanilla/assets/high/French.jpeg'),
+        loadImage('/vanilla/assets/high/Louvered.jpeg'),
+        loadImage('/vanilla/assets/high/Modern.jpeg'),
+        loadImage('/vanilla/assets/high/Minimalist.png'),
         // Add Design Here
     ]
 
     images_low = [
-        loadImage('/vanilla-assets/low/Classical.png'),
-        loadImage('/vanilla-assets/low/Fluted.png'),
-        loadImage('/vanilla-assets/low/French.png'),
-        loadImage('/vanilla-assets/low/Louvered.jpeg'),
-        loadImage('/vanilla-assets/low/Modern.png'),
-        loadImage('/vanilla-assets/low/Minimalist.jpeg'),
+        loadImage('/vanilla/assets/low/Classical.png'),
+        loadImage('/vanilla/assets/low/Fluted.png'),
+        loadImage('/vanilla/assets/low/French.png'),
+        loadImage('/vanilla/assets/low/Louvered.jpeg'),
+        loadImage('/vanilla/assets/low/Modern.png'),
+        loadImage('/vanilla/assets/low/Minimalist.jpeg'),
         // Add Design Here
     ]
 }
@@ -566,6 +566,7 @@ function mousePressed() {
 
 function removeMask() {
     var state = removeMaskEnabled
+    movingMask = false
     toggleAllOff()
     removeMaskEnabled = !state
 }
@@ -677,6 +678,7 @@ function finalizeMask() {
         rectEndY = undefined
         isDrawMaskGrid = false
     }
+    maskDrawingEnabled = false
 }
 
 function rotate_and_draw_image(
@@ -1027,7 +1029,20 @@ document.addEventListener('mousemove', function (event) {
     //     // Scroll down
     //     window.scrollBy(0, scrollSpeed);
     //   }
+    // console.log(event)
 })
+
+// const element = document.getElementById('canvas-div')
+
+// element.addEventListener('mousedown', () => {
+//     element.classList.add('pressed')
+//     console.log('Mouse-down')
+// })
+
+// element.addEventListener('mouseup', () => {
+//     element.classList.remove('pressed')
+//     maskDrawingEnabled = false
+// })
 
 function init2D(M, N) {
     var array = []
