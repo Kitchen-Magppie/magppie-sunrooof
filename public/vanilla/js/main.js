@@ -20,7 +20,10 @@ var sending = 0
 // let fakeMaskGrid = []
 
 let removeMaskEnabled = false
-
+let corpus = {
+    isMaskBorderVisible: true,
+    isDragging: false,
+}
 // let grids = [];
 let lengths = []
 
@@ -84,6 +87,9 @@ function selectUnitType() {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', function (event) {
+        if (['R', 'r']?.includes(event.key)) {
+            rotateMask()
+        }
         if (event.key == 'M' || event.key == 'm') {
             startDrawingMask()
         }
@@ -224,6 +230,7 @@ function draw() {
         //     point.y += mouseY - originalPos.y;
         //   }
         // });
+        console.log(removalPointsToMove)
         removalPointsToMove.forEach((maskIndex) => {
             removalPoints[maskIndex].forEach((point) => {
                 point.x += mouseX - originalPos.x
@@ -254,6 +261,7 @@ function draw() {
     image(bgImage, 0, 0, width, height)
 
     // Draw points and line for unit calculation
+    // console.log(points)
     if (points.length > 0) {
         points.forEach((point) => {
             fill(255, 0, 0)
@@ -296,6 +304,12 @@ function draw() {
             mask.trueEndSet,
             index
         )
+        // if (corpus.isMaskBorderVisible) {
+        //     fill(0, 0)
+        //     // stroke(corpus.isDragging ? 'red' : 'gray')
+        //     stroke('red')
+        //     rect(mask.startX - 10, mask.startY - 10, mask.endX, mask.endY)
+        // }
         if (sending) {
             drawRectGrid(
                 mask.startX,
@@ -485,6 +499,8 @@ function mousePressed() {
     }
 
     if (movingMask && selectedMask == -1) {
+        console.log(movingMask)
+        console.log(masks)
         masks.forEach((mask, maskIndex) => {
             if (
                 mouseX > mask.startX &&
@@ -866,6 +882,7 @@ function sleep(time) {
 }
 
 function downloadCanvas() {
+    corpus.isMaskBorderVisible = false
     const canvas = document.getElementsByTagName('canvas')[0]
     if (!canvas) {
         console.error('Canvas not found!')
