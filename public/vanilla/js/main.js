@@ -86,12 +86,20 @@ function selectUnitType() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('keydown', function (event) {
-        if (['R', 'r']?.includes(event.key)) {
-            rotateMask()
-        }
-        if (event.key == 'M' || event.key == 'm') {
-            startDrawingMask()
+    document.addEventListener('keydown', ({ key }) => {
+        const pressedKey = key?.toLowerCase()
+        switch (pressedKey) {
+            case 'backspace':
+                removePoints()
+                break
+            case 'r':
+                rotateMask()
+                break
+            case 'm':
+                startDrawingMask()
+                break
+            default:
+                break
         }
     })
 })
