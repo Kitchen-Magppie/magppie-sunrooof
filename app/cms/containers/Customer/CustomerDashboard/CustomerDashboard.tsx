@@ -70,7 +70,7 @@ export default function CustomerDashboard() {
                 <div className="flex gap-2">
                     <div >
                         <button
-                            className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-indigo-700 rounded-full hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                             onClick={() => {
                                 action.onChangeModal({
                                     action: ComponentModeEnum.Create,
@@ -85,7 +85,7 @@ export default function CustomerDashboard() {
                     <div >
                         <Link
                             to='/cms/proposed/old/layout'
-                            className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-blue-700 rounded-full hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-indigo-700 rounded-full hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                         >
                             <MdOutlineDesignServices className="text-lg" />
                         </Link>
