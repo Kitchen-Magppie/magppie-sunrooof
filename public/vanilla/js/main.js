@@ -462,7 +462,7 @@ function draw() {
         : '#6b8a7a'
 
     document.getElementById('mask_btn').style.backgroundColor =
-        maskDrawingEnabled ? '#4e685a' : '#6b8a7a'
+        maskDrawingEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('ruler').style.backgroundColor = displayRuler
         ? '#4e685a'
