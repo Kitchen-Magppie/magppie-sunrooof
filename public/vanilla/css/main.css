@@ -24,8 +24,7 @@ select {
 .navbar {
     height: 10vh;
     width: 100vw;
-    background-image: url('/vanilla-assets/hero-bg.jpeg');
-
+    background-image: url('/vanilla/assets/hero-bg.jpeg');
     background-size: cover;
     background-position: 10% 30%;
     display: flex;
@@ -44,13 +43,13 @@ img {
 
 .content-div {
     margin: 32px;
-    /* margin-top: 15vh; */
+    margin-top: 15vh;
     display: flex;
     justify-content: space-evenly;
 }
 
 button {
-    background-color: #6b8a7a;
+    background-color: rgb(67 56 202) !important;
     color: white;
     /* font-weight: bold; */
     outline: none;
@@ -64,12 +63,16 @@ button {
 
 #download-canvas,
 #generate-invoice {
-    background-color: #b7b597;
+    background-color: rgb(67 56 202);
+}
+
+#download-canvas:hover {
+    background-color: rgb(55 48 163) !important;
 }
 
 button:hover {
     cursor: pointer;
-    background-color: #4e685a !important;
+    background-color: rgb(55 48 163) !important;
 }
 
 button:focus {
@@ -95,4 +98,39 @@ canvas {
 
 .content-div > section {
     width: 30vw;
+}
+
+.box {
+    border: 1px solid #d8dee4; /* Border color */
+    padding: 16px;
+    border-radius: 8px; /* Rounded corners */
+    background-color: #fff; /* White background */
+    /* max-width: 400px;
+    margin: auto; */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #486942; /* Greenish text color */
+    margin-bottom: 8px;
+}
+
+.step-header .icon {
+    /* margin-right: 8px; */
+    font-size: 18px; /* Icon size */
+}
+
+.step-title {
+    font-size: 16px;
+}
+
+.step-description {
+    font-size: 14px;
+    color: #586069; /* Grayish text color */
+    line-height: 1.6;
+    margin-bottom: 16px;
 }
