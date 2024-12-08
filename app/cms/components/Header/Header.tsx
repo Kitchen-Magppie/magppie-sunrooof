@@ -47,7 +47,7 @@ export default function Header() {
                         Welcome,
                     </div>
 
-                    <div className='text-purple-600 font-medium'>
+                    <div className='text-indigo-600 font-medium'>
                         {_.get(user, 'value.name', 'User')}
                     </div>
                     <div >
@@ -55,7 +55,7 @@ export default function Header() {
 
                             <button
                                 data-tooltip-target="tooltip-default"
-                                type="button" className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm p-1 py-1 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                                type="button" className="text-white bg-indigo-700 hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300 font-medium rounded-full text-sm p-1 py-1 text-center mb-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900">
                                 <MdLogout onClick={onClickSignOut}
                                     className='cursor-pointer hover:text-gray-500 '
                                 />

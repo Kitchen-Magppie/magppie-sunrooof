@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <title>Design Generation</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
         <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script> -->
         <link rel="stylesheet" href="/vanilla/css/main.css" />
     </head>
@@ -84,6 +85,7 @@
                             title="Orientation"
                             alt="Orientation"
                             onclick="changeOrientation()"
+                            style="display: none"
                         >
                             Orientation ||
                         </button>
@@ -99,10 +101,18 @@
                 Draw Border
               </button> -->
                         <br />
-                        <button id="move_mask" onclick="moveMask()">
+                        <button
+                            id="move_mask"
+                            onclick="moveMask()"
+                            style="display: none"
+                        >
                             Move SUNROOOF
                         </button>
-                        <button id="rotate_mask" onclick="rotateMask()">
+                        <button
+                            id="rotate_mask"
+                            onclick="rotateMask()"
+                            style="display: none"
+                        >
                             Rotate SUNROOOF
                         </button>
                         <!-- </div> -->
@@ -136,7 +146,7 @@
                         <br />
 
                         <button id="download-canvas" onclick="downloadCanvas()">
-                            Download Final Image
+                            Proceed
                         </button>
 
                         <button
