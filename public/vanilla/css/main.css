@@ -49,7 +49,7 @@ img {
 }
 
 button {
-    background-color: rgb(67 56 202) !important;
+    background-color: rgb(67 56 202);
     color: white;
     /* font-weight: bold; */
     outline: none;
@@ -72,7 +72,7 @@ button {
 
 button:hover {
     cursor: pointer;
-    background-color: rgb(55 48 163) !important;
+    background-color: rgb(55 48 163);
 }
 
 button:focus {

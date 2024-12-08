@@ -448,10 +448,10 @@ function draw() {
     }
 
     document.getElementById('remove-unit').style.backgroundColor =
-        removalEnabled ? '#4e685a' : '#6b8a7a'
+        removalEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('remove-mask').style.backgroundColor =
-        removeMaskEnabled ? '#4e685a' : '#6b8a7a'
+        removeMaskEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('move_mask').style.backgroundColor = movingMask
         ? '#4e685a'
@@ -465,8 +465,7 @@ function draw() {
         maskDrawingEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('ruler').style.backgroundColor = displayRuler
-        ? '#4e685a'
-        : '#6b8a7a'
+        ? '#3730A3' : '#4338CA'
 }
 
 // Start drawing the initial line for unit calculation
