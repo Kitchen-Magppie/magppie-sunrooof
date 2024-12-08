@@ -54,7 +54,7 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
                 <Link
                     to={publishedUrl}
                     target="_blank"
-                    className="text-blue-600 underline"
+                    className="text-indigo-600 underline"
                 >
                     {publishedUrl}
                 </Link>
