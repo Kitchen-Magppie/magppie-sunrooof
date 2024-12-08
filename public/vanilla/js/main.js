@@ -163,11 +163,22 @@ function removePoints() {
 
 // Preload the background image from local storage
 function preload() {
-    const imageData = localStorage.getItem('CUSTOMER_IMAGE')
-    bgImage = loadImage(imageData, (img) => {
-        imgWidth = img.width
-        imgHeight = img.height
-    })
+    const imageData = localStorage.getItem('CUSTOMER_IMAGE');
+    if (imageData) {
+        // Load the background image
+        bgImage = loadImage(
+            imageData,
+            () => {
+                console.log('Background image loaded successfully.');
+            },
+            (err) => {
+                console.error('Failed to load background image:', err);
+            }
+        );
+    } else {
+        console.error('Image data or dimensions not found in localStorage.');
+    }
+
     images = [
         loadImage('/vanilla/assets/high/Classical.jpeg'),
         loadImage('/vanilla/assets/high/Fluted.jpeg'),
@@ -191,23 +202,47 @@ function preload() {
 
 // Setup the canvas and display client name
 function setup() {
-    //   hw_ratio = imgHeight / imgWidth;
-    //   if (imgWidth > window.innerWidth * 0.8) {
-    //     var myCanvas = createCanvas(
-    //       window.innerWidth * 0.8,
-    //       hw_ratio * window.innerWidth * 0.8
-    //     );
-    //   }
-    //   if (imgHeight > window.innerHeight * 0.8) {
-    //     var myCanvas = createCanvas(
-    //       (window.innerHeight * 0.8) / hw_ratio,
-    //       window.innerHeight * 0.8
-    //     );
-    //   } else {
-    //     var myCanvas = createCanvas(imgWidth, imgHeight);
-    //   }
-    var myCanvas = createCanvas(imgWidth, imgHeight)
-    myCanvas.parent('canvas-div')
+    if (!bgImage) {
+        console.error('Background image is not loaded.');
+        return;
+    }
+
+    // Handle Device Pixel Ratio (DPR)
+    const devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    // console.log(`Device Pixel Ratio (capped): ${devicePixelRatio}`);
+
+    imgWidth = bgImage.width / devicePixelRatio;
+    imgHeight = bgImage.height / devicePixelRatio;
+
+    pixelDensity(devicePixelRatio);
+    console.log('Pixel density set to ', devicePixelRatio);
+
+    const canvasWidth = imgWidth;
+    const canvasHeight = imgHeight;
+
+    // Create the canvas with the original image dimensions
+    let myCanvas = createCanvas(canvasWidth, canvasHeight);
+    myCanvas.parent('canvas-div');
+
+    // **Access the 2D context**
+    const context = drawingContext;
+    if (!context) {
+        throw new Error('Failed to get p5.js canvas 2D context.');
+    }
+
+    // **Scale the context to account for device pixel ratio**
+    context.scale(devicePixelRatio, devicePixelRatio);
+    console.log('Canvas context scaled by device pixel ratio.');
+
+    // **Disable image smoothing for sharper edges**
+    context.imageSmoothingEnabled = false;
+    context.imageSmoothingQuality = 'high';
+    console.log('Image smoothing disabled for sharper rendering.');
+
+    // Optional: Scale the canvas context for DPR if needed
+    // Note: p5.js handles DPR internally, but if you have custom scaling, manage it here.
+    // For example:
+    // scale(devicePixelRatio);
 }
 
 // Draw loop to continuously render the canvas
@@ -241,16 +276,16 @@ function draw() {
         originalPos = { x: mouseX, y: mouseY }
     }
 
-    if (mousePosX > window.innerWidth * 0.9) {
-        window.scrollBy(10, 0)
-    } else if (mousePosX < window.innerWidth * 0.1) {
-        window.scrollBy(-10, 0)
-    }
-    if (mousePosY > window.innerHeight * 0.9) {
-        window.scrollBy(0, 10)
-    } else if (mousePosY < window.innerHeight * 0.1) {
-        window.scrollBy(0, -10)
-    }
+    // if (mousePosX > window.innerWidth * 0.9) {
+    //     window.scrollBy(10, 0)
+    // } else if (mousePosX < window.innerWidth * 0.1) {
+    //     window.scrollBy(-10, 0)
+    // }
+    // if (mousePosY > window.innerHeight * 0.9) {
+    //     window.scrollBy(0, 10)
+    // } else if (mousePosY < window.innerHeight * 0.1) {
+    //     window.scrollBy(0, -10)
+    // }
     image(bgImage, 0, 0, width, height)
 
     // Draw points and line for unit calculation
@@ -379,11 +414,11 @@ function draw() {
             text(
                 'Distance: ' + distance,
                 rulerOrigin.x +
-                    (dx / 2) * (mouseX > rulerOrigin.x ? 1 : -1) -
-                    50,
+                (dx / 2) * (mouseX > rulerOrigin.x ? 1 : -1) -
+                50,
                 10 +
-                    rulerOrigin.y +
-                    (dy / 2) * (mouseY > rulerOrigin.y ? 1 : -1)
+                rulerOrigin.y +
+                (dy / 2) * (mouseY > rulerOrigin.y ? 1 : -1)
             )
         }
     }
@@ -757,22 +792,22 @@ function drawMaskGrid(
     //   var xi = 0;
     //   var yi = 0;
 
-    for (let x = minX; x < maxX; ) {
-        for (let y = minY; y < maxY; ) {
+    for (let x = minX; x < maxX;) {
+        for (let y = minY; y < maxY;) {
             let flag = true
             if (index >= 0) {
                 removalPoints[index].forEach((point) => {
                     if (
                         x < point.x &&
                         x +
-                            smallRectWidth * !orient +
-                            smallRectHeight * orient >
-                            point.x &&
+                        smallRectWidth * !orient +
+                        smallRectHeight * orient >
+                        point.x &&
                         y < point.y &&
                         y +
-                            smallRectHeight * !orient +
-                            smallRectWidth * orient >
-                            point.y
+                        smallRectHeight * !orient +
+                        smallRectWidth * orient >
+                        point.y
                     ) {
                         flag = false
                         // if (endset && grids.length > index) {
@@ -784,9 +819,9 @@ function drawMaskGrid(
             }
             if (
                 x + smallRectWidth * !orient + smallRectHeight * orient <=
-                    maxX &&
+                maxX &&
                 y + smallRectWidth * orient + smallRectHeight * !orient <=
-                    maxY &&
+                maxY &&
                 flag
             ) {
                 unitsCount[invMap[design]] += 1 + 1 * !design
@@ -1070,22 +1105,22 @@ function drawRectGrid(startX, startY, endX, endY, design, orient, index) {
 
     var xi = 0
     var yi = 0
-    for (let x = minX; x < maxX; ) {
-        for (let y = minY; y < maxY; ) {
+    for (let x = minX; x < maxX;) {
+        for (let y = minY; y < maxY;) {
             let flag = true
             if (index >= 0) {
                 removalPoints[index].forEach((point) => {
                     if (
                         x < point.x &&
                         x +
-                            smallRectWidth * !orient +
-                            smallRectHeight * orient >
-                            point.x &&
+                        smallRectWidth * !orient +
+                        smallRectHeight * orient >
+                        point.x &&
                         y < point.y &&
                         y +
-                            smallRectHeight * !orient +
-                            smallRectWidth * orient >
-                            point.y
+                        smallRectHeight * !orient +
+                        smallRectWidth * orient >
+                        point.y
                     ) {
                         flag = false
                         return
@@ -1094,9 +1129,9 @@ function drawRectGrid(startX, startY, endX, endY, design, orient, index) {
             }
             if (
                 x + smallRectWidth * !orient + smallRectHeight * orient <=
-                    maxX &&
+                maxX &&
                 y + smallRectWidth * orient + smallRectHeight * !orient <=
-                    maxY &&
+                maxY &&
                 flag
             ) {
                 // unitsCount[invMap[design]] += 1 + 1 * !design;

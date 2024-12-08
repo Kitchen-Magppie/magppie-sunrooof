@@ -52,36 +52,130 @@ function ProposedLayoutView() {
     });
 
     const values = watch() as TProposedLayoutItem
-    const convertPdfToImage = useCallback(async (file: File) => {
+
+    /**
+     * Converts the first page of a PDF to a high-resolution PNG image.
+     * @param {File} file - The PDF file to convert.
+     * @param {(name: keyof any, value: any) => void} setValue - Function to set form values (from react-hook-form).
+     * @returns {Promise<string>} - Returns the Blob URL of the converted image.
+     */
+  
+    
+const convertPdfToImage = useCallback(
+    async function (file: File): Promise<string> {
+    try {
+        // Step 1: Create an object URL for the PDF file
         const fileUrl = URL.createObjectURL(file);
+        console.log(`Object URL created: ${fileUrl}`);
+
+        // Step 2: Load the PDF document
         const pdfDoc = await pdfjsLib.getDocument(fileUrl).promise;
-        const page = await pdfDoc.getPage(1); // Assuming you want the first page
+        console.log(`PDF loaded with ${pdfDoc.numPages} page(s).`);
 
-        const scale = 1.5; // Adjust the scale as needed
+        // Step 3: Get the first page of the PDF
+        const page = await pdfDoc.getPage(1);
+        console.log(`Rendering page ${page.pageNumber}.`);
+
+        // Step 4: Define the scale
+        const scale = 1.5;
         const viewport = page.getViewport({ scale });
+        console.log(`Viewport created with scale ${scale}:`, viewport);
 
+        // Step 5: Create a canvas element
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
+        if (!context) throw new Error('Failed to get canvas 2D context.');
 
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+        // Step 6: Adjust canvas for device pixel ratio
+        const devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        console.log(`Device Pixel Ratio (capped): ${devicePixelRatio}`);
 
+        canvas.width = viewport.width * devicePixelRatio;
+        canvas.height = viewport.height * devicePixelRatio;
+        canvas.style.width = `${viewport.width}px`;
+        canvas.style.height = `${viewport.height}px`;
+        console.log(
+            `Canvas dimensions set to ${canvas.width}x${canvas.height} pixels.`
+        );
+
+        // Step 7: Scale the context to account for device pixel ratio
+        context.scale(devicePixelRatio, devicePixelRatio);
+        console.log(`Canvas context scaled by device pixel ratio.`);
+
+        // Step 8: Disable image smoothing for sharper edges
+        context.imageSmoothingEnabled = false;
+        context.imageSmoothingQuality = 'high';
+        console.log(`Image smoothing disabled for sharper rendering.`);
+
+        // Step 9: Define the render context
         const renderContext = {
             canvasContext: context,
             viewport: viewport,
-
         };
+
+        // Step 10: Render the PDF page into the canvas
         await page.render(renderContext).promise;
+        console.log(`Page rendered onto canvas.`);
+
+        // Step 11: Convert the canvas to a Blob
+        const blob = await new Promise<Blob | null>((resolve, reject) => {
+            canvas.toBlob(
+                (blob) => {
+                    if (blob) resolve(blob);
+                    else reject(new Error('Canvas is empty'));
+                },
+                'image/png',
+                1.0
+            );
+        });
+        console.log(`Canvas converted to Blob.`);
+
+        if (!blob) throw new Error('Failed to convert canvas to Blob.');
+
+        // Step 12: Convert Blob to File
+        const fileName = `${file.name.split('.')[0]}.png`;
+        const imageFile = new File([blob], fileName, { type: 'image/png' });
+        console.log(`Blob converted to File: ${fileName}`);
+
+        // Step 13: Update the form value with the image file
+        setValue('file', imageFile);
+        console.log(`Form value 'file' set with the image file.`);
+
+        // Step 14: Convert Blob to Base64
+        const base64Data = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                if (reader.result) resolve(reader.result as string);
+                else reject(new Error('Failed to read Blob as Base64.'));
+            };
+            reader.onerror = () => reject(new Error('Error reading Blob as Base64.'));
+            reader.readAsDataURL(blob);
+        });
+        console.log(`Blob converted to Base64.`);
+
+        // Step 15: Save the Base64 string to localStorage
+        localStorage.setItem('CUSTOMER_IMAGE', base64Data);
+        console.log(
+            `Base64 image saved to localStorage under 'CUSTOMER_IMAGE'.`
+        );
+
+        // Step 16: Clean up the object URL
+        URL.revokeObjectURL(fileUrl);
+        console.log(`Object URL revoked to free up memory.`);
+
+        // Step 17: Create a Blob URL for the image
+        const imageUrl = URL.createObjectURL(blob);
+        console.log(`Image Blob URL created: ${imageUrl}`);
+        return imageUrl;
+    } catch (error) {
+        console.error('Error converting PDF to image:', error);
+        throw error;
+    }
+},
+    [setValue] // Add any dependencies here if needed
+)
 
 
-        const imageDataUrl = canvas.toDataURL('image/png');
-
-        setValue('file', _.base64ToFile(imageDataUrl, `${file?.name?.split('.')[0]}.png`))
-        localStorage.setItem('CUSTOMER_IMAGE', `${imageDataUrl}`)
-    }, [setValue])
-
-
-    // console.log(values)
 
     const onFileChange = useCallback(async (e: ChangeEvent<HTMLInputElement>) => {
         const content = FROM_FILE_TO_ACCESSOR(e.target?.files[0])
