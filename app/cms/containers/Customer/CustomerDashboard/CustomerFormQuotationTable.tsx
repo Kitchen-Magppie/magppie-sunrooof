@@ -65,7 +65,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     {calc.discount}%
                 </td>
             </tr>
-            <tr>
+            <tr className="bg-[#CFE1B9]">
                 <td
                     colSpan={6}
                     className="px-4 py-2 text-right border border-black"
@@ -87,7 +87,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     ₹{freightCharges.toLocaleString()}
                 </td>
             </tr>
-            <tr className="font-bold">
+            <tr className="font-bold bg-[#CFE1B9]">
                 <td
                     colSpan={6}
                     className="px-4 py-2 text-right border border-black"
