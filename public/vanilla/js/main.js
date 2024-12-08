@@ -630,7 +630,7 @@ function removeMask() {
     const descElement = document.getElementById('desc')
 
     titleElement.textContent = 'Remove Mask Tool' // Update content
-    descElement.textContent = 'This tool helps you to remove entire Sunrooof Mask from rectangular selection from the canvas.' // Clear any message
+    descElement.textContent = 'This tool helps you to remove entire Sunrooof Design from rectangular selection from the canvas.' // Clear any message
     
     var state = removeMaskEnabled
     movingMask = false
@@ -700,7 +700,7 @@ function startDrawingMask() {
     const descElement = document.getElementById('desc')
 
     titleElement.textContent = 'Drawing Tool' // Update content
-    descElement.textContent = 'Drawing Tool' // Clear any message
+    descElement.textContent = 'This Tool will help you in drawing Sunroof in the Canvas.' // Clear any message
 
     var state = maskDrawingEnabled
     toggleAllOff()
