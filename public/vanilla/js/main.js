@@ -276,16 +276,16 @@ function draw() {
         originalPos = { x: mouseX, y: mouseY }
     }
 
-    if (mousePosX > window.innerWidth * 0.9) {
-        window.scrollBy(10, 0)
-    } else if (mousePosX < window.innerWidth * 0.1) {
-        window.scrollBy(-10, 0)
-    }
-    if (mousePosY > window.innerHeight * 0.9) {
-        window.scrollBy(0, 10)
-    } else if (mousePosY < window.innerHeight * 0.1) {
-        window.scrollBy(0, -10)
-    }
+    // if (mousePosX > window.innerWidth * 0.9) {
+    //     window.scrollBy(10, 0)
+    // } else if (mousePosX < window.innerWidth * 0.1) {
+    //     window.scrollBy(-10, 0)
+    // }
+    // if (mousePosY > window.innerHeight * 0.9) {
+    //     window.scrollBy(0, 10)
+    // } else if (mousePosY < window.innerHeight * 0.1) {
+    //     window.scrollBy(0, -10)
+    // }
     image(bgImage, 0, 0, width, height)
 
     // Draw points and line for unit calculation
