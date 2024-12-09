@@ -86,20 +86,31 @@ function selectUnitType() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('keydown', ({ key }) => {
+    document.addEventListener('keydown', (e) => {
+        const { key } = e
         const pressedKey = key?.toLowerCase()
-        switch (pressedKey) {
-            case 'backspace':
-                removeMask()
-                break
-            case 'r':
-                rotateMask()
-                break
-            case 'm':
-                startDrawingMask()
-                break
-            default:
-                break
+        if (e.ctrlKey) {
+            switch (pressedKey) {
+                case 'd':
+                    removalEnabled = !removalEnabled
+                    break
+                default:
+                    break
+            }
+        } else {
+            switch (pressedKey) {
+                case 'backspace':
+                    removeMask()
+                    break
+                case 'r':
+                    rotateMask()
+                    break
+                case 'm':
+                    startDrawingMask()
+                    break
+                default:
+                    break
+            }
         }
     })
 })
@@ -147,7 +158,8 @@ function toggleRuler() {
     const descElement = document.getElementById('desc')
 
     titleElement.textContent = 'Scale for Measurement' // Update content
-    descElement.textContent = 'This tool helps you to measure the block of canvas horizontally or vertically.' // Clear any message
+    descElement.textContent =
+        'This tool helps you to measure the block of canvas horizontally or vertically.' // Clear any message
     var state = displayRuler
     toggleAllOff()
     displayRuler = !state
@@ -179,7 +191,8 @@ function removePoints() {
     const descElement = document.getElementById('desc')
 
     titleElement.textContent = 'Remove Sunrooof Tool' // Update content
-    descElement.textContent = 'This tool helps you to remove a sunrooof from rectangular selection from the canvas.' // Clear any message
+    descElement.textContent =
+        'This tool helps you to remove a sunrooof from rectangular selection from the canvas.' // Clear any message
     var state = removalEnabled
     toggleAllOff()
     removalEnabled = !state
@@ -473,7 +486,8 @@ function draw() {
         maskDrawingEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('ruler').style.backgroundColor = displayRuler
-        ? '#3730A3' : '#4338CA'
+        ? '#3730A3'
+        : '#4338CA'
 }
 
 // Start drawing the initial line for unit calculation
@@ -637,8 +651,9 @@ function removeMask() {
     const descElement = document.getElementById('desc')
 
     titleElement.textContent = 'Remove Mask Tool' // Update content
-    descElement.textContent = 'This tool helps you to remove entire Sunrooof Design from rectangular selection from the canvas.' // Clear any message
-    
+    descElement.textContent =
+        'This tool helps you to remove entire Sunrooof Design from rectangular selection from the canvas.' // Clear any message
+
     var state = removeMaskEnabled
     movingMask = false
     toggleAllOff()
@@ -707,7 +722,8 @@ function startDrawingMask() {
     const descElement = document.getElementById('desc')
 
     titleElement.textContent = 'Drawing Tool' // Update content
-    descElement.textContent = 'This Tool will help you in drawing Sunroof in the Canvas.' // Clear any message
+    descElement.textContent =
+        'This Tool will help you in drawing Sunroof in the Canvas.' // Clear any message
 
     var state = maskDrawingEnabled
     toggleAllOff()
