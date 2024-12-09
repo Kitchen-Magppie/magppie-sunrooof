@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pressedKey = key?.toLowerCase()
         switch (pressedKey) {
             case 'backspace':
-                removePoints()
+                removeMask()
                 break
             case 'r':
                 rotateMask()
