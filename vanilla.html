@@ -7,13 +7,33 @@
 
         <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script> -->
         <link rel="stylesheet" href="/vanilla/css/main.css" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
     </head>
     <body>
+        <div class="navbar">
+            <img src="/vanilla/assets/logo.png" alt="" />
+        </div>
         <div class="content-div">
             <section>
-                <h1></h1>
                 <br /><br />
                 <div id="unit-div">
+                    <div class="box">
+                        <div class="step-header">
+                            <i
+                                class="fa-solid fa-circle-info"
+                                style="margin-right: 0.5rem"
+                            ></i>
+                            <span class="step-title">Step 1</span>
+                        </div>
+                        <p class="step-description">
+                            Please select mm or inches then enter the numeric
+                            value. You can move cursor on canvas to measure the
+                            value in pixels. Then proceed to the next step.
+                        </p>
+                    </div>
                     <p id="prompt">
                         Enter the length of the line and click to draw:
                     </p>
@@ -23,7 +43,7 @@
                         onchange="selectUnitType()"
                     >
                         <option value="mm">mm</option>
-                        <option value="feet">feet and inches</option>
+                        <option value="feet">Feet and Inches</option>
                     </select>
                     <br />
                     <input
@@ -46,7 +66,11 @@
                             required
                         />
                     </div>
-                    <button onclick="startDrawing()">Start Drawing</button>
+                    <button onclick="startDrawing()">
+                        <i class="fa-solid fa-pen-nib"></i>
+
+                        Start Drawing
+                    </button>
                     <p id="unitValueDisplay"></p>
                     <button
                         id="final-unit"
@@ -58,6 +82,21 @@
                 </div>
 
                 <div id="other-tools" style="display: none">
+                    <div class="box">
+                        <div class="step-header">
+                            <i
+                                class="fa-solid fa-circle-info"
+                                style="margin-right: 0.5rem"
+                            ></i>
+                            <span class="step-title" id="title">Step 2</span>
+                        </div>
+                        <p class="step-description" id="desc">
+                            Please select a sunrooof window from dropdown. Then
+                            you can move the rectangular selection using mouse.
+                            Also you can use multiple tools from toolbox.
+                        </p>
+                    </div>
+                    <br />
                     <div id="draw-mask">
                         <select
                             id="design"
@@ -75,12 +114,43 @@
                             <option value="Minimalist">Minimalist</option>
                             <!-- Add Design Here -->
                         </select>
-                        <br /><br />
-                        <button id="mask_btn" onclick="startDrawingMask()">
-                            Draw SUNROOOF
+                        <div
+                            id="extra-tools"
+                            style="
+                                display: grid;
+                                grid-template-columns: repeat(2, 1fr);
+                                gap: 10px;
+                            "
+                        >
+                            <button id="mask_btn" onclick="startDrawingMask()">
+                                <i class="fa-solid fa-pen"></i> Draw SUNROOF
+                            </button>
+                            <button id="remove-unit" onclick="removePoints()">
+                                <i class="fa-solid fa-eraser"></i> Remove
+                                SUNROOF
+                            </button>
+
+                            <button id="remove-mask" onclick="removeMask()">
+                                <i class="fa-solid fa-mask"></i> Remove Design
+                            </button>
+                            <button id="ruler" onclick="toggleRuler()">
+                                <i class="fa-solid fa-ruler-combined"></i> Scale
+                                for Measurement
+                            </button>
+                        </div>
+                        <button id="download-canvas" onclick="downloadCanvas()">
+                            Proceed <i class="fa-solid fa-arrow-right"></i>
                         </button>
 
                         <button
+                            id="generate-invoice"
+                            onclick="generateInvoice()"
+                            style="display: none"
+                        >
+                            Generate Quote
+                        </button>
+
+                        <!-- <button
                             id="orientation_btn"
                             title="Orientation"
                             alt="Orientation"
@@ -88,7 +158,7 @@
                             style="display: none"
                         >
                             Orientation ||
-                        </button>
+                        </button> -->
 
                         <!-- <div style="display: flex; align-items: center">
               <input
@@ -122,40 +192,6 @@
                         </p>
 
                         <br /><br />
-                    </div>
-
-                    <div id="extra-tools">
-                        <button id="remove-unit" onclick="removePoints()">
-                            Remove SUNROOOF
-                        </button>
-
-                        <button id="remove-mask" onclick="removeMask()">
-                            Remove MASK
-                        </button>
-
-                        <br />
-                        <br />
-
-                        <button id="ruler" onclick="toggleRuler()">
-                            Scale for Measurement
-                        </button>
-
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-
-                        <button id="download-canvas" onclick="downloadCanvas()">
-                            Proceed
-                        </button>
-
-                        <button
-                            id="generate-invoice"
-                            onclick="generateInvoice()"
-                            style="display: none"
-                        >
-                            Generate Quote
-                        </button>
                     </div>
                 </div>
             </section>
