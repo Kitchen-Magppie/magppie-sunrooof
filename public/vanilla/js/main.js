@@ -92,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.ctrlKey) {
             switch (pressedKey) {
                 case 'd':
-                    removalEnabled = !removalEnabled
+                    removePoints()
+                    // removalEnabled = !removalEnabled
                     break
                 default:
                     break
@@ -134,7 +135,7 @@ function toggleAllOff() {
     removalEnabled = false
     removeMaskEnabled = false
     // movingMask = false
-    // rotateEnabled = false
+    rotateEnabled = false
     displayRuler = false
 }
 
@@ -284,6 +285,8 @@ function setup() {
 
 // Draw loop to continuously render the canvas
 function draw() {
+    // console.log('Rotate:', rotateEnabled)
+
     if (movingMask && originalPos && selectedMask > -1) {
         // removalPoints.forEach((point, index) => {
         //   if (
@@ -562,11 +565,13 @@ function mousePressed() {
                 mask.trueEndSet = false
             }
         })
+        rotateEnabled = false
+        movingMask = true
     }
 
     if (movingMask && selectedMask == -1) {
-        console.log(movingMask)
-        console.log(masks)
+        // console.log(movingMask)
+        // console.log(masks)
         masks.forEach((mask, maskIndex) => {
             if (
                 mouseX > mask.startX &&
@@ -623,7 +628,8 @@ function mousePressed() {
             }
         })
         // removalPoints.push({ x: mouseX, y: mouseY });
-        // removalEnabled = !removalEnabled;
+        removalEnabled = false
+        movingMask = true
     }
 
     if (displayRuler) {
@@ -643,6 +649,9 @@ function mousePressed() {
 
     if (removeMaskEnabled) {
         removeMaskAt(mouseX, mouseY)
+        toggleAllOff()
+        removeMaskEnabled = false
+        movingMask = true
     }
 }
 
