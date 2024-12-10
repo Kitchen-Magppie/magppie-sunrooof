@@ -51,7 +51,7 @@ export default function CmsRoutes() {
                 ),
             },
             {
-                path: 'proposed/old/layout',
+                path: 'proposed/new/layout',
                 element: (
                     <Suspense fallback={<PageProgress />}>
                         <ProposedLayoutOldView />
