@@ -73,7 +73,9 @@ function CustomerFormQuotationTable(props: TProps) {
                     Discount Amount
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                    ₹{calc?.discountAmount.toLocaleString("en-IN")}
+                    {/* ₹{calc?.discountAmount.toLocaleString("en-IN")} */}
+                    ₹{calc?.discountAmount ? Math.round(calc.discountAmount).toLocaleString("en-IN") : "0"}
+
                 </td>
             </tr>
             <tr>
@@ -95,7 +97,8 @@ function CustomerFormQuotationTable(props: TProps) {
                     Total
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                    ₹{calc?.totalAmount.toLocaleString("en-IN")}
+                ₹{calc?.totalAmount ? Math.round(calc.totalAmount).toLocaleString("en-IN") : "0"}
+                    {/* ₹{calc?.totalAmount.toLocaleString("en-IN")} */}
                 </td>
             </tr>
             <tr>
@@ -106,7 +109,8 @@ function CustomerFormQuotationTable(props: TProps) {
                     Tax @ 18%
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                    ₹{calc?.taxAmount.toLocaleString("en-IN")}
+                ₹{calc?.taxAmount ? Math.round(calc.taxAmount).toLocaleString("en-IN") : "0"}
+                    {/* ₹{calc?.taxAmount.toLocaleString("en-IN")} */}
                 </td>
             </tr>
             <tr className="font-bold">
@@ -117,7 +121,8 @@ function CustomerFormQuotationTable(props: TProps) {
                     Grand Total
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                    ₹{calc?.grandTotal.toLocaleString("en-IN")}
+                ₹{calc?.grandTotal ? Math.round(calc.grandTotal).toLocaleString("en-IN") : "0"}
+                    {/* ₹{calc?.grandTotal.toLocaleString("en-IN")} */}
                 </td>
             </tr>
         </tbody>
