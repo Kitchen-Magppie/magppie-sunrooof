@@ -84,7 +84,7 @@ export default function CustomerDashboard() {
                     </div>
                     <div >
                         <Link
-                            to='/cms/proposed/old/layout'
+                            to='/cms/proposed/new/layout'
                             className="flex items-center px-4 py-4 text-sm font-medium text-center text-white bg-indigo-700 rounded-full hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                         >
                             <MdOutlineDesignServices className="text-lg" />
