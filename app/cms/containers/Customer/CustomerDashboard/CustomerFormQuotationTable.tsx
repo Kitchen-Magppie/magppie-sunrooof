@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { _, TCustomerComponentDesign2DItem, TCustomerComponentQuotationItem } from "../../../../../types";
 import { CMS_QUOTATION_OPTIONS } from "../../../mocks";
+import { freightData } from "./freightData";
 
 
 function CustomerFormQuotationTable(props: TProps) {
@@ -9,6 +10,34 @@ function CustomerFormQuotationTable(props: TProps) {
         return QUOTATION_TABLE_DATA(item, quotation?.data?.discount)
         // NOTE: Please don't remove this props array dependency. It helps to re-render on live changes;
     }, [props])
+
+    const totalQuantity = props.item.data.reduce((total, item) => {
+        return total + item.entries.reduce((subTotal, entry) => subTotal + (entry.quantity || 0), 0);
+      }, 0);
+      
+    console.log(totalQuantity); 
+   
+    const selectedZone = props.quotation.data.zone;
+
+    console.log(selectedZone);
+
+    const getFreightCharges = (totalQuantity, selectedZone) => {
+        const zoneCharges = freightData[selectedZone];
+      
+        if (!zoneCharges) {
+          return "Freight charges not available for the given zone.";
+        }
+        for (const { range, charge } of zoneCharges) {
+          if (totalQuantity >= range[0] && totalQuantity <= range[1]) {
+            return charge;
+          }
+        }
+        return "Freight charges not available for the given quantity.";
+    };
+
+    const freightChargesFinal = getFreightCharges(totalQuantity, selectedZone);
+
+    console.log(freightChargesFinal);
 
     return (<table style={{ width: "100%" }}>
 
@@ -86,7 +115,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     Freight Charges
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                    ₹{freightCharges.toLocaleString()}
+                    ₹{freightChargesFinal.toLocaleString()}
                 </td>
             </tr>
             <tr className="font-bold bg-[#CFE1B9]">
