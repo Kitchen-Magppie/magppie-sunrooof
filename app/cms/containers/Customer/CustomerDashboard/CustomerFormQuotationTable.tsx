@@ -15,11 +15,8 @@ function CustomerFormQuotationTable(props: TProps) {
         return total + item.entries.reduce((subTotal, entry) => subTotal + (entry.quantity || 0), 0);
       }, 0);
       
-    console.log(totalQuantity); 
    
     const selectedZone = props.quotation.data.zone;
-
-    console.log(selectedZone);
 
     const getFreightCharges = (totalQuantity, selectedZone) => {
         const zoneCharges = freightData[selectedZone];
@@ -36,8 +33,6 @@ function CustomerFormQuotationTable(props: TProps) {
     };
 
     const freightChargesFinal = getFreightCharges(totalQuantity, selectedZone);
-
-    console.log(freightChargesFinal);
 
     return (<table style={{ width: "100%" }}>
 
@@ -83,7 +78,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     ₹{calc?.totalGrossAmount.toLocaleString("en-IN")}
                 </td>
             </tr>
-            <tr>
+            <tr className={`${calc.discount === 0 || !calc.discount ? 'hidden' : ''}`}>
                 <td
                     colSpan={6}
                     className="px-4 py-2 text-right border border-black"
@@ -94,7 +89,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     {calc.discount}%
                 </td>
             </tr>
-            <tr className="bg-[#CFE1B9]">
+            <tr className={`bg-[#CFE1B9] ${calc.discountAmount === 0 ? 'hidden' : ''}`}>
                 <td
                     colSpan={6}
                     className="px-4 py-2 text-right border border-black"
@@ -104,7 +99,6 @@ function CustomerFormQuotationTable(props: TProps) {
                 <td className="border border-black px-4 py-2 text-center">
                     {/* ₹{calc?.discountAmount.toLocaleString("en-IN")} */}
                     ₹{calc?.discountAmount ? Math.round(calc.discountAmount).toLocaleString("en-IN") : "0"}
-
                 </td>
             </tr>
             <tr>
@@ -150,7 +144,8 @@ function CustomerFormQuotationTable(props: TProps) {
                     Grand Total
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                ₹{calc?.grandTotal ? Math.round(calc.grandTotal).toLocaleString("en-IN") : "0"}
+                ₹{calc?.grandTotal || freightChargesFinal ? Math.round((calc?.grandTotal || 0) + freightChargesFinal).toLocaleString("en-IN") : "0"}
+                {/* ₹{calc?.grandTotal ? Math.round(calc.grandTotal).toLocaleString("en-IN") : "0"} */}
                     {/* ₹{calc?.grandTotal.toLocaleString("en-IN")} */}
                 </td>
             </tr>
@@ -163,7 +158,7 @@ function CustomerFormQuotationTable(props: TProps) {
 
 
 
-const freightCharges = 50000;
+// const freightCharges = 50000;
 
 function QuotationTableHeader() {
     return (<thead className="bg-[darkorange]">
@@ -241,8 +236,7 @@ const TO_TOTAL_GROSS_AMOUNT = (item: TCustomerComponentDesign2DItem, discount: n
 
     const discountAmount =
         totalGrossAmount * (discount / 100);
-    const totalAmount =
-        totalGrossAmount - discountAmount + freightCharges;
+    const totalAmount = totalGrossAmount - discountAmount;
     const taxAmount = totalAmount * (18 / 100);
     const grandTotal = totalAmount + taxAmount;
 
@@ -253,7 +247,6 @@ const TO_TOTAL_GROSS_AMOUNT = (item: TCustomerComponentDesign2DItem, discount: n
         discountAmount,
         totalAmount,
         grandTotal
-
     })
 }
 type TProps = {
