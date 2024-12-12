@@ -5,8 +5,7 @@ export const freightData = {
         { range: [25, 40], charge: 50000 },
         { range: [41, 60], charge: 65000 },
         { range: [61, 80], charge: 80000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
     'North India': [
         { range: [2, 14], charge: 50000 },
@@ -14,8 +13,7 @@ export const freightData = {
         { range: [25, 40], charge: 50000 },
         { range: [41, 60], charge: 65000 },
         { range: [61, 80], charge: 80000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
     'North-East India': [
         { range: [2, 14], charge: 50000 },
@@ -23,8 +21,7 @@ export const freightData = {
         { range: [25, 40], charge: 80000 },
         { range: [41, 60], charge: 100000 },
         { range: [61, 80], charge: 120000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
     'Central India': [
         { range: [2, 14], charge: 50000 },
@@ -32,8 +29,7 @@ export const freightData = {
         { range: [25, 40], charge: 80000 },
         { range: [41, 60], charge: 100000 },
         { range: [61, 80], charge: 120000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
     'East India': [
         { range: [2, 14], charge: 50000 },
@@ -41,8 +37,7 @@ export const freightData = {
         { range: [25, 40], charge: 80000 },
         { range: [41, 60], charge: 100000 },
         { range: [61, 80], charge: 120000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
     'West India': [
         { range: [2, 14], charge: 50000 },
@@ -50,8 +45,7 @@ export const freightData = {
         { range: [25, 40], charge: 80000 },
         { range: [41, 60], charge: 100000 },
         { range: [61, 80], charge: 120000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
     'South India': [
         { range: [2, 14], charge: 50000 },
@@ -59,7 +53,6 @@ export const freightData = {
         { range: [25, 40], charge: 80000 },
         { range: [41, 60], charge: 100000 },
         { range: [61, 80], charge: 120000 },
-        { range: [81, 999], charge: 'Talk to Mrinal' },
-        { range: [1000, Infinity], charge: 'Talk to Mrinal' },
+        { range: [81, 999], charge: '' },
     ],
 }
