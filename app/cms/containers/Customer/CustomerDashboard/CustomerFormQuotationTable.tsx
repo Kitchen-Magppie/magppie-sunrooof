@@ -11,24 +11,23 @@ function CustomerFormQuotationTable(props: TProps) {
         // NOTE: Please don't remove this props array dependency. It helps to re-render on live changes;
     }, [props])
 
-    const totalQuantity = props.item.data.reduce((total, item) => {
-        return total + item.entries.reduce((subTotal, entry) => subTotal + (entry.quantity || 0), 0);
+    const totalQuantity = props.item?.data?.reduce((total, item) => {
+        return total + item?.entries?.reduce((subTotal, entry) => subTotal + (Number(entry.quantity) || 0), 0);
     }, 0);
 
-    console.log(totalQuantity);
-    
+
     const selectedZone = props.quotation.data.zone;
 
     const getFreightCharges = (totalQuantity, selectedZone) => {
         const zoneCharges = freightData[selectedZone];
-      
+
         if (!zoneCharges) {
-          return "Freight charges not available for the given zone.";
+            return "Freight charges not available for the given zone.";
         }
         for (const { range, charge } of zoneCharges) {
-          if (totalQuantity >= range[0] && totalQuantity <= range[1]) {
-            return charge;
-          }
+            if (totalQuantity >= range[0] && totalQuantity <= range[1]) {
+                return charge;
+            }
         }
         return "Freight charges not available for the given quantity.";
     };
@@ -41,7 +40,7 @@ function CustomerFormQuotationTable(props: TProps) {
     console.log(freightChargesFinal);
 
     console.log(props.fCharges);
-    
+
     return (<table style={{ width: "100%" }}>
 
         <QuotationTableHeader />
@@ -117,7 +116,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     Freight Charges
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                {totalQuantity > 80 ? `₹${props.fCharges.toLocaleString("en-IN")}` : `₹${freightChargesFinal.toLocaleString("en-IN")}`}
+                    {totalQuantity > 80 ? `₹${props.fCharges.toLocaleString("en-IN")}` : `₹${freightChargesFinal.toLocaleString("en-IN")}`}
                 </td>
             </tr>
             <tr className="font-bold bg-[#CFE1B9]">
@@ -128,7 +127,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     Total
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                ₹{calc?.totalAmount ? Math.round(calc.totalAmount).toLocaleString("en-IN") : "0"}
+                    ₹{calc?.totalAmount ? Math.round(calc.totalAmount).toLocaleString("en-IN") : "0"}
                     {/* ₹{calc?.totalAmount.toLocaleString("en-IN")} */}
                 </td>
             </tr>
@@ -140,7 +139,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     Tax @ 18%
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                ₹{calc?.taxAmount ? Math.round(calc.taxAmount).toLocaleString("en-IN") : "0"}
+                    ₹{calc?.taxAmount ? Math.round(calc.taxAmount).toLocaleString("en-IN") : "0"}
                     {/* ₹{calc?.taxAmount.toLocaleString("en-IN")} */}
                 </td>
             </tr>
@@ -152,10 +151,10 @@ function CustomerFormQuotationTable(props: TProps) {
                     Grand Total
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                { totalQuantity > 80 ? formattedValueAbove80 : formattedValueBelow80}
+                    {totalQuantity > 80 ? formattedValueAbove80 : formattedValueBelow80}
                     {/* {totalQuantity > 80 ? `₹{calc?.grandTotal || freightChargesFinal ? Math.round((calc?.grandTotal || 0) + freightChargesFinal).toLocaleString("en-IN") : "0"}` : `₹{calc?.grandTotal || freightChargesFinal ? Math.round((calc?.grandTotal || 0) + freightChargesFinal).toLocaleString("en-IN") : "0"}`} */}
-                {/* ₹{calc?.grandTotal || freightChargesFinal ? Math.round((calc?.grandTotal || 0) + freightChargesFinal).toLocaleString("en-IN") : "0"} */}
-                {/* ₹{calc?.grandTotal ? Math.round(calc.grandTotal).toLocaleString("en-IN") : "0"} */}
+                    {/* ₹{calc?.grandTotal || freightChargesFinal ? Math.round((calc?.grandTotal || 0) + freightChargesFinal).toLocaleString("en-IN") : "0"} */}
+                    {/* ₹{calc?.grandTotal ? Math.round(calc.grandTotal).toLocaleString("en-IN") : "0"} */}
                     {/* ₹{calc?.grandTotal.toLocaleString("en-IN")} */}
                 </td>
             </tr>
@@ -236,7 +235,7 @@ const TO_TOTAL_GROSS_AMOUNT = (item: TCustomerComponentDesign2DItem, discount: n
     if (item && Array.isArray(item.data) && item.data.length > 0) {
         totalGrossAmount = item.data?.flatMap((x) => x.entries || []).reduce((acc, entry) => {
             const price = _.get(CMS_QUOTATION_OPTIONS, `${entry.design}.${entry.finish}`, 0);
-            const total = price * (entry.quantity || 1); // Calculate total for the entry
+            const total = price * (Number(entry.quantity) || 1); // Calculate total for the entry
             return acc + total; // Add to accumulator
         }, 0);
     }

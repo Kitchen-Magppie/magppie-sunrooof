@@ -42,7 +42,7 @@ function CustomerFormQuotationSection(props: TProps) {
 
     // Handle change event to update the state
     const handleFreightChargesChange = (e) => {
-      setFreightCharges(Number(e.target.value));
+        setFreightCharges(Number(e.target.value));
     };
     const {
         watch,
@@ -170,9 +170,9 @@ function CustomerFormQuotationSection(props: TProps) {
     console.log(twoDataItem)
 
     // console.log(item);
-    
-    const totalQuantity = twoDataItem.data.reduce((total, item) => {
-        return total + item.entries.reduce((subTotal, entry) => subTotal + (entry.quantity || 0), 0);
+
+    const totalQuantity = twoDataItem?.data?.reduce((total, item) => {
+        return total + item?.entries?.reduce((subTotal, entry) => subTotal + (Number(entry.quantity) || 0), 0);
     }, 0);
 
     console.log(totalQuantity);
@@ -287,7 +287,7 @@ function CustomerFormQuotationSection(props: TProps) {
                             Zone
                         </label>
                         <select
-                        defaultValue=""
+                            defaultValue=""
                             {...register(`components.${i}.data.zone`)}
                             className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         >
@@ -328,19 +328,19 @@ function CustomerFormQuotationSection(props: TProps) {
                         {renderErrorMessage(`components.${i}.data.discount`)}
                     </div>
                     {totalQuantity > 80 ? (
-                    <div className="bg-white">
-                    <label className="block text-sm font-medium text-gray-700">
-                        Custom Freight Charges
-                    </label>
-                    <input
-                        type="number"
-                        value={freightCharges}
-                        onChange={handleFreightChargesChange}
-                        // {...register(`components.${i}.data.fCharges`)}
-                        className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    />
-                    {/* {renderErrorMessage(`components.${i}.data.fCharges`)} */}
-                </div>
+                        <div className="bg-white">
+                            <label className="block text-sm font-medium text-gray-700">
+                                Custom Freight Charges
+                            </label>
+                            <input
+                                type="number"
+                                value={freightCharges}
+                                onChange={handleFreightChargesChange}
+                                // {...register(`components.${i}.data.fCharges`)}
+                                className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            />
+                            {/* {renderErrorMessage(`components.${i}.data.fCharges`)} */}
+                        </div>
                     ) : null}
                 </div>
 
@@ -542,7 +542,7 @@ function CustomerFormQuotationSection(props: TProps) {
                     <div className=" py-10  w-full" ref={invoiceRefPng}>
                         <div className="w-full">
                             <CustomerFormQuotationTable
-                            fCharges = {freightCharges}
+                                fCharges={freightCharges}
                                 item={twoDataItem}
                                 quotation={data}
                             />
@@ -613,7 +613,7 @@ function CustomerFormQuotationSection(props: TProps) {
                             {data.data.createdDate}
                         </p>
                         <CustomerFormQuotationTable
-                            fCharges = {freightCharges}
+                            fCharges={freightCharges}
                             item={twoDataItem}
                             quotation={data}
                         />
