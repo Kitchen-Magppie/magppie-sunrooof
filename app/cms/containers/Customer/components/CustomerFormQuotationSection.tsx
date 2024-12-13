@@ -38,12 +38,8 @@ function CustomerFormQuotationSection(props: TProps) {
     const { title, i, data } = props
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const StorageActions = useFirebaseStorageActions()
-    const [freightCharges, setFreightCharges] = useState(0); // Initialize with a default value
+    // const [freightCharges, setFreightCharges] = useState(0); // Initialize with a default value
 
-    // Handle change event to update the state
-    const handleFreightChargesChange = (e) => {
-        setFreightCharges(Number(e.target.value));
-    };
     const {
         watch,
         register,
@@ -84,6 +80,7 @@ function CustomerFormQuotationSection(props: TProps) {
         })
     }, [])
 
+
     // const TO_TOTAL_GROSS_AMOUNT = useCallback((arr: TCustomerComponentItem[]) => {
     //     const twoDataItem = arr.find(
     //         (item) => item.value === CustomerComponentEnum.TwoDDesign
@@ -122,7 +119,6 @@ function CustomerFormQuotationSection(props: TProps) {
                         path: `customers/${values.customerId}/${CustomerComponentEnum.Quotation}`,
 
                         onSuccess(e) {
-                            console.log(e)
                             setValue(`components.${i}.data.invoiceUrl`, e.link)
                             toast(
                                 'Image url has been generated. Press submit this to save the changes.'
@@ -167,15 +163,12 @@ function CustomerFormQuotationSection(props: TProps) {
     //     ? data?.data?.entries
     //     : [];
     // const hasMoreThenOne = entries?.length > 1;
-    console.log(twoDataItem)
 
     // console.log(item);
 
     const totalQuantity = twoDataItem?.data?.reduce((total, item) => {
         return total + item?.entries?.reduce((subTotal, entry) => subTotal + (Number(entry.quantity) || 0), 0);
     }, 0);
-
-    console.log(totalQuantity);
 
     return (
         <MinimalAccordion isExpanded title={title}>
@@ -334,9 +327,8 @@ function CustomerFormQuotationSection(props: TProps) {
                             </label>
                             <input
                                 type="number"
-                                value={freightCharges}
-                                onChange={handleFreightChargesChange}
-                                // {...register(`components.${i}.data.fCharges`)}
+                                // onChange={handleFreightChargesChange}
+                                {...register(`components.${i}.data.customFreightCharge`)}
                                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             />
                             {/* {renderErrorMessage(`components.${i}.data.fCharges`)} */}
@@ -542,7 +534,6 @@ function CustomerFormQuotationSection(props: TProps) {
                     <div className=" py-10  w-full" ref={invoiceRefPng}>
                         <div className="w-full">
                             <CustomerFormQuotationTable
-                                fCharges={freightCharges}
                                 item={twoDataItem}
                                 quotation={data}
                             />
@@ -613,7 +604,6 @@ function CustomerFormQuotationSection(props: TProps) {
                             {data.data.createdDate}
                         </p>
                         <CustomerFormQuotationTable
-                            fCharges={freightCharges}
                             item={twoDataItem}
                             quotation={data}
                         />

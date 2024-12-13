@@ -176,7 +176,13 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                     <div className="grid grid-cols-2 gap-2 mb-2 ">
 
                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM?.map((row, fieldIndex) => {
-                                            const { value, field, label, placeholder, lock } = row
+                                            const {
+                                                value,
+                                                field,
+                                                label,
+                                                placeholder,
+                                                // lock
+                                            } = row
                                             const proposedOptions = proposedLayouts?.filter(({ customerId }) => isCreateAction ? true : customerId === values.customerId)
                                             const options = DESIGN_2D_SELECT_OPTION(
                                                 value,
@@ -191,7 +197,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                         <MinimalDropdown
                                                             defaultValue={defaultValue}
                                                             placeholder={label}
-                                                            isDisabled={(lock && !!defaultValue?.value?.length)}
+                                                            // isDisabled={(lock && !!defaultValue?.value?.length)}
                                                             options={options}
                                                             onChange={(e) => {
                                                                 setValue(`components.${index}.data.${j}.entries.${k}.${value}`, e.value)
@@ -202,7 +208,8 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                     </div>
 
                                                 default: {
-                                                    const disabled = lock && !!(value === 'quantity' ? Number(entry[value]) > 0 : `${entry[value]}`?.length)
+                                                    // const disabled = lock && !!(value === 'quantity' ? Number(entry[value]) > 0 : `${entry[value]}`?.length)
+                                                    const disabled = false
                                                     return <div
                                                         className="bg-white"
                                                         key={`entry-${index}-${fieldIndex}`}
@@ -238,17 +245,18 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                         <div className="grid grid-cols-2 gap-2">
                             {CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS?.filter(
                                 (item) => item.field === "image"
-                            )?.map((item, j) => {
+                            )?.map((item, k) => {
                                 const value = `${_.get(data, `${item.value}`, '')}`;
                                 const items = value?.length ? [value] : [];
                                 return (
-                                    <div key={j}>
+                                    <div key={k}>
                                         <ImageInput
                                             label={item.label}
                                             key={j}
                                             path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
                                             values={items as string[]}
                                             onSuccess={(e) => {
+                                                console.log(e)
                                                 setValue(
                                                     `components.${index}.data.${j}.${item.value}`,
                                                     e[0]

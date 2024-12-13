@@ -5,6 +5,7 @@ import { freightData } from "./freightData";
 
 
 function CustomerFormQuotationTable(props: TProps) {
+    const freightCharges = Number(props.quotation.data.customFreightCharge) || 0
     const { rows, calc } = useMemo(() => {
         const { item, quotation } = props;
         return QUOTATION_TABLE_DATA(item, quotation?.data?.discount)
@@ -34,12 +35,12 @@ function CustomerFormQuotationTable(props: TProps) {
 
     const freightChargesFinal = getFreightCharges(totalQuantity, selectedZone);
 
-    const formattedValueAbove80 = `₹${Math.round((calc?.grandTotal || 0) + (props.fCharges || 0)).toLocaleString("en-IN")}`;
+    const formattedValueAbove80 = `₹${Math.round((calc?.grandTotal || 0) + (freightCharges || 0)).toLocaleString("en-IN")}`;
     const formattedValueBelow80 = `₹${Math.round((calc?.grandTotal || 0) + (freightChargesFinal || 0)).toLocaleString("en-IN")}`;
 
-    console.log(freightChargesFinal);
+    // console.log(freightChargesFinal);
 
-    console.log(props.fCharges);
+    // console.log(props.fCharges);
 
     return (<table style={{ width: "100%" }}>
 
@@ -116,7 +117,7 @@ function CustomerFormQuotationTable(props: TProps) {
                     Freight Charges
                 </td>
                 <td className="border border-black px-4 py-2 text-center">
-                    {totalQuantity > 80 ? `₹${props.fCharges.toLocaleString("en-IN")}` : `₹${freightChargesFinal.toLocaleString("en-IN")}`}
+                    {totalQuantity > 80 ? `₹${freightCharges.toLocaleString("en-IN")}` : `₹${freightChargesFinal.toLocaleString("en-IN")}`}
                 </td>
             </tr>
             <tr className="font-bold bg-[#CFE1B9]">
@@ -261,5 +262,4 @@ const TO_TOTAL_GROSS_AMOUNT = (item: TCustomerComponentDesign2DItem, discount: n
 type TProps = {
     quotation: TCustomerComponentQuotationItem
     item: TCustomerComponentDesign2DItem
-    fCharges: number
 }

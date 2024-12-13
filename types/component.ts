@@ -44,6 +44,7 @@ export type TCustomerComponentQuotationItem = {
         city: string
         discount: number
         invoiceUrl: string,
+        customFreightCharge: string,
         entries: TCustomerComponentQuotationEntryItem[]
     }
 }
