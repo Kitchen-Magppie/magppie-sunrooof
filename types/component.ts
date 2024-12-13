@@ -208,7 +208,8 @@ const customerComponentQuotationItemSchema = yup.object().shape({
             email: yup.string().nullable(),
             mobile: yup.string().required('Mobile field is required'),
             createdDate: yup.string().required(),
-            salutation: yup.string().required('Salutation field is required'),
+            salutation: yup.string(),
+            // .required('Salutation field is required')
             address: yup.string().nullable(),
             zone: yup.string().nullable(),
             city: yup.string().required('City field is required'),
