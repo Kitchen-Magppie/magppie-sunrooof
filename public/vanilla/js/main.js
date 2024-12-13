@@ -86,12 +86,32 @@ function selectUnitType() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('keydown', function (event) {
-        if (['R', 'r']?.includes(event.key)) {
-            rotateMask()
-        }
-        if (event.key == 'M' || event.key == 'm') {
-            startDrawingMask()
+    document.addEventListener('keydown', (e) => {
+        const { key } = e
+        const pressedKey = key?.toLowerCase()
+        if (e.ctrlKey) {
+            switch (pressedKey) {
+                case 'd':
+                    removePoints()
+                    // removalEnabled = !removalEnabled
+                    break
+                default:
+                    break
+            }
+        } else {
+            switch (pressedKey) {
+                case 'backspace':
+                    removeMask()
+                    break
+                case 'r':
+                    rotateMask()
+                    break
+                case 'm':
+                    startDrawingMask()
+                    break
+                default:
+                    break
+            }
         }
     })
 })
@@ -115,7 +135,7 @@ function toggleAllOff() {
     removalEnabled = false
     removeMaskEnabled = false
     // movingMask = false
-    // rotateEnabled = false
+    rotateEnabled = false
     displayRuler = false
 }
 
@@ -135,6 +155,12 @@ function rotateMask() {
 }
 
 function toggleRuler() {
+    const titleElement = document.getElementById('title')
+    const descElement = document.getElementById('desc')
+
+    titleElement.textContent = 'Scale for Measurement' // Update content
+    descElement.textContent =
+        'This tool helps you to measure the block of canvas horizontally or vertically.' // Clear any message
     var state = displayRuler
     toggleAllOff()
     displayRuler = !state
@@ -162,6 +188,12 @@ function finaliseUnit() {
 
 // Toggle removal mode and update button color
 function removePoints() {
+    const titleElement = document.getElementById('title')
+    const descElement = document.getElementById('desc')
+
+    titleElement.textContent = 'Remove Sunrooof Tool' // Update content
+    descElement.textContent =
+        'This tool helps you to remove a sunrooof from rectangular selection from the canvas.' // Clear any message
     var state = removalEnabled
     toggleAllOff()
     removalEnabled = !state
@@ -169,20 +201,20 @@ function removePoints() {
 
 // Preload the background image from local storage
 function preload() {
-    const imageData = localStorage.getItem('CUSTOMER_IMAGE');
+    const imageData = localStorage.getItem('CUSTOMER_IMAGE')
     if (imageData) {
         // Load the background image
         bgImage = loadImage(
             imageData,
             () => {
-                console.log('Background image loaded successfully.');
+                console.log('Background image loaded successfully.')
             },
             (err) => {
-                console.error('Failed to load background image:', err);
+                console.error('Failed to load background image:', err)
             }
-        );
+        )
     } else {
-        console.error('Image data or dimensions not found in localStorage.');
+        console.error('Image data or dimensions not found in localStorage.')
     }
 
     images = [
@@ -209,41 +241,41 @@ function preload() {
 // Setup the canvas and display client name
 function setup() {
     if (!bgImage) {
-        console.error('Background image is not loaded.');
-        return;
+        console.error('Background image is not loaded.')
+        return
     }
 
     // Handle Device Pixel Ratio (DPR)
-    const devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2)
     // console.log(`Device Pixel Ratio (capped): ${devicePixelRatio}`);
 
-    imgWidth = bgImage.width / devicePixelRatio;
-    imgHeight = bgImage.height / devicePixelRatio;
+    imgWidth = bgImage.width / devicePixelRatio
+    imgHeight = bgImage.height / devicePixelRatio
 
-    pixelDensity(devicePixelRatio);
-    console.log('Pixel density set to ', devicePixelRatio);
+    pixelDensity(devicePixelRatio)
+    console.log('Pixel density set to ', devicePixelRatio)
 
-    const canvasWidth = imgWidth;
-    const canvasHeight = imgHeight;
+    const canvasWidth = imgWidth
+    const canvasHeight = imgHeight
 
     // Create the canvas with the original image dimensions
-    let myCanvas = createCanvas(canvasWidth, canvasHeight);
-    myCanvas.parent('canvas-div');
+    let myCanvas = createCanvas(canvasWidth, canvasHeight)
+    myCanvas.parent('canvas-div')
 
     // **Access the 2D context**
-    const context = drawingContext;
+    const context = drawingContext
     if (!context) {
-        throw new Error('Failed to get p5.js canvas 2D context.');
+        throw new Error('Failed to get p5.js canvas 2D context.')
     }
 
     // **Scale the context to account for device pixel ratio**
-    context.scale(devicePixelRatio, devicePixelRatio);
-    console.log('Canvas context scaled by device pixel ratio.');
+    context.scale(devicePixelRatio, devicePixelRatio)
+    console.log('Canvas context scaled by device pixel ratio.')
 
     // **Disable image smoothing for sharper edges**
-    context.imageSmoothingEnabled = false;
-    context.imageSmoothingQuality = 'high';
-    console.log('Image smoothing disabled for sharper rendering.');
+    context.imageSmoothingEnabled = false
+    context.imageSmoothingQuality = 'high'
+    console.log('Image smoothing disabled for sharper rendering.')
 
     // Optional: Scale the canvas context for DPR if needed
     // Note: p5.js handles DPR internally, but if you have custom scaling, manage it here.
@@ -253,6 +285,8 @@ function setup() {
 
 // Draw loop to continuously render the canvas
 function draw() {
+    // console.log('Rotate:', rotateEnabled)
+
     if (movingMask && originalPos && selectedMask > -1) {
         // removalPoints.forEach((point, index) => {
         //   if (
@@ -428,20 +462,20 @@ function draw() {
             text(
                 'Distance: ' + distance,
                 rulerOrigin.x +
-                (dx / 2) * (mouseX > rulerOrigin.x ? 1 : -1) -
-                50,
+                    (dx / 2) * (mouseX > rulerOrigin.x ? 1 : -1) -
+                    50,
                 10 +
-                rulerOrigin.y +
-                (dy / 2) * (mouseY > rulerOrigin.y ? 1 : -1)
+                    rulerOrigin.y +
+                    (dy / 2) * (mouseY > rulerOrigin.y ? 1 : -1)
             )
         }
     }
 
     document.getElementById('remove-unit').style.backgroundColor =
-        removalEnabled ? '#4e685a' : '#6b8a7a'
+        removalEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('remove-mask').style.backgroundColor =
-        removeMaskEnabled ? '#4e685a' : '#6b8a7a'
+        removeMaskEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('move_mask').style.backgroundColor = movingMask
         ? '#4e685a'
@@ -452,11 +486,11 @@ function draw() {
         : '#6b8a7a'
 
     document.getElementById('mask_btn').style.backgroundColor =
-        maskDrawingEnabled ? '#4e685a' : '#6b8a7a'
+        maskDrawingEnabled ? '#3730A3' : '#4338CA'
 
     document.getElementById('ruler').style.backgroundColor = displayRuler
-        ? '#4e685a'
-        : '#6b8a7a'
+        ? '#3730A3'
+        : '#4338CA'
 }
 
 // Start drawing the initial line for unit calculation
@@ -531,11 +565,13 @@ function mousePressed() {
                 mask.trueEndSet = false
             }
         })
+        rotateEnabled = false
+        movingMask = true
     }
 
     if (movingMask && selectedMask == -1) {
-        console.log(movingMask)
-        console.log(masks)
+        // console.log(movingMask)
+        // console.log(masks)
         masks.forEach((mask, maskIndex) => {
             if (
                 mouseX > mask.startX &&
@@ -592,7 +628,8 @@ function mousePressed() {
             }
         })
         // removalPoints.push({ x: mouseX, y: mouseY });
-        // removalEnabled = !removalEnabled;
+        removalEnabled = false
+        movingMask = true
     }
 
     if (displayRuler) {
@@ -612,10 +649,20 @@ function mousePressed() {
 
     if (removeMaskEnabled) {
         removeMaskAt(mouseX, mouseY)
+        toggleAllOff()
+        removeMaskEnabled = false
+        movingMask = true
     }
 }
 
 function removeMask() {
+    const titleElement = document.getElementById('title')
+    const descElement = document.getElementById('desc')
+
+    titleElement.textContent = 'Remove Mask Tool' // Update content
+    descElement.textContent =
+        'This tool helps you to remove entire Sunrooof Design from rectangular selection from the canvas.' // Clear any message
+
     var state = removeMaskEnabled
     movingMask = false
     toggleAllOff()
@@ -680,6 +727,13 @@ function calculateUnitValue() {
 
 // Start drawing the mask rectangle
 function startDrawingMask() {
+    const titleElement = document.getElementById('title')
+    const descElement = document.getElementById('desc')
+
+    titleElement.textContent = 'Drawing Tool' // Update content
+    descElement.textContent =
+        'This Tool will help you in drawing Sunroof in the Canvas.' // Clear any message
+
     var state = maskDrawingEnabled
     toggleAllOff()
     if (state) {
@@ -808,22 +862,22 @@ function drawMaskGrid(
     //   var xi = 0;
     //   var yi = 0;
 
-    for (let x = minX; x < maxX;) {
-        for (let y = minY; y < maxY;) {
+    for (let x = minX; x < maxX; ) {
+        for (let y = minY; y < maxY; ) {
             let flag = true
             if (index >= 0) {
                 removalPoints[index].forEach((point) => {
                     if (
                         x < point.x &&
                         x +
-                        smallRectWidth * !orient +
-                        smallRectHeight * orient >
-                        point.x &&
+                            smallRectWidth * !orient +
+                            smallRectHeight * orient >
+                            point.x &&
                         y < point.y &&
                         y +
-                        smallRectHeight * !orient +
-                        smallRectWidth * orient >
-                        point.y
+                            smallRectHeight * !orient +
+                            smallRectWidth * orient >
+                            point.y
                     ) {
                         flag = false
                         // if (endset && grids.length > index) {
@@ -835,9 +889,9 @@ function drawMaskGrid(
             }
             if (
                 x + smallRectWidth * !orient + smallRectHeight * orient <=
-                maxX &&
+                    maxX &&
                 y + smallRectWidth * orient + smallRectHeight * !orient <=
-                maxY &&
+                    maxY &&
                 flag
             ) {
                 unitsCount[invMap[design]] += 1 + 1 * !design
@@ -1122,22 +1176,22 @@ function drawRectGrid(startX, startY, endX, endY, design, orient, index) {
 
     var xi = 0
     var yi = 0
-    for (let x = minX; x < maxX;) {
-        for (let y = minY; y < maxY;) {
+    for (let x = minX; x < maxX; ) {
+        for (let y = minY; y < maxY; ) {
             let flag = true
             if (index >= 0) {
                 removalPoints[index].forEach((point) => {
                     if (
                         x < point.x &&
                         x +
-                        smallRectWidth * !orient +
-                        smallRectHeight * orient >
-                        point.x &&
+                            smallRectWidth * !orient +
+                            smallRectHeight * orient >
+                            point.x &&
                         y < point.y &&
                         y +
-                        smallRectHeight * !orient +
-                        smallRectWidth * orient >
-                        point.y
+                            smallRectHeight * !orient +
+                            smallRectWidth * orient >
+                            point.y
                     ) {
                         flag = false
                         return
@@ -1146,9 +1200,9 @@ function drawRectGrid(startX, startY, endX, endY, design, orient, index) {
             }
             if (
                 x + smallRectWidth * !orient + smallRectHeight * orient <=
-                maxX &&
+                    maxX &&
                 y + smallRectWidth * orient + smallRectHeight * !orient <=
-                maxY &&
+                    maxY &&
                 flag
             ) {
                 // unitsCount[invMap[design]] += 1 + 1 * !design;

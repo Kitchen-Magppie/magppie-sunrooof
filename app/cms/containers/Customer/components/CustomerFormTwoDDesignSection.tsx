@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
 import { useCallback, useMemo, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+// import { LazyLoadImage } from "react-lazy-load-image-component";
 import { IoIosRemoveCircleOutline } from "react-icons/io";
 //====================================================================
 
@@ -13,6 +13,7 @@ import {
     TCustomerItem
 } from "../../../../../types";
 import {
+    FieldCautation,
     //  FieldCautation,
     MinimalAccordion,
     MinimalDropdown
@@ -20,10 +21,12 @@ import {
 import {
     CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM,
     CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS,
+    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM,
+    INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
     // INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM
 } from "../../../mocks";
 import { useAppSelector } from "../../../../../redux";
-import { CustomConfirmationDialog } from "../../../../../components";
+import { CustomConfirmationDialog, ImageInput } from "../../../../../components";
 
 
 
@@ -65,14 +68,14 @@ function CustomerFormTwoDDesignSection(props: TProps) {
     return (<div>
         <MinimalAccordion isExpanded title={title}>
             <div>
-                {/* <FieldCautation
+                <FieldCautation
                     onClickAdd={() => {
                         setValue(`components.${index}.data`, [
                             ...item.data,
                             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
                         ]);
                     }}
-                /> */}
+                />
                 {item.data?.map((data, j) => {
                     const hasMoreThenOne = item?.data?.length > 1
                     const layouts = proposedLayouts?.filter(((layout) => [values.id, values.customerId]?.includes(layout.customerId)))?.map((item) => ({
@@ -131,20 +134,19 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                             </div>
                         </div>
                         <div className="border rounded-lg border-gray-300 p-2 ">
-
                             <div className="text-lg font-medium text-indigo-800 dark:text-gray-300 flex  justify-between align-middle flex-col">
                                 Window Sunrooof
-                                {/* <FieldCautation
+                                <FieldCautation
                                     label=" Sunrooof Window"
                                     onClickAdd={() => {
-                                        const entries = currentData.entries || []
+                                        const entries = data.entries || []
                                         setValue(`components.${index}.data.${j}.entries`, [
                                             ...entries,
                                             INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM
 
                                         ])
                                     }}
-                                /> */}
+                                />
                                 {renderErrorMessage(`components.${index}.data.${j}.entries`)}
 
 
@@ -155,7 +157,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                     <div className="text-gray-400 italic text-sm flex justify-between">
                                         #{j + 1}.{k + 1}
                                         <div className="py-1">
-                                            {/* <IoIosRemoveCircleOutline
+                                            <IoIosRemoveCircleOutline
                                                 className={
                                                     entryLength > 1
                                                         ? "text-red-500 cursor-pointer hover:text-red-800"
@@ -168,13 +170,19 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                             item.data.filter((_, m) => m !== j)
                                                         );
                                                 }}
-                                            /> */}
+                                            />
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-2 mb-2 ">
 
                                         {CUSTOMER_COMPONENT_2D_DESIGN_FIELD_ENTRY_ITEM?.map((row, fieldIndex) => {
-                                            const { value, field, label, placeholder, lock } = row
+                                            const {
+                                                value,
+                                                field,
+                                                label,
+                                                placeholder,
+                                                // lock
+                                            } = row
                                             const proposedOptions = proposedLayouts?.filter(({ customerId }) => isCreateAction ? true : customerId === values.customerId)
                                             const options = DESIGN_2D_SELECT_OPTION(
                                                 value,
@@ -189,7 +197,7 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                         <MinimalDropdown
                                                             defaultValue={defaultValue}
                                                             placeholder={label}
-                                                            isDisabled={(lock && !!defaultValue?.value?.length)}
+                                                            // isDisabled={(lock && !!defaultValue?.value?.length)}
                                                             options={options}
                                                             onChange={(e) => {
                                                                 setValue(`components.${index}.data.${j}.entries.${k}.${value}`, e.value)
@@ -200,7 +208,8 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                                     </div>
 
                                                 default: {
-                                                    const disabled = lock && !!(value === 'quantity' ? Number(entry[value]) > 0 : `${entry[value]}`?.length)
+                                                    // const disabled = lock && !!(value === 'quantity' ? Number(entry[value]) > 0 : `${entry[value]}`?.length)
+                                                    const disabled = false
                                                     return <div
                                                         className="bg-white"
                                                         key={`entry-${index}-${fieldIndex}`}
@@ -225,22 +234,48 @@ function CustomerFormTwoDDesignSection(props: TProps) {
                                 </div>
                             })}
                         </div>
-                        <div className="grid grid-cols-2 gap-5 my-5">
+                        {/* <div className="grid grid-cols-2 gap-5 my-5">
 
                             {_.filter(CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS, { field: 'image' })?.map((item, j) => {
                                 return <div key={j} className="border py-1 rounded-sm">
                                     <LazyLoadImage src={`${_.get(data, item.value, '')}`} key={j} />
                                 </div>
                             })}
+                        </div> */}
+                        <div className="grid grid-cols-2 gap-2">
+                            {CUSTOMER_COMPONENT_2D_DESIGN_LAYOUT_FIELD_OPTIONS?.filter(
+                                (item) => item.field === "image"
+                            )?.map((item, k) => {
+                                const value = `${_.get(data, `${item.value}`, '')}`;
+                                const items = value?.length ? [value] : [];
+                                return (
+                                    <div key={k}>
+                                        <ImageInput
+                                            label={item.label}
+                                            key={j}
+                                            path={`/customers/${values.customerId}/${CustomerComponentEnum.TwoDDesign}`}
+                                            values={items as string[]}
+                                            onSuccess={(e) => {
+                                                console.log(e)
+                                                setValue(
+                                                    `components.${index}.data.${j}.${item.value}`,
+                                                    e[0]
+                                                );
+                                            }}
+                                        />
+                                        {renderErrorMessage(
+                                            `components.${index}.data.${j}.${item.value}`
+                                        )}
+                                    </div>
+                                );
+                            })}
                         </div>
-
                     </div>
                     );
                 })}
             </div>
         </MinimalAccordion>
         {renderCustomDeleteConfirmationDialog}
-
     </div>
     );
 }

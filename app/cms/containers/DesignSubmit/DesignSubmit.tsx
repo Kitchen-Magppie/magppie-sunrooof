@@ -169,13 +169,13 @@ export default function DesignSubmit() {
                 <button
                     type="button"
                     onClick={() => {
-                        navigate('/cms/proposed/old/layout')
+                        navigate('/cms/proposed/new/layout')
                     }}
                     className={`text-white mt-10  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none ${isLoading ? 'bg-blue-300 ' : 'bg-blue-700 hover:bg-blue-800'}`}
                     disabled={isLoading}
 
                 >
-                    Back to Old Design Generator
+                    Back to Design Generator
                 </button>
                 <button
                     type="button"
