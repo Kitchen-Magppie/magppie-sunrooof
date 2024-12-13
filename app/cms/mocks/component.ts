@@ -95,6 +95,7 @@ export const INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM: TCustomerComponentDesign2DD
     rightImage: '',
     floor: '',
     quantity: 0,
+    entries: [INIT_CUSTOMER_COMPONENT_2D_DESIGN_ENTRY_ITEM]
     // invoiceUrl: '',
     // designBy: '',
     // approvedBy: '',

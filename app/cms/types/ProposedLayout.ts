@@ -3,7 +3,7 @@ export interface IProposedLayoutEntryItem {
     area: string,
     floor: string,
     design: string,
-    quantity: number,
+    quantity: string,
     // proposedLayoutId?: string
 }
 
