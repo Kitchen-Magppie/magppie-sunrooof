@@ -39,7 +39,6 @@ function CustomerFormQuotationSection(props: TProps) {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const StorageActions = useFirebaseStorageActions()
     // const [freightCharges, setFreightCharges] = useState(0); // Initialize with a default value
-
     const {
         watch,
         register,
@@ -49,6 +48,7 @@ function CustomerFormQuotationSection(props: TProps) {
     const values = watch() as TCustomerItem
     // console.log(values)
 
+    const freightCharges = Number(_.get(values.components, `${i}.data.customFreightCharge`, 0) || 0)
     const invoiceRef = useRef(null)
     const invoiceRefPng = useRef(null)
     const downloadInvoice = useCallback(() => {
@@ -185,7 +185,7 @@ function CustomerFormQuotationSection(props: TProps) {
                             )}
                             options={salutations}
                             onChange={(e) => {
-                                console.log(e)
+                                // console.log(e)
                                 setValue(
                                     `components.${i}.data.salutation`,
                                     e.value
@@ -331,7 +331,10 @@ function CustomerFormQuotationSection(props: TProps) {
                                 {...register(`components.${i}.data.customFreightCharge`)}
                                 className="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             />
-                            {/* {renderErrorMessage(`components.${i}.data.fCharges`)} */}
+                            {renderErrorMessage(`components.${i}.data.customFreightCharge`)}
+                            <p className="text-red-500 text-xs mt-1">
+                                {freightCharges <= 0 ? '*Add Freight Charges to Calculate Total' : ''}
+                            </p>
                         </div>
                     ) : null}
                 </div>
