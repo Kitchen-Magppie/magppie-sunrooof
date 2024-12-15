@@ -4,7 +4,6 @@ import CmsRoutes from '../app/cms/routes/routes'
 import QuotationPage from '../app/QuotationPage/QuotationPage'
 import QuotationHome from '../app/QuotationGenerator/Containers/Home'
 import QuotationGenerator from '../app/QuotationGenerator/Containers/QuotationGenerator'
-import { BrowserTabTitle } from '../components'
 
 export default function Routes() {
     const CMS_ROUTES = CmsRoutes()
@@ -19,9 +18,7 @@ export default function Routes() {
                 },
                 {
                     path: '/quotation/:id',
-                    element: <BrowserTabTitle message="Demo Message">
-                        <QuotationPage />
-                    </BrowserTabTitle>,
+                    element: <QuotationPage />
                 },
             ],
         },
