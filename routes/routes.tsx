@@ -5,7 +5,7 @@ import QuotationPage from '../app/QuotationPage/QuotationPage'
 import QuotationHome from '../app/QuotationGenerator/Containers/Home'
 import QuotationGenerator from '../app/QuotationGenerator/Containers/QuotationGenerator'
 import { BrowserTabTitle } from '../components'
-// import QuotationCanvas from '../app/QuotationGenerator/Containers/QuotationCanvas'
+
 export default function Routes() {
     const CMS_ROUTES = CmsRoutes()
     return useRoutes([
