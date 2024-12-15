@@ -1,5 +1,7 @@
 import { ReactNode, useEffect } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async"; export function BrowserTabTitle(props: IProps) {
+import { Helmet, HelmetProvider } from "react-helmet-async";
+
+export function BrowserTabTitle(props: IProps) {
     useEffect(() => {
         document.title = props.message
     }, [props.message])
@@ -12,5 +14,6 @@ import { Helmet, HelmetProvider } from "react-helmet-async"; export function Bro
         {props.children}
     </HelmetProvider>);
 }
+
 interface IProps { message: string, children?: ReactNode }
 
