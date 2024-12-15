@@ -19,7 +19,7 @@ import Hero from './Hero'
 import ImageComparison from './Image'
 
 import { CustomerComponentEnum } from '../../types'
-import { PageProgress } from '../../components'
+import { BrowserTabTitle, PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
 
 
@@ -28,23 +28,25 @@ export default function QuotationPage() {
     const { pathname } = useLocation()
 
     const params = useParams()
+    const item = CMS_NAV_ITEMS?.find((row) => row.url === pathname)
+
     useEffect(() => {
 
         if (!loading) {
             if ('id' in params) {
                 document.title = `Quotation for ${components.name}`
             } else {
-                const item = CMS_NAV_ITEMS?.find((row) => row.url === pathname)
                 document.title = `${item?.title?.length ? item?.title : 'Home'} | Sunrooof`
             }
         }
 
-    }, [components, loading, params, pathname])
+    }, [components, item?.title, loading, params, pathname])
     if (loading) {
         return <PageProgress />
     }
     return (
         <div className="overflow-x-hidden">
+            <BrowserTabTitle message={'id' in params ? `Quotation for ${components.name}` : `${item?.title?.length ? item?.title : 'Home'} | Sunrooof`} />
             <Navbar />
             <Hero name={components.name} item={components[CustomerComponentEnum.Quotation]} />
             <About />

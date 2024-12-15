@@ -8,7 +8,7 @@ import CustomConfirmationDialog from "./CustomConfirmationDialog"
 import CustomSiteModal from "./CustomSiteModal";
 import SpecialCharacterDom from "./SpecialCharacterDom";
 import CustomAutocompleteExample from "./CustomAutocompleteExample";
-
+export * from "./BrowserTabTitle"
 export {
     CustomAutocompleteExample,
     SpecialCharacterDom,
