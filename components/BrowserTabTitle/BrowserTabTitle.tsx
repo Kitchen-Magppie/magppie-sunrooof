@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 
 export function BrowserTabTitle(props: IProps) {
     useEffect(() => {
