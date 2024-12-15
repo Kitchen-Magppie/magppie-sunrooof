@@ -53,3 +53,4 @@ txts/
 
 /txts
 #deploy again
+.yarn/install-state.gz

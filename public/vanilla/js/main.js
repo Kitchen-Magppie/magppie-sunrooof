@@ -848,6 +848,7 @@ function drawMaskGrid(
     const minY = Math.min(startY, endY)
     const maxX = Math.max(startX, endX)
     const maxY = Math.max(startY, endY)
+    // console.log(maxX, maxY)
 
     const smallRectWidth = width_height[design].width * unitValue
     const smallRectHeight = width_height[design].height * unitValue

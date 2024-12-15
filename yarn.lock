@@ -2074,20 +2074,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/p5@npm:1.7.0":
-  version: 1.7.0
-  resolution: "@types/p5@npm:1.7.0"
-  checksum: 10c0/163f11228f968ea124738f55f0749e091e5148baa55a4e483377125ec79a8c596b8ce48dc584ad3efd635b49ce8e4e5dacf421667e53eadbab8659a15e6e14c6
-  languageName: node
-  linkType: hard
-
-"@types/p5@npm:^1":
-  version: 1.7.6
-  resolution: "@types/p5@npm:1.7.6"
-  checksum: 10c0/92f53b7666a346a70c144fd72e09d06b9ef54a099098629717d0a70043d2ce96f1e3f49e6d36c7afa7f27ceaa4b833cca50d9d33878d201fce7105658ace0a6e
-  languageName: node
-  linkType: hard
-
 "@types/parse-json@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/parse-json@npm:4.0.2"
@@ -2115,6 +2101,15 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: 10c0/6c90d2ed72c5a0e440d2c75d99287e4b5df3e7b011838cdc03ae5cd518ab52164d86990e73246b9d812eaf02ec351d74e3b4f5bd325bf341e13bf980392fd53b
+  languageName: node
+  linkType: hard
+
+"@types/react-helmet@npm:^6":
+  version: 6.1.11
+  resolution: "@types/react-helmet@npm:6.1.11"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/f7b3bb2151d992a108ae46fed876fb9c8119108397d9a01d150c5642782997542c8b3c52e742b56e8689b7dbfa62ca9cfc76aa7e05dec4e60c652f7ef53fa783
   languageName: node
   linkType: hard
 
@@ -4100,6 +4095,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"invariant@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "invariant@npm:2.2.4"
+  dependencies:
+    loose-envify: "npm:^1.0.0"
+  checksum: 10c0/5af133a917c0bcf65e84e7f23e779e7abc1cd49cb7fdc62d00d1de74b0d8c1b5ee74ac7766099fb3be1b05b26dfc67bab76a17030d2fe7ea2eef867434362dfc
+  languageName: node
+  linkType: hard
+
 "ip-address@npm:^9.0.5":
   version: 9.0.5
   resolution: "ip-address@npm:9.0.5"
@@ -4349,9 +4353,9 @@ __metadata:
     "@tanstack/react-query": "npm:^5.40.0"
     "@tanstack/react-table": "npm:^8.20.1"
     "@types/lodash": "npm:^4.17.4"
-    "@types/p5": "npm:^1"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
+    "@types/react-helmet": "npm:^6"
     "@types/react-lazy-load-image-component": "npm:^1.6.4"
     "@types/react-redux": "npm:^7.1.33"
     "@types/react-router-dom": "npm:^5.3.3"
@@ -4378,16 +4382,16 @@ __metadata:
     konva: "npm:^9.3.15"
     lodash: "npm:^4.17.21"
     lucide-react: "npm:^0.440.0"
-    p5: "npm:^1.11.1"
     pdfjs-dist: "npm:^4.8.69"
     postcss: "npm:^8.4.38"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
+    react-helmet: "npm:^6.1.0"
+    react-helmet-async: "npm:^2.0.5"
     react-hook-form: "npm:^7.51.5"
     react-icons: "npm:^5.2.1"
     react-konva: "npm:^18.2.10"
     react-lazy-load-image-component: "npm:^1.6.2"
-    react-p5: "npm:^1.4.1"
     react-redux: "npm:^9.1.2"
     react-responsive-carousel: "npm:^3.2.23"
     react-router-dom: "npm:^6.23.1"
@@ -4498,7 +4502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -4935,15 +4939,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"opencollective-postinstall@npm:2.0.2":
-  version: 2.0.2
-  resolution: "opencollective-postinstall@npm:2.0.2"
-  bin:
-    opencollective-postinstall: index.js
-  checksum: 10c0/d12cb4c79428ac47752628e56be0840f0ff7d106acb89103cad0dedd9f8b1f532833e987a7a82f06b42e35577b81ebc9a6cbf8ee780833bf542b5182496d7885
-  languageName: node
-  linkType: hard
-
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -4982,20 +4977,6 @@ __metadata:
   dependencies:
     aggregate-error: "npm:^3.0.0"
   checksum: 10c0/592c05bd6262c466ce269ff172bb8de7c6975afca9b50c975135b974e9bdaafbfe80e61aaaf5be6d1200ba08b30ead04b88cfa7e25ff1e3b93ab28c9f62a2c75
-  languageName: node
-  linkType: hard
-
-"p5@npm:1.7.0":
-  version: 1.7.0
-  resolution: "p5@npm:1.7.0"
-  checksum: 10c0/8b6e9f8ed167f2b30afde7ac6c0eced27f1d0d96f831500d2e6a08238c28a4b9fe949a47e60e7ae8ab2fac8c20b0275bbac55e2561639850e9a87b2f6dfe3d80
-  languageName: node
-  linkType: hard
-
-"p5@npm:^1.11.1":
-  version: 1.11.1
-  resolution: "p5@npm:1.11.1"
-  checksum: 10c0/77178d75e7150c1d2f5c8cebca1f978c102299908efc188a8712c56431f492e1cba845d57331d0374c9fdb9069bffddb046046ea365b29be5aba83938576875d
   languageName: node
   linkType: hard
 
@@ -5394,6 +5375,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.1.1, react-fast-compare@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: 10c0/0bbd2f3eb41ab2ff7380daaa55105db698d965c396df73e6874831dbafec8c4b5b08ba36ff09df01526caa3c61595247e3269558c284e37646241cba2b90a367
+  languageName: node
+  linkType: hard
+
+"react-helmet-async@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "react-helmet-async@npm:2.0.5"
+  dependencies:
+    invariant: "npm:^2.2.4"
+    react-fast-compare: "npm:^3.2.2"
+    shallowequal: "npm:^1.1.0"
+  peerDependencies:
+    react: ^16.6.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/f390ea8bf13c2681850e5f8eb5b73d8613f407c245a5fd23e9db9b2cc14a3700dd1ce992d3966632886d1d613083294c2aeee009193f49dfa7d145d9f13ea2b0
+  languageName: node
+  linkType: hard
+
+"react-helmet@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "react-helmet@npm:6.1.0"
+  dependencies:
+    object-assign: "npm:^4.1.1"
+    prop-types: "npm:^15.7.2"
+    react-fast-compare: "npm:^3.1.1"
+    react-side-effect: "npm:^2.1.0"
+  peerDependencies:
+    react: ">=16.3.0"
+  checksum: 10c0/1d2831d9c3b4f5c91f020076aeb6502437a4788077d0c438421e466eb9633d5dc2aacedf7b779a970b807d61cf87793c5ff76ee3190a185d71c90b5cfb367e96
+  languageName: node
+  linkType: hard
+
 "react-hook-form@npm:^7.51.5":
   version: 7.52.0
   resolution: "react-hook-form@npm:7.52.0"
@@ -5453,20 +5468,6 @@ __metadata:
   peerDependencies:
     react: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x
   checksum: 10c0/e0bf069d734c9371cfcea6e9402b6327adf18c6e57c98616f48b38dbbeb5c8d1e9262ad4b8f5626fdd26d5ddfa7c547ff9d17419a9617306195f5fe577f0b430
-  languageName: node
-  linkType: hard
-
-"react-p5@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "react-p5@npm:1.4.1"
-  dependencies:
-    "@types/p5": "npm:1.7.0"
-    opencollective-postinstall: "npm:2.0.2"
-    p5: "npm:1.7.0"
-  peerDependencies:
-    react: ">= 17.0.1"
-    react-dom: ">= 17.0.1"
-  checksum: 10c0/340c10c30d90f03d11976bc7c0e94a55b5854d4a97f2f7482f5c2430412d247556b65c46fc3d25392d8ca7e03a1096b9feaf67badae10f206bcb62aaf996c60f
   languageName: node
   linkType: hard
 
@@ -5573,6 +5574,15 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10c0/b4b98aaf117ee5cc4642871b7bd51fd0e2697988d0b880f30b21e933ca90258959147117d8aada36713b622e0e4cb06bd18ec02069f3f108896e0d31e69e3c16
+  languageName: node
+  linkType: hard
+
+"react-side-effect@npm:^2.1.0":
+  version: 2.1.2
+  resolution: "react-side-effect@npm:2.1.2"
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/5d934cae438f701ce646f566750ae6a445e99185ce1a026108f9db728147f7962a22ecf8db79ff26089953a3799b3607766904f4f10194ce42bcd5a1aa0215e8
   languageName: node
   linkType: hard
 
@@ -5947,6 +5957,13 @@ __metadata:
   version: 1.0.1
   resolution: "set-harmonic-interval@npm:1.0.1"
   checksum: 10c0/49014d928a62c8418507bf66ffef7066783e8fb19f76e955318bbae5a8c4b56e1a7176b370f9040ef9de51531aa522a3f96fa5c47b1534635aa577ff7c12f9c6
+  languageName: node
+  linkType: hard
+
+"shallowequal@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "shallowequal@npm:1.1.0"
+  checksum: 10c0/b926efb51cd0f47aa9bc061add788a4a650550bbe50647962113a4579b60af2abe7b62f9b02314acc6f97151d4cf87033a2b15fc20852fae306d1a095215396c
   languageName: node
   linkType: hard
 

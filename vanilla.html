@@ -2,10 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Design Generation</title>
+        <title>Design Generation - Sunrooof</title>
+        <link rel="icon" type="image/svg+xml" href="./assets/logo.jpeg" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-
-        <!-- <script async src="https://docs.opencv.org/4.x/opencv.js" type="text/javascript"></script> -->
         <link rel="stylesheet" href="/vanilla/css/main.css" />
         <link
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -68,7 +67,6 @@
                     </div>
                     <button onclick="startDrawing()">
                         <i class="fa-solid fa-pen-nib"></i>
-
                         Start Drawing
                     </button>
                     <p id="unitValueDisplay"></p>
@@ -142,19 +140,24 @@
                             Proceed <i class="fa-solid fa-arrow-right"></i>
                         </button>
 
-                        <div class="box" style="margin-top: 40px;">
+                        <div class="box" style="margin-top: 40px">
                             <div class="step-header">
                                 <i
                                     class="fa-solid fa-circle-info"
                                     style="margin-right: 0.5rem"
                                 ></i>
-                                <span class="step-title" id="title">ShortCuts:</span>
+                                <span class="step-title" id="title"
+                                    >ShortCuts:</span
+                                >
                             </div>
                             <div>
                                 <ol>
                                     <li>R + Select ---> Rotate Sunrooof.</li>
                                     <li>D + Select ---> Delete One sunrooof</li>
-                                    <li>Backspace/Delete + Select ---> Delete one Whole Grid</li>
+                                    <li>
+                                        Backspace/Delete + Select ---> Delete
+                                        one Whole Grid
+                                    </li>
                                 </ol>
                             </div>
                         </div>
@@ -216,7 +219,6 @@
                 <div id="canvas-div"></div>
             </main>
         </div>
-        <!-- <script src="script.js"></script> -->
         <script src="/vanilla/js/main.js"></script>
     </body>
 </html>
