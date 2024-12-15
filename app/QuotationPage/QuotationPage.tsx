@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 //====================================================================
 import { CMS_NAV_ITEMS } from '../cms/mocks'
@@ -18,7 +18,7 @@ import Navbar from './Navbar'
 import Hero from './Hero'
 import ImageComparison from './Image'
 
-import { CustomerComponentEnum } from '../../types'
+import { _, CustomerComponentEnum } from '../../types'
 import { BrowserTabTitle, PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
 
@@ -28,19 +28,18 @@ export default function QuotationPage() {
     const { pathname } = useLocation()
 
     const params = useParams()
-    const item = CMS_NAV_ITEMS?.find((row) => row.url === pathname)
+    const item = useMemo(() => _.find(CMS_NAV_ITEMS, { url: pathname }), [pathname])
+    // useEffect(() => {
 
-    useEffect(() => {
+    //     if (!loading) {
+    //         if ('id' in params) {
+    //             document.title = `Quotation for ${components.name}`
+    //         } else {
+    //             document.title = `${item?.title?.length ? item?.title : 'Home'} | Sunrooof`
+    //         }
+    //     }
 
-        if (!loading) {
-            if ('id' in params) {
-                document.title = `Quotation for ${components.name}`
-            } else {
-                document.title = `${item?.title?.length ? item?.title : 'Home'} | Sunrooof`
-            }
-        }
-
-    }, [components, item?.title, loading, params, pathname])
+    // }, [components, item?.title, loading, params, pathname])
     if (loading) {
         return <PageProgress />
     }
