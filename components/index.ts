@@ -9,6 +9,7 @@ import CustomSiteModal from "./CustomSiteModal";
 import SpecialCharacterDom from "./SpecialCharacterDom";
 import CustomAutocompleteExample from "./CustomAutocompleteExample";
 export * from "./BrowserTabTitle"
+export * from "./CustomImage"
 export {
     CustomAutocompleteExample,
     SpecialCharacterDom,

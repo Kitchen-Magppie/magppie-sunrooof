@@ -131,7 +131,8 @@ export type TCustomerItem = {
     components: TCustomerComponentItem[]
     id: string
     customerId: string
-    at: { created: Date; updated?: Date }
+    at: { created: Date; updated?: Date },
+    isTransformed?: boolean
 }
 
 export enum ComponentModeEnum {
@@ -317,35 +318,77 @@ export const IS_VALID_FOR_URL = ({ components }: TCustomerItem) => {
     return quotation?.data?.invoiceUrl?.length && designItem?.data?.filter(({ entries }) => entries?.length && entries?.length == entries?.filter((entry) => entry.design?.length)?.length)?.length
 }
 
+const removeObject = ['leftImage', 'rightImage', 'areaName']
+
+export const TRANSFORM_TWO_DIMENSIONAL_COMPONENT_DATA = (arr: TCustomerItem[]) => {
+
+    return arr?.map((currentItem) => {
+        let isTransformed: boolean
+        const components = currentItem?.components?.map((currentComponent) => {
+            switch (currentComponent.value) {
+                case CustomerComponentEnum.TwoDDesign: {
+                    const data = currentComponent.data?.map((currentLayout) => {
+                        if ('entries' in currentLayout && currentLayout?.entries?.length) {
+                            return currentLayout;
+                        }
+                        isTransformed = true
+                        const entries = [
+                            {
+                                finish: `${currentLayout?.finish || ''}`,
+                                area: `${currentLayout?.areaName || ''}`,
+                                floor: `${currentLayout?.floor || ''}`,
+                                design: `${currentLayout?.design || ''}`,
+                                quantity: `${currentLayout.quantity || ''}`
+                            }
+                        ]
+                        return {
+                            ...currentLayout,
+                            entries
+                        } as TCustomerComponentDesign2DDataItem
+                    })
+                    return ({ ...currentComponent, data }) as TCustomerComponentDesign2DItem
+                }
+                default:
+                    return ({ ...currentComponent })
+            }
+        })
+        const results = ({
+            ...currentItem,
+            components,
+            isTransformed: !!isTransformed
+        })
+        return results
+    })
+}
 
 export function TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(arr: TCustomerItem[], id: string) {
-    const removeObject = ['leftImage', 'rightImage', 'areaName']
     const currentItem = _.find(arr || [], { id })
     if (currentItem) {
         return currentItem?.components?.map((currentComponent) => {
             switch (currentComponent.value) {
-                case CustomerComponentEnum.TwoDDesign: {
-                    return {
-                        ...currentComponent,
-                        data: currentComponent?.data?.map((currentItem) => {
-                            if (!('entries' in currentItem)) {
-                                const currentEntry = {
-                                    ..._.omit(currentItem, removeObject),
-                                    area: currentItem.areaName,
+                case CustomerComponentEnum.TwoDDesign:
+                    {
+                        return ({
+                            ...currentComponent,
+                            data: currentComponent?.data?.map((currentItem) => {
+                                if (!('entries' in currentItem)) {
+                                    const currentEntry = {
+                                        ..._.omit(currentItem, removeObject),
+                                        area: currentItem.areaName,
+                                    }
+                                    const mainEntries = [..._.keys(currentEntry), 'areaName']
+                                    const results = _.omit({
+                                        ...currentItem,
+                                        proposedLayoutId: '',
+                                        entries: [currentEntry]
+                                    }, mainEntries)
+                                    return results
                                 }
-                                const mainEntries = [..._.keys(currentEntry), 'areaName']
-                                const results = _.omit({
-                                    ...currentItem,
-                                    proposedLayoutId: '',
-                                    entries: [currentEntry]
-                                }, mainEntries)
-                                return results
-                            }
-                            return currentItem
-                        })
-                    } as TCustomerComponentDesign2DItem
+                                return currentItem
+                            })
+                        }) as TCustomerComponentDesign2DItem
 
-                }
+                    }
                 default:
                     return currentComponent;
             }
@@ -353,10 +396,4 @@ export function TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(arr: TCustomerItem[], id: 
     }
 }
 
-// console.log(TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(data.values.components, 'z3FM8dIavU2m1PeieIPQ'))
-// console.log(data.values.components?.filter((customer) => {
 
-//     const currentCustomer = customer?.components?.find((item) => item.value === CustomerComponentEnum.TwoDDesign)
-
-//     return currentCustomer?.data?.find((currentItem) => (!('entries' in currentItem) || !currentItem?.entries?.length))
-// }))

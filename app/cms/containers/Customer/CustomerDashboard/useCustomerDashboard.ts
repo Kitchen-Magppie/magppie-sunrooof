@@ -3,14 +3,17 @@ import {
     _,
     ComponentModeEnum,
     TComponentMode,
-    TCustomerItem
+    TCustomerItem,
 } from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
 import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
 
+
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const value = useAppSelector((state) => state.Cms.Customer);
+
+
 
     const components = useMemo(() => {
         return _.sortBy(value.value?.filter((item) =>
@@ -101,7 +104,7 @@ const INIT_CORPUS_MODAL: TCorpusModal = {
     open: false
 }
 
-const INIT_CORPUS: TCorpus = {
+export const INIT_CORPUS: TCorpus = {
     toggle: { isOpenComponentModal: false },
     filteration: { search: '' },
     values: {
