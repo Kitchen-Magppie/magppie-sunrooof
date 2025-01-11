@@ -50,7 +50,6 @@ export default function QuotationPage() {
             <Hero name={components.name} item={components[CustomerComponentEnum.Quotation]} />
             <About />
             <Clients />
-            {/* <ImageComparison item={DEFAULT_CUSTOMER?.components.find((item) => item.value === CustomerComponentEnum.Comparison)} /> */}
             <ImageComparison
                 item={components[CustomerComponentEnum.Comparison]}
             />

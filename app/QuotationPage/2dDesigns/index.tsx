@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { useMedia } from 'react-use'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -21,6 +20,7 @@ import { Mousewheel, Scrollbar, Zoom } from 'swiper/modules'
 import ProposedLayout from './ProposedLayout'
 import CustomerLayout from './CustomerLayout'
 import { _, TCustomerComponentDesign2DItem } from '../../../types'
+import { CustomImage } from '../../../components'
 // import { images } from './data'
 
 
@@ -63,7 +63,7 @@ export default function Layout2dDesign(props: TProps) {
     //     }
     // }, [swiperInstance, selectedLayout])
 
-
+    console.log(data)
     const renderSwiper = useMemo(() => {
         // console.log('🚀 ~ renderSwiper ~ isMobile:', isMobile)
         if (isMobile) {
@@ -97,12 +97,18 @@ export default function Layout2dDesign(props: TProps) {
                                 </h2>
                                 <div className="swiper-zoom-container flex flex-col mb-4">
                                     <div className="flex flex-col mb-4">
-                                        <LazyLoadImage
+                                        <CustomImage src={image.leftImage}
+                                            alt="blur"
+
+                                            className="block w-screen h-full object-contain"
+
+                                        />
+                                        {/* <LazyLoadImage
                                             effect="blur"
                                             src={image.leftImage}
                                             alt=""
                                             className="block w-screen h-full object-contain"
-                                        />
+                                        /> */}
                                         <h1 className="text-3xl mb-4 p-2 font-[400] w-full text-[#fff] text-left bg-gradient-to-t from-stone-800 via-stone-600 to-stone-400">
                                             Customer Layout
                                         </h1>
@@ -110,7 +116,7 @@ export default function Layout2dDesign(props: TProps) {
                                 </div>
                                 <div className="flex flex-col swiper-zoom-container">
                                     <div className="flex flex-col mb-4">
-                                        <LazyLoadImage
+                                        <CustomImage
                                             effect="blur"
                                             src={image.rightImage}
                                             alt=""
@@ -160,7 +166,7 @@ export default function Layout2dDesign(props: TProps) {
                                                 Customer Layout
                                             </h1>
                                             <div>
-                                                <LazyLoadImage
+                                                <CustomImage
                                                     effect="blur"
                                                     src={
                                                         image.leftImage
@@ -175,7 +181,7 @@ export default function Layout2dDesign(props: TProps) {
                                                 Proposed Layout
                                             </h1>
                                             <div>
-                                                <LazyLoadImage
+                                                <CustomImage
                                                     effect="blur"
                                                     src={image.rightImage}
                                                     alt=""
