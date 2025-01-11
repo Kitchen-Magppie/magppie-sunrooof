@@ -67,7 +67,7 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
 
         </div>
         <div className="flex items-center justify-between flex-row mb-2 capitalize gap-2  " />
-        <div className="flex border justify-between">
+        <div className="flex  justify-between">
             <button
                 onClick={onClickModal}
                 type="button"
