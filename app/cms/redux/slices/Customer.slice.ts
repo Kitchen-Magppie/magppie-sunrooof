@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TCustomerItem } from '../../../../types';
+import { TCustomerItem, TRANSFORM_TWO_DIMENSIONAL_COMPONENT_DATA } from '../../../../types';
 
 
 interface ICustomerSlice {
@@ -24,7 +24,7 @@ const CustomerSlice = createSlice({
         setCustomers: (state, action: TAction) => {
             state.status = 'success';
             state.loading = false;
-            state.value = action.payload;
+            state.value = TRANSFORM_TWO_DIMENSIONAL_COMPONENT_DATA(action.payload);
         },
     },
 });
