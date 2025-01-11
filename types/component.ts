@@ -317,9 +317,9 @@ export const IS_VALID_FOR_URL = ({ components }: TCustomerItem) => {
     return quotation?.data?.invoiceUrl?.length && designItem?.data?.filter(({ entries }) => entries?.length && entries?.length == entries?.filter((entry) => entry.design?.length)?.length)?.length
 }
 
+const removeObject = ['leftImage', 'rightImage', 'areaName']
 
 export function TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(arr: TCustomerItem[], id: string) {
-    const removeObject = ['leftImage', 'rightImage', 'areaName']
     const currentItem = _.find(arr || [], { id })
     if (currentItem) {
         return currentItem?.components?.map((currentComponent) => {
