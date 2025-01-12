@@ -14,7 +14,7 @@ import { IS_VALID_FOR_URL } from "../../../../types";
 
 
 export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
-    const { item, onClickModal } = props;
+    const { item } = props;
     const location = useLocation()
     const isDefault = DEFAULT_CUSTOMER.customerId === item.customerId
 
@@ -69,16 +69,14 @@ export function CmsCustomerCardItem(props: TCmsCustomerCardItem) {
         <div className="flex items-center justify-between flex-row mb-2 capitalize gap-2  " />
         <div className="flex  justify-between">
             <button
-                onClick={onClickModal}
+                onClick={props.onClickEditModal}
                 type="button"
                 className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 flex gap-1"
             >
                 <IoCreateOutline className='text-xl' />
                 Edit
             </button>
-            <button className=" font-medium px-5 py-2 mb-2" onClick={() => {
-                console.log(item.customerId)
-            }} />
+            <button className=" font-medium px-5 py-2 mb-2" onClick={props.onClickDeleteModal} />
             {/* {item.isTransformed ? 'Transformed' : ''} */}
             {/* <button className="bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm  p-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
                 <BsTrash2 className='text-xl text-red-500 hover:text-red-800' />
