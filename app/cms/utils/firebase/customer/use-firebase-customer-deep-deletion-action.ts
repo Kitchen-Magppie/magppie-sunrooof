@@ -22,6 +22,7 @@ export function useFirebaseCustomerDeepDeletionAction() {
                 customer: item,
                 layouts: proposedLayouts
             })
+            console.log(options)
             if (options?.length) {
                 const customer = _.find(options, { type: TCustomerDeletableEnum.Customer })
                 const customerPropsedLayouts = _.filter(options, { type: TCustomerDeletableEnum.ProposedLayout })
