@@ -18,7 +18,6 @@ import { useAppSelector } from '../../../../redux'
 // import { useNavigate } from 'react-router-dom'
 import { useFirebaseCustomerAction } from '../../utils/firebase/customer'
 import { useProposedLayoutAction } from '../../hooks'
-import { useFirebaseCmsCustomerListener } from '../../utils/firebase'
 import { CircularProgress } from '../../../../components'
 
 // const UNIT_COUNT = { "Classical": 30, "Fluted": 30, "French Window": 0, "Louvered Window": 0, "Modern": 0, "Minimalist": 0 }
@@ -30,11 +29,7 @@ export default function DesignSubmit() {
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const customers = useAppSelector(({ Cms }) => Cms.Customer)
 
-
-
-
     const navigate = useNavigate()
-    useFirebaseCmsCustomerListener()
     const firestoreRunRef = useRef(null)
     const STORAGE_DATA: TSessionStorageData = useMemo(() => {
         const units_count = JSON.parse(localStorage.getItem("units_count"))

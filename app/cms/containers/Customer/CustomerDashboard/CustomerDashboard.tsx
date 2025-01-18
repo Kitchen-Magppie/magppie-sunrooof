@@ -3,46 +3,19 @@ import { Link } from 'react-router-dom';
 import { MdOutlineDesignServices } from "react-icons/md";
 import { MdAddchart } from "react-icons/md";
 import { toast } from 'react-toastify';
-import localforage from 'localforage';
 //====================================================================
 import { CmsSearch, CmsCustomerCardItem, CmsNotFound } from '../../../components'
 import { CustomConfirmationDialog, CustomSimpleModal } from '../../../../../components'
-import { useFirebaseCmsCustomerListener, useFirebaseCustomerDeepDeletionAction } from '../../../utils'
+import { useFirebaseCustomerDeepDeletionAction } from '../../../utils'
 import { _, CMS_TOAST_CONFIG, ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
-import { useProposedLayoutListener } from '../../../hooks';
+// import { useProposedLayoutListener } from '../../../hooks';
 
 export default function CustomerDashboard() {
-    useFirebaseCmsCustomerListener()
-    useProposedLayoutListener()
     useEffect(() => {
         document.title = 'Customer | CMS'
     }, [])
-
-    useEffect(() => {
-        // Set data
-        localforage.setItem('userConfig', { theme: 'dark', language: 'en' })
-            .then(() => {
-                console.log('Data stored successfully!');
-            })
-            .catch(error => {
-                console.error('Error storing data:', error);
-            });
-
-        // get data
-
-        localforage.getItem('userConfig')
-            .then(data => {
-                console.log('Retrieved data:', data);
-            })
-            .catch(error => {
-                console.error('Error retrieving data:', error);
-            });
-    }, [])
-
-    console.log(localforage.getItem('userConfig')?.then((response) => response))
-
     const { loading, data, action } = useCustomerDashboard()
     const deleteAction = useFirebaseCustomerDeepDeletionAction()
     const renderDeleteConfirmationModal = useMemo(() => {
