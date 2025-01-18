@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react"
-import { addDoc, collection, onSnapshot } from "firebase/firestore"
+import { addDoc, collection, onSnapshot, writeBatch, doc } from "firebase/firestore"
 //====================================================================
 import { _, FirebaseCollectionEnum, IProposedLayoutItem } from "../../../types"
 import { db } from "../../../config"
@@ -12,8 +12,22 @@ export function useProposedLayoutAction() {
             at: { created: new Date() }
         }, ['id']))
     }, [])
+    return ({
+        add,
+        batch: {
+            remove: (arr: string[]) => {
+                const batch = writeBatch(db)
 
-    return ({ add })
+                arr?.forEach((id) => {
+
+                    const docRef = doc(db, '/proposed-layouts', id)
+                    batch.delete(docRef)
+                });
+                return batch.commit()
+            }
+        }
+
+    })
 }
 // export function useProposedLayoutAction() {
 //     const add = useCallback(async (row: Omit<IProposedLayoutItem, 'id' | 'at'>) => {

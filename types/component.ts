@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 //====================================================================
-import { IProposedLayoutEntryItem } from '../app/cms/types';
+import { IProposedLayoutEntryItem, IProposedLayoutItem } from '../app/cms/types';
 import _ from './lodash';
 
 export type TComponentMeta = { order: { used: number[]; next: number } }
@@ -138,6 +138,7 @@ export type TCustomerItem = {
 export enum ComponentModeEnum {
     Create = 'create',
     Edit = 'edit',
+    Delete = 'delete',
     None = '',
 }
 
@@ -155,6 +156,7 @@ export type TComponentMode =
     | ComponentModeEnum.Create
     | ComponentModeEnum.Edit
     | ComponentModeEnum.None
+    | ComponentModeEnum.Delete
 
 export enum SpecialCharacterEnum {
     BreakLine = '==nextline==',
@@ -397,3 +399,89 @@ export function TRANSFORM_2D_LAGACY_TO_REFINED_FORMAT(arr: TCustomerItem[], id: 
 }
 
 
+type TDeletableParam = {
+    customer: TCustomerItem,
+    layouts: IProposedLayoutItem[]
+}
+export enum TCustomerDeletableEnum {
+    Customer = 'customer',
+    ProposedLayout = 'proposed-layout',
+    Link = 'link'
+}
+
+export type TDeletable = TCustomerDeletableEnum.Customer
+    | TCustomerDeletableEnum.Link
+    | TCustomerDeletableEnum.ProposedLayout
+
+export type TDeletableItem = { value: string, type: TDeletable }
+
+export function DOCUMENT_DELETATABLE_OPTIONS(params: TDeletableParam) {
+    const deletable: TDeletableItem[] = []
+    deletable.push({
+        value: params?.customer?.id,
+        type: TCustomerDeletableEnum.Customer
+    })
+
+
+    _.filter(params?.layouts, { customerId: params?.customer?.customerId })
+
+        .forEach((currentLayout) => {
+            deletable?.push({
+                value: currentLayout.id,
+                type: TCustomerDeletableEnum.ProposedLayout
+            })
+        })
+    // console.log(proposedLayouts?.filter((currentLayout) => currentLayout.customerId === params?.customer?.customerId))
+    params?.customer?.components?.forEach((currentComponent) => {
+        if (currentComponent.value === CustomerComponentEnum.Quotation) {
+
+            const local = currentComponent as TCustomerComponentQuotationItem
+            if (local.data.invoiceUrl?.length) {
+                deletable?.push({
+                    value: local?.data?.invoiceUrl,
+                    type: TCustomerDeletableEnum.Link
+                })
+            }
+        }
+        if (currentComponent.value === CustomerComponentEnum.TwoDDesign) {
+            const local = currentComponent as TCustomerComponentDesign2DItem
+            local.data?.forEach((currentLayout) => {
+                // if (currentLayout?.proposedLayoutId?.length)
+                //     deletable.push({
+                //         value: currentLayout?.proposedLayoutId,
+                //         type: 'proposed-layout'
+                //     })
+                if (currentLayout?.leftImage?.length) {
+                    deletable?.push({
+                        value: currentLayout?.leftImage,
+                        type: TCustomerDeletableEnum.Link
+
+                    })
+
+                }
+                if (currentLayout?.rightImage?.length) {
+                    deletable?.push({
+                        value: currentLayout?.rightImage,
+                        type: TCustomerDeletableEnum.Link
+
+                    })
+                }
+            })
+
+        }
+        if (currentComponent.value === CustomerComponentEnum.ThreeDDesign) {
+            const local = currentComponent as TCustomerComponentDesign3DItem
+            local.data?.forEach((currentLink) => {
+                if (currentLink?.length) {
+                    deletable?.push({
+                        value: currentLink,
+                        type: TCustomerDeletableEnum.Link
+
+                    })
+                }
+            })
+        }
+    })
+    // 3d design data
+    return deletable
+}
