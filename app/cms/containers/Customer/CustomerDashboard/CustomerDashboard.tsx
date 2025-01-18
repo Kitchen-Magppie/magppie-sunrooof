@@ -2,23 +2,20 @@ import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { MdOutlineDesignServices } from "react-icons/md";
 import { MdAddchart } from "react-icons/md";
+import { toast } from 'react-toastify';
 //====================================================================
 import { CmsSearch, CmsCustomerCardItem, CmsNotFound } from '../../../components'
 import { CustomConfirmationDialog, CustomSimpleModal } from '../../../../../components'
-import { useFirebaseCmsCustomerListener, useFirebaseCustomerDeepDeletionAction } from '../../../utils'
+import { useFirebaseCustomerDeepDeletionAction } from '../../../utils'
 import { _, CMS_TOAST_CONFIG, ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
-import { useProposedLayoutListener } from '../../../hooks';
-import { toast } from 'react-toastify';
+// import { useProposedLayoutListener } from '../../../hooks';
 
 export default function CustomerDashboard() {
-    useFirebaseCmsCustomerListener()
-    useProposedLayoutListener()
     useEffect(() => {
         document.title = 'Customer | CMS'
     }, [])
-
     const { loading, data, action } = useCustomerDashboard()
     const deleteAction = useFirebaseCustomerDeepDeletionAction()
     const renderDeleteConfirmationModal = useMemo(() => {
