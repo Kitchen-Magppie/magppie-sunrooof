@@ -8,6 +8,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import CreatableSelect from "react-select/creatable"
 import * as pdfjsLib from 'pdfjs-dist';
+import localforage from 'localforage'
 //====================================================================
 import pdfJSWorkerURL from "pdfjs-dist/build/pdf.worker?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfJSWorkerURL;
@@ -22,7 +23,8 @@ function ProposedLayoutView() {
 
     useEffect(() => {
         document.title = 'Proposed Layout | CMS'
-        localStorage.clear()
+        localforage.clear()
+        // localforage.clear()
     }, [])
     const [toggle, setToggle] = useState(INIT_TOGGLE)
     const customers = useAppSelector((state) => state.Cms.Customer.value)
@@ -30,7 +32,9 @@ function ProposedLayoutView() {
     // const ar = proposedLayouts?.map((item) => item.name?.toLowerCase()?.trim())
     // console.log(ar)
 
-    // console.log(ar)
+
+
+
     const proposedLayoutSchema = useMemo(() => (yup.object().shape({
         name: yup.string().required('Name is required'),
         title: yup.string().required('Title is required')
@@ -154,10 +158,11 @@ function ProposedLayoutView() {
                 });
                 console.log(`Blob converted to Base64.`);
 
-                // Step 15: Save the Base64 string to localStorage
-                localStorage.setItem('CUSTOMER_IMAGE', base64Data);
+                localforage.setItem('CUSTOMER_IMAGE', base64Data);
+                // Step 15: Save the Base64 string to localforage
+                // localforage.setItem('CUSTOMER_IMAGE', base64Data);
                 console.log(
-                    `Base64 image saved to localStorage under 'CUSTOMER_IMAGE'.`
+                    `Base64 image saved to localforage under 'CUSTOMER_IMAGE'.`
                 );
 
                 // Step 16: Clean up the object URL
@@ -188,7 +193,7 @@ function ProposedLayoutView() {
             }
             if (content?.accessor === 'image') {
                 const data = await convertFileToBase64(content.file)
-                localStorage.setItem('CUSTOMER_IMAGE', `${data}`)
+                localforage.setItem('CUSTOMER_IMAGE', `${data}`)
                 setValue('file', content.file)
             }
         } else {
@@ -233,10 +238,10 @@ function ProposedLayoutView() {
                     onChange={(e) => {
                         const currentCustomer = customers.find((customer) => customer.name === e.label)
                         if (currentCustomer)
-                            localStorage.setItem('CUSTOMER_ID', currentCustomer.customerId)
+                            localforage.setItem('CUSTOMER_ID', currentCustomer.customerId)
                         else {
-                            localStorage.setItem('CUSTOMER_ID', '')
-                            localStorage.setItem('CUSTOMER_NAME', e.label)
+                            localforage.setItem('CUSTOMER_ID', '')
+                            localforage.setItem('CUSTOMER_NAME', e.label)
                         }
                         // console.log(currentCustomer);
                         setValue('name', e.label)
@@ -257,7 +262,7 @@ function ProposedLayoutView() {
                     {...register('title')}
                     id="large-input"
                     onChange={(e) => {
-                        localStorage.setItem('LAYOUT_TITLE', e.target.value)
+                        localforage.setItem('LAYOUT_TITLE', e.target.value)
                         setValue('name', e.target.value)
                     }}
                     className={`block w-full rounded-sm py-1.5 bg-white text-base dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white ${errors?.title ? 'dark:focus:ring-red-500 dark:focus:border-red-500 focus:ring-red-500 focus:border-red-500 text-red-900 border border-red-300' : 'dark:focus:ring-indigo-500 dark:focus:border-indigo-500 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 border border-gray-300'}`}
@@ -343,3 +348,4 @@ function convertFileToBase64(file: File) {
 }
 
 export default ProposedLayoutView;
+
