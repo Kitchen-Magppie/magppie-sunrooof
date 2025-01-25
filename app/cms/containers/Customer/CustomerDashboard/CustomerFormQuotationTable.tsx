@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { _, TCustomerComponentDesign2DItem, TCustomerComponentQuotationItem } from "../../../../../types";
 import { CMS_QUOTATION_OPTIONS } from "../../../mocks";
 import { freightData } from "./freightData";
@@ -12,7 +12,7 @@ function CustomerFormQuotationTable(props: TProps) {
         // NOTE: Please don't remove this props array dependency. It helps to re-render on live changes;
     }, [props])
 
-    const totalQuantity = useCallback(() => {
+    const totalQuantity = useMemo(() => {
         return props.item?.data?.reduce((total, item) => {
             return total + item?.entries?.reduce((subTotal, entry) => {
                 return subTotal + (Number(entry.quantity) || 0)
