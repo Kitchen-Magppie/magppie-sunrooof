@@ -1,7 +1,7 @@
 import { useMedia } from 'react-use'
-import { TCustomerComponentDesign2DDataItem } from '../../../types'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Swiper } from 'swiper/types'
+import { TCustomerComponentDesign2DDataItem } from '../../../types'
+import { CustomImage } from '../../../components'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
@@ -41,16 +41,15 @@ const ProposedLayout = (props: TProps) => {
                                     >
                                         <div className=" py-1">{i + 1}.</div>
                                         <div className="flex flex-col items-center">
-                                            <LazyLoadImage
+                                            <CustomImage
                                                 src={data.leftImage}
                                                 alt=""
                                                 effect="blur"
                                                 style={{
-                                                    border: `2px solid ${
-                                                        isActive
-                                                            ? '#0066FF'
-                                                            : 'white'
-                                                    }`,
+                                                    border: `2px solid ${isActive
+                                                        ? '#0066FF'
+                                                        : 'white'
+                                                        }`,
                                                 }}
                                                 className={`rounded-lg cursor-pointer w-[200px] `}
                                             />
@@ -66,26 +65,24 @@ const ProposedLayout = (props: TProps) => {
                     </div>
                 </>
             ) : (
-                <div className="bg-white text-black p-6 w-full rounded-lg shadow-md flex gap-6">
+                <div className="bg-white text-black p-6 w-full rounded-lg shadow-md">
                     <div className="flex items-center">
-                        {/* <h1 className="text-xl mb-2">Proposed Layout</h1> */}
-                        <div className="overflow-y-auto gap-4 flex">
+                        <div className="overflow-x-auto whitespace-nowrap gap-4 flex">
                             {item.map((data, i) => {
                                 const isActive = swiper?.activeIndex === i
 
                                 return (
-                                    <div className="flex gap-2" key={i}>
-                                        <div className=" py-1">{i + 1}.</div>
-                                        <div className="mt-2 text-center">
+                                    <div className="inline-flex gap-2" key={i}>
+                                        <div className="py-1">{i + 1}.</div>
+                                        <div className="mt-2 text-center mb-4">
                                             <div
                                                 style={{
-                                                    border: `2px solid ${
-                                                        isActive
-                                                            ? '#0066FF'
-                                                            : 'white'
-                                                    }`,
+                                                    border: `2px solid ${isActive
+                                                        ? '#0066FF'
+                                                        : 'white'
+                                                        }`,
                                                 }}
-                                                className={`flex justify-center overflow-hidden  w-60 h-40 rounded-lg  bg-white cursor-pointer`}
+                                                className="flex justify-center items-center overflow-hidden w-60 h-40 rounded-lg bg-white cursor-pointer"
                                                 onClick={() => {
                                                     swiper.slideTo(i)
                                                 }}
@@ -93,11 +90,10 @@ const ProposedLayout = (props: TProps) => {
                                                 <img
                                                     src={data.leftImage}
                                                     alt=""
-                                                    className="cursor-pointer"
+                                                    className="cursor-pointer w-full h-full object-cover"
                                                 />
                                             </div>
                                             <span className="mt-2 text-md">
-                                                {/* Area Name:  */}
                                                 {data.areaName}
                                             </span>
                                         </div>

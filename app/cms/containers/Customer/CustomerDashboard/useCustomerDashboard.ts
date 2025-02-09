@@ -3,14 +3,17 @@ import {
     _,
     ComponentModeEnum,
     TComponentMode,
-    TCustomerItem
+    TCustomerItem,
 } from "../../../../../types"
 import { useAppSelector } from "../../../../../redux";
 import { INIT_CUSTOMER_COMPONENT_ITEM } from "../../../mocks";
 
+
 export function useCustomerDashboard() {
     const [corpus, setCorpus] = useState(INIT_CORPUS)
     const value = useAppSelector((state) => state.Cms.Customer);
+
+
 
     const components = useMemo(() => {
         return _.sortBy(value.value?.filter((item) =>
@@ -23,17 +26,8 @@ export function useCustomerDashboard() {
         value.value
     ]);
 
-    const onToggleModal = useCallback(() => {
-        setCorpus((prev) => ({
-            ...prev,
-            toggle: {
-                ...prev.toggle,
-                isOpenComponentModal: !prev.toggle.isOpenComponentModal
-            }
-        }))
-    }, [])
 
-    const onChangeModal = useCallback((args: { action: TComponentMode, value: boolean, item?: TCustomerItem }) => {
+    const onChangeModal = useCallback((args: TChangeModalEvent) => {
         setCorpus((prev) => ({
             ...prev,
             values: {
@@ -41,13 +35,11 @@ export function useCustomerDashboard() {
                 modal: {
                     ...prev.values.modal,
                     action: args.action,
-                    value: args?.item
+                    value: args?.item,
+                    open: args.value
                 }
             },
-            toggle: {
-                ...prev.toggle,
-                isOpenComponentModal: args.value
-            }
+
         }))
     }, [])
     const onSearchItem = useCallback((search: string) => {
@@ -69,13 +61,19 @@ export function useCustomerDashboard() {
             }
         }
     }, [components, corpus])
+
     return ({
         loading: value.loading,
         data,
         action: {
-            onToggleModal,
             onChangeModal,
-            onSearchItem
+            onSearchItem,
+            onCloseModal: () => {
+                onChangeModal({
+                    action: ComponentModeEnum.None,
+                    value: false,
+                })
+            }
         }
     })
 }
@@ -89,7 +87,7 @@ type TCorpusModal = {
 }
 
 type TCorpus = {
-    toggle: { isOpenComponentModal: boolean },
+
     filteration: { search: string },
     values: {
         modal: TCorpusModal
@@ -101,8 +99,7 @@ const INIT_CORPUS_MODAL: TCorpusModal = {
     open: false
 }
 
-const INIT_CORPUS: TCorpus = {
-    toggle: { isOpenComponentModal: false },
+export const INIT_CORPUS: TCorpus = {
     filteration: { search: '' },
     values: {
         modal: INIT_CORPUS_MODAL
@@ -110,3 +107,4 @@ const INIT_CORPUS: TCorpus = {
 }
 
 
+type TChangeModalEvent = { action: TComponentMode, value: boolean, item?: TCustomerItem }

@@ -2,12 +2,14 @@ import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { EffectCoverflow, Mousewheel, Scrollbar } from 'swiper/modules'
 import { useMedia } from 'react-use'
+import { CoverflowEffectOptions } from 'swiper/types'
+
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
+//====================================================================
 
 import { TCustomerComponentDesign3DItem } from '../../../types'
-import { CoverflowEffectOptions } from 'swiper/types'
 
 const ThreedDesigns = ({ item }: TProps) => {
     const isMobile = useMedia('(orientation: portrait)')

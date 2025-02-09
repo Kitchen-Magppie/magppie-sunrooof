@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Design Generation - Sunrooof</title>
+        <link rel="icon" type="image/svg+xml" href="./assets/logo.jpeg" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"
+            integrity="sha256-zBaNlfuSfUaxBDcmz+E5mOCJAv9j8kMw4rsikBCe0UU="
+            crossorigin="anonymous"
+        ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+        <link rel="stylesheet" href="/vanilla/css/main.css" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="navbar">
+            <img src="/vanilla/assets/logo.png" alt="" />
+        </div>
+        <div class="content-div">
+            <section>
+                <br /><br />
+                <div id="unit-div">
+                    <div class="box">
+                        <div class="step-header">
+                            <i
+                                class="fa-solid fa-circle-info"
+                                style="margin-right: 0.5rem"
+                            ></i>
+                            <span class="step-title">Step 1</span>
+                        </div>
+                        <p class="step-description">
+                            Please select mm or inches then enter the numeric
+                            value. You can move cursor on canvas to measure the
+                            value in pixels. Then proceed to the next step.
+                        </p>
+                    </div>
+                    <p id="prompt">
+                        Enter the length of the line and click to draw:
+                    </p>
+                    <select
+                        name="unit"
+                        id="unitSelect"
+                        onchange="selectUnitType()"
+                    >
+                        <option value="mm">mm</option>
+                        <option value="feet">Feet and Inches</option>
+                    </select>
+                    <br />
+                    <input
+                        id="unitInput"
+                        type="number"
+                        placeholder="Length (in mm)"
+                        required
+                    />
+                    <div id="feetinch-inp" style="display: none">
+                        <input
+                            id="feetInput"
+                            type="number"
+                            placeholder="Length (in feet and)"
+                            required
+                        />
+                        <input
+                            id="inchInput"
+                            type="number"
+                            placeholder="(in inches)"
+                            required
+                        />
+                    </div>
+                    <button onclick="startDrawing()">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        Start Drawing
+                    </button>
+                    <p id="unitValueDisplay"></p>
+                    <button
+                        id="final-unit"
+                        onclick="finaliseUnit()"
+                        style="display: none"
+                    >
+                        Finalize Unit Value
+                    </button>
+                </div>
+
+                <div id="other-tools" style="display: none">
+                    <div class="box">
+                        <div class="step-header">
+                            <i
+                                class="fa-solid fa-circle-info"
+                                style="margin-right: 0.5rem"
+                            ></i>
+                            <span class="step-title" id="title">Step 2</span>
+                        </div>
+                        <p class="step-description" id="desc">
+                            Please select a sunrooof window from dropdown. Then
+                            you can move the rectangular selection using mouse.
+                            Also you can use multiple tools from toolbox.
+                        </p>
+                    </div>
+                    <br />
+                    <div id="draw-mask">
+                        <select
+                            id="design"
+                            name="design"
+                            onchange="updateDesign()"
+                        >
+                            <option value="">Select Design</option>
+                            <option value="Classical">Classical</option>
+                            <option value="Fluted">Fluted</option>
+                            <option value="French Window">French Window</option>
+                            <option value="Louvered Window">
+                                Louvered Window
+                            </option>
+                            <option value="Modern">Modern</option>
+                            <option value="Minimalist">Minimalist</option>
+                            <!-- Add Design Here -->
+                        </select>
+                        <div
+                            id="extra-tools"
+                            style="
+                                display: grid;
+                                grid-template-columns: repeat(2, 1fr);
+                                gap: 10px;
+                            "
+                        >
+                            <button id="mask_btn" onclick="startDrawingMask()">
+                                <i class="fa-solid fa-pen"></i> Draw SUNROOF
+                            </button>
+                            <button id="remove-unit" onclick="removePoints()">
+                                <i class="fa-solid fa-eraser"></i> Remove
+                                SUNROOF
+                            </button>
+
+                            <button id="remove-mask" onclick="removeMask()">
+                                <i class="fa-solid fa-mask"></i> Remove Design
+                            </button>
+                            <button id="ruler" onclick="toggleRuler()">
+                                <i class="fa-solid fa-ruler-combined"></i> Scale
+                                for Measurement
+                            </button>
+                        </div>
+                        <button id="download-canvas" onclick="downloadCanvas()">
+                            Proceed <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                        <div class="box" style="margin-top: 40px">
+                            <div class="step-header">
+                                <i
+                                    class="fa-solid fa-circle-info"
+                                    style="margin-right: 0.5rem"
+                                ></i>
+                                <span class="step-title" id="title"
+                                    >ShortCuts:</span
+                                >
+                            </div>
+                            <div>
+                                <ol>
+                                    <li>R + Select ---> Rotate Sunrooof.</li>
+                                    <li>D + Select ---> Delete One sunrooof</li>
+                                    <li>
+                                        Backspace/Delete + Select ---> Delete
+                                        one Whole Grid
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <button
+                            id="generate-invoice"
+                            onclick="generateInvoice()"
+                            style="display: none"
+                        >
+                            Generate Quote
+                        </button>
+
+                        <!-- <button
+                            id="orientation_btn"
+                            title="Orientation"
+                            alt="Orientation"
+                            onclick="changeOrientation()"
+                            style="display: none"
+                        >
+                            Orientation ||
+                        </button> -->
+
+                        <!-- <div style="display: flex; align-items: center">
+              <input
+                id="borderInput"
+                type="number"
+                placeholder="Border for X units"
+                required
+              /> -->
+                        <!-- <button id="border_btn" onclick=" drawBorder()">
+                Draw Border
+              </button> -->
+                        <br />
+                        <button
+                            id="move_mask"
+                            onclick="moveMask()"
+                            style="display: none"
+                        >
+                            Move SUNROOOF
+                        </button>
+                        <button
+                            id="rotate_mask"
+                            onclick="rotateMask()"
+                            style="display: none"
+                        >
+                            Rotate SUNROOOF
+                        </button>
+                        <!-- </div> -->
+                        <p id="border_tooltip" style="display: none">
+                            Press [ and ] to change Border Length <br />
+                            Click to Invert border and Double Click to Place it
+                        </p>
+
+                        <br /><br />
+                    </div>
+                </div>
+            </section>
+            <main>
+                <div id="canvas-div"></div>
+            </main>
+        </div>
+        <script src="/vanilla/js/main.js"></script>
+    </body>
+</html>
