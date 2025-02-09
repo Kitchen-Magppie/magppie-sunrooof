@@ -13,6 +13,7 @@ function MinimalDropdown(props: TProps) {
             },
         })}
         placeholder={props?.placeholder}
+        isDisabled={props?.isDisabled}
         classNames={{ control: () => AUTOCOMPLETE_STYLE }}
         onChange={props.onChange}
         defaultValue={props.defaultValue}
@@ -27,7 +28,7 @@ type TProps = {
     defaultValue?: { label: string, value: string },
     options: TValueItem[],
     placeholder?: string
-
+    isDisabled?: boolean
 }
 const AUTOCOMPLETE_STYLE =
     "mt-1 block w-full py-1 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm";

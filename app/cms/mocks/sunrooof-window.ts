@@ -7,6 +7,10 @@ import ModernWindowSunrooofLow from "../../QuotationPage/assets/sunrooof/low/Mod
 // import LouveredWindowSunrooofLow from "../../QuotationPage/assets/sunrooof/low/Louvered.jpeg"
 
 import ClassicalWindowSunrooofHigh from "../../QuotationPage/assets/sunrooof/high/Classical.jpeg"
+import MinimalistWindowSunrooofHigh from "../../QuotationPage/assets/sunrooof/high/Minimalist.png"
+import MinimalistWindowSunrooofLow from "../../QuotationPage/assets/sunrooof/low/Minimalist.jpeg"
+
+
 // import FrenchWindowSunrooofHigh from "../../QuotationPage/assets/sunrooof/high/French.jpeg"
 import ModernWindowSunrooofHigh from "../../QuotationPage/assets/sunrooof/high/Modern.jpeg"
 // import FlutedWindowSunrooofHigh from "../../QuotationPage/assets/sunrooof/high/Fluted.jpeg"
@@ -41,7 +45,10 @@ export const CUSTOMER_COMPONENT_COMPARISON_OPTIONS: TComponentComparisonDataOpti
         {
             label: 'Minimalist Sunrooof',
             value: ComponentComparisonDataEnum.FlutedMinimalistSunrooof,
-            image: { high: '', low: '' },
+            image: {
+                high: MinimalistWindowSunrooofHigh,
+                low: MinimalistWindowSunrooofLow
+            },
             height: 1200, // Example value in mm
             width: 400, // Example value in mm
             gap: 25, // Example value in mm

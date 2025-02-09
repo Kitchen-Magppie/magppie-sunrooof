@@ -9,5 +9,6 @@ export enum CmsCardEnum {
 export type TCmsCardVariant = CmsCardEnum.Complete | CmsCardEnum.Pending | CmsCardEnum.None
 export type TCmsCustomerCardItem = {
     item: TCustomerItem
-    onClickModal: VoidFunction
+    onClickEditModal: VoidFunction,
+    onClickDeleteModal: VoidFunction
 }

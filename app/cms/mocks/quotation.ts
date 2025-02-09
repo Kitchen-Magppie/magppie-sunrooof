@@ -90,6 +90,13 @@ export const CMS_QUOTATION_OPTIONS = {
         Grey: 39650,
         Bronze: 39650,
     },
+    Fluted: {           //NOTE: This is the copy of `Fluted Minimalist`;
+        Wooden: 35650,
+        White: 37950,
+        Grey: 39650,
+        Bronze: 39650,
+        Gold: 39650,
+    },
     'Fluted Minimalist': {
         Wooden: 35650,
         White: 37950,
