@@ -201,21 +201,23 @@ function removePoints() {
 
 // Preload the background image from local storage
 function preload() {
-    const imageData = localStorage.getItem('CUSTOMER_IMAGE')
-    if (imageData) {
-        // Load the background image
-        bgImage = loadImage(
-            imageData,
-            () => {
-                console.log('Background image loaded successfully.')
-            },
-            (err) => {
-                console.error('Failed to load background image:', err)
-            }
-        )
-    } else {
-        console.error('Image data or dimensions not found in localStorage.')
-    }
+    localforage.getItem('CUSTOMER_IMAGE').then((imageData) => {
+        console.log(imageData)
+        if (imageData) {
+            // Load the background image
+            bgImage = loadImage(
+                imageData,
+                () => {
+                    console.log('Background image loaded successfully.')
+                },
+                (err) => {
+                    console.error('Failed to load background image:', err)
+                }
+            )
+        } else {
+            console.error('Image data or dimensions not found in localStorage.')
+        }
+    })
 
     images = [
         loadImage('/vanilla/assets/high/Classical.jpeg'),
@@ -990,8 +992,8 @@ function downloadCanvas() {
         const finalImageBase64 = maskedImgBase64 // Use maskedImgBase64 or trueImgBase64 based on requirement
 
         // Store the final image in session storage as PROPOSED_IMAGE
-        localStorage.setItem('PROPOSED_IMAGE', finalImageBase64)
-        localStorage.setItem('units_count', JSON.stringify(unitsCount))
+        localforage.setItem('PROPOSED_IMAGE', finalImageBase64)
+        localforage.setItem('units_count', JSON.stringify(unitsCount))
         console.log(
             'Image successfully stored in session storage as Base64 string under key PROPOSED_IMAGE'
         )

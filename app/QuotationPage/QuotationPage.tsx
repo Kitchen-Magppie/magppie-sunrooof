@@ -21,9 +21,12 @@ import ImageComparison from './Image'
 import { _, CustomerComponentEnum } from '../../types'
 import { BrowserTabTitle, PageProgress } from '../../components'
 import useHomeData from '../cms/hooks/useHomeData'
+import { useFirebaseCmsCustomerListener } from '../cms/utils'
 
 
 export default function QuotationPage() {
+    useFirebaseCmsCustomerListener()
+
     const { loading, components } = useHomeData()
     const { pathname } = useLocation()
 
@@ -50,7 +53,6 @@ export default function QuotationPage() {
             <Hero name={components.name} item={components[CustomerComponentEnum.Quotation]} />
             <About />
             <Clients />
-            {/* <ImageComparison item={DEFAULT_CUSTOMER?.components.find((item) => item.value === CustomerComponentEnum.Comparison)} /> */}
             <ImageComparison
                 item={components[CustomerComponentEnum.Comparison]}
             />

@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 import { useAppSelector } from "../../../redux";
-import { useFirebaseCmsCustomerListener } from "../utils/firebase";
 import { DEFAULT_CUSTOMER } from "../mocks";
 import {
     _,
@@ -16,7 +15,6 @@ import {
 } from "../../../types";
 
 export default function useHomeData() {
-    useFirebaseCmsCustomerListener()
     const params = useParams()
     const { loading, value } = useAppSelector((state) => state.Cms.Customer);
     const components = useMemo(() => {

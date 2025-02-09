@@ -1,7 +1,7 @@
 import { useMedia } from 'react-use'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Swiper } from 'swiper/types'
 import { TCustomerComponentDesign2DDataItem } from '../../../types'
+import { CustomImage } from '../../../components'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
@@ -41,16 +41,15 @@ const ProposedLayout = (props: TProps) => {
                                     >
                                         <div className=" py-1">{i + 1}.</div>
                                         <div className="flex flex-col items-center">
-                                            <LazyLoadImage
+                                            <CustomImage
                                                 src={data.leftImage}
                                                 alt=""
                                                 effect="blur"
                                                 style={{
-                                                    border: `2px solid ${
-                                                        isActive
-                                                            ? '#0066FF'
-                                                            : 'white'
-                                                    }`,
+                                                    border: `2px solid ${isActive
+                                                        ? '#0066FF'
+                                                        : 'white'
+                                                        }`,
                                                 }}
                                                 className={`rounded-lg cursor-pointer w-[200px] `}
                                             />
@@ -78,11 +77,10 @@ const ProposedLayout = (props: TProps) => {
                                         <div className="mt-2 text-center mb-4">
                                             <div
                                                 style={{
-                                                    border: `2px solid ${
-                                                        isActive
-                                                            ? '#0066FF'
-                                                            : 'white'
-                                                    }`,
+                                                    border: `2px solid ${isActive
+                                                        ? '#0066FF'
+                                                        : 'white'
+                                                        }`,
                                                 }}
                                                 className="flex justify-center items-center overflow-hidden w-60 h-40 rounded-lg bg-white cursor-pointer"
                                                 onClick={() => {

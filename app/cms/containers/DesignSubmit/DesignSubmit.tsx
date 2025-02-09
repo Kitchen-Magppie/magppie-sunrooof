@@ -18,32 +18,61 @@ import { useAppSelector } from '../../../../redux'
 // import { useNavigate } from 'react-router-dom'
 import { useFirebaseCustomerAction } from '../../utils/firebase/customer'
 import { useProposedLayoutAction } from '../../hooks'
-import { useFirebaseCmsCustomerListener } from '../../utils/firebase'
 import { CircularProgress } from '../../../../components'
+import localforage from 'localforage'
 
 // const UNIT_COUNT = { "Classical": 30, "Fluted": 30, "French Window": 0, "Louvered Window": 0, "Modern": 0, "Minimalist": 0 }
 export default function DesignSubmit() {
 
+    const [corpus, setCorpus] = useState(INIT_CORPUS)
     const [isLoading, setLoading] = useState(true)
     const StorageAction = useFirebaseStorageActions()
     const CustomerAction = useFirebaseCustomerAction()
     const ProposedLayoutDataAction = useProposedLayoutAction()
     const customers = useAppSelector(({ Cms }) => Cms.Customer)
+    const getAllDataInSingleObject = useCallback(async () => {
+        try {
+            const keys = await localforage.keys();
+            const allData = {};
+            for (const key of keys) {
+                allData[key] = await localforage.getItem(key);
+            }
+            return allData;
+        } catch (error) {
+            console.error("Error getting all data:", error);
+            return {};
+        }
+    }, [])
+    useEffect(() => {
+        setCorpus((prev) => ({ ...prev, loading: true }))
 
-
-
+        getAllDataInSingleObject().then((response) => {
+            console.log(response)
+            setCorpus((prev) => ({
+                ...prev,
+                localForage: {
+                    ...prev.localForage,
+                    ...response,
+                    units_count: JSON.parse(_.get(response, 'units_count'))
+                }
+            }))
+        }).finally(() => {
+            setCorpus((prev) => ({ ...prev, loading: false }))
+        })
+    }, [getAllDataInSingleObject])
 
     const navigate = useNavigate()
-    useFirebaseCmsCustomerListener()
     const firestoreRunRef = useRef(null)
+    console.log(corpus)
     const STORAGE_DATA: TSessionStorageData = useMemo(() => {
-        const units_count = JSON.parse(localStorage.getItem("units_count"))
+        const units_count = corpus?.localForage?.units_count
+        console.log(units_count)
         return {
             ...INIT_CUSTOMER_COMPONENT_2D_DESIGN_ITEM,
-            customerId: localStorage.getItem("CUSTOMER_ID"),
-            title: localStorage.getItem("LAYOUT_TITLE"),
-            leftImage: localStorage.getItem("CUSTOMER_IMAGE"),
-            rightImage: localStorage.getItem("PROPOSED_IMAGE"),
+            customerId: corpus?.localForage?.CUSTOMER_ID,
+            title: corpus?.localForage?.LAYOUT_TITLE,
+            leftImage: corpus?.localForage?.CUSTOMER_IMAGE,
+            rightImage: corpus?.localForage?.PROPOSED_IMAGE,
             windows: _.isObject(units_count) ? _.keys(units_count)?.map((win) => {
                 return ({
                     label: win,
@@ -60,11 +89,16 @@ export default function DesignSubmit() {
                 })
             }),
         }
-    }, [])
-
+    }, [
+        corpus?.localForage?.CUSTOMER_ID,
+        corpus?.localForage?.CUSTOMER_IMAGE,
+        corpus?.localForage?.LAYOUT_TITLE,
+        corpus?.localForage?.PROPOSED_IMAGE,
+        corpus?.localForage?.units_count
+    ])
 
     const onCreateDatabaseCall = useCallback(() => {
-        if (!customers?.loading) {
+        if (!customers?.loading && !corpus?.loading) {
             if (STORAGE_DATA.rightImage?.length && STORAGE_DATA.leftImage?.length && !firestoreRunRef.current) {
                 firestoreRunRef.current = true
                 const files = [
@@ -85,9 +119,9 @@ export default function DesignSubmit() {
 
                         const args = {
                             label: STORAGE_DATA.title,
-                            name: currentCustomer?.name || localStorage.getItem('CUSTOMER_NAME'),
+                            name: currentCustomer?.name || (corpus?.localForage.CUSTOMER_NAME || ''),
                             design: `${_.first(STORAGE_DATA?.windows)?.label || ''}`,
-                            sunrooofCount: _.first(STORAGE_DATA?.windows).count || 0,
+                            sunrooofCount: _.first(STORAGE_DATA?.windows)?.count || 0,
                             finish: '',
                             customerId: STORAGE_DATA?.customerId || _.uuid(),
                             url: { customer: e[0], proposed: e[1] },
@@ -137,7 +171,16 @@ export default function DesignSubmit() {
                 // toast('Images could not be retrieved from session storage')
             }
         }
-    }, [CustomerAction, ProposedLayoutDataAction, STORAGE_DATA, StorageAction.batch, customers?.loading, customers?.value])
+    }, [
+        CustomerAction,
+        ProposedLayoutDataAction,
+        STORAGE_DATA,
+        StorageAction.batch,
+        corpus?.localForage?.CUSTOMER_NAME,
+        corpus?.loading,
+        customers?.loading,
+        customers?.value
+    ])
 
     useEffect(() => { onCreateDatabaseCall() }, [onCreateDatabaseCall])
 
@@ -223,3 +266,22 @@ const CUSTOMER_COMPONENT_ITEM = (item: TCustomerComponentItem, args: Omit<IPropo
 
 type TSessionStorageData = TCustomerComponentDesign2DDataItem & { windows: { label: string, count: number }[], customerId: string, title: string }
 //322
+interface IUnitCount {
+    Classical: number;
+    Fluted: number;
+    "French Window": number;
+    "Louvered Window": number;
+    Modern: number;
+    Minimalist: number;
+}
+
+interface TLocalStorageReturnData {
+    CUSTOMER_ID: string;
+    CUSTOMER_IMAGE: string;
+    LAYOUT_TITLE: string;
+    PROPOSED_IMAGE: string;
+    units_count: IUnitCount;
+    CUSTOMER_NAME?: string
+}
+type TCorpus = { loading: boolean, localForage?: TLocalStorageReturnData }
+const INIT_CORPUS: TCorpus = { loading: true }

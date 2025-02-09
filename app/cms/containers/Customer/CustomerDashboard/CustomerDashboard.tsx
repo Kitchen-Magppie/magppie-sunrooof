@@ -2,60 +2,69 @@ import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom';
 import { MdOutlineDesignServices } from "react-icons/md";
 import { MdAddchart } from "react-icons/md";
+import { toast } from 'react-toastify';
 //====================================================================
 import { CmsSearch, CmsCustomerCardItem, CmsNotFound } from '../../../components'
-import { CustomSimpleModal } from '../../../../../components'
-import { useFirebaseCmsCustomerListener } from '../../../utils/firebase'
-import { _, ComponentModeEnum } from '../../../../../types'
+import { CustomConfirmationDialog, CustomSimpleModal } from '../../../../../components'
+import { useFirebaseCustomerDeepDeletionAction } from '../../../utils'
+import { _, CMS_TOAST_CONFIG, ComponentModeEnum } from '../../../../../types'
 import { DEFAULT_CUSTOMER, INIT_CUSTOMER_ITEM } from '../../../mocks'
 import { CustomerActionForm, useCustomerDashboard } from '.'
-import { useProposedLayoutListener } from '../../../hooks';
+// import { useProposedLayoutListener } from '../../../hooks';
 
 export default function CustomerDashboard() {
-    useFirebaseCmsCustomerListener()
-    useProposedLayoutListener()
     useEffect(() => {
         document.title = 'Customer | CMS'
     }, [])
-
     const { loading, data, action } = useCustomerDashboard()
+    const deleteAction = useFirebaseCustomerDeepDeletionAction()
+    const renderDeleteConfirmationModal = useMemo(() => {
+        const onConfirm = () => {
+            if (data?.values?.modal?.value) {
+                deleteAction.confirm(data?.values?.modal?.value).then(() => {
+                    action.onCloseModal()
+                    toast.success("Customer has been deleted", CMS_TOAST_CONFIG);
 
-    const renderActionModal = useMemo(() => {
-        const isCreateAction =
-            data.values.modal.action === ComponentModeEnum.Create
-        return (
-            <CustomSimpleModal
-                show={data.toggle.isOpenComponentModal}
-                onHide={() => {
-                    action.onChangeModal({
-                        action: ComponentModeEnum.None,
-                        value: false,
-                    })
-                }}
-                label={`${isCreateAction ? 'Create' : 'Edit'} Component`}
-            >
-                <div className="p-2">
-                    <CustomerActionForm
-                        onSubmit={() => {
-                            action.onChangeModal({
-                                action: ComponentModeEnum.None,
-                                value: false,
-                            })
-                        }}
-                        mode={data.values.modal.action}
-                        item={data.values.modal.value}
-                    />
-                </div>
-            </CustomSimpleModal>
-        )
+                })
+            }
+
+        }
+        const show = data.values.modal.open && ComponentModeEnum.Delete === data.values.modal.action
+        return <CustomConfirmationDialog
+            variant='danger'
+            text={{
+                header: `Delete Confirmation`,
+                remark: 'Are you sure you want to delete the customer & its layouts?'
+            }}
+            onHide={action.onCloseModal}
+            onConfirm={onConfirm}
+            show={show}
+        />
     }, [
         action,
-        data.toggle.isOpenComponentModal,
         data.values.modal.action,
-        data.values.modal.value,
+        data.values.modal.open,
+        data.values.modal?.value,
+        deleteAction
     ])
 
-    // console.log(data.values)
+    const renderActionModal = useMemo(() => {
+        return (<CustomSimpleModal
+            show={data.values.modal.open && [ComponentModeEnum.Edit, ComponentModeEnum.Create]?.includes(data.values.modal.action)}
+            onHide={() => { action.onCloseModal() }}
+            label={`${data.values.modal.action === ComponentModeEnum.Create ? 'Create' : 'Edit'} Component`}
+        >
+            <div className="p-2">
+                <CustomerActionForm
+                    onSubmit={() => { action.onCloseModal() }}
+                    mode={data.values.modal.action}
+                    item={data.values.modal.value}
+                />
+            </div>
+        </CustomSimpleModal>
+        )
+    }, [action, data.values.modal.action, data.values.modal.open, data.values.modal.value])
+
     return (<div className='container mx-auto'>
         <div className="pt-4">
             <div className="flex gap-2 justify-between">
@@ -103,7 +112,7 @@ export default function CustomerDashboard() {
                                 const isSecondaryRecord =
                                     item.customerId !==
                                     DEFAULT_CUSTOMER.customerId
-                                const onClickModal = () => {
+                                const onClickEditModal = () => {
                                     if (item && isSecondaryRecord) {
                                         action.onChangeModal({
                                             action: ComponentModeEnum.Edit,
@@ -112,8 +121,16 @@ export default function CustomerDashboard() {
                                         })
                                     }
                                 }
+                                const onClickDeleteModal = () => {
+                                    action.onChangeModal({
+                                        action: ComponentModeEnum.Delete,
+                                        value: true,
+                                        item,
+                                    })
+                                }
                                 return (<CmsCustomerCardItem
-                                    onClickModal={onClickModal}
+                                    onClickEditModal={onClickEditModal}
+                                    onClickDeleteModal={onClickDeleteModal}
                                     item={item}
                                     key={i}
                                 />
@@ -127,6 +144,7 @@ export default function CustomerDashboard() {
             </div>
         </div>
         {renderActionModal}
+        {renderDeleteConfirmationModal}
     </div>)
 }
 
