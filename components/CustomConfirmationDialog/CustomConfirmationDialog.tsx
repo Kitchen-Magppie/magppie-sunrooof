@@ -5,9 +5,7 @@ import CustomSimpleModal from '../CustomSimpleModal';
 export default function CustomConfirmationDialog(props: TProps) {
     return <CustomSimpleModal
         show={props?.show}
-        onHide={() => {
-            props.onHide()
-        }}
+        onHide={props.onHide}
         label={props?.text?.header || `Confirmation`}
     >
         <div className="grid grid-cols-1 p-5">
@@ -22,6 +20,7 @@ export default function CustomConfirmationDialog(props: TProps) {
                     Cancel
                 </button>
                 {props?.variant === 'danger' ? <button
+                    style={{ background: " #f00e0e" }}
                     className="cursor-pointer focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 flex gap-1"
                     onClick={() => { props.onConfirm() }}
                 >
@@ -29,7 +28,7 @@ export default function CustomConfirmationDialog(props: TProps) {
                     {props?.text?.buttonLabel || 'Delete'}
                 </button> : <button
                     onClick={() => { props.onConfirm() }}
-                    className="cursor-pointer focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 flex gap-3"
+                    className="cursor-pointer focus:outline-none text-white bg-indigo-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 flex gap-3"
                 >
                     {props?.text?.buttonLabel || 'Submit'}
                 </button>}

@@ -13,7 +13,7 @@ export function useFirebaseCustomerAction() {
         },
         remove: (id: string) => {
             const docRef = doc(db, `${COLLECTION}/${id}`)
-            deleteDoc(docRef)
+            return deleteDoc(docRef)
         },
     })
 }

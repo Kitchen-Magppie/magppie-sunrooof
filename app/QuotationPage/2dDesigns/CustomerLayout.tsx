@@ -4,9 +4,9 @@ import { TCustomerComponentDesign2DDataItem } from '../../../types'
 // import { MdClose } from 'react-icons/md'
 // import { useState } from 'react'
 
-type TProps = { item: TCustomerComponentDesign2DDataItem }
 
-const CustomerLayout = ({ item }: TProps) => {
+const CustomerLayout = (props: TProps) => {
+    const { item, caption } = props;
     const isMobile = useMedia('(orientation: portrait)')
     // const [corpus, setCorpus] = useState({
     //     link: item.leftImage,
@@ -16,12 +16,12 @@ const CustomerLayout = ({ item }: TProps) => {
         <>
             {isMobile ? (
                 <>
-                    <div className="text-black lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap text-[#78746c]">
+                    <div className="lg:w-80 w-full flex gap-6 justify-evenly items-start flex-row flex-wrap text-[#78746c]">
                         <div className="mb-2 text-3xl lg:text-xl text-[#78746c]">
-                            <strong>Design :</strong> {item.design}
+                            <strong>Design :</strong> {caption.design}
                         </div>
                         <div className="mb-2 text-3xl lg:text-xl text-[#78746c]">
-                            <strong>Finish :</strong> {item.finish}
+                            <strong>Finish :</strong> {caption.finish}
                         </div>
                     </div>
                 </>
@@ -42,7 +42,7 @@ const CustomerLayout = ({ item }: TProps) => {
 
                         <span className="mt-2 text-sm text-center">
                             {/* Area Name: */}
-                            {/* {item.areaName}  */} Hello
+                            {item.areaName}  Hello
                         </span>
                     </div>
                 </div>
@@ -78,5 +78,6 @@ const CustomerLayout = ({ item }: TProps) => {
 //         </div>
 //     )
 // }
+type TProps = { item: TCustomerComponentDesign2DDataItem, caption: { design: string, finish: string } }
 
 export default CustomerLayout
