@@ -13,6 +13,21 @@ import { Grid, FreeMode, Scrollbar } from 'swiper/modules'
 
 const Clients = () => {
     const isMobile = useMedia('(orientation: portrait)')
+
+    // split array into rows of 4 so we can center the last (incomplete) row
+    type Client = { id: number; img: string; alt: string }
+
+    const chunkArray = (arr: Client[], size: number): Client[][] => {
+        const chunks: Client[][] = []
+        for (let i = 0; i < arr?.length; i += size) {
+            chunks.push(arr?.slice(i, i + size))
+        }
+        return chunks
+    }
+
+    const firstRow = clientsDesktop?.slice(0, 4)
+    const restRows = chunkArray(clientsDesktop?.slice(4), 4)
+
     return (
         <div className="bg-[#77726c] text-white py-20" id="clients">
             <h1 className="text-5xl lg:text-6xl text-center pb-10 mx-5">
@@ -22,7 +37,7 @@ const Clients = () => {
                 <Swiper
                     slidesPerView={2}
                     grid={{
-                        rows: 3,
+                        rows: 2,
                         fill: 'row',
                     }}
                     pagination={{
@@ -36,13 +51,13 @@ const Clients = () => {
                 >
                     {clientsMobile.map((client) => {
                         return (
-                            <SwiperSlide key={client.id}>
+                            <SwiperSlide key={client?.id}>
                                 <div className="flex flex-col items-center pb-10 gap-1">
                                     <div className="h-72 w-72 lg:mb-4">
                                         <LazyLoadImage
                                             effect="blur"
-                                            src={client.img}
-                                            alt=""
+                                            src={client?.img}
+                                            alt={client?.alt || ''}
                                             className="w-full h-full rounded-3xl"
                                         />
                                     </div>
@@ -52,22 +67,49 @@ const Clients = () => {
                     })}
                 </Swiper>
             ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-6 container mx-auto max-w-xl lg:max-w-7xl gap-5">
-                    {clientsDesktop.map((client) => {
-                        return (
+                <div className="container mx-auto max-w-xl lg:max-w-7xl space-y-5">
+                    {/* first row: up to 4 items */}
+                    <div className="flex justify-center flex-wrap gap-5">
+                        {firstRow.map((client) => (
                             <div
-                                className="text-white flex flex-col items-center justify-center text-center pb-5"
-                                key={client.id}
+                                key={client?.id}
+                                className="flex justify-center w-1/2 lg:w-auto"
                             >
-                                <LazyLoadImage
-                                    effect="blur"
-                                    className="mb-2 shadow-md rounded-3xl"
-                                    src={client.img}
-                                    alt=""
-                                />
+                                <div className="w-40 lg:w-56 text-white flex flex-col items-center justify-center text-center pb-5">
+                                    <LazyLoadImage
+                                        effect="blur"
+                                        className="w-full h-auto mb-2 shadow-md rounded-3xl"
+                                        src={client?.img}
+                                        alt={client?.alt || ''}
+                                    />
+                                </div>
                             </div>
-                        )
-                    })}
+                        ))}
+                    </div>
+
+                    {/* remaining rows (centered) */}
+                    {restRows?.map((row, idx) => (
+                        <div
+                            key={idx}
+                            className="flex justify-center flex-wrap gap-5"
+                        >
+                            {row.map((client) => (
+                                <div
+                                    key={client?.id}
+                                    className="flex justify-center w-1/2 lg:w-auto"
+                                >
+                                    <div className="w-40 lg:w-56 text-white flex flex-col items-center justify-center text-center pb-5">
+                                        <LazyLoadImage
+                                            effect="blur"
+                                            className="w-full h-auto mb-2 shadow-md rounded-3xl"
+                                            src={client?.img}
+                                            alt={client?.alt || ''}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
                 </div>
             )}
         </div>

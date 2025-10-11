@@ -1,8 +1,15 @@
+import dayjs from 'dayjs'
+
 const Guarantee = () => {
+    const cutoffDate = dayjs('2025-10-12')
+    const guaranteeYears = dayjs().isAfter(cutoffDate) ? 3 : 5
+
     return (
         <div className="flex flex-col container mx-auto py-10 justify-center">
             <div>
-                <h1 className="text-5xl lg:text-5xl lg:font-bold mb-6">5 year guarantee</h1>
+                <h1 className="text-5xl lg:text-5xl lg:font-bold mb-6">
+                    {guaranteeYears} year guarantee
+                </h1>
                 <p className="text-3xl lg:text-2xl pb-4">
                     Which includes all 4 components :
                 </p>
@@ -17,7 +24,8 @@ const Guarantee = () => {
             <hr className="border-2" />
             <div className="text-3xl lg:text-2xl pb-2 pt-4">
                 If there is any manufacturing defect to any of these 4
-                components then we will replace it in the span of 5 years.
+                components then we will replace it in the span of{' '}
+                {guaranteeYears} years.
             </div>
         </div>
     )

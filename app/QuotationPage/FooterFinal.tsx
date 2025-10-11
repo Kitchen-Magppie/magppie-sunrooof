@@ -28,7 +28,7 @@ const Footer = () => {
                 <div className="flex flex-col lg:flex-row justify-evenly mb-6 gap-3 text-center w-full conatiner mx-auto max-w-7xl">
                     <div className="flex items-center mb-5 lg:mb-0">
                         <FaPhoneAlt className="h-6 w-6 mr-2" />
-                        <span className="text-xl">+91 9711008738</span>
+                        <span className="text-xl">+91 9811773388</span>
                     </div>
                     <div className="flex items-center mb-5 lg:mb-0">
                         <FaMapLocationDot className="h-6 w-6 mr-2" />
@@ -39,9 +39,7 @@ const Footer = () => {
                     </div>
                     <div className="flex items-center">
                         <MdEmail className="h-6 w-6 mr-2" />
-                        <span className="text-xl">
-                            contactsunrooof@magppie.com
-                        </span>
+                        <span className="text-xl">contact@sunrooof.com</span>
                     </div>
                 </div>
             </div>
