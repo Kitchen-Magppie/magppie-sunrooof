@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
 const Guarantee = () => {
-    const cutoffDate = dayjs('2025-10-12')
+    const cutoffDate = dayjs('2025-10-21')
     const guaranteeYears = dayjs().isAfter(cutoffDate) ? 3 : 5
 
     return (

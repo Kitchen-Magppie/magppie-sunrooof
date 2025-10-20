@@ -6,7 +6,9 @@ import rizwanSajan from '../assets/clients/rizwan_sajan.jpg'
 import sarahSham from '../assets/clients/sarah_sham.jpg'
 import shilpa from '../assets/clients/shilpa.jpg'
 
-export const clientsDesktop = [
+type Client = { id: number; img: string; alt: string }
+
+const clientsDesktopData: Client[] = [
     { id: 6, img: anitaLal, alt: 'Anita Lal' },
     { id: 1, img: mukeshAmbani, alt: 'Mukesh Ambani' },
     { id: 3, img: peyushBansal, alt: 'Peyush Bansal' },
@@ -16,7 +18,7 @@ export const clientsDesktop = [
     { id: 2, img: shilpa, alt: 'Shilpa' },
 ]
 
-export const clientsMobile = [
+const clientsMobileData: Client[] = [
     { id: 6, img: anitaLal, alt: 'Anita Lal' },
     { id: 1, img: mukeshAmbani, alt: 'Mukesh Ambani' },
     { id: 3, img: peyushBansal, alt: 'Peyush Bansal' },
@@ -25,3 +27,9 @@ export const clientsMobile = [
     { id: 4, img: sarahSham, alt: 'Sarah Sham' },
     { id: 2, img: shilpa, alt: 'Shilpa' },
 ]
+
+const sortById = (a: Client, b: Client) => a?.id - b?.id
+
+export const clientsDesktop = [...clientsDesktopData]?.sort(sortById)
+
+export const clientsMobile = [...clientsMobileData]?.sort(sortById)
