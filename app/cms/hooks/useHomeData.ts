@@ -35,9 +35,10 @@ export default function useHomeData() {
             [CustomerComponentEnum.ThreeDDesign]: data?.components?.find(({ value }) => value === CustomerComponentEnum.ThreeDDesign) as unknown as TCustomerComponentDesign3DItem,
             [CustomerComponentEnum.Quotation]: quotation,
             [CustomerComponentEnum.Feature]: data?.components?.find(({ value }) => value === CustomerComponentEnum.Feature) as unknown as TCustomerComponentFeatureItem,
-
+            createdAt:data?.at?.created
         })
 
-    }, [params, value])
+    }, [params, value]);
+
     return ({ loading, components })
 }

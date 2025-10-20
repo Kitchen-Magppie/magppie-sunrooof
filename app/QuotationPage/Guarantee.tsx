@@ -1,8 +1,40 @@
 import dayjs from 'dayjs'
 
-const Guarantee = () => {
-    const cutoffDate = dayjs('2025-10-21')
-    const guaranteeYears = dayjs().isAfter(cutoffDate) ? 3 : 5
+interface GuaranteeProps {
+    createdAt?: unknown
+}
+
+const Guarantee = ({ createdAt }: GuaranteeProps) => {
+    const cutoffDate = dayjs('2025-10-21');
+
+    const ensureCreationDate = (value: unknown) => {
+        if (value instanceof Date) {
+            return dayjs(value)
+        }
+
+        if (typeof value === 'string' || typeof value === 'number') {
+            const parsed = dayjs(value)
+            return parsed?.isValid() ? parsed : dayjs()
+        }
+
+        if (
+            value &&
+            typeof value === 'object' &&
+            'seconds' in value &&
+            'nanoseconds' in value
+        ) {
+            const { seconds, nanoseconds } = value as {
+                seconds: number
+                nanoseconds: number
+            }
+            return dayjs(seconds * 1000 + Math.floor(nanoseconds / 1e6))
+        }
+
+        return dayjs()
+    }
+
+    const creationDate = ensureCreationDate(createdAt)
+    const guaranteeYears = creationDate.isAfter(cutoffDate) ? 3 : 5
 
     return (
         <div className="flex flex-col container mx-auto py-10 justify-center">

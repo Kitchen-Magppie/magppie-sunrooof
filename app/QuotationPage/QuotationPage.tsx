@@ -60,7 +60,7 @@ const QuotationPage = () => {
             />
             <Quotation name={components.name} item={components[CustomerComponentEnum.Quotation]} />
             <TermsandConditions />
-            <Guarantee />
+            <Guarantee createdAt={components?.createdAt}/>
             <BuyingJourney />
             <FooterFinal />
         </div>
