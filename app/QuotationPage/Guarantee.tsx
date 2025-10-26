@@ -5,7 +5,7 @@ interface GuaranteeProps {
 }
 
 const Guarantee = ({ createdAt }: GuaranteeProps) => {
-    const cutoffDate = dayjs('2025-10-21');
+    const cutoffDate = dayjs('2025-10-26');
 
     const ensureCreationDate = (value: unknown) => {
         if (value instanceof Date) {
